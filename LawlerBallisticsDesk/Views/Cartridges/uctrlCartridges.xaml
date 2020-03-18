@@ -1,0 +1,143 @@
+﻿<UserControl x:Class="LawlerBallisticsDesk.Views.Cartridges.uctrlCartridges"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
+        mc:Ignorable="d"
+        DataContext="{Binding CVM, Source={StaticResource Locator}}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="27"/>
+            <RowDefinition Height="38*"/>
+        </Grid.RowDefinitions>
+        <Menu HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="150" Name="Tools" 
+              Grid.Row="0" Grid.Column ="0" Background="{x:Null}">
+            <MenuItem Header="Tools" Background="{x:Null}">
+                <MenuItem Header="Add Cartridge" Background="{x:Null}" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName ="Click">
+                            <i:InvokeCommandAction Command="{Binding AddCartridgeCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
+                <MenuItem Header="Save Cartridge Data" Background="{x:Null}" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName ="Click">
+                            <i:InvokeCommandAction Command="{Binding SaveCartridgeDataCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
+                <MenuItem Header="_____________________________"/>
+                <MenuItem Header="SAMMI">
+                    <Hyperlink NavigateUri="https://SAAMI.org/" RequestNavigate="GoToHyperlink">
+                        Website
+                    </Hyperlink>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <DataGrid HorizontalAlignment="Stretch" Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Stretch"
+                  ItemsSource="{Binding Cartridges}" CanUserAddRows="False" CanUserDeleteRows="True"
+                  AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedCartridge}"
+                  AlternationCount="2">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="AlternationIndex" Value="0">
+                            <Setter Property="Background" Value="White" />
+                        </Trigger>
+                        <Trigger Property="AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="Aqua" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Path=Selectable}" Value="False">
+                            <DataTrigger.Setters>
+                                <Setter Property="Background" Value="LightGray" />
+                            </DataTrigger.Setters>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"  Width="*">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontWeight"  Value="Bold" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Bullet Diameter" Binding="{Binding BulletDiameter, StringFormat={}{0:n4}}" Width="*">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontWeight"  Value="Bold" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Max. COAL" Binding="{Binding MaxCOAL, StringFormat={}{0:n4}}" Width="*">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontWeight"  Value="Bold" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Max. Case Length" Binding="{Binding MaxCaseLngth, StringFormat={}{0:n4}}" Width="*">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontWeight"  Value="Bold" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Case Trim Length" Binding="{Binding CaseTrimLngth, StringFormat={}{0:n4}}" Width="*">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontWeight"  Value="Bold" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName ="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding LoadCartridgeCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName ="KeyUp">
+                    <command:EventToCommand Command="{Binding KeyUpCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </DataGrid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,45 @@
+﻿<Window x:Class="LawlerBallisticsDesk.Views.Cartridges.frmPrimer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LawlerBallisticsDesk.Views.Cartridges"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        DataContext="{Binding PVM, Source={StaticResource Locator}}"   
+        Title="Primer" Height="331" Width="444" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="31*"/>
+            <RowDefinition Height="269*"/>
+        </Grid.RowDefinitions>
+        <Menu HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="150" Name="Tools" Background="{x:Null}">
+            <MenuItem Header="Tools" Background="{x:Null}">
+                <MenuItem Header="Load Primer" Background="{x:Null}" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName ="Click">
+                            <i:InvokeCommandAction Command="{Binding SavePrimerCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="10,49,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="393" Text="{Binding SelectedPrimer.Name, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Name" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
+            FontWeight="Bold" Margin="10,19,0,0" VerticalAlignment="Top" Width="393" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="10,104,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="393" Text="{Binding SelectedPrimer.Manufacturer, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Manufacturer" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
+            FontWeight="Bold" Margin="10,74,0,0" VerticalAlignment="Top" Width="393" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="10,159,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="393" Text="{Binding SelectedPrimer.Model, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Model" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
+            FontWeight="Bold" Margin="10,129,0,0" VerticalAlignment="Top" Width="393" Grid.Row="1"/>
+        <Label Content="Type" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
+            FontWeight="Bold" Margin="10,184,0,0" VerticalAlignment="Top" Width="393" Grid.Row="1"/>
+        <ComboBox HorizontalAlignment="Left" Height="24" Margin="10,214,0,0" VerticalAlignment="Top" Width="393"
+                  ItemsSource="{Binding PrimerType}" SelectedItem="{Binding SelectedPrimer.Type}" Grid.Row="1"/>
+
+    </Grid>
+</Window>

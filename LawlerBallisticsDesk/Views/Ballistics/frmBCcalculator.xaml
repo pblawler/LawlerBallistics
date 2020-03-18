@@ -1,0 +1,46 @@
+﻿<Window x:Class="LawlerBallisticsDesk.Views.Ballistics.frmBCcalculator"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LawlerBallisticsDesk.Views.Ballistics"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        DataContext="{Binding BC, Source={StaticResource Locator}}"        
+        mc:Ignorable="d"
+        Title="BC Estimator" Height="206" Width="503.333" ResizeMode="NoResize">
+    <Grid>
+        <TextBox Name="txtBulletWt" HorizontalAlignment="Left" Height="20" Margin="28,50,0,0" HorizontalContentAlignment="Center" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="{Binding TestBulletWeight, UpdateSourceTrigger=Explicit}">
+            <!--<i:Interaction.Triggers>
+                <i:EventTrigger EventName ="KeyUp">
+                    <i:InvokeCommandAction Command="{Binding EstimateBC}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>-->
+        </TextBox>
+        <Label Content="Bullet Weight (grn)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+               FontWeight="Bold" Height="30" Margin="28,20,0,0" VerticalAlignment="Top" Width="140"/>
+        <TextBox Name="txtBulletDia" HorizontalAlignment="Left" Height="20" Margin="173,50,0,0" HorizontalContentAlignment="Center" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="{Binding TestBulletDiameter, UpdateSourceTrigger=Explicit}"/>
+        <Label Content="Bullet Diameter (in.)" HorizontalAlignment="Left" HorizontalContentAlignment="Center"
+               FontWeight="Bold" Height="30" Margin="173,20,0,0" VerticalAlignment="Top" Width="140"/>
+        <Label Content="Bullet Type" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+               FontWeight="Bold" Height="30" Margin="318,20,0,0" VerticalAlignment="Top" Width="148"/>
+        <ComboBox HorizontalAlignment="Left" Height="20" Margin="318,50,0,0" VerticalAlignment="Top" Width="148" 
+                  ItemsSource="{Binding BulletTypes}" Text="{Binding TestBulletType, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="173,138,0,0" HorizontalContentAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="140"
+                 Text="{Binding TestBulletBC}"/>
+        <Label Content="Ballistic Coefficent" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+               FontWeight="Bold" Height="30" Margin="173,108,0,0" VerticalAlignment="Top" Width="140"/>
+        <Label Content="Calculate" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="25" 
+               Margin="173,78,0,0" VerticalAlignment="Top" Width="140" FontWeight="Bold" Background="#00000000" 
+               Foreground="#FF1250F5">
+                <i:Interaction.Triggers>
+                <i:EventTrigger EventName ="MouseDown">
+                        <i:InvokeCommandAction Command="{Binding EstimateBCCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+        </Label>
+
+    </Grid>
+</Window>

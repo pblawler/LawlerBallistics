@@ -1,0 +1,22 @@
+﻿<Window x:Class="LawlerBallisticsDesk.Views.Cartridges.frmAddCartridgePowder"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LawlerBallisticsDesk.Views.Cartridges"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="Add Cartridge Powder Option" Height="182.837" Width="524" ResizeMode="NoResize">
+    <Grid>
+        <ComboBox Name="cboPwdrList" HorizontalAlignment="Left" Height="25" Margin="23,53,0,0" 
+                  VerticalAlignment="Top" Width="469" ItemsSource="{Binding PowderList}" SelectedItem="{Binding SelectedPowderName}"/>
+        <Label Content="Select Powder" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="30" 
+            Margin="23,23,0,0" VerticalAlignment="Top" Width="469" FontWeight="Bold"
+            ToolTip="Maximum Cartridge Overall Length"/>
+        <Button Content="OK" HorizontalAlignment="Left" Height="28" Margin="26,101,0,0" 
+                VerticalAlignment="Top" Width="106" Click="Button_Click" />
+        <Button Content="Cancel" HorizontalAlignment="Left" Height="28" Margin="137,101,0,0" 
+                VerticalAlignment="Top" Width="106" Click="Button_Click_1" />
+
+    </Grid>
+</Window>

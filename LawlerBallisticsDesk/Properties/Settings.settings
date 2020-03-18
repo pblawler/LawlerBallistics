@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LawlerBallisticsDesk.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="GoogleAPIkey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">AIzaSyCi5ErfDhSOozPMEildKjYOU1AMNAeuf_s</Value>
+    </Setting>
+    <Setting Name="BingKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">AnrO2VkGEY5x2TcoZxPkwaiVeYfUT2wmT81Fjcamvt1TbhaUYSoMEU8vudvst73k </Value>
+    </Setting>
+    <Setting Name="Openweathermap" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">f0fd410eac46e1826cb157fe9e7b0ec6</Value>
+    </Setting>
+    <Setting Name="DockingLayoutState" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

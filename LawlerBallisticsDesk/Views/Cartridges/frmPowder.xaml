@@ -1,0 +1,45 @@
+﻿<Window x:Class="LawlerBallisticsDesk.Views.Cartridges.frmPowder"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LawlerBallisticsDesk.Views.Cartridges"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        DataContext="{Binding PDRVM, Source={StaticResource Locator}}"            
+        Title="Powder" Height="305" Width="469" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        <Menu HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="150" Name="Tools" Background="{x:Null}">
+            <MenuItem Header="Tools" Background="{x:Null}">
+                <MenuItem Header="Load Powder" Background="{x:Null}" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName ="Click">
+                            <i:InvokeCommandAction Command="{Binding SavePowderCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="10,89,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="393" Text="{Binding SelectedPowder.Manufacturer, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Manufacturer" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
+            FontWeight="Bold" Margin="10,59,0,0" VerticalAlignment="Top" Width="393" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="10,34,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="393" Text="{Binding SelectedPowder.Name, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Name" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
+            FontWeight="Bold" Margin="10,4,0,0" VerticalAlignment="Top" Width="393" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="10,144,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="393" Text="{Binding SelectedPowder.Model, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Model" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
+            FontWeight="Bold" Margin="10,114,0,0" VerticalAlignment="Top" Width="393" Grid.Row="1"/>
+        <Label Content="Base Type" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
+            FontWeight="Bold" Margin="10,169,0,0" VerticalAlignment="Top" Width="393" Grid.Row="1"/>
+        <ComboBox HorizontalAlignment="Left" Height="23" Margin="10,199,0,0" VerticalAlignment="Top" Width="393"
+                  ItemsSource="{Binding BaseTypeNames}" SelectedItem="{Binding SelectedPowder.BaseType}" Grid.Row="1"/>
+
+    </Grid>
+</Window>

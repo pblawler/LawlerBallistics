@@ -1,0 +1,97 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LawlerBallisticsDesk.Views.Cartridges"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
+    x:Class="LawlerBallisticsDesk.Views.Cartridges.frmCartridge"
+        DataContext="{Binding CVM, Source={StaticResource Locator}}"
+        mc:Ignorable="d"
+        Title="Cartridge" Height="435.344" Width="938.833" AllowDrop="True" Drop="Image_Drop">
+    <Grid AllowDrop="True" Drop="Image_Drop">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35*"/>
+            <RowDefinition Height="369*"/>
+        </Grid.RowDefinitions>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="195" Margin="626,8,0,0" 
+                VerticalAlignment="Top" Width="280" Grid.Row="1" AllowDrop="True" Drop="Image_Drop">
+            <Image x:Name="imgCartridge" HorizontalAlignment="Left" Height="193" Margin="0,0,0,0" VerticalAlignment="Top" Width="278" AllowDrop="True"
+                Source="{Binding SelectedCartridge.CartridgePic}" Grid.Row="1" Drop="Image_Drop" Stretch="Fill" Loaded="imgCartridge_Loaded"/>
+        </Border>
+        <Menu HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="150" x:Name="Tools" Background="{x:Null}">
+            <MenuItem Header="Tools" Background="{x:Null}">
+                <MenuItem Header="Add Powder" Click="MenuItem_Click"></MenuItem>
+                <MenuItem/>
+                <MenuItem Header="Load Cartridge" Background="{x:Null}" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName ="Click">
+                            <i:InvokeCommandAction Command="{Binding SaveCartridgeCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="10,38,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="393" Text="{Binding SelectedCartridge.Name, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Name" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
+               FontWeight="Bold" Margin="10,8,0,0" VerticalAlignment="Top" Width="393" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="10,93,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="{Binding SelectedCartridge.BulletDiameter, StringFormat=\{0:n4\}, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Bullet Diameter (in.)" HorizontalAlignment="Left" HorizontalContentAlignment="Center"
+               FontWeight="Bold" Height="30" Margin="10,63,0,0" VerticalAlignment="Top" Width="140" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="155,93,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="{Binding SelectedCartridge.MaxCOAL, StringFormat=\{0:n4\}, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Max. COAL (in.)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="30" 
+               Margin="155,63,0,0" VerticalAlignment="Top" Width="140" Grid.Row="1" FontWeight="Bold"
+               ToolTip="Maximum Cartridge Overall Length"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="300,93,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="{Binding SelectedCartridge.MaxCaseLngth, StringFormat=\{0:n4\}, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Max. Case Length (in.)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="30" 
+            Margin="300,63,0,0" VerticalAlignment="Top" Width="140" Grid.Row="1" FontWeight="Bold"
+            ToolTip="Maximum Cartridge Overall Length"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="445,93,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="{Binding SelectedCartridge.CaseTrimLngth, StringFormat=\{0:n4\}, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Case Trim Length (in.)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="30" 
+            Margin="445,63,0,0" VerticalAlignment="Top" Width="140" Grid.Row="1" FontWeight="Bold"
+            ToolTip="Maximum Cartridge Overall Length"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="10,148,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="{Binding SelectedCartridge.HeadSpaceMax, StringFormat=\{0:n4\}, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Head Space Max. (in.)" HorizontalAlignment="Left" HorizontalContentAlignment="Center"
+            FontWeight="Bold" Height="30" Margin="10,118,0,0" VerticalAlignment="Top" Width="140" Grid.Row="1"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="155,148,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="{Binding SelectedCartridge.HeadSpaceMin, StringFormat=\{0:n4\}, UpdateSourceTrigger=Default}" Grid.Row="1"/>
+        <Label Content="Head Space Min. (in.)" HorizontalAlignment="Left" HorizontalContentAlignment="Center"
+            FontWeight="Bold" Height="30" Margin="155,118,0,0" VerticalAlignment="Top" Width="140" Grid.Row="1"/>
+        <ListBox HorizontalAlignment="Left" Height="102" Margin="10,220,0,0" Grid.Row="1" VerticalAlignment="Top"
+                 Width="430" ItemsSource="{Binding SelectedCartridgePowderList}" 
+                 SelectedItem="{Binding SelectedCartridgePowderName}" AlternationCount="2">
+            <ListBox.Resources>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                            <Setter Property="Background" Value="White" />
+                        </Trigger>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="Aqua" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Path=Selectable}" Value="False">
+                            <DataTrigger.Setters>
+                                <Setter Property="Background" Value="LightGray" />
+                            </DataTrigger.Setters>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Resources>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName ="KeyUp">
+                    <command:EventToCommand Command="{Binding PwdrKeyUpCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListBox>
+        <Label Content="Powders" HorizontalAlignment="Left" HorizontalContentAlignment="Center"
+            FontWeight="Bold" Height="30" Margin="10,190,0,0" VerticalAlignment="Top" Width="430" Grid.Row="1"/>
+    </Grid>
+</Window>
