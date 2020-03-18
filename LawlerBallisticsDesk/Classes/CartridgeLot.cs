@@ -465,6 +465,33 @@ namespace LawlerBallisticsDesk.Classes
                         }
                     }
                     break;
+                case "HD":
+                    HDstat();
+                    lRndData = true;
+                    foreach (Round lr in LotStats)
+                    {
+                        switch (lr.name)
+                        {
+                            case "ES":
+                                lr.SilentSet("HD", HDes);
+                                break;
+                            case "AVG":
+                                lr.SilentSet("HD", HDavg);
+                                break;
+                            case "MAX":
+                                lr.SilentSet("HD", HDmax);
+                                break;
+                            case "MIN":
+                                lr.SilentSet("HD", HDmin);
+                                break;
+                            case "SD":
+                                lr.SilentSet("HD", HDsd);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
