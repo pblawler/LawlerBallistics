@@ -53,8 +53,8 @@ namespace LawlerBallisticsDesk.Classes
         private double _JumpDistance;
         private double _DoRate;
         private string _Notes;
-        private ObservableCollection<CartridgeLot> _Lots;
-        private CartridgeLot _SelectedLot;
+        private ObservableCollection<RecipeLot> _Lots;
+        private RecipeLot _SelectedLot;
         #endregion
 
         #region "Properties"
@@ -86,8 +86,8 @@ namespace LawlerBallisticsDesk.Classes
         public double JumpDistance { get { return _JumpDistance; } set { _JumpDistance = value; RaisePropertyChanged(nameof(JumpDistance)); } }
         public double FoRate { get { return _DoRate; } set { _DoRate = value; RaisePropertyChanged(nameof(FoRate)); } }
         public string Notes { get { return _Notes; } set { _Notes = value; RaisePropertyChanged(nameof(Notes)); } }
-        public ObservableCollection<CartridgeLot> Lots { get { return _Lots; } set { _Lots = value; RaisePropertyChanged(nameof(Lots)); } }
-        public CartridgeLot SelectedLot
+        public ObservableCollection<RecipeLot> Lots { get { return _Lots; } set { _Lots = value; RaisePropertyChanged(nameof(Lots)); } }
+        public RecipeLot SelectedLot
         {
             get { return _SelectedLot; }
             set 
@@ -102,7 +102,7 @@ namespace LawlerBallisticsDesk.Classes
         public Recipe()
         {
             _ID = Guid.NewGuid().ToString();
-            _Lots = new ObservableCollection<CartridgeLot>();
+            _Lots = new ObservableCollection<RecipeLot>();
             _BarrelID = "";
             _BulletID = "";
             _CartridgeID = "";

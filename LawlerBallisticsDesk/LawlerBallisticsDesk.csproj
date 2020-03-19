@@ -223,7 +223,7 @@
     <Compile Include="Classes\Barrel.cs" />
     <Compile Include="Classes\Bullet.cs" />
     <Compile Include="Classes\Cartridge.cs" />
-    <Compile Include="Classes\CartridgeLot.cs" />
+    <Compile Include="Classes\RecipeLot.cs" />
     <Compile Include="Classes\Case.cs" />
     <Compile Include="Classes\DataPersistence.cs" />
     <Compile Include="Classes\Gun.cs" />

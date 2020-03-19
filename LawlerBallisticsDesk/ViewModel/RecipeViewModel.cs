@@ -222,7 +222,7 @@ namespace LawlerBallisticsDesk.ViewModel
                         DialogResult lrst = MessageBox.Show(lmsg, lcaption, lbtns, MessageBoxIcon.Warning);
                         if (lrst == DialogResult.Yes)
                         {
-                            foreach (CartridgeLot lc in SelectedRecipe.Lots)
+                            foreach (RecipeLot lc in SelectedRecipe.Lots)
                             {
                                 if (SelectedRecipe.SelectedLot.ID == lc.ID)
                                 {
@@ -289,7 +289,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 lfrmCreatLot = null;
                 return;
             }
-            CartridgeLot lCartLt = new CartridgeLot();
+            RecipeLot lCartLt = new RecipeLot();
             lCartLt.LotDate = DateTime.Now.ToString();
             lCartLt.SerialNo = SelectedRecipe.Lots.Count.ToString();
             for (Int32 cnt = lCartLt.SerialNo.Length; cnt < 10; cnt++)

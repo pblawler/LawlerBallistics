@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LawlerBallisticsDesk.Classes
 {
-    public class CartridgeLot : INotifyPropertyChanged
+    public class RecipeLot : INotifyPropertyChanged
     {
         #region "Binding"
         public event PropertyChangedEventHandler PropertyChanged;
@@ -492,6 +492,141 @@ namespace LawlerBallisticsDesk.Classes
                         }
                     }
                     break;
+                case "HAD":
+                    HADstat();
+                    lRndData = true;
+                    foreach (Round lr in LotStats)
+                    {
+                        switch (lr.name)
+                        {
+                            case "ES":
+                                lr.SilentSet("HAD", HADes);
+                                break;
+                            case "AVG":
+                                lr.SilentSet("HAD", HADavg);
+                                break;
+                            case "MAX":
+                                lr.SilentSet("HAD", HADmax);
+                                break;
+                            case "MIN":
+                                lr.SilentSet("HAD", HADmin);
+                                break;
+                            case "SD":
+                                lr.SilentSet("HAD", HADsd);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                case "VAD":
+                    VADstat();
+                    lRndData = true;
+                    foreach (Round lr in LotStats)
+                    {
+                        switch (lr.name)
+                        {
+                            case "ES":
+                                lr.SilentSet("VAD", VADes);
+                                break;
+                            case "AVG":
+                                lr.SilentSet("VAD", VADavg);
+                                break;
+                            case "MAX":
+                                lr.SilentSet("VAD", VADmax);
+                                break;
+                            case "MIN":
+                                lr.SilentSet("VAD", VADmin);
+                                break;
+                            case "SD":
+                                lr.SilentSet("VAD", VADsd);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                case "GDV":
+                    GDVstat();
+                    lRndData = true;
+                    foreach (Round lr in LotStats)
+                    {
+                        switch (lr.name)
+                        {
+                            case "ES":
+                                lr.SilentSet("GDV", GDVes);
+                                break;
+                            case "AVG":
+                                lr.SilentSet("GDV", GDVavg);
+                                break;
+                            case "MAX":
+                                lr.SilentSet("GDV", GDVmax);
+                                break;
+                            case "MIN":
+                                lr.SilentSet("GDV", GDVmin);
+                                break;
+                            case "SD":
+                                lr.SilentSet("GDV", GDVsd);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                case "RMSD":
+                    RMSDstat();
+                    lRndData = true;
+                    foreach (Round lr in LotStats)
+                    {
+                        switch (lr.name)
+                        {
+                            case "ES":
+                                lr.SilentSet("RMSD", RMSDes);
+                                break;
+                            case "AVG":
+                                lr.SilentSet("RMSD", RMSDavg);
+                                break;
+                            case "MAX":
+                                lr.SilentSet("RMSD", RMSDmax);
+                                break;
+                            case "MIN":
+                                lr.SilentSet("RMSD", RMSDmin);
+                                break;
+                            case "SD":
+                                lr.SilentSet("RMSD", RMSDsd);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                case "VELAD":
+                    VELADstat();
+                    lRndData = true;
+                    foreach (Round lr in LotStats)
+                    {
+                        switch (lr.name)
+                        {
+                            case "ES":
+                                lr.SilentSet("VELAD", VELADes);
+                                break;
+                            case "AVG":
+                                lr.SilentSet("VELAD", VELADavg);
+                                break;
+                            case "MAX":
+                                lr.SilentSet("VELAD", VELADmax);
+                                break;
+                            case "MIN":
+                                lr.SilentSet("VELAD", VELADmin);
+                                break;
+                            case "SD":
+                                lr.SilentSet("VELAD", VELADsd);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -611,6 +746,42 @@ namespace LawlerBallisticsDesk.Classes
         private double _VDmin;
         private double _VDes;
         private double _VDsdmulti;
+        private double _HDavg;
+        private double _HDsd;
+        private double _HDmax;
+        private double _HDmin;
+        private double _HDes;
+        private double _HDsdmulti;
+        private double _VADavg;
+        private double _VADsd;
+        private double _VADmax;
+        private double _VADmin;
+        private double _VADes;
+        private double _VADsdmulti;
+        private double _HADavg;
+        private double _HADsd;
+        private double _HADmax;
+        private double _HADmin;
+        private double _HADes;
+        private double _HADsdmulti;
+        private double _RMSDavg;
+        private double _RMSDsd;
+        private double _RMSDmax;
+        private double _RMSDmin;
+        private double _RMSDes;
+        private double _RMSDsdmulti;
+        private double _GDVavg;
+        private double _GDVsd;
+        private double _GDVmax;
+        private double _GDVmin;
+        private double _GDVes;
+        private double _GDVsdmulti;
+        private double _VELADavg;
+        private double _VELADsd;
+        private double _VELADmax;
+        private double _VELADmin;
+        private double _VELADes;
+        private double _VELADsdmulti;
         #endregion
 
         #region "Public Properties"
@@ -735,11 +906,47 @@ namespace LawlerBallisticsDesk.Classes
         public double VDmin { get { return _VDmin; } set { _VDmin = value; RaisePropertyChanged(nameof(VDmin)); } }
         public double VDes { get { return _VDes; } set { _VDes = value; RaisePropertyChanged(nameof(VDes)); } }
         public double VDsdmulti { get { if (_VDsdmulti == 0) _VDsdmulti = 1; return _VDsdmulti; } set { _VDsdmulti = value; RaisePropertyChanged(nameof(VDsdmulti)); } }
+        public double HDavg { get { return _HDavg; } set { _HDavg = value; RaisePropertyChanged(nameof(HDavg)); } }
+        public double HDsd { get { return _HDsd; } set { _HDsd = value; RaisePropertyChanged(nameof(HDsd)); } }
+        public double HDmax { get { return _HDmax; } set { _HDmax = value; RaisePropertyChanged(nameof(HDmax)); } }
+        public double HDmin { get { return _HDmin; } set { _HDmin = value; RaisePropertyChanged(nameof(HDmin)); } }
+        public double HDes { get { return _HDes; } set { _HDes = value; RaisePropertyChanged(nameof(HDes)); } }
+        public double HDsdmulti { get { if (_HDsdmulti == 0) _HDsdmulti = 1; return _HDsdmulti; } set { _HDsdmulti = value; RaisePropertyChanged(nameof(HDsdmulti)); } }
+        public double VADavg { get { return _VADavg; } set { _VADavg = value; RaisePropertyChanged(nameof(VADavg)); } }
+        public double VADsd { get { return _VADsd; } set { _VADsd = value; RaisePropertyChanged(nameof(VADsd)); } }
+        public double VADmax { get { return _VADmax; } set { _VADmax = value; RaisePropertyChanged(nameof(VADmax)); } }
+        public double VADmin { get { return _VADmin; } set { _VADmin = value; RaisePropertyChanged(nameof(VADmin)); } }
+        public double VADes { get { return _VADes; } set { _VADes = value; RaisePropertyChanged(nameof(VADes)); } }
+        public double VADsdmulti { get { if (_VADsdmulti == 0) _VADsdmulti = 1; return _VADsdmulti; } set { _VADsdmulti = value; RaisePropertyChanged(nameof(VADsdmulti)); } }
+        public double HADavg { get { return _HADavg; } set { _HADavg = value; RaisePropertyChanged(nameof(HADavg)); } }
+        public double HADsd { get { return _HADsd; } set { _HADsd = value; RaisePropertyChanged(nameof(HADsd)); } }
+        public double HADmax { get { return _HADmax; } set { _HADmax = value; RaisePropertyChanged(nameof(HADmax)); } }
+        public double HADmin { get { return _HADmin; } set { _HADmin = value; RaisePropertyChanged(nameof(HADmin)); } }
+        public double HADes { get { return _HADes; } set { _HADes = value; RaisePropertyChanged(nameof(HADes)); } }
+        public double HADsdmulti { get { if (_HADsdmulti == 0) _HADsdmulti = 1; return _HADsdmulti; } set { _HADsdmulti = value; RaisePropertyChanged(nameof(HADsdmulti)); } }
+        public double RMSDavg { get { return _RMSDavg; } set { _RMSDavg = value; RaisePropertyChanged(nameof(RMSDavg)); } }
+        public double RMSDsd { get { return _RMSDsd; } set { _RMSDsd = value; RaisePropertyChanged(nameof(RMSDsd)); } }
+        public double RMSDmax { get { return _RMSDmax; } set { _RMSDmax = value; RaisePropertyChanged(nameof(RMSDmax)); } }
+        public double RMSDmin { get { return _RMSDmin; } set { _RMSDmin = value; RaisePropertyChanged(nameof(RMSDmin)); } }
+        public double RMSDes { get { return _RMSDes; } set { _RMSDes = value; RaisePropertyChanged(nameof(RMSDes)); } }
+        public double RMSDsdmulti { get { if (_RMSDsdmulti == 0) _RMSDsdmulti = 1; return _RMSDsdmulti; } set { _RMSDsdmulti = value; RaisePropertyChanged(nameof(RMSDsdmulti)); } }
+        public double GDVavg { get { return _GDVavg; } set { _GDVavg = value; RaisePropertyChanged(nameof(GDVavg)); } }
+        public double GDVsd { get { return _GDVsd; } set { _GDVsd = value; RaisePropertyChanged(nameof(GDVsd)); } }
+        public double GDVmax { get { return _GDVmax; } set { _GDVmax = value; RaisePropertyChanged(nameof(GDVmax)); } }
+        public double GDVmin { get { return _GDVmin; } set { _GDVmin = value; RaisePropertyChanged(nameof(GDVmin)); } }
+        public double GDVes { get { return _GDVes; } set { _GDVes = value; RaisePropertyChanged(nameof(GDVes)); } }
+        public double GDVsdmulti { get { if (_GDVsdmulti == 0) _GDVsdmulti = 1; return _GDVsdmulti; } set { _GDVsdmulti = value; RaisePropertyChanged(nameof(GDVsdmulti)); } }
+        public double VELADavg { get { return _VELADavg; } set { _VELADavg = value; RaisePropertyChanged(nameof(VELADavg)); } }
+        public double VELADsd { get { return _VELADsd; } set { _VELADsd = value; RaisePropertyChanged(nameof(VELADsd)); } }
+        public double VELADmax { get { return _VELADmax; } set { _VELADmax = value; RaisePropertyChanged(nameof(VELADmax)); } }
+        public double VELADmin { get { return _VELADmin; } set { _VELADmin = value; RaisePropertyChanged(nameof(VELADmin)); } }
+        public double VELADes { get { return _VELADes; } set { _VELADes = value; RaisePropertyChanged(nameof(VELADes)); } }
+        public double VELADsdmulti { get { if (_VELADsdmulti == 0) _VELADsdmulti = 1; return _VELADsdmulti; } set { _VELADsdmulti = value; RaisePropertyChanged(nameof(VELADsdmulti)); } }
         public ObservableCollection<Round> LotStats { get { return _LotStats; } set { _LotStats = value; RaisePropertyChanged(nameof(LotStats)); } }
         #endregion
 
         #region "Constructor"
-        public CartridgeLot()
+        public RecipeLot()
         {
             //GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<PropertyChangedMsg>(this, (action ) => ReceiveMessage(action ));
             Messenger.Default.Register<PropertyChangedMsg>(this, (Msg) => ReceiveMessage(Msg));
@@ -1331,6 +1538,216 @@ namespace LawlerBallisticsDesk.Classes
             }
             VDavg = lTot / lCnt;
             VDsd = LawlerBallisticsFactory.SampleStandardDeviation(lVals);
+        }
+        private void HDstat()
+        {
+            double lTot = 0, lmax = 0, lmin = 0;
+            double[] lVals = new double[Rounds.Count];
+            Int32 lCnt = 0, lI = 0;
+
+            lCnt = Rounds.Count;
+            if (lCnt == 0)
+            {
+                HDavg = 0;
+                HDsd = 0;
+                HDmax = 0;
+                HDmin = 0;
+                HDes = 0;
+                return;
+            }
+            foreach (Round lr in Rounds)
+            {
+                lVals[lI] = lr.HD;
+                if (lI == 0)
+                {
+                    lmin = lVals[lI];
+                    lmax = lVals[lI];
+                }
+                if (lmax < lVals[lI]) lmax = lVals[lI];
+                if (lmin > lVals[lI]) lmin = lVals[lI];
+                lI++;
+                lTot = lTot + lr.HD;
+                HDes = (lmax - lmin);
+                HDmax = lmax;
+                HDmin = lmin;
+            }
+            HDavg = lTot / lCnt;
+            HDsd = LawlerBallisticsFactory.SampleStandardDeviation(lVals);
+        }
+        private void VADstat()
+        {
+            double lTot = 0, lmax = 0, lmin = 0;
+            double[] lVals = new double[Rounds.Count];
+            Int32 lCnt = 0, lI = 0;
+
+            lCnt = Rounds.Count;
+            if (lCnt == 0)
+            {
+                VADavg = 0;
+                VADsd = 0;
+                VADmax = 0;
+                VADmin = 0;
+                VADes = 0;
+                return;
+            }
+            foreach (Round lr in Rounds)
+            {
+                lVals[lI] = lr.VAD;
+                if (lI == 0)
+                {
+                    lmin = lVals[lI];
+                    lmax = lVals[lI];
+                }
+                if (lmax < lVals[lI]) lmax = lVals[lI];
+                if (lmin > lVals[lI]) lmin = lVals[lI];
+                lI++;
+                lTot = lTot + lr.VAD;
+                VADes = (lmax - lmin);
+                VADmax = lmax;
+                VADmin = lmin;
+            }
+            VADavg = lTot / lCnt;
+            VADsd = LawlerBallisticsFactory.SampleStandardDeviation(lVals);
+        }
+        private void HADstat()
+        {
+            double lTot = 0, lmax = 0, lmin = 0;
+            double[] lVals = new double[Rounds.Count];
+            Int32 lCnt = 0, lI = 0;
+
+            lCnt = Rounds.Count;
+            if (lCnt == 0)
+            {
+                HADavg = 0;
+                HADsd = 0;
+                HADmax = 0;
+                HADmin = 0;
+                HADes = 0;
+                return;
+            }
+            foreach (Round lr in Rounds)
+            {
+                lVals[lI] = lr.HAD;
+                if (lI == 0)
+                {
+                    lmin = lVals[lI];
+                    lmax = lVals[lI];
+                }
+                if (lmax < lVals[lI]) lmax = lVals[lI];
+                if (lmin > lVals[lI]) lmin = lVals[lI];
+                lI++;
+                lTot = lTot + lr.HAD;
+                HADes = (lmax - lmin);
+                HADmax = lmax;
+                HADmin = lmin;
+            }
+            HADavg = lTot / lCnt;
+            HADsd = LawlerBallisticsFactory.SampleStandardDeviation(lVals);
+        }
+        private void RMSDstat()
+        {
+            double lTot = 0, lmax = 0, lmin = 0;
+            double[] lVals = new double[Rounds.Count];
+            Int32 lCnt = 0, lI = 0;
+
+            lCnt = Rounds.Count;
+            if (lCnt == 0)
+            {
+                RMSDavg = 0;
+                RMSDsd = 0;
+                RMSDmax = 0;
+                RMSDmin = 0;
+                RMSDes = 0;
+                return;
+            }
+            foreach (Round lr in Rounds)
+            {
+                lVals[lI] = lr.RMSD;
+                if (lI == 0)
+                {
+                    lmin = lVals[lI];
+                    lmax = lVals[lI];
+                }
+                if (lmax < lVals[lI]) lmax = lVals[lI];
+                if (lmin > lVals[lI]) lmin = lVals[lI];
+                lI++;
+                lTot = lTot + lr.RMSD;
+                RMSDes = (lmax - lmin);
+                RMSDmax = lmax;
+                RMSDmin = lmin;
+            }
+            RMSDavg = lTot / lCnt;
+            RMSDsd = LawlerBallisticsFactory.SampleStandardDeviation(lVals);
+        }
+        private void GDVstat()
+        {
+            double lTot = 0, lmax = 0, lmin = 0;
+            double[] lVals = new double[Rounds.Count];
+            Int32 lCnt = 0, lI = 0;
+
+            lCnt = Rounds.Count;
+            if (lCnt == 0)
+            {
+                GDVavg = 0;
+                GDVsd = 0;
+                GDVmax = 0;
+                GDVmin = 0;
+                GDVes = 0;
+                return;
+            }
+            foreach (Round lr in Rounds)
+            {
+                lVals[lI] = lr.GDV;
+                if (lI == 0)
+                {
+                    lmin = lVals[lI];
+                    lmax = lVals[lI];
+                }
+                if (lmax < lVals[lI]) lmax = lVals[lI];
+                if (lmin > lVals[lI]) lmin = lVals[lI];
+                lI++;
+                lTot = lTot + lr.GDV;
+                GDVes = (lmax - lmin);
+                GDVmax = lmax;
+                GDVmin = lmin;
+            }
+            GDVavg = lTot / lCnt;
+            GDVsd = LawlerBallisticsFactory.SampleStandardDeviation(lVals);
+        }
+        private void VELADstat()
+        {
+            double lTot = 0, lmax = 0, lmin = 0;
+            double[] lVals = new double[Rounds.Count];
+            Int32 lCnt = 0, lI = 0;
+
+            lCnt = Rounds.Count;
+            if (lCnt == 0)
+            {
+                VELADavg = 0;
+                VELADsd = 0;
+                VELADmax = 0;
+                VELADmin = 0;
+                VELADes = 0;
+                return;
+            }
+            foreach (Round lr in Rounds)
+            {
+                lVals[lI] = lr.VELAD;
+                if (lI == 0)
+                {
+                    lmin = lVals[lI];
+                    lmax = lVals[lI];
+                }
+                if (lmax < lVals[lI]) lmax = lVals[lI];
+                if (lmin > lVals[lI]) lmin = lVals[lI];
+                lI++;
+                lTot = lTot + lr.VELAD;
+                VELADes = (lmax - lmin);
+                VELADmax = lmax;
+                VELADmin = lmin;
+            }
+            VELADavg = lTot / lCnt;
+            VELADsd = LawlerBallisticsFactory.SampleStandardDeviation(lVals);
         }
         #endregion
     }

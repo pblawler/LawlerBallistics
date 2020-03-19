@@ -788,7 +788,7 @@ namespace LawlerBallisticsDesk.Classes
                     lGF = lGF + "<primerid value=\"" + lr.PrimerID.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
                     lGF = lGF + "</primerid>" + System.Environment.NewLine;
                     lGF = lGF + "<Lots>" + System.Environment.NewLine;
-                    foreach(CartridgeLot ll in lr.Lots)
+                    foreach(RecipeLot ll in lr.Lots)
                     {
                         lGF = lGF + "<Lot>" + System.Environment.NewLine;
                         lGF = lGF + "<RecipeID value=\"" + ll.RecipeID + "\" type=\"string\">" + System.Environment.NewLine;
@@ -974,16 +974,16 @@ namespace LawlerBallisticsDesk.Classes
                     ltg.PrimerID = lNR;
                     ltg.RecpPrimer = LawlerBallisticsFactory.GetPrimer(ltg.PrimerID);
 
-                    ltg.Lots = new ObservableCollection<CartridgeLot>();
+                    ltg.Lots = new ObservableCollection<RecipeLot>();
                     XmlNode lLots = lgn.SelectSingleNode("Lots");
                     XmlNode lLotProp;
                     string lLotPropVal;
-                    CartridgeLot lRLC;
+                    RecipeLot lRLC;
                     if(lLots != null)
                     {
                         foreach (XmlNode lLot in lLots)
                         {
-                            lRLC = new CartridgeLot();
+                            lRLC = new RecipeLot();
                             lLotPropVal = "";
                             lLotProp = lLot.SelectSingleNode("RecipeID");
                             lLotPropVal = lLotProp.Attributes["value"].Value;
