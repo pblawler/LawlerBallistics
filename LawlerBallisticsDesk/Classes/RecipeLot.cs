@@ -894,19 +894,19 @@ namespace LawlerBallisticsDesk.Classes
         public double COALmin { get { return _COALmin; } set { _COALmin = value; RaisePropertyChanged(nameof(COALmin)); } }
         public double COALes { get { return _COALes; } set { _COALes = value; RaisePropertyChanged(nameof(COALes)); } }
         public double COALsdmulti { get { if (_COALsdmulti == 0) _COALsdmulti = 1; return _COALsdmulti; } set { _COALsdmulti = value; RaisePropertyChanged(nameof(COALsdmulti)); } }
-        public double MVavg { get { return _MVavg; } set { _MVavg = value; RaisePropertyChanged(nameof(MVavg)); } }
+        public double MVavg { get { return _MVavg; } set { _MVavg = value; UpdateVELAD(); RaisePropertyChanged(nameof(MVavg)); } }
         public double MVsd { get { return _MVsd; } set { _MVsd = value; RaisePropertyChanged(nameof(MVsd)); } }
         public double MVmax { get { return _MVmax; } set { _MVmax = value; RaisePropertyChanged(nameof(MVmax)); } }
         public double MVmin { get { return _MVmin; } set { _MVmin = value; RaisePropertyChanged(nameof(MVmin)); } }
         public double MVes { get { return _MVes; } set { _MVes = value; RaisePropertyChanged(nameof(MVes)); } }
         public double MVsdmulti { get { if (_MVsdmulti == 0) _MVsdmulti = 1; return _MVsdmulti; } set { _MVsdmulti = value; RaisePropertyChanged(nameof(MVsdmulti)); } }
-        public double VDavg { get { return _VDavg; } set { _VDavg = value; RaisePropertyChanged(nameof(VDavg)); } }
+        public double VDavg { get { return _VDavg; } set { _VDavg = value; UpdateVAD(); RaisePropertyChanged(nameof(VDavg)); } }
         public double VDsd { get { return _VDsd; } set { _VDsd = value; RaisePropertyChanged(nameof(VDsd)); } }
         public double VDmax { get { return _VDmax; } set { _VDmax = value; RaisePropertyChanged(nameof(VDmax)); } }
         public double VDmin { get { return _VDmin; } set { _VDmin = value; RaisePropertyChanged(nameof(VDmin)); } }
         public double VDes { get { return _VDes; } set { _VDes = value; RaisePropertyChanged(nameof(VDes)); } }
         public double VDsdmulti { get { if (_VDsdmulti == 0) _VDsdmulti = 1; return _VDsdmulti; } set { _VDsdmulti = value; RaisePropertyChanged(nameof(VDsdmulti)); } }
-        public double HDavg { get { return _HDavg; } set { _HDavg = value; RaisePropertyChanged(nameof(HDavg)); } }
+        public double HDavg { get { return _HDavg; } set { _HDavg = value; UpdateHAD(); RaisePropertyChanged(nameof(HDavg)); } }
         public double HDsd { get { return _HDsd; } set { _HDsd = value; RaisePropertyChanged(nameof(HDsd)); } }
         public double HDmax { get { return _HDmax; } set { _HDmax = value; RaisePropertyChanged(nameof(HDmax)); } }
         public double HDmin { get { return _HDmin; } set { _HDmin = value; RaisePropertyChanged(nameof(HDmin)); } }
@@ -979,6 +979,7 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Private Routines"
+        #region "Property Stats"
         private void BBTOstat()
         {
             double lTot = 0, lmax=0, lmin=0;
@@ -1749,6 +1750,49 @@ namespace LawlerBallisticsDesk.Classes
             VELADavg = lTot / lCnt;
             VELADsd = LawlerBallisticsFactory.SampleStandardDeviation(lVals);
         }
+        #endregion
+        #region "Update Relative Properties"
+        private void UpdateHAD()
+        {
+            foreach(Round lR in Rounds)
+            {
+                lR.HAD = Math.Abs(lR.HD - HDavg);
+            }
+            UpdateRMSD();
+        }
+        private void UpdateVAD()
+        {
+            foreach (Round lR in Rounds)
+            {
+                lR.VAD = Math.Abs(lR.VD - VDavg);
+            }
+            UpdateRMSD();
+        }
+        private void UpdateRMSD()
+        {
+            foreach (Round lR in Rounds)
+            {
+                lR.RMSD = Math.Pow((Math.Pow(lR.VAD, 2) + Math.Pow(lR.HAD, 2)), .5);
+            }
+            UpdateGDV();
+        }
+        private void UpdateGDV()
+        {
+            double lComp = RMSDavg + (RMSDsd * RMSDsdmulti);
+
+            foreach (Round lR in Rounds)
+            {
+                lR.GDV = lComp - lR.RMSD;
+            }
+        }
+        private void UpdateVELAD()
+        {
+            foreach (Round lR in Rounds)
+            {
+                lR.VELAD = Math.Abs(lR.MV - MVavg);
+            }
+        }
+        #endregion
         #endregion
     }
 }

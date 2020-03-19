@@ -42,7 +42,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="clmNo" Header="No." Binding="{Binding RndNo}" Width="50">
+                <DataGridTextColumn x:Name="clmNo" Header="No." Binding="{Binding RndNo}" IsReadOnly="True" Width="50">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight"  Value="Bold" />
@@ -55,6 +55,15 @@
                             <Setter Property="HorizontalAlignment" Value="Left" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn x:Name="clmFPS" Header="MV" Binding="{Binding MV, StringFormat={}{0:n0}}" Width="*">
                     <DataGridTextColumn.HeaderStyle>
@@ -94,6 +103,11 @@
                                     </MultiBinding>
                                 </Setter.Value>
                             </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
@@ -124,6 +138,11 @@
                                     </MultiBinding>
                                 </Setter.Value>
                             </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
@@ -154,10 +173,15 @@
                                     </MultiBinding>
                                 </Setter.Value>
                             </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="VAD" Binding="{Binding VAD, StringFormat={}{0:n4}}"  Width="*">
+                <DataGridTextColumn Header="VAD" Binding="{Binding VAD, StringFormat={}{0:n4}}" IsReadOnly="True"  Width="*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight"  Value="Bold" />
@@ -184,10 +208,15 @@
                                     </MultiBinding>
                                 </Setter.Value>
                             </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="HAD" Binding="{Binding HAD, StringFormat={}{0:n4}}"  Width="*">
+                <DataGridTextColumn Header="HAD" Binding="{Binding HAD, StringFormat={}{0:n4}}" IsReadOnly="True" Width="*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight"  Value="Bold" />
@@ -214,10 +243,15 @@
                                     </MultiBinding>
                                 </Setter.Value>
                             </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="RMSD" Binding="{Binding RMSD, StringFormat={}{0:n4}}"  Width="*">
+                <DataGridTextColumn Header="RMSD" Binding="{Binding RMSD, StringFormat={}{0:n4}}" IsReadOnly="True"  Width="*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight"  Value="Bold" />
@@ -244,10 +278,15 @@
                                     </MultiBinding>
                                 </Setter.Value>
                             </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="GDV" Binding="{Binding GDV, StringFormat={}{0:n4}}"  Width="*">
+                <DataGridTextColumn Header="GDV" Binding="{Binding GDV, StringFormat={}{0:n4}}" IsReadOnly="True"  Width="*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight"  Value="Bold" />
@@ -274,10 +313,15 @@
                                     </MultiBinding>
                                 </Setter.Value>
                             </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="VELAD" Binding="{Binding VELAD, StringFormat={}{0:n4}}"  Width="*">
+                <DataGridTextColumn Header="VELAD" Binding="{Binding VELAD, StringFormat={}{0:n4}}" IsReadOnly="True"  Width="*">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight"  Value="Bold" />
@@ -296,7 +340,7 @@
                                 <Setter.Value>
                                     <MultiBinding Converter="{StaticResource BWBCC}">
                                         <MultiBinding.Bindings>
-                                            <Binding Path="CHS"/>
+                                            <Binding Path="VELAD"/>
                                             <Binding Path="DataContext.SelectedRecipe.SelectedLot.VELADavg" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=UserControl}"/>
                                             <Binding Path="DataContext.SelectedRecipe.SelectedLot.VELADsd" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=UserControl}"/>
                                             <Binding Path="DataContext.SelectedRecipe.SelectedLot.VELADsdmulti" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=UserControl}"/>
@@ -304,6 +348,11 @@
                                     </MultiBinding>
                                 </Setter.Value>
                             </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
@@ -335,7 +384,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="clmName" Header="STAT" Binding="{Binding name}" Width="50">
+                <DataGridTextColumn x:Name="clmName" Header="STAT" Binding="{Binding name}" IsReadOnly="True" Width="50">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight"  Value="Bold" />

@@ -131,4 +131,33 @@ namespace LawlerBallisticsDesk.Views.Cartridges
             throw new NotImplementedException();
         }
     }
+    /// <summary>
+    /// Used in recipe data grid to highlight outlier cells
+    /// </summary>
+    public class GDVrowClrConverter : IValueConverter
+    {
+        public object Convert(object value, Type targettype, object Parameter, CultureInfo culture)
+        {
+            double lval = 1;
+            Brush lRTN = Brushes.Transparent;
+
+            try
+            {
+                lval = (double)value;
+                if (lval < 0)
+                {
+                    lRTN = Brushes.Red;
+                }
+            }
+            catch
+            {
+                lRTN = Brushes.Transparent;
+            }
+            return lRTN;
+        }
+        public object ConvertBack(object value, Type targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
