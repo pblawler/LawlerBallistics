@@ -26,7 +26,18 @@
                   AlternationCount="2" CanUserAddRows="False" CanUserDeleteRows="False" KeyUp="DataGrid_KeyUp" >
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
-                    <Style.Triggers>
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource FLYER}">
+                                <MultiBinding.Bindings>
+                                    <Binding Path="GDV"/>
+                                    <Binding Path="RndNo"/>
+                                    <!--<Binding Path="DataContext.SelectedRecipe.SelectedLot.CLavg" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=UserControl}"/>-->
+                                </MultiBinding.Bindings>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                    <!--<Style.Triggers>
                         <Trigger Property="AlternationIndex" Value="0">
                             <Setter Property="Background" Value="White" />
                         </Trigger>
@@ -38,16 +49,34 @@
                                 <Setter Property="Background" Value="LightGray" />
                             </DataTrigger.Setters>
                         </DataTrigger>
-                    </Style.Triggers>
-                    <Setter Property="Background" >
-                        <Setter.Value>
-                            <Binding Path="GDV" Converter="{StaticResource FLYER}"/>
-                        </Setter.Value>
-                    </Setter>
+                    </Style.Triggers>-->
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="clmNo" Header="No." Binding="{Binding RndNo}" IsReadOnly="True" Width="50">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="FontWeight"  Value="Bold" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="GDV" Binding="{Binding GDV}" IsReadOnly="True" Width="0" Visibility="Hidden">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight"  Value="Bold" />

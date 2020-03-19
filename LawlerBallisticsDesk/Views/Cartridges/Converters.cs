@@ -134,19 +134,27 @@ namespace LawlerBallisticsDesk.Views.Cartridges
     /// <summary>
     /// Used in recipe data grid to highlight outlier cells
     /// </summary>
-    public class GDVrowClrConverter : IValueConverter
+    public class GDVrowClrConverter : IMultiValueConverter
     {
-        public object Convert(object value, Type targettype, object Parameter, CultureInfo culture)
+        public object Convert(object[] value, Type targettype, object Parameter, CultureInfo culture)
         {
-            double lval = 1;
+            double lval, lnval;
             Brush lRTN = Brushes.Transparent;
 
             try
             {
-                lval = (double)value;
+                lval = (double)value[0];
+                lnval = (int)value[1];
                 if (lval < 0)
                 {
                     lRTN = Brushes.Red;
+                }
+                else
+                {
+                    if((lnval % 2) == 0)
+                    {
+                        lRTN = Brushes.Cyan;
+                    }
                 }
             }
             catch
@@ -155,7 +163,7 @@ namespace LawlerBallisticsDesk.Views.Cartridges
             }
             return lRTN;
         }
-        public object ConvertBack(object value, Type targetTypes, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
