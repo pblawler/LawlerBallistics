@@ -7,14 +7,18 @@
         ResizeMode="NoResize"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="Cartridge Lot" Height="186" Width="320.667">
+        Title="Cartridge Lot" Height="214.213" Width="320.667">
     <Grid>
-        <Button Content="OK" HorizontalAlignment="Left" Height="28" Margin="48,102,0,0" VerticalAlignment="Top" Width="106" Click="Button_Click"/>
-        <Button Content="Cancel" HorizontalAlignment="Left" Height="28" Margin="159,102,0,0" VerticalAlignment="Top" Width="106" Click="Button_Click_1"/>
-        <TextBox HorizontalAlignment="Left" Height="20" Margin="95,48,0,0" HorizontalContentAlignment="Center" 
+        <Button Content="OK" HorizontalAlignment="Left" Height="28" Margin="49,135,0,0" VerticalAlignment="Top" Width="106" Click="Button_Click"/>
+        <Button Content="Cancel" HorizontalAlignment="Left" Height="28" Margin="160,135,0,0" VerticalAlignment="Top" Width="106" Click="Button_Click_1"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="101,49,0,0" HorizontalContentAlignment="Center" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="122" Text="{Binding LotSize, StringFormat=\{0:n0\}, UpdateSourceTrigger=Default}"/>
-        <Label Content="Number of Rounds" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="30" 
-            FontWeight="Bold" Margin="95,18,0,0" VerticalAlignment="Top" Width="122"/>
+        <Label Content="Number of Sample Rounds" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="30" 
+            FontWeight="Bold" Margin="81,19,0,0" VerticalAlignment="Top" Width="163"/>
+        <TextBox HorizontalAlignment="Left" Height="20" Margin="101,104,0,0" HorizontalContentAlignment="Center" 
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="122" Text="{Binding TotLotSize, StringFormat=\{0:n0\}, UpdateSourceTrigger=Default}"/>
+        <Label Content="Number of Total Rounds" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="30" 
+            FontWeight="Bold" Margin="81,74,0,0" VerticalAlignment="Top" Width="163"/>
 
     </Grid>
 </Window>

@@ -25,6 +25,12 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Messaging"
+        private void SendPropertyChangedMsg(string name)
+        {
+            var msg = new PropertyChangedMsg() { Sender = "RecipeLot", PropName = name, Msg = "" };
+            Messenger.Default.Send<PropertyChangedMsg>(msg);
+        }
+
         private void ReceiveMessage(PropertyChangedMsg msg)
         {
             string lsender = msg.Sender;
@@ -440,6 +446,7 @@ namespace LawlerBallisticsDesk.Classes
                     break;
                 case "VD":
                     VDstat();
+                    SendPropertyChangedMsg("ChartDataUpdate");
                     lRndData = true;
                     foreach (Round lr in LotStats)
                     {
@@ -467,6 +474,7 @@ namespace LawlerBallisticsDesk.Classes
                     break;
                 case "HD":
                     HDstat();
+                    SendPropertyChangedMsg("ChartDataUpdate");
                     lRndData = true;
                     foreach (Round lr in LotStats)
                     {
@@ -639,9 +647,9 @@ namespace LawlerBallisticsDesk.Classes
 
         #region "Private Variables"
         private string _ID;
+        private int _TotalCnt;
         private string _LotDate;
         private string _RecipeID;
-        private Recipe _Recipe;
         private string _SerialNo;
         private string _BulletLot;
         private string _CaseLot;
@@ -788,7 +796,7 @@ namespace LawlerBallisticsDesk.Classes
         public string ID { get { return _ID; } set { _ID = value; RaisePropertyChanged(nameof(ID)); } }
         public string LotDate { get { return _LotDate; } set { _LotDate = value; RaisePropertyChanged(nameof(LotDate)); } }
         public string RecipeID { get { return _RecipeID;} set { _RecipeID = value; RaisePropertyChanged(nameof(RecipeID)); } }
-        public Int32 Count 
+        public Int32 SampleCount 
         {
             get
             {
@@ -802,6 +810,8 @@ namespace LawlerBallisticsDesk.Classes
                 }
             }
         }
+        //TODO: add totalcount to data persistance.
+        public int TotalCount { get { return _TotalCnt; } set { _TotalCnt = value; RaisePropertyChanged(nameof(TotalCount)); } }
         public string SerialNo { get { return _SerialNo; } set { _SerialNo = value; RaisePropertyChanged(nameof(SerialNo)); } }
         public string BulletLot { get { return _BulletLot; } set { _BulletLot = value; RaisePropertyChanged(nameof(BulletLot)); } }
         public string CaseLot { get { return _CaseLot; } set { _CaseLot = value; RaisePropertyChanged(nameof(CaseLot)); } }

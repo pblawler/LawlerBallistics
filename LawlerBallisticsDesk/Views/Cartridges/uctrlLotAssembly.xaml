@@ -32,24 +32,10 @@
                                 <MultiBinding.Bindings>
                                     <Binding Path="GDV"/>
                                     <Binding Path="RndNo"/>
-                                    <!--<Binding Path="DataContext.SelectedRecipe.SelectedLot.CLavg" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=UserControl}"/>-->
                                 </MultiBinding.Bindings>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
-                    <!--<Style.Triggers>
-                        <Trigger Property="AlternationIndex" Value="0">
-                            <Setter Property="Background" Value="White" />
-                        </Trigger>
-                        <Trigger Property="AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="Aqua" />
-                        </Trigger>
-                        <DataTrigger Binding="{Binding Path=Selectable}" Value="False">
-                            <DataTrigger.Setters>
-                                <Setter Property="Background" Value="LightGray" />
-                            </DataTrigger.Setters>
-                        </DataTrigger>
-                    </Style.Triggers>-->
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>

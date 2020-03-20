@@ -19,9 +19,12 @@ namespace LawlerBallisticsDesk.Views.Cartridges
     /// </summary>
     public partial class frmCreateCartridgeLot : Window
     {
-        private Int32 _LotSize;
+        private Int32 _SampleSize;
+        private Int32 _TotalLotSize;
 
-        public Int32 LotSize { get { return _LotSize; } set { _LotSize = value; } }
+        public Int32 SampleSize { get { return _SampleSize; } set { _SampleSize = value; } }
+        public Int32 TotalLotSize { get { return _TotalLotSize; } set { _TotalLotSize = value; } }
+
         public frmCreateCartridgeLot()
         {
             InitializeComponent();
@@ -34,7 +37,8 @@ namespace LawlerBallisticsDesk.Views.Cartridges
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            LotSize = 0;
+            TotalLotSize = 0;
+            SampleSize = 0;
             this.Close();
         }
     }

@@ -1,7 +1,12 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Views.Cartridges;
+using OxyPlot;
+using OxyPlot.Annotations;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,11 +19,35 @@ namespace LawlerBallisticsDesk.ViewModel
 {
     public class RecipeViewModel : ViewModelBase
     {
+        #region "Messaging"
+        private void ReceiveMessage(PropertyChangedMsg msg)
+        {
+            string lsender = msg.Sender;
+            string lProp = msg.PropName;
+            string lmsg = msg.Msg;
+            switch (lProp)
+            {
+                case "VD":
+                    LoadCharts();
+                    break;
+                case "HD":
+                    LoadCharts();
+                    break;
+                case "ChartDataUpdate":
+                    LoadCharts();
+                    break;
+                default:
+                    break;
+            }
+        }
+        #endregion
+
         #region "RelayCommands"
         private RelayCommand _AddLotCommand;
         private RelayCommand _AddSAMMIRecipeCommand;
         private RelayCommand _OpenRecipeCommand;
         private RelayCommand _OpenRecipeLotCommand;
+        private RelayCommand _ResetChartCommand;
         private RelayCommand<System.Windows.Input.KeyEventArgs> _KeyUpCommand;
         private RelayCommand<System.Windows.Input.KeyEventArgs> _KeyUpLotCommand;
         private RelayCommand<System.Windows.Input.KeyEventArgs> _KeyUpRoundCommand;
@@ -42,6 +71,13 @@ namespace LawlerBallisticsDesk.ViewModel
             get
             {
                 return _OpenRecipeLotCommand ?? (_OpenRecipeLotCommand = new RelayCommand(() => OpenRecipeLot()));
+            }
+        }
+        public RelayCommand ResetChartCommand
+        {
+            get
+            {
+                return _ResetChartCommand ?? (_ResetChartCommand = new RelayCommand(() => ResetChart()));
             }
         }
         public RelayCommand<System.Windows.Input.KeyEventArgs> KeyUpCommand
@@ -81,18 +117,24 @@ namespace LawlerBallisticsDesk.ViewModel
         private Recipe _SelectedRecipe;
         private frmLoadRecipe _frmLoadRecipe;
         private frmRecipeLot _frmRecipeLot;
+        private PlotModel _PerformancePlot;
         #endregion
 
         #region "Properties"
-        public Recipe SelectedRecipe { get { return _SelectedRecipe; } set { _SelectedRecipe = value; RaisePropertyChanged(nameof(SelectedRecipe)); } }
+        public Recipe SelectedRecipe { get { return _SelectedRecipe; } set { _SelectedRecipe = value; LoadCharts(); RaisePropertyChanged(nameof(SelectedRecipe)); } }
         public ObservableCollection<Recipe> MyRecipes { get {return LawlerBallisticsFactory.MyRecipes; } 
             set { LawlerBallisticsFactory.MyRecipes = value; RaisePropertyChanged(nameof(MyRecipes)); } }
         public ObservableCollection<Case> Cases { get { return LawlerBallisticsFactory.MyCases; } }
+        public PlotModel PerformancePlot { get { return _PerformancePlot; } }
         #endregion
 
         #region "Constructor"
         public RecipeViewModel()
         {
+            //GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<PropertyChangedMsg>(this, (action ) => ReceiveMessage(action ));
+            Messenger.Default.Register<PropertyChangedMsg>(this, (Msg) => ReceiveMessage(Msg));
+            _PerformancePlot = new PlotModel();
+            _PerformancePlot.Title = "Group Data";
             LoadRecipeCommand = new RelayCommand(LoadThisRecipe, null);
             SaveRecipeDataCommand = new RelayCommand(SaveRecipeCollection, null);
             SaveRecipeCommand = new RelayCommand(SaveRecipe, null);
@@ -116,7 +158,7 @@ namespace LawlerBallisticsDesk.ViewModel
         {
             _frmRecipeLot = new frmRecipeLot();
             _frmRecipeLot.Show();
-
+            LoadCharts();
         }
         private void AddSAMMIRecipe()
         {
@@ -281,9 +323,9 @@ namespace LawlerBallisticsDesk.ViewModel
         {
             Int32 lRndNo = 0;
             frmCreateCartridgeLot lfrmCreatLot = new frmCreateCartridgeLot();
-            lfrmCreatLot.LotSize = 0;
+            lfrmCreatLot.TotalLotSize = 0;
             lfrmCreatLot.ShowDialog();
-            if(lfrmCreatLot.LotSize == 0)
+            if(lfrmCreatLot.TotalLotSize == 0)
             {
                 lfrmCreatLot.Close();
                 lfrmCreatLot = null;
@@ -296,8 +338,10 @@ namespace LawlerBallisticsDesk.ViewModel
             {
                 lCartLt.SerialNo = "0" + lCartLt.SerialNo;
             }
+            lCartLt.TotalCount = lfrmCreatLot.TotalLotSize;
+            //TODO: once inventory control is added. Decrement inventory by lot size here.
             Round lRnd;
-            for(Int32 I = 0; I < (lfrmCreatLot.LotSize); I++)
+            for(Int32 I = 0; I < (lfrmCreatLot.SampleSize); I++)
             {
                 lRnd = new Round();
                 lRndNo++;
@@ -308,6 +352,55 @@ namespace LawlerBallisticsDesk.ViewModel
             lfrmCreatLot.Close();
             lfrmCreatLot = null;
             RaisePropertyChanged(nameof(SelectedRecipe));
+        }
+        public void LoadCharts()
+        {
+            if (SelectedRecipe == null) return;
+            if (SelectedRecipe.SelectedLot == null) return;
+            if (SelectedRecipe.SelectedLot.Rounds == null) return;
+            if (SelectedRecipe.SelectedLot.Rounds.Count == 0) return;
+            _PerformancePlot.Series.Clear();
+            _PerformancePlot.Axes.Clear();
+            _PerformancePlot.Annotations.Clear();
+            double lHspread = Math.Max(Math.Abs(SelectedRecipe.SelectedLot.HDmax), Math.Abs(SelectedRecipe.SelectedLot.HDmin));
+            double lVspread = Math.Max(Math.Abs(SelectedRecipe.SelectedLot.VDmax), Math.Abs(SelectedRecipe.SelectedLot.VDmin));
+            double lSpread = Math.Max(lHspread, lVspread);
+            ScatterSeries lPt = new ScatterSeries();
+            LinearAxis lVert = new LinearAxis();
+            LinearAxis lHoriz = new LinearAxis();
+            lHoriz.Position = AxisPosition.Bottom;
+            lHoriz.Minimum = SelectedRecipe.SelectedLot.HDavg - (lSpread * 2);
+            lHoriz.Maximum = SelectedRecipe.SelectedLot.HDavg + (lSpread * 2);
+            lHoriz.MajorGridlineColor = OxyColors.Black;
+            lHoriz.MajorGridlineStyle = LineStyle.Dot;
+            _PerformancePlot.Axes.Add(lHoriz);
+            lVert.Key = "Iloc";
+            lVert.Position = AxisPosition.Left;
+            lVert.Minimum = SelectedRecipe.SelectedLot.VDavg - (lSpread * 2);
+            lVert.Maximum = SelectedRecipe.SelectedLot.VDavg + (lSpread * 2);
+            lVert.MajorGridlineColor = OxyColors.Black;
+            lVert.MajorGridlineStyle = LineStyle.Dot;
+            _PerformancePlot.Axes.Add(lVert);
+            lPt.Title = "Impact Location";
+            lPt.YAxisKey = "Iloc";
+            ScatterPoint lSP;
+            foreach (Round lR in SelectedRecipe.SelectedLot.Rounds)
+            {
+                lSP = new ScatterPoint(lR.HD, lR.VD);
+                var pointAnnotation1 = new PointAnnotation();
+                pointAnnotation1.X = lR.HD;
+                pointAnnotation1.Y = lR.VD;
+                pointAnnotation1.Text = lR.HD.ToString() + ", " + lR.VD.ToString();
+                _PerformancePlot.Annotations.Add(pointAnnotation1);
+                lPt.Points.Add(lSP);
+            }
+            _PerformancePlot.Series.Add(lPt);
+            _PerformancePlot.InvalidatePlot(true);
+        }
+        public void ResetChart()
+        {
+            _PerformancePlot.ResetAllAxes();
+            _PerformancePlot.InvalidatePlot(true);
         }
         #endregion
     }
