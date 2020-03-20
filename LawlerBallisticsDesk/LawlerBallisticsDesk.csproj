@@ -456,22 +456,19 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="miller_stability_1.pdf" />
+    <None Include="RefDocs\miller_stability_1.pdf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="SGarticle.pdf" />
+    <None Include="RefDocs\SGarticle.pdf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ReadMeBallisticCalculator.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="mcgyro.txt" />
+    <Resource Include="RefDocs\mcgyro.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
