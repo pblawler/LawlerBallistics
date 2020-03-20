@@ -17,6 +17,7 @@ using LawlerBallisticsDesk.Views.Ballistics;
 using LawlerBallisticsDesk.Views.Maps;
 using LawlerBallisticsDesk.Views.Guns;
 using System.ComponentModel;
+using LawlerBallisticsDesk.Views;
 
 namespace LawlerBallisticsDesk.ViewModel
 {

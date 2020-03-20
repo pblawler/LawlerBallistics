@@ -63,9 +63,9 @@ namespace LawlerBallisticsDesk.Classes
         public string CartridgeID { get { return _CartridgeID; } set { _CartridgeID = value; RaisePropertyChanged(nameof(CartridgeID)); } }
         public Cartridge RecpCartridge { get { return _RecpCartridge; } set { _RecpCartridge = value; RaisePropertyChanged(nameof(RecpCartridge)); } }
         public string GunID { get { return _GunID; } set { _GunID = value; RaisePropertyChanged(nameof(GunID)); } }
-        public Gun RecpGun { get { return _RecpGun; } set { _RecpGun = value; RaisePropertyChanged(nameof(RecpGun)); } }
+//        public Gun RecpGun { get { return _RecpGun; } set { _RecpGun = value; RaisePropertyChanged(nameof(RecpGun)); } }
         public string BarrelID { get { return _BarrelID; } set { _GunID = value; RaisePropertyChanged(nameof(BarrelID)); } }
-        public Barrel RecpBarrel { get { return _RecpBarrel; } set { _RecpBarrel = value; RaisePropertyChanged(nameof(RecpBarrel)); } }
+ //       public Barrel RecpBarrel { get { return _RecpBarrel; } set { _RecpBarrel = value; RaisePropertyChanged(nameof(RecpBarrel)); } }
         public string CaseID { get { return _CaseID; } set { _CaseID = value; RaisePropertyChanged(nameof(CaseID)); } }
         public Case RecpCase { get { return _RecpCase; } set { _RecpCase = value; RaisePropertyChanged(nameof(RecpCase)); } }
         public string PrimerID { get { return _PrimerID; } set { _PrimerID = value; RaisePropertyChanged(nameof(PrimerID)); } }

@@ -592,7 +592,7 @@ namespace LawlerBallisticsDesk.Classes
                         lGF = lGF + "</neckdiameter>" + System.Environment.NewLine;
                     try
                     {
-                            lGF = lGF + "<selectedloadid value=\"" + lb.SelectedLoad.ID.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
+                            lGF = lGF + "<selectedloadid value=\"" + lb.SelectedRecipe.ID.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
                             lGF = lGF + "</selectedloadid>" + System.Environment.NewLine;
                         }
                         catch

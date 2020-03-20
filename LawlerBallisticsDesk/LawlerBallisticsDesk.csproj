@@ -310,11 +310,14 @@
     <Compile Include="Views\Cartridges\uctrlRecipes.xaml.cs">
       <DependentUpon>uctrlRecipes.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Guns\frmGun.xaml.cs">
+      <DependentUpon>frmGun.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Guns\frmBarrel.xaml.cs">
       <DependentUpon>frmBarrel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Guns\frmGun.xaml.cs">
-      <DependentUpon>frmGun.xaml</DependentUpon>
+    <Compile Include="Views\Guns\uctrlGun.xaml.cs">
+      <DependentUpon>uctrlGun.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Guns\uctrlGuns.xaml.cs">
       <DependentUpon>uctrlGuns.xaml</DependentUpon>
@@ -414,11 +417,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Guns\frmGun.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Guns\frmBarrel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Guns\frmGun.xaml">
+    <Page Include="Views\Guns\uctrlGun.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

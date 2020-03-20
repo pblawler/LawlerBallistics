@@ -37,8 +37,8 @@ namespace LawlerBallisticsDesk.Classes
         private double _HeadSpace;
         private double _Length;
         private Cartridge _Cartridge;
-        private ObservableCollection<Recipe> _Loads;
-        private Recipe _SelectedLoad;
+        private ObservableCollection<Recipe> _Recipes;
+        private Recipe _SelectedRecipe;
         #endregion
 
         #region "Properties"
@@ -63,8 +63,9 @@ namespace LawlerBallisticsDesk.Classes
         public double HeadSpace { get { return _HeadSpace; } set { _HeadSpace = value; RaisePropertyChanged(nameof(HeadSpace)); } }
         public double Length { get { return _Length; } set { _Length = value; RaisePropertyChanged(nameof(Length)); } }
         public Cartridge ParentCartridge { get { return _Cartridge; } set { _Cartridge = value; RaisePropertyChanged(nameof(ParentCartridge)); } }
-        public ObservableCollection<Recipe> Loads { get { return _Loads; } set { _Loads = value; RaisePropertyChanged(nameof(Loads)); } }
-        public Recipe SelectedLoad { get { return _SelectedLoad; } set { _SelectedLoad = value; RaisePropertyChanged(nameof(SelectedLoad)); } }
+        public ObservableCollection<Recipe> Recipes { get { return _Recipes; } set { _Recipes = value; RaisePropertyChanged(nameof(Recipes)); } }
+        public Recipe SelectedRecipe { get { return _SelectedRecipe; } set { _SelectedRecipe = value; RaisePropertyChanged(nameof(SelectedRecipe)); } }
+        public string[] RecipeList { get { return GetRecipeList(); } }
         #endregion
 
         #region "Constructor"
@@ -77,6 +78,22 @@ namespace LawlerBallisticsDesk.Classes
             _Model = "";
             _Name = "";
             _TwistDirection = TwistDirection.Right;
+        }
+        #endregion
+
+        #region "Private Routines"
+
+        private string[] GetRecipeList()
+        {
+            string[] lRTN = new string[Recipes.Count];
+            int lcnt = 0;
+
+            foreach(Recipe ln in Recipes)
+            {
+                lRTN[lcnt] = ln.Name;
+                lcnt++;
+            }
+            return lRTN;
         }
         #endregion
     }
