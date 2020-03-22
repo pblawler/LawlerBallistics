@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace LawlerBallisticsDesk.Views.Cartridges
 {
     /// <summary>
-    /// Interaction logic for frmLoadRecipe.xaml
+    /// Interaction logic for frmRecipe.xaml
     /// </summary>
-    public partial class frmLoadRecipe : Window
+    public partial class frmRecipe : Window
     {
-        public frmLoadRecipe(bool IsNew, bool IsBarrelSpecific)
+        public frmRecipe(bool IsNew, bool IsBarrelSpecific)
         {
             
             InitializeComponent();

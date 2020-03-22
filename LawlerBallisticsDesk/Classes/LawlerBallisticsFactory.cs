@@ -274,10 +274,42 @@ namespace LawlerBallisticsDesk.Classes
 
         #endregion
 
+        public static ObservableCollection<Recipe> BarrelRecipes(string BarrelID)
+        {
+            ObservableCollection<Recipe> lRTN = new ObservableCollection<Recipe>();
+
+            foreach (Recipe lR in MyRecipes)
+            {
+                if (lR.BarrelID != null)
+                {
+                    if (lR.BarrelID == BarrelID)
+                    {
+                        lRTN.Add(lR);
+                    }
+                }
+            }
+            return lRTN;
+        }
         public static void SaveMyCartridges()
         {
             DataPersistence lDataPersistence = new DataPersistence();
             lDataPersistence.SaveCartridgeData();
+        }
+        public static Barrel GetBarrel(string BarrelID)
+        {
+            Barrel lRTN = new Barrel();
+            foreach(Gun lg in MyGuns)
+            {
+                foreach(Barrel lb in lg.Barrels)
+                {
+                    if(lb.ID == BarrelID)
+                    {
+                        lRTN = lb;
+                        return lRTN;
+                    }
+                }
+            }
+            return lRTN;
         }
         public static Bullet GetBullet(string ID)
         {

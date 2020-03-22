@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LawlerBallisticsDesk.Views"
         xmlns:guns="clr-namespace:LawlerBallisticsDesk.Views.Guns"
+        xmlns:cartridges="clr-namespace:LawlerBallisticsDesk.Views.Cartridges"
         mc:Ignorable="d"
         Title="Gun" Height="450" Width="800">
     <Grid>
@@ -18,9 +19,9 @@
                     <guns:uctrlGun HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Recipe">
+            <TabItem Header="Recipes">
                 <Grid>
-                    
+                    <cartridges:uctrlBarrelRecipes HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Ballistic Data">

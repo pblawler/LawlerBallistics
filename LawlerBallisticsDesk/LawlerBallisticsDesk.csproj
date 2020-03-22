@@ -223,6 +223,7 @@
     <Compile Include="Classes\Barrel.cs" />
     <Compile Include="Classes\Bullet.cs" />
     <Compile Include="Classes\Cartridge.cs" />
+    <Compile Include="Classes\Gun\GunMsg.cs" />
     <Compile Include="Classes\RecipeLot.cs" />
     <Compile Include="Classes\Case.cs" />
     <Compile Include="Classes\DataPersistence.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="ViewModel\CasesViewModel.cs" />
     <Compile Include="ViewModel\PrimersViewModel.cs" />
     <Compile Include="ViewModel\GunsViewModel.cs" />
+    <Compile Include="ViewModel\BarrelRecipeViewModel.cs" />
     <Compile Include="ViewModel\RecipeViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\PowdersViewModel.cs" />
@@ -264,6 +266,9 @@
     </Compile>
     <Compile Include="Views\Cartridges\frmRecipeLot.xaml.cs">
       <DependentUpon>frmRecipeLot.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cartridges\frmBarrelLoadDev.xaml.cs">
+      <DependentUpon>frmBarrelLoadDev.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Cartridges\uctrlLotPerformance.xaml.cs">
       <DependentUpon>uctrlLotPerformance.xaml</DependentUpon>
@@ -289,8 +294,8 @@
     <Compile Include="Views\Cartridges\ucrtrlCases.xaml.cs">
       <DependentUpon>ucrtrlCases.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Cartridges\frmLoadRecipe.xaml.cs">
-      <DependentUpon>frmLoadRecipe.xaml</DependentUpon>
+    <Compile Include="Views\Cartridges\frmRecipe.xaml.cs">
+      <DependentUpon>frmRecipe.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Cartridges\uctrlCartridges.xaml.cs">
       <DependentUpon>uctrlCartridges.xaml</DependentUpon>
@@ -306,6 +311,9 @@
     </Compile>
     <Compile Include="Views\Cartridges\uctrlPrimers.xaml.cs">
       <DependentUpon>uctrlPrimers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cartridges\uctrlBarrelRecipes.xaml.cs">
+      <DependentUpon>uctrlBarrelRecipes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Cartridges\uctrlRecipes.xaml.cs">
       <DependentUpon>uctrlRecipes.xaml</DependentUpon>
@@ -357,6 +365,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Cartridges\frmBarrelLoadDev.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Cartridges\uctrlLotPerformance.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -389,7 +401,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Cartridges\frmLoadRecipe.xaml">
+    <Page Include="Views\Cartridges\frmRecipe.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -412,6 +424,10 @@
     <Page Include="Views\Cartridges\uctrlPrimers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Cartridges\uctrlBarrelRecipes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Cartridges\uctrlRecipes.xaml">
       <SubType>Designer</SubType>

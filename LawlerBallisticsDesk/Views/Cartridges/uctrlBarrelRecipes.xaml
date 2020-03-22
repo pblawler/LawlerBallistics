@@ -1,5 +1,5 @@
 ﻿<UserControl
-        x:Class="LawlerBallisticsDesk.Views.Cartridges.uctrlRecipes"
+        x:Class="LawlerBallisticsDesk.Views.Cartridges.uctrlBarrelRecipes"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,8 +7,7 @@
         xmlns:local="clr-namespace:LawlerBallisticsDesk.Views.Cartridges"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:command="http://www.galasoft.ch/mvvmlight"
-    mc:Ignorable="d"
-        DataContext="{Binding RECIPES, Source={StaticResource Locator}}">
+    mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50*"/>
