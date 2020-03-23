@@ -516,6 +516,9 @@
     <Content Include="Data\RecipeDB.rdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\default.bdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="LBK.pfx" />
     <None Include="RefDocs\miller_stability_1.pdf" />
     <None Include="packages.config" />
@@ -569,6 +572,16 @@
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Data\CaseDB.cdf">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="Data\default.bdf">
       <Visible>False</Visible>
       <Group>
       </Group>
