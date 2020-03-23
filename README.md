@@ -6,6 +6,7 @@ The application is still in initial development and has not reached release one 
 
 
 *************************** WARNING ***********************************
+
 This application makes no recommendations or statements about the safety
 of any reloading data.  Shooting and reloading can be dangerous and 
 cause sever injury or death.  The developer(s) do not guarranty or
