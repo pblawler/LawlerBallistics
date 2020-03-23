@@ -69,7 +69,7 @@ namespace LawlerBallisticsDesk.Classes
         /// </summary>
         public void CheckDataFiles()
         {
-            //Load default data file
+            //Load default data file for ballistic solution menu view
             string lDatFile = AppDataFolder + "\\default.bdf";
             string lSource = "Data/default.bdf";
             if (!File.Exists(lDatFile))
