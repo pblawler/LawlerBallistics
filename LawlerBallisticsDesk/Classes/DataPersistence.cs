@@ -69,6 +69,14 @@ namespace LawlerBallisticsDesk.Classes
         /// </summary>
         public void CheckDataFiles()
         {
+            //Load default data file
+            string lDatFile = AppDataFolder + "\\default.bdf";
+            string lSource = "Data/default.bdf";
+            if (!File.Exists(lDatFile))
+            {
+                File.Copy(lSource, lDatFile);
+            }
+
             //Load Cartridge data file
             string lDatFile = AppDataFolder + "\\CartridgeDB.cdf";
             string lSource = "Data/CartridgeDB.cdf";
