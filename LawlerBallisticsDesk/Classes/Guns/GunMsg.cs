@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LawlerBallisticsDesk.Classes.Gun
+namespace LawlerBallisticsDesk.Classes.Guns
 {
     class GunBarrelMsg
     {

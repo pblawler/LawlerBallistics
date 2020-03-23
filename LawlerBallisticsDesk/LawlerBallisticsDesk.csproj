@@ -223,12 +223,12 @@
     <Compile Include="Classes\Barrel.cs" />
     <Compile Include="Classes\Bullet.cs" />
     <Compile Include="Classes\Cartridge.cs" />
-    <Compile Include="Classes\Gun\GunMsg.cs" />
+    <Compile Include="Classes\Guns\GunMsg.cs" />
+    <Compile Include="Classes\LawlerBallisticsFactory.cs" />
     <Compile Include="Classes\RecipeLot.cs" />
     <Compile Include="Classes\Case.cs" />
     <Compile Include="Classes\DataPersistence.cs" />
     <Compile Include="Classes\Gun.cs" />
-    <Compile Include="Classes\LawlerBallisticsFactory.cs" />
     <Compile Include="Classes\LoadOut.cs" />
     <Compile Include="Classes\Recipe.cs" />
     <Compile Include="Classes\LocationData.cs" />
