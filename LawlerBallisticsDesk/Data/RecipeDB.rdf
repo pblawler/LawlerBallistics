@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF - 8"?>
+<recipedatabasefile>
+<recipe>
+<id value="325c221d-4c6e-45c3-9f58-9b4ce49f3b96">
+</id>
+<name value="Example Recipe DO NOT USE !!!!">
+</name>
+<notes value="">
+</notes>
+<barrelid value="">
+</barrelid>
+<bulletid value="4ca20589-d2ab-4733-bc8b-38d89a605747">
+</bulletid>
+<bulletsbto value="0">
+</bulletsbto>
+<bulletsoal value="0">
+</bulletsoal>
+<bulletswt value="0">
+</bulletswt>
+<cartid value="2155c3c4-b344-4768-a7c5-58315085a13b">
+</cartid>
+<caseid value="2f5034df-2ceb-4ca5-b04b-faf7bc8f394f">
+</caseid>
+<casetl value="1.91">
+</casetl>
+<cbto value="2.27">
+</cbto>
+<chargewt value="42">
+</chargewt>
+<coal value="2.825">
+</coal>
+<dorate value="0">
+</dorate>
+<gunid value="">
+</gunid>
+<headspace value="1.546">
+</headspace>
+<jump value="0">
+</jump>
+<neckclearance value="0">
+</neckclearance>
+<powderid value="0ec27513-cc36-4d7e-a50b-8ab8c219fbdd">
+</powderid>
+<primerid value="74d4ac3a-5b7f-4a33-a7e0-69b5ebc35b78" type="string">
+</primerid>
+<Lots>
+<Lot>
+<RecipeID value="" type="string">
+</RecipeID>
+<BulletLot value="" type="string">
+</BulletLot>
+<CaseLot value="" type="string">
+</CaseLot>
+<ID value="da9b4edd-510b-41fc-93da-04fdda289927" type="string">
+</ID>
+<LotDate value="3/11/2020 4:38:52 PM" type="string">
+</LotDate>
+<PowderLot value="" type="string">
+</PowderLot>
+<PrimerLot value="" type="string">
+</PrimerLot>
+<SerialNo value="0000000000" type="string">
+</SerialNo>
+<rounds>
+<round>
+<ID value="645b1178-f8a3-4dcd-a7e1-6e7cd2049b43" type="string">
+</ID>
+<RndNo value="1" type="string">
+</RndNo>
+<BBTO value="0.755" type="double">
+</BBTO>
+<BD value="0.264" type="double">
+</BD>
+<BL value="1.35" type="double">
+</BL>
+<BW value="1.455" type="double">
+</BW>
+<CHS value="1.533" type="double">
+</CHS>
+<CL value="1.921" type="double">
+</CL>
+<CNOD value="0.282" type="double">
+</CNOD>
+<CVW value="52.1" type="double">
+</CVW>
+<CW value="144" type="double">
+</CW>
+<CNID value="0.262" type="double">
+</CNID>
+<PCW value="41.5" type="double">
+</PCW>
+<CBTO value="2.271" type="double">
+</CBTO>
+<COAL value="2.85" type="double">
+</COAL>
+<MV value="2750" type="double">
+</MV>
+<VD value="1.25" type="double">
+</VD>
+<VD value="1.25" type="double">
+</VD>
+<HD value="1.25" type="double">
+</HD>
+<VAD value="0.43" type="double">
+</VAD>
+<HAD value="0.017" type="double">
+</HAD>
+<RMSD value="0.430336" type="double">
+</RMSD>
+<GDV value="0.564" type="double">
+</GDV>
+<VELAD value="1.9" type="double">
+</VELAD>
+</round>
+<round>
+<ID value="6a55478c-0366-4cb7-969a-d0610f6d88ee" type="string">
+</ID>
+<RndNo value="2" type="string">
+</RndNo>
+<BBTO value="0.758" type="double">
+</BBTO>
+<BD value="0.2639" type="double">
+</BD>
+<BL value="1.355" type="double">
+</BL>
+<BW value="1.465" type="double">
+</BW>
+<CHS value="1.533" type="double">
+</CHS>
+<CL value="1.93" type="double">
+</CL>
+<CNOD value="0.283" type="double">
+</CNOD>
+<CVW value="55" type="double">
+</CVW>
+<CW value="146" type="double">
+</CW>
+<CNID value="0.262" type="double">
+</CNID>
+<PCW value="41.6" type="double">
+</PCW>
+<CBTO value="2.27" type="double">
+</CBTO>
+<COAL value="2.852" type="double">
+</COAL>
+<MV value="2765" type="double">
+</MV>
+<VD value="1.62" type="double">
+</VD>
+<VD value="1.62" type="double">
+</VD>
+<HD value="1.13" type="double">
+</HD>
+<VAD value="0.06" type="double">
+</VAD>
+<HAD value="0.137" type="double">
+</HAD>
+<RMSD value="0.149563" type="double">
+</RMSD>
+<GDV value="0.844" type="double">
+</GDV>
+<VELAD value="5.9" type="double">
+</VELAD>
+</round>
+<round>
+<ID value="c456f053-0c39-4e97-ac50-28be8c97c8e0" type="string">
+</ID>
+<RndNo value="3" type="string">
+</RndNo>
+<BBTO value="0.77" type="double">
+</BBTO>
+<BD value="0.2641" type="double">
+</BD>
+<BL value="1.35" type="double">
+</BL>
+<BW value="1.459" type="double">
+</BW>
+<CHS value="1.531" type="double">
+</CHS>
+<CL value="1.925" type="double">
+</CL>
+<CNOD value="0.281" type="double">
+</CNOD>
+<CVW value="52.3" type="double">
+</CVW>
+<CW value="148" type="double">
+</CW>
+<CNID value="0.262" type="double">
+</CNID>
+<PCW value="42" type="double">
+</PCW>
+<CBTO value="2.273" type="double">
+</CBTO>
+<COAL value="2.865" type="double">
+</COAL>
+<MV value="2755" type="double">
+</MV>
+<VD value="1.71" type="double">
+</VD>
+<VD value="1.71" type="double">
+</VD>
+<HD value="0.95" type="double">
+</HD>
+<VAD value="0.03" type="double">
+</VAD>
+<HAD value="0.317" type="double">
+</HAD>
+<RMSD value="0.318416" type="double">
+</RMSD>
+<GDV value="0.676" type="double">
+</GDV>
+<VELAD value="23.1" type="double">
+</VELAD>
+</round>
+<round>
+<ID value="ea376a5e-e835-4e0c-9438-0d38b9cf2b4d" type="string">
+</ID>
+<RndNo value="4" type="string">
+</RndNo>
+<BBTO value="0.756" type="double">
+</BBTO>
+<BD value="0.2644" type="double">
+</BD>
+<BL value="1.344" type="double">
+</BL>
+<BW value="1.466" type="double">
+</BW>
+<CHS value="1.531" type="double">
+</CHS>
+<CL value="1.93" type="double">
+</CL>
+<CNOD value="0.2825" type="double">
+</CNOD>
+<CVW value="52.15" type="double">
+</CVW>
+<CW value="142" type="double">
+</CW>
+<CNID value="0.263" type="double">
+</CNID>
+<PCW value="41.4" type="double">
+</PCW>
+<CBTO value="2.272" type="double">
+</CBTO>
+<COAL value="2.849" type="double">
+</COAL>
+<MV value="2760" type="double">
+</MV>
+<VD value="1.35" type="double">
+</VD>
+<VD value="1.35" type="double">
+</VD>
+<HD value="1.18" type="double">
+</HD>
+<VAD value="0.33" type="double">
+</VAD>
+<HAD value="0.087" type="double">
+</HAD>
+<RMSD value="0.341276" type="double">
+</RMSD>
+<GDV value="0.653" type="double">
+</GDV>
+<VELAD value="2.9" type="double">
+</VELAD>
+</round>
+<round>
+<ID value="8a7dc28e-1ae9-4374-ba9c-c9d92755d941" type="string">
+</ID>
+<RndNo value="5" type="string">
+</RndNo>
+<BBTO value="0.757" type="double">
+</BBTO>
+<BD value="0.26389" type="double">
+</BD>
+<BL value="1.35" type="double">
+</BL>
+<BW value="1.481" type="double">
+</BW>
+<CHS value="1.534" type="double">
+</CHS>
+<CL value="1.928" type="double">
+</CL>
+<CNOD value="0.2815" type="double">
+</CNOD>
+<CVW value="50.3" type="double">
+</CVW>
+<CW value="144" type="double">
+</CW>
+<CNID value="0.262" type="double">
+</CNID>
+<PCW value="41.5" type="double">
+</PCW>
+<CBTO value="2.27" type="double">
+</CBTO>
+<COAL value="2.851" type="double">
+</COAL>
+<MV value="2762" type="double">
+</MV>
+<VD value="1.89" type="double">
+</VD>
+<VD value="1.89" type="double">
+</VD>
+<HD value="1.2" type="double">
+</HD>
+<VAD value="0.21" type="double">
+</VAD>
+<HAD value="0.067" type="double">
+</HAD>
+<RMSD value="0.220429" type="double">
+</RMSD>
+<GDV value="0.774" type="double">
+</GDV>
+<VELAD value="3.9" type="double">
+</VELAD>
+</round>
+<round>
+<ID value="58bdaccb-53c5-4097-ab92-18bda02cb28a" type="string">
+</ID>
+<RndNo value="6" type="string">
+</RndNo>
+<BBTO value="0.725" type="double">
+</BBTO>
+<BD value="0.2641" type="double">
+</BD>
+<BL value="1.361" type="double">
+</BL>
+<BW value="1.471" type="double">
+</BW>
+<CHS value="1.533" type="double">
+</CHS>
+<CL value="1.922" type="double">
+</CL>
+<CNOD value="0.2805" type="double">
+</CNOD>
+<CVW value="52.35" type="double">
+</CVW>
+<CW value="149" type="double">
+</CW>
+<CNID value="0.262" type="double">
+</CNID>
+<PCW value="41.39" type="double">
+</PCW>
+<CBTO value="2.272" type="double">
+</CBTO>
+<COAL value="2.85" type="double">
+</COAL>
+<MV value="2764" type="double">
+</MV>
+<VD value="3.05" type="double">
+</VD>
+<VD value="3.05" type="double">
+</VD>
+<HD value="1.22" type="double">
+</HD>
+<VAD value="1.37" type="double">
+</VAD>
+<HAD value="0.047" type="double">
+</HAD>
+<RMSD value="1.370806" type="double">
+</RMSD>
+<GDV value="0" type="double">
+</GDV>
+<VELAD value="6.9" type="double">
+</VELAD>
+</round>
+<round>
+<ID value="826ff559-5a80-48aa-8510-005497a4fb30" type="string">
+</ID>
+<RndNo value="7" type="string">
+</RndNo>
+<BBTO value="0.756" type="double">
+</BBTO>
+<BD value="0.2642" type="double">
+</BD>
+<BL value="1.351" type="double">
+</BL>
+<BW value="1.468" type="double">
+</BW>
+<CHS value="1.532" type="double">
+</CHS>
+<CL value="1.923" type="double">
+</CL>
+<CNOD value="0.2835" type="double">
+</CNOD>
+<CVW value="52.44" type="double">
+</CVW>
+<CW value="146" type="double">
+</CW>
+<CNID value="0.261" type="double">
+</CNID>
+<PCW value="41.48" type="double">
+</PCW>
+<CBTO value="2.271" type="double">
+</CBTO>
+<COAL value="2.852" type="double">
+</COAL>
+<MV value="2763" type="double">
+</MV>
+<VD value="1.85" type="double">
+</VD>
+<VD value="1.85" type="double">
+</VD>
+<HD value="1.11" type="double">
+</HD>
+<VAD value="0.17" type="double">
+</VAD>
+<HAD value="0.157" type="double">
+</HAD>
+<RMSD value="0.231407" type="double">
+</RMSD>
+<GDV value="0.763" type="double">
+</GDV>
+<VELAD value="2.9" type="double">
+</VELAD>
+</round>
+<round>
+<ID value="8e086f3c-c84a-4175-8a47-c53f19975b3f" type="string">
+</ID>
+<RndNo value="8" type="string">
+</RndNo>
+<BBTO value="0.76" type="double">
+</BBTO>
+<BD value="0.26388" type="double">
+</BD>
+<BL value="1.349" type="double">
+</BL>
+<BW value="1.469" type="double">
+</BW>
+<CHS value="1.531" type="double">
+</CHS>
+<CL value="1.928" type="double">
+</CL>
+<CNOD value="0.282" type="double">
+</CNOD>
+<CVW value="53.12" type="double">
+</CVW>
+<CW value="145" type="double">
+</CW>
+<CNID value="0.263" type="double">
+</CNID>
+<PCW value="41.5" type="double">
+</PCW>
+<CBTO value="2.275" type="double">
+</CBTO>
+<COAL value="2.845" type="double">
+</COAL>
+<MV value="2755" type="double">
+</MV>
+<VD value="1.65" type="double">
+</VD>
+<VD value="1.65" type="double">
+</VD>
+<HD value="1.05" type="double">
+</HD>
+<VAD value="0.03" type="double">
+</VAD>
+<HAD value="0.217" type="double">
+</HAD>
+<RMSD value="0.219064" type="double">
+</RMSD>
+<GDV value="0.775" type="double">
+</GDV>
+<VELAD value="5.1" type="double">
+</VELAD>
+</round>
+<round>
+<ID value="96d7d646-6938-4b48-b36e-972728a9211a" type="string">
+</ID>
+<RndNo value="9" type="string">
+</RndNo>
+<BBTO value="0.761" type="double">
+</BBTO>
+<BD value="0.2644" type="double">
+</BD>
+<BL value="1.355" type="double">
+</BL>
+<BW value="1.459" type="double">
+</BW>
+<CHS value="1.533" type="double">
+</CHS>
+<CL value="1.924" type="double">
+</CL>
+<CNOD value="0.283" type="double">
+</CNOD>
+<CVW value="52.75" type="double">
+</CVW>
+<CW value="143" type="double">
+</CW>
+<CNID value="0.262" type="double">
+</CNID>
+<PCW value="41" type="double">
+</PCW>
+<CBTO value="2.269" type="double">
+</CBTO>
+<COAL value="2.85" type="double">
+</COAL>
+<MV value="2766" type="double">
+</MV>
+<VD value="0.75" type="double">
+</VD>
+<VD value="0.75" type="double">
+</VD>
+<HD value="2.43" type="double">
+</HD>
+<VAD value="0.93" type="double">
+</VAD>
+<HAD value="1.163" type="double">
+</HAD>
+<RMSD value="1.489117" type="double">
+</RMSD>
+<GDV value="0" type="double">
+</GDV>
+<VELAD value="1.1" type="double">
+</VELAD>
+</round>
+<round>
+<ID value="fcebc4c4-6baa-4df2-93f1-18997ae117cc" type="string">
+</ID>
+<RndNo value="10" type="string">
+</RndNo>
+<BBTO value="0.755" type="double">
+</BBTO>
+<BD value="0.26388" type="double">
+</BD>
+<BL value="1.349" type="double">
+</BL>
+<BW value="1.471" type="double">
+</BW>
+<CHS value="1.53" type="double">
+</CHS>
+<CL value="1.928" type="double">
+</CL>
+<CNOD value="0.281" type="double">
+</CNOD>
+<CVW value="52.66" type="double">
+</CVW>
+<CW value="148" type="double">
+</CW>
+<CNID value="0.261" type="double">
+</CNID>
+<PCW value="41.6" type="double">
+</PCW>
+<CBTO value="2.27" type="double">
+</CBTO>
+<COAL value="2.851" type="double">
+</COAL>
+<MV value="2770" type="double">
+</MV>
+<VD value="1.68" type="double">
+</VD>
+<VD value="1.68" type="double">
+</VD>
+<HD value="1.15" type="double">
+</HD>
+<VAD value="0" type="double">
+</VAD>
+<HAD value="0.117" type="double">
+</HAD>
+<RMSD value="0.117" type="double">
+</RMSD>
+<GDV value="0.877" type="double">
+</GDV>
+<VELAD value="4.9" type="double">
+</VELAD>
+</round>
+</rounds>
+</Lot>
+</Lots>
+</recipe>
+</recipedatabasefile>

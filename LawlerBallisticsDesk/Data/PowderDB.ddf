@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF - 8"?>
+<powderdatabasefile>
+<powder>
+<id value="0ec27513-cc36-4d7e-a50b-8ab8c219fbdd">
+</id>
+<name value="H4350 Extreme Line Temp Stable">
+</name>
+<model value="H4350">
+</model>
+<manufacturer value="Hogden" type='string'>
+</manufacturer>
+<basetype value="SingleBase" type='string'>
+</basetype>
+</powder>
+<powder>
+<id value="63e96b36-dea7-43a6-8bad-1c3ddf7fbe96">
+</id>
+<name value="IMR4895">
+</name>
+<model value="IMR4895">
+</model>
+<manufacturer value="IMR Legendary Powders" type='string'>
+</manufacturer>
+<basetype value="SingleBase" type='string'>
+</basetype>
+</powder>
+</powderdatabasefile>
