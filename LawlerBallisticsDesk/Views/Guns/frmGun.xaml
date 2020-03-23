@@ -21,7 +21,7 @@
             </TabItem>
             <TabItem Header="Recipes">
                 <Grid>
-                    <cartridges:uctrlBarrelRecipes HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <cartridges:uctrlBarrelRecipes x:Name="uctrlBRp" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Ballistic Data">

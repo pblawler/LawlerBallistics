@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using GalaSoft.MvvmLight.Messaging;
+using LawlerBallisticsDesk.Classes.Guns;
 
 namespace LawlerBallisticsDesk.Classes
 {
@@ -21,6 +23,19 @@ namespace LawlerBallisticsDesk.Classes
         protected void RaisePropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+        #endregion
+
+        #region "Messaging"
+        private void SendPropertyChangedMsg(string name)
+        {
+            var msg = new PropertyChangedMsg() { Sender = "RecipeLot", PropName = name, Msg = "" };
+            Messenger.Default.Send<PropertyChangedMsg>(msg);
+        }
+        private void SendGunBarrelMsg(string SelectedBarrelID, string Message)
+        {
+            var msg = new GunBarrelMsg() { Sender = "Gun", GunID = ID, SelectedBarrelID = SelectedBarrelID, Msg = Message };
+            Messenger.Default.Send<GunBarrelMsg>(msg);
         }
         #endregion
 
@@ -41,7 +56,20 @@ namespace LawlerBallisticsDesk.Classes
         public string Make { get { return _Make; } set { _Make = value; RaisePropertyChanged(nameof(Make)); } }
         public string Model { get { return _Model; } set { _Model = value; RaisePropertyChanged(nameof(Model)); } }
         public string Description { get { return _Desc; } set { _Desc = value; RaisePropertyChanged(nameof(Description)); } }
-        public Barrel SelectedBarrel { get { return _SelectedBarrel; } set { _SelectedBarrel = value; RaisePropertyChanged(nameof(SelectedBarrel)); } }
+        public Barrel SelectedBarrel
+        {
+            get
+            {
+                return _SelectedBarrel;
+            }
+            set
+            {
+                _SelectedBarrel = value;
+                RaisePropertyChanged(nameof(SelectedBarrel));
+                //Send barrel selected message
+                SendGunBarrelMsg(_SelectedBarrel.ID, "");
+            }
+        }
         public Barrel TargetBarrel { get { return _TargetBarrel; } set { _TargetBarrel = value; RaisePropertyChanged(nameof(TargetBarrel)); } }
         public ObservableCollection<Barrel> Barrels { get { return _Barrels; } set { _Barrels = value; RaisePropertyChanged(nameof(Barrels)); } }
         public Image GunPic
