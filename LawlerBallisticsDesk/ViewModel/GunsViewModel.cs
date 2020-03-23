@@ -37,7 +37,7 @@ namespace LawlerBallisticsDesk.ViewModel
 
         #region "Private Variables"
         Gun _SelectedGun;
-        string _GunsID;
+        string _GunID;
         #endregion
 
         #region "Public Actions"
@@ -72,10 +72,10 @@ namespace LawlerBallisticsDesk.ViewModel
                 RaisePropertyChanged(nameof(MyGuns));
             }
         }
-        public string GunsID
+        public string GunID
         {
-            get { return _GunsID; }
-            set { _GunsID = value; }
+            get { return _GunID; }
+            set { _GunID = value; }
         }
         public List<string> TwistDirectionNames 
         {
@@ -118,7 +118,7 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Constructor"
         public GunsViewModel()
         {
-            GunsID = Guid.NewGuid().ToString();
+            GunID = Guid.NewGuid().ToString();
             CloseWindowCommand = new RelayCommand(CloseWindow, null);
             CloseBarrelWindowCommand = new RelayCommand(CloseBarrelWindow, null);
             CloseGunWindowCommand = new RelayCommand(CloseGunWindow, null);
