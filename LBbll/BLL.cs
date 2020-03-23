@@ -2,10 +2,7 @@
 
 namespace LBbll
 {
-
     public class BLL
     {
-
     }
 }
-

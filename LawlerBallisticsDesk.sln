@@ -5,10 +5,7 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LawlerBallisticsDesk", "LawlerBallisticsDesk\LawlerBallisticsDesk.csproj", "{F436F26E-D7D6-4263-85B1-90FA6940E47B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{359293EA-D594-43AE-8B70-4DED17C76C93}"
-	ProjectSection(SolutionItems) = preProject
-		GoogleAPIkey.txt = GoogleAPIkey.txt
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LBbll", "LBbll\LBbll.csproj", "{BBB4FBCE-DE0E-409F-ADF2-15E613D8A62F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +17,10 @@ Global
 		{F436F26E-D7D6-4263-85B1-90FA6940E47B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F436F26E-D7D6-4263-85B1-90FA6940E47B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F436F26E-D7D6-4263-85B1-90FA6940E47B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBB4FBCE-DE0E-409F-ADF2-15E613D8A62F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBB4FBCE-DE0E-409F-ADF2-15E613D8A62F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBB4FBCE-DE0E-409F-ADF2-15E613D8A62F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBB4FBCE-DE0E-409F-ADF2-15E613D8A62F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
