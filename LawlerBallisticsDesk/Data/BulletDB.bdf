@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF - 8"?>
+<bulletdatabasefile>
+<bullet>
+<id value="4ca20589-d2ab-4733-bc8b-38d89a605747">
+</id>
+<bcg1 value="0.646">
+</bcg1>
+<bcg7 value="0">
+</bcg7>
+<diameter value="0.264">
+</diameter>
+<length value="1.432">
+</length>
+<bto value="0" type='double'>
+</bto>
+<model value="ELD-M">
+</model>
+<manufacturer value="Hornady" type='bytearray'>
+</manufacturer>
+<type value="VLD_BoatTail" type='bytearray'>
+</type>
+<weight value="147" type='bytearray'>
+</weight>
+</bullet>
+<bullet>
+<id value="bd93f4c2-766b-4d6b-8652-1b4096df328e">
+</id>
+<bcg1 value="0.289">
+</bcg1>
+<bcg7 value="0">
+</bcg7>
+<diameter value="0.308">
+</diameter>
+<length value="1.175">
+</length>
+<bto value="0" type='double'>
+</bto>
+<model value="TAC-TX">
+</model>
+<manufacturer value="Barnes" type='bytearray'>
+</manufacturer>
+<type value="SpitzerFlatBase" type='bytearray'>
+</type>
+<weight value="110" type='bytearray'>
+</weight>
+</bullet>
+</bulletdatabasefile>

@@ -172,6 +172,7 @@ namespace LawlerBallisticsDesk.Classes
         {
             if (Initialized) return;
             _MyData = new DataPersistence();
+            _MyData.CheckDataFiles();
             _MyCartridges = _MyData.ParseCartridgeDB();
             _MyGuns = _MyData.ParseGunDB();
             _MyBullets = _MyData.ParseBulletsDB();

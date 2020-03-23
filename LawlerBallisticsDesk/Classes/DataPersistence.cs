@@ -26,8 +26,9 @@ namespace LawlerBallisticsDesk.Classes
         }
         #endregion
 
-        #region "Private Members"
+        #region "Private Variables"
         private string _AppDataFolder;
+        private string _DataFolder;
         #endregion
 
         #region "Properties"
@@ -52,10 +53,78 @@ namespace LawlerBallisticsDesk.Classes
             {
                 Directory.CreateDirectory(_AppDataFolder);
             }
+            _DataFolder = "\\Data";
+            _DataFolder = _DataFolder + "\\LawlerBallistics";
+            if (!Directory.Exists(_DataFolder))
+            {
+                Directory.CreateDirectory(_DataFolder);
+            }
+
         }
         #endregion
 
         #region "Public Routines"
+        /// <summary>
+        /// If this is a first run or something happened to the data files load the prepackaged files.
+        /// </summary>
+        public void CheckDataFiles()
+        {
+            //Load Cartridge data file
+            string lDatFile = AppDataFolder + "\\CartridgeDB.cdf";
+            string lSource = "Data/CartridgeDB.cdf";
+            if (!File.Exists(lDatFile))
+            {
+                File.Copy(lSource, lDatFile);
+            }
+
+            //Load Bullet data file
+            lDatFile = AppDataFolder + "\\BulletDB.bdf";
+            lSource = "Data/BulletDB.bdf";
+            if (!File.Exists(lDatFile))
+            {
+                File.Copy(lSource, lDatFile);
+            }
+
+            //Load Case data file
+            lDatFile = AppDataFolder + "\\CaseDB.cdf";
+            lSource = "Data/CaseDB.cdf";
+            if (!File.Exists(lDatFile))
+            {
+                File.Copy(lSource, lDatFile);
+            }
+
+            //Load Gun data file
+            lDatFile = AppDataFolder + "\\GunDB.gdf";
+            lSource = "Data/GunDB.gdf";
+            if (!File.Exists(lDatFile))
+            {
+                File.Copy(lSource, lDatFile);
+            }
+
+            //Load Powder data file
+            lDatFile = AppDataFolder + "\\PowderDB.ddf";
+            lSource = "Data/PowderDB.ddf";
+            if (!File.Exists(lDatFile))
+            {
+                File.Copy(lSource, lDatFile);
+            }
+
+            //Load Primer data file
+            lDatFile = AppDataFolder + "\\PrimerDB.pdf";
+            lSource = "Data/PrimerDB.pdf";
+            if (!File.Exists(lDatFile))
+            {
+                File.Copy(lSource, lDatFile);
+            }
+
+            //Load Recipe data file
+            lDatFile = AppDataFolder + "\\RecipeDB.rdf";
+            lSource = "Data/RecipeDB.rdf";
+            if (!File.Exists(lDatFile))
+            {
+                File.Copy(lSource, lDatFile);
+            }
+        }
         public int SaveCartridgeData()
         {
             int lRtn = 0;
