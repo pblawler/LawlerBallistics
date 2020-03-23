@@ -78,8 +78,8 @@ namespace LawlerBallisticsDesk.Classes
             }
 
             //Load Cartridge data file
-            string lDatFile = AppDataFolder + "\\CartridgeDB.cdf";
-            string lSource = "Data/CartridgeDB.cdf";
+             lDatFile = AppDataFolder + "\\CartridgeDB.cdf";
+             lSource = "Data/CartridgeDB.cdf";
             if (!File.Exists(lDatFile))
             {
                 File.Copy(lSource, lDatFile);
