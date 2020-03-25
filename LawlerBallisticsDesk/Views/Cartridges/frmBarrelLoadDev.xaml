@@ -8,25 +8,28 @@
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="Select Components" Height="458.783" Width="653.5" ResizeMode="NoResize">
     <Grid>
-        <ComboBox HorizontalAlignment="Left" Height="25" Margin="52,39,0,0" VerticalAlignment="Top" Width="189"
-                ItemsSource="{Binding NeckClearanceList}" SelectedValue="{Binding CaseNeckClearance}" SelectionChanged="ComboBox_SelectionChanged"/>
+        <ComboBox Name="cboNeckClearance" HorizontalAlignment="Left" Height="25" Margin="52,39,0,0" VerticalAlignment="Top" Width="189"
+                ItemsSource="{Binding NeckClearanceList}" SelectedValue="{Binding CaseNeckClearance}" Text="{Binding CaseNeckClearance}"
+                  SelectionChanged="ComboBox_SelectionChanged"/>
         <Label Content="Select a cartridge neck Clearance:" HorizontalAlignment="Left" Height="29" Margin="52,10,0,0" VerticalAlignment="Top" Width="189"/>
         <Button Content="OK" HorizontalAlignment="Left" Height="28" Margin="48,381,0,0" VerticalAlignment="Top" Width="106" Click="Button_Click"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Height="28" Margin="159,381,0,0" VerticalAlignment="Top" Width="106" Click="Button_Click_1"/>
-        <ComboBox Name="cboCase" HorizontalAlignment="Left" Height="25" Margin="52,157,0,0" VerticalAlignment="Top" Width="562"
-            ItemsSource="{Binding CaseList}" SelectedValue="{Binding SelectedCaseName}" IsEnabled="False" SelectionChanged="cboCase_SelectionChanged"/>
+        <ComboBox Name="cboCase" HorizontalAlignment="Left" Height="25" Margin="52,157,0,0" VerticalAlignment="Top" Width="545"
+            ItemsSource="{Binding CaseList}" SelectedValue="{Binding SelectedCaseName}" Text="{Binding SelectedCaseName}"
+                  IsEnabled="True" SelectionChanged="cboCase_SelectionChanged"/>
         <Label Content="Select a case:" HorizontalAlignment="Left" Height="29" Margin="52,128,0,0" VerticalAlignment="Top" Width="562"/>
         <ComboBox x:Name="cboPrimer" HorizontalAlignment="Left" Height="25" Margin="52,216,0,0" VerticalAlignment="Top" Width="562"
             ItemsSource="{Binding PrimerList}" SelectedValue="{Binding SelectedPrimerName}" IsEnabled="False"/>
         <Label Content="Select a primer:" HorizontalAlignment="Left" Height="29" Margin="52,187,0,0" VerticalAlignment="Top" Width="562"/>
         <ComboBox x:Name="cboBullet" HorizontalAlignment="Left" Height="25" Margin="52,275,0,0" VerticalAlignment="Top" Width="562"
-            ItemsSource="{Binding BulletList}" SelectedValue="{Binding SelectedBulletName}" IsEnabled="False"/>
+            ItemsSource="{Binding BulletList}" SelectedValue="{Binding SelectedBulletName}" IsEnabled="True"/>
         <Label Content="Select a bullet:" HorizontalAlignment="Left" Height="29" Margin="52,246,0,0" VerticalAlignment="Top" Width="562"/>
         <ComboBox x:Name="cboPowder" HorizontalAlignment="Left" Height="25" Margin="52,334,0,0" VerticalAlignment="Top" Width="562"
-            ItemsSource="{Binding BulletList}" SelectedValue="{Binding SelectedPowderName}" IsEnabled="False"/>
+            ItemsSource="{Binding BulletList}" SelectedValue="{Binding SelectedPowderName}" IsEnabled="True"/>
         <Label Content="Select a powder:" HorizontalAlignment="Left" Height="29" Margin="52,305,0,0" VerticalAlignment="Top" Width="562"/>
-        <ComboBox HorizontalAlignment="Left" Height="25" Margin="52,98,0,0" VerticalAlignment="Top" Width="189"
-            ItemsSource="{Binding HeadspacClearanceList}" SelectedValue="{Binding HeadSpaceClearance}" SelectionChanged="ComboBox_SelectionChanged"/>
+        <ComboBox Name="cboHeadClearance" HorizontalAlignment="Left" Height="25" Margin="52,98,0,0" VerticalAlignment="Top" Width="189"
+            ItemsSource="{Binding HeadspaceClearanceList}" SelectedValue="{Binding HeadSpaceClearance}" Text="{Binding HeadSpaceClearance}"
+                  SelectionChanged="ComboBox_SelectionChanged"/>
         <Label Content="Select a headspace Clearance:" HorizontalAlignment="Left" Height="29" Margin="52,69,0,0" VerticalAlignment="Top" Width="189"/>
 
     </Grid>
