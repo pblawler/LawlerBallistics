@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF - 8"?>
+<primerdatabasefile>
+<primer>
+<id value="74d4ac3a-5b7f-4a33-a7e0-69b5ebc35b78">
+</id>
+<name value="CCI SRM">
+</name>
+<model value="BR4">
+</model>
+<manufacturer value="CCI" type='string'>
+</manufacturer>
+<type value="Small_Rifle" type='string'>
+</type>
+</primer>
+<primer>
+<id value="8456af5d-298c-4566-bfb9-93f1e7d7ff5c">
+</id>
+<name value="CCI LRM">
+</name>
+<model value="BR2">
+</model>
+<manufacturer value="CCI" type='string'>
+</manufacturer>
+<type value="Large_Rifle" type='string'>
+</type>
+</primer>
+<primer>
+<id value="2e35afe9-cb97-4b2e-b85b-96bcc2437f13">
+</id>
+<name value="CCI #500">
+</name>
+<model value="500">
+</model>
+<manufacturer value="CCI" type='string'>
+</manufacturer>
+<type value="Small_Pistol" type='string'>
+</type>
+</primer>
+</primerdatabasefile>

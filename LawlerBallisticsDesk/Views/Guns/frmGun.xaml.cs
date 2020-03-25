@@ -1,4 +1,7 @@
-﻿using LawlerBallisticsDesk.ViewModel;
+﻿using GalaSoft.MvvmLight.Messaging;
+using LawlerBallisticsDesk.Classes;
+using LawlerBallisticsDesk.Classes.Guns;
+using LawlerBallisticsDesk.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,19 +23,45 @@ namespace LawlerBallisticsDesk.Views
     /// </summary>
     public partial class frmGun : Window
     {
+        private GunsViewModel _DC;
+
+        #region "Messaging"
+        private void ReceiveGunMessage(GunBarrelMsg msg)
+        {
+            if (msg.GunID == _DC.GunID)
+            {
+                uctrlBRp.DataContext = new BarrelRecipeViewModel(msg.SelectedBarrelID);
+            }
+        }
+        #endregion
+
         //TODO:  Add a message for when a barrel is selected and listen for it in this form to
         // send the barrelID to the recipes control for this form.
         public frmGun()
         {
-            InitializeComponent();
+            InitializeComponent();            
+            Messenger.Default.Register<GunBarrelMsg>(this, (Msg) => ReceiveGunMessage(Msg));
+            try
+            {
+                if (_DC.SelectedGun.SelectedBarrel.ID != "") uctrlBRp.DataContext = new BarrelRecipeViewModel(_DC.SelectedGun.SelectedBarrel.ID);
+            }
+            catch
+            { }
+
         }
 
         public void RegClose()
         {
-            GunsViewModel lvm;
-            lvm = (GunsViewModel)this.DataContext;
-            lvm.CloseGunAction = new Action(this.Close);
+            _DC = (GunsViewModel)this.DataContext;
+            _DC.CloseGunAction = new Action(this.Close);
+            try
+            {
+                if (_DC.SelectedGun.SelectedBarrel.ID != "") uctrlBRp.DataContext = new BarrelRecipeViewModel(_DC.SelectedGun.SelectedBarrel.ID);
+            }
+            catch
+            { }
 
         }
+
     }
 }

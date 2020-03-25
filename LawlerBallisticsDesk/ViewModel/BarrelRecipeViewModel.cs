@@ -169,7 +169,7 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Private Routines"
         private void AddBarrelRecipe()
         {
-            frmBarrelLoadDev lfrmSC = new frmBarrelLoadDev();
+            frmBarrelLoadDev lfrmSC = new frmBarrelLoadDev(_BarrelID);
             lfrmSC.ShowDialog();
             SelectedRecipe = new Recipe();
             if (lfrmSC.SelectedCartridgeName == null) return;

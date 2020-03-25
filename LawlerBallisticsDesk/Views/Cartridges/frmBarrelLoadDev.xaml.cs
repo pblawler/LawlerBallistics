@@ -20,6 +20,7 @@ namespace LawlerBallisticsDesk.Views.Cartridges
     /// </summary>
     public partial class frmBarrelLoadDev : Window
     {
+        #region "Private Variables"
         private string _SelectedCartridgeName;
         private string _SelectedCaseName;
         private string _SelectedPrimerName;
@@ -28,15 +29,17 @@ namespace LawlerBallisticsDesk.Views.Cartridges
         private double _CaseNeckClearance;
         private double _HeadSpaceClearance;
         private List<string> _CaseList;
-        private double _BulletDia;
+        private Barrel _Barrel;
         private List<string> _BulletList;
         private List<string> _PrimerList;
         private List<string> _PowderList;
         private List<double> _NeckClearanceList = new List<double>{0.005, 0.010, 0.015};
         private List<double> _HeadspaceClearanceList = new List<double> { 0.000, 0.001, 0.0015,0.002, 0.0025, 0.003, 0.0035,0.004,0.0045,0.005};
+        #endregion
 
+        #region "Properties"
         public double CaseNeckClearance { get { return _CaseNeckClearance; } set { _CaseNeckClearance = value; } }
-        public List<double> NeackClearanceList { get {return _NeckClearanceList; } }
+        public List<double> NeckClearanceList { get {return _NeckClearanceList; } }
         public double HeadSpaceClearance { get { return _HeadSpaceClearance; } set { _HeadSpaceClearance = value; } }
         public List<double> HeadspaceClearanceList { get { return _HeadspaceClearanceList; } }
         public string SelectedCartridgeName{ get { return _SelectedCartridgeName; } set { _SelectedCartridgeName = value; } }
@@ -49,12 +52,26 @@ namespace LawlerBallisticsDesk.Views.Cartridges
         public List<string> BulletList { get { return _BulletList; } }
         public List<string> PrimerList { get { return _PrimerList; } }
         public List<string> PowderList { get { return _PowderList; } }
+        #endregion
 
-        public frmBarrelLoadDev()
+        #region "Constructor"
+        public frmBarrelLoadDev(string BarrelID)
         {
             InitializeComponent();
+            _Barrel = LawlerBallisticsFactory.GetBarrel(BarrelID);
+            _CaseList = LawlerBallisticsFactory.GetCaseList(_Barrel.CartridgeID);
+            _PowderList = LawlerBallisticsFactory.GetCartridgePowderList(_Barrel.CartridgeID);
+            _BulletList = LawlerBallisticsFactory.GetCartridgeBulletList(_Barrel.CartridgeID);
+            _CaseNeckClearance = 0.005;
+            cboNeckClearance.Text = "0.005";
+            cboHeadClearance.Text = "0.0015";
+            cboCase.ItemsSource = CaseList;
+            cboPowder.ItemsSource = PowderList;
+            cboBullet.ItemsSource = BulletList;
         }
+        #endregion
 
+        #region "Events"
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -66,73 +83,14 @@ namespace LawlerBallisticsDesk.Views.Cartridges
         }
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string lCid="";
-            _CaseList = new List<string>();
-            _BulletList = new List<string>();
-            foreach(Cartridge lcart in LawlerBallisticsFactory.MyCartridges)
-            {
-                if (lcart.Name == _SelectedCartridgeName)
-                {
-                    lCid = lcart.ID;
-                    _BulletDia = lcart.BulletDiameter;
-                    _PowderList = new List<string>();
-                    if (lcart.PowderIDlist != null)
-                    {
-                        foreach (string lpid in lcart.PowderIDlist)
-                        {
-                            _PowderList.Add(LawlerBallisticsFactory.GetPowderName(lpid));
-                        }
-                    }
-                    cboPowder.ItemsSource = PowderList;
-                    cboPowder.IsEnabled = true;
-                    break;
-                }
-            }
-            foreach(Case lc in LawlerBallisticsFactory.MyCases)
-            {
-                if(lc.CartridgeID == lCid)
-                {
-                    _CaseList.Add(lc.Name);
-                }
-            }
-            foreach(Bullet lb in LawlerBallisticsFactory.MyBullets)
-            {
-                if(lb.Diameter == _BulletDia)
-                {
-                    _BulletList.Add((lb.Manufacturer + "|" + lb.Model + "|" + lb.Weight));
-                }
-            }
-            cboBullet.ItemsSource = BulletList;
-            cboCase.ItemsSource = CaseList;
-            cboCase.IsEnabled = true;
-            cboBullet.IsEnabled = true;
         }
         private void cboCase_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Case lCase=null;
-            _PrimerList = new List<string>();
-            foreach(Case lc in LawlerBallisticsFactory.MyCases)
-            {
-                if(_SelectedCaseName == lc.Name)
-                {
-                    lCase = lc;
-                    break;
-                }
-            }
-            if(lCase==null)
-            {
-                MessageBox.Show("The selected case cannot be located.", "Case not found", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                return;
-            }
-            foreach(Primer lp in LawlerBallisticsFactory.MyPrimers)
-            {
-                if(lCase.PrimerSize == lp.Type)
-                {
-                    _PrimerList.Add(lp.Name);
-                }
-            }
-            cboPrimer.ItemsSource = PrimerList;
+            string lCaseID = LawlerBallisticsFactory.GetCaseID(cboCase.SelectedItem.ToString());
+            _PrimerList = LawlerBallisticsFactory.GetPrimerList(lCaseID);
             cboPrimer.IsEnabled = true;
+            cboPrimer.ItemsSource = PrimerList;
         }
+        #endregion
     }
 }

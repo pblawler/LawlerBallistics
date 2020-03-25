@@ -52,6 +52,7 @@ namespace LawlerBallisticsDesk.Classes
         //TODO: Implement Docking
         // https://github.com/Dirkster99/AvalonDock
 
+        //TODO: Verify Name uniqueness for all classes where the name is entered prior to saving.  Perferably on keyup.
 
         #region "Private Variables"
         private static ObservableCollection<Bullet> _MyBullets = new ObservableCollection<Bullet>();
@@ -172,6 +173,7 @@ namespace LawlerBallisticsDesk.Classes
         {
             if (Initialized) return;
             _MyData = new DataPersistence();
+            _MyData.CheckDataFiles();
             _MyCartridges = _MyData.ParseCartridgeDB();
             _MyGuns = _MyData.ParseGunDB();
             _MyBullets = _MyData.ParseBulletsDB();
@@ -274,6 +276,9 @@ namespace LawlerBallisticsDesk.Classes
 
         #endregion
 
+        #region "Class Routines"
+
+        #region "Barrel"
         public static ObservableCollection<Recipe> BarrelRecipes(string BarrelID)
         {
             ObservableCollection<Recipe> lRTN = new ObservableCollection<Recipe>();
@@ -290,19 +295,14 @@ namespace LawlerBallisticsDesk.Classes
             }
             return lRTN;
         }
-        public static void SaveMyCartridges()
-        {
-            DataPersistence lDataPersistence = new DataPersistence();
-            lDataPersistence.SaveCartridgeData();
-        }
         public static Barrel GetBarrel(string BarrelID)
         {
             Barrel lRTN = new Barrel();
-            foreach(Gun lg in MyGuns)
+            foreach (Gun lg in MyGuns)
             {
-                foreach(Barrel lb in lg.Barrels)
+                foreach (Barrel lb in lg.Barrels)
                 {
-                    if(lb.ID == BarrelID)
+                    if (lb.ID == BarrelID)
                     {
                         lRTN = lb;
                         return lRTN;
@@ -311,6 +311,10 @@ namespace LawlerBallisticsDesk.Classes
             }
             return lRTN;
         }
+
+        #endregion
+
+        #region "Bullet"
         public static Bullet GetBullet(string ID)
         {
             Bullet lblt = new Bullet();
@@ -359,6 +363,10 @@ namespace LawlerBallisticsDesk.Classes
             }
             return lblt;
         }
+
+        #endregion
+
+        #region "Cartridge"
         public static Cartridge GetCartridge(string ID)
         {
 
@@ -410,6 +418,47 @@ namespace LawlerBallisticsDesk.Classes
             }
             return lID;
         }
+        public static List<string> GetCartridgeBulletList(string CartridgeID)
+        {
+            Powder lp;
+            string lBN;
+            List<string> lRTN = new List<string>();
+            Cartridge lc = GetCartridge(CartridgeID);
+
+            foreach (Bullet lb in MyBullets)
+            {
+                lBN = "";
+                if (lb.Diameter == lc.BulletDiameter)
+                {
+                    lBN = lb.Manufacturer + "|" + lb.Model + "|" + lb.Weight.ToString();
+                    lRTN.Add(lBN);
+                }
+            }
+
+            return lRTN;
+        }
+        public static List<string> GetCartridgePowderList(string CartridgeID)
+        {
+            Powder lp;
+            List<string> lRTN = new List<string>();
+            Cartridge lc = GetCartridge(CartridgeID);
+            
+            foreach(string lpid in lc.PowderIDlist)
+            {
+                lp = GetPowder(lpid);
+                lRTN.Add(lp.Name);
+            }
+
+            return lRTN;
+        }
+        public static void SaveMyCartridges()
+        {
+            DataPersistence lDataPersistence = new DataPersistence();
+            lDataPersistence.SaveCartridgeData();
+        }
+        #endregion
+
+        #region "Case"
         public static Case GetCase(string ID)
         {
             Case lRTN = null;
@@ -454,6 +503,31 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
+        public static string GetCaseID(string Name)
+        {
+            string lRtn = "";
+            Case lc = GetCaseFromName(Name);
+            lRtn = lc.ID;            
+
+            return lRtn;
+        }
+        public static List<string> GetCaseList(string CartridgeID)
+        {
+            List<string> lRTN = new List<string>();
+            foreach(Case lc in MyCases)
+            {
+                if(lc.CartridgeID == CartridgeID)
+                {
+                    lRTN.Add(lc.Name);
+                }
+            }
+
+            return lRTN;
+        }
+
+        #endregion
+
+        #region "Powder"
         public static string GetPowderName(string PowderID)
         {
             foreach(Powder lp in MyPowders)
@@ -506,6 +580,10 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
+
+        #endregion
+
+        #region "Primer"
         public static Primer GetPrimer(string ID)
         {
             Primer lRTN = null;
@@ -534,6 +612,25 @@ namespace LawlerBallisticsDesk.Classes
             }
             return lRTN;
         }
+        public static List<string> GetPrimerList(string CaseID)
+        {
+            List<string> lRTN = new List<string>();
+            Case lc = GetCase(CaseID);
+            string lPrimerTyp = lc.PrimerSize;
+            
+            foreach(Primer lp in MyPrimers)
+            {
+                if(lp.Type == lPrimerTyp)
+                {
+                    lRTN.Add(lp.Name);
+                }
+            }
+
+            return lRTN;
+        }
+
+        #endregion
+
         public static void SaveMyGuns()
         {
             DataPersistence lDataPersistence = new DataPersistence();
@@ -579,6 +676,8 @@ namespace LawlerBallisticsDesk.Classes
             DataPersistence lDataPersistence = new DataPersistence();
             lDataPersistence.SavePowderDB();
         }
+        #endregion
+
         #endregion
 
         #region "Private Routines"

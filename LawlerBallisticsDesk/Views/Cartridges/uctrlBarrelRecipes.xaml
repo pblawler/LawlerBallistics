@@ -18,7 +18,7 @@
                 <MenuItem Header="Add Recipe" Background="{x:Null}" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName ="Click">
-                            <i:InvokeCommandAction Command="{Binding AddSAMMIRecipeCommand}"/>
+                            <i:InvokeCommandAction Command="{Binding AddBarrelRecipeCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </MenuItem>
@@ -32,7 +32,7 @@
             </MenuItem>
         </Menu>
         <DataGrid HorizontalAlignment="Stretch"  Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Stretch"
-                  ItemsSource="{Binding MyRecipes}" SelectedItem="{Binding SelectedRecipe}" CanUserAddRows="False" 
+                  ItemsSource="{Binding BarrelRecipes}" SelectedItem="{Binding SelectedRecipe}" CanUserAddRows="False" 
                   CanUserDeleteRows="False" IsReadOnly="True" AutoGenerateColumns="False"
                   AlternationCount="2">
             <DataGrid.RowStyle>
