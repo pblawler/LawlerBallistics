@@ -21,13 +21,13 @@ namespace LawlerBallisticsDesk.Views.Cartridges
     public partial class frmBarrelLoadDev : Window
     {
         #region "Private Variables"
-        private string _SelectedCartridgeName;
-        private string _SelectedCaseName;
-        private string _SelectedPrimerName;
-        private string _SelectedPowderName;
-        private string _SelectedBulletName;
-        private double _CaseNeckClearance;
-        private double _HeadSpaceClearance;
+        private string _SelectedCartridgeName = "";
+        private string _SelectedCaseName = "";
+        private string _SelectedPrimerName = "";
+        private string _SelectedPowderName = "";
+        private string _SelectedBulletName = "";
+        private double _CaseNeckClearance = 0;
+        private double _HeadSpaceClearance = 0;
         private List<string> _CaseList;
         private Barrel _Barrel;
         private List<string> _BulletList;
@@ -62,6 +62,7 @@ namespace LawlerBallisticsDesk.Views.Cartridges
             _CaseList = LawlerBallisticsFactory.GetCaseList(_Barrel.CartridgeID);
             _PowderList = LawlerBallisticsFactory.GetCartridgePowderList(_Barrel.CartridgeID);
             _BulletList = LawlerBallisticsFactory.GetCartridgeBulletList(_Barrel.CartridgeID);
+            _SelectedCartridgeName = _Barrel.ParentCartridge.Name;
             _CaseNeckClearance = 0.005;
             cboNeckClearance.Text = "0.005";
             cboHeadClearance.Text = "0.0015";
@@ -74,11 +75,17 @@ namespace LawlerBallisticsDesk.Views.Cartridges
         #region "Events"
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if((SelectedCartridgeName == "") || (SelectedCaseName == "") || (SelectedPrimerName == "") || 
+                (SelectedPowderName == "") || (SelectedBulletName == "") || (CaseNeckClearance == 0) || (HeadSpaceClearance == 0))
+            {
+                MessageBox.Show("All fields must be provided.", "Load Development", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;                
+            }
             this.Close();
         }
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            SelectedCartridgeName = null;
+            SelectedCartridgeName = "";
             this.Close();
         }
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
