@@ -45,6 +45,7 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "RelayCommands"
         private RelayCommand _AddLotCommand;
         private RelayCommand _AddBarrelRecipeCommand;
+        private RelayCommand _LoadRecipeCommand;
         private RelayCommand _OpenRecipeCommand;
         private RelayCommand _OpenRecipeLotCommand;
         private RelayCommand _ResetChartCommand;
@@ -57,6 +58,13 @@ namespace LawlerBallisticsDesk.ViewModel
             get
             {
                 return _AddBarrelRecipeCommand ?? (_AddBarrelRecipeCommand = new RelayCommand(() => AddBarrelRecipe()));
+            }
+        }
+        public RelayCommand LoadRecipeCommand
+        {
+            get
+            {
+                return _LoadRecipeCommand ?? (_LoadRecipeCommand = new RelayCommand(() => LoadRecipe()));
             }
         }
         public RelayCommand OpenRecipeCommand
@@ -101,7 +109,6 @@ namespace LawlerBallisticsDesk.ViewModel
                 return _KeyUpRoundCommand ?? (_KeyUpRoundCommand = new RelayCommand<System.Windows.Input.KeyEventArgs>((X) => KeyUpRound(X)));
             }
         }
-        public RelayCommand LoadRecipeCommand { get; set; }
         public RelayCommand SaveRecipeDataCommand { get; set; }
         public RelayCommand SaveRecipeCommand { get; set; }
         public RelayCommand AddLotCommand
@@ -115,7 +122,7 @@ namespace LawlerBallisticsDesk.ViewModel
 
         #region "Private Variables"
         private Recipe _SelectedRecipe;
-        private frmRecipe _frmLoadRecipe;
+        private frmBarrelRecipe _frmLoadRecipe;
         private frmRecipeLot _frmRecipeLot;
         private PlotModel _PerformancePlot;
         private string _BarrelID;
@@ -152,7 +159,6 @@ namespace LawlerBallisticsDesk.ViewModel
             _PerformancePlot = new PlotModel();
             _PerformancePlot.Title = "Group Data";
             _BarrelRecipes = LawlerBallisticsFactory.BarrelRecipes(BarrelID);
-            LoadRecipeCommand = new RelayCommand(LoadThisRecipe, null);
             SaveRecipeDataCommand = new RelayCommand(SaveRecipeCollection, null);
             SaveRecipeCommand = new RelayCommand(SaveRecipe, null);
             _Barrel = LawlerBallisticsFactory.GetBarrel(BarrelID);
@@ -194,12 +200,12 @@ namespace LawlerBallisticsDesk.ViewModel
             SelectedRecipe.RecpPrimer = LawlerBallisticsFactory.GetPrimerFromName(lPrmrName);
             SelectedRecipe.PrimerID = SelectedRecipe.RecpPrimer.ID;
             SelectedRecipe.Name = "LoadRecipe_" + (LawlerBallisticsFactory.MyRecipes.Count + 1).ToString();
-            _frmLoadRecipe = new frmRecipe(true, true);
+            _frmLoadRecipe = new frmBarrelRecipe(this);
             _frmLoadRecipe.Show();
         }
         private void OpenRecipe()
         {
-            _frmLoadRecipe = new frmRecipe(false,false);
+            _frmLoadRecipe = new frmBarrelRecipe(this);
             _frmLoadRecipe.Show();
         }
         private void OpenRecipeLot()
@@ -211,6 +217,21 @@ namespace LawlerBallisticsDesk.ViewModel
         private void LoadThisRecipe()
         {
 
+        }
+        private void LoadRecipe()
+        {
+            foreach(Recipe lR in BarrelRecipes)
+            {
+                if(lR.ID == SelectedRecipe.ID)
+                {
+                    BarrelRecipes.Remove(lR);
+                    BarrelRecipes.Add(SelectedRecipe);
+                    RaisePropertyChanged(nameof(BarrelRecipes));
+                    return;
+                }
+            }
+            BarrelRecipes.Add(SelectedRecipe);
+            RaisePropertyChanged(nameof(BarrelRecipes));
         }
         private void SaveRecipeCollection()
         {
@@ -370,6 +391,8 @@ namespace LawlerBallisticsDesk.ViewModel
             lfrmCreatLot = null;
             RaisePropertyChanged(nameof(SelectedRecipe));
         }
+        #endregion
+
         public void LoadCharts()
         {
             if (SelectedRecipe == null) return;
@@ -419,6 +442,5 @@ namespace LawlerBallisticsDesk.ViewModel
             _PerformancePlot.ResetAllAxes();
             _PerformancePlot.InvalidatePlot(true);
         }
-        #endregion
     }
 }

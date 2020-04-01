@@ -287,6 +287,9 @@
     <Compile Include="Views\Cartridges\frmBullet.xaml.cs">
       <DependentUpon>frmBullet.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Cartridges\frmBarrelRecipe.xaml.cs">
+      <DependentUpon>frmBarrelRecipe.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Cartridges\frmRecipeLot.xaml.cs">
       <DependentUpon>frmRecipeLot.xaml</DependentUpon>
     </Compile>
@@ -383,6 +386,10 @@
     <Page Include="Views\Cartridges\frmBullet.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Cartridges\frmBarrelRecipe.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Cartridges\frmRecipeLot.xaml">
       <SubType>Designer</SubType>
