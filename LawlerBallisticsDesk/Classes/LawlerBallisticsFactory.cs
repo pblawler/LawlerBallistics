@@ -628,26 +628,21 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
-
+        public static void SaveMyPrimers()
+        {
+            DataPersistence lDataPersistence = new DataPersistence();
+            lDataPersistence.SavePrimerDB();
+        }
         #endregion
 
-        public static void SaveMyGuns()
-        {
-            DataPersistence lDataPersistence = new DataPersistence();
-            lDataPersistence.SaveGunDB();
-        }
-        public static void SaveMyRecipes()
-        {
-            DataPersistence lDataPersistence = new DataPersistence();
-            lDataPersistence.SaveRecipeDB();
-        }
+        #region "Recipes"
         public static Recipe GetRecipe(string ID)
         {
             Recipe lLR = new Recipe();
 
-            foreach(Recipe ltLR in MyRecipes)
+            foreach (Recipe ltLR in MyRecipes)
             {
-                if(ltLR.ID == ID)
+                if (ltLR.ID == ID)
                 {
                     return ltLR;
                     break;
@@ -655,6 +650,43 @@ namespace LawlerBallisticsDesk.Classes
             }
 
             return lLR;
+        }
+        /// <summary>
+        /// Saves the barrel specific recipes to the global recipe collection then persists to file.
+        /// </summary>
+        /// <param name="BarrelRecipes"></param>
+        public static void SaveBarrelRecipes(ObservableCollection<Recipe> BarrelRecipes)
+        {
+            bool lfnd = false;
+
+            foreach(Recipe lbr in BarrelRecipes)
+            {
+                lfnd = false;
+                foreach(Recipe lmr in MyRecipes)
+                {
+                    if(lbr.ID == lmr.ID)
+                    {
+                        MyRecipes.Remove(lmr);
+                        MyRecipes.Add(lbr);
+                        lfnd = true;
+                        break;
+                    }
+                }
+                if (!lfnd) MyRecipes.Add(lbr);
+            }
+            SaveMyRecipes();
+        }
+        public static void SaveMyRecipes()
+        {
+            DataPersistence lDataPersistence = new DataPersistence();
+            lDataPersistence.SaveRecipeDB();
+        }
+        #endregion
+
+        public static void SaveMyGuns()
+        {
+            DataPersistence lDataPersistence = new DataPersistence();
+            lDataPersistence.SaveGunDB();
         }
         public static void SaveMyBullets()
         {
@@ -665,11 +697,6 @@ namespace LawlerBallisticsDesk.Classes
         {
             DataPersistence lDataPersistence = new DataPersistence();
             lDataPersistence.SaveCaseDB();
-        }
-        public static void SaveMyPrimers()
-        {
-            DataPersistence lDataPersistence = new DataPersistence();
-            lDataPersistence.SavePrimerDB();
         }
         public static void SaveMyPowders()
         {

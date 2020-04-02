@@ -49,10 +49,11 @@ namespace LawlerBallisticsDesk.ViewModel
         private RelayCommand _OpenRecipeCommand;
         private RelayCommand _OpenRecipeLotCommand;
         private RelayCommand _ResetChartCommand;
+        private RelayCommand _SaveRecipeDataCommand;
         private RelayCommand<System.Windows.Input.KeyEventArgs> _KeyUpCommand;
         private RelayCommand<System.Windows.Input.KeyEventArgs> _KeyUpLotCommand;
         private RelayCommand<System.Windows.Input.KeyEventArgs> _KeyUpRoundCommand;
-
+        
         public RelayCommand AddBarrelRecipeCommand
         {
             get
@@ -88,6 +89,13 @@ namespace LawlerBallisticsDesk.ViewModel
                 return _ResetChartCommand ?? (_ResetChartCommand = new RelayCommand(() => ResetChart()));
             }
         }
+        public RelayCommand SaveRecipeDataCommand
+        {
+            get
+            {
+                return _SaveRecipeDataCommand ?? (_SaveRecipeDataCommand = new RelayCommand(() => SaveRecipe()));
+            }
+        }
         public RelayCommand<System.Windows.Input.KeyEventArgs> KeyUpCommand
         {
             get
@@ -109,8 +117,6 @@ namespace LawlerBallisticsDesk.ViewModel
                 return _KeyUpRoundCommand ?? (_KeyUpRoundCommand = new RelayCommand<System.Windows.Input.KeyEventArgs>((X) => KeyUpRound(X)));
             }
         }
-        public RelayCommand SaveRecipeDataCommand { get; set; }
-        public RelayCommand SaveRecipeCommand { get; set; }
         public RelayCommand AddLotCommand
         {
             get
@@ -159,8 +165,6 @@ namespace LawlerBallisticsDesk.ViewModel
             _PerformancePlot = new PlotModel();
             _PerformancePlot.Title = "Group Data";
             _BarrelRecipes = LawlerBallisticsFactory.BarrelRecipes(BarrelID);
-            SaveRecipeDataCommand = new RelayCommand(SaveRecipeCollection, null);
-            SaveRecipeCommand = new RelayCommand(SaveRecipe, null);
             _Barrel = LawlerBallisticsFactory.GetBarrel(BarrelID);
         }
         #endregion
@@ -177,8 +181,9 @@ namespace LawlerBallisticsDesk.ViewModel
         {
             frmBarrelLoadDev lfrmSC = new frmBarrelLoadDev(_BarrelID);
             lfrmSC.ShowDialog();
-            SelectedRecipe = new Recipe();
             if (lfrmSC.SelectedCartridgeName == null) return;
+            SelectedRecipe = new Recipe();
+            SelectedRecipe.BarrelID = BarrelID;
             string lbullet = lfrmSC.SelectedBulletName;
             string lCaseName = lfrmSC.SelectedCaseName;
             string lPwdrNm = lfrmSC.SelectedPowderName;
@@ -200,6 +205,7 @@ namespace LawlerBallisticsDesk.ViewModel
             SelectedRecipe.RecpPrimer = LawlerBallisticsFactory.GetPrimerFromName(lPrmrName);
             SelectedRecipe.PrimerID = SelectedRecipe.RecpPrimer.ID;
             SelectedRecipe.Name = "LoadRecipe_" + (LawlerBallisticsFactory.MyRecipes.Count + 1).ToString();
+            SelectedRecipe.BarrelID = BarrelID;
             _frmLoadRecipe = new frmBarrelRecipe(this);
             _frmLoadRecipe.Show();
         }
@@ -213,10 +219,6 @@ namespace LawlerBallisticsDesk.ViewModel
             _frmRecipeLot = new frmRecipeLot();
             _frmRecipeLot.Show();
             LoadCharts();
-        }
-        private void LoadThisRecipe()
-        {
-
         }
         private void LoadRecipe()
         {
@@ -232,28 +234,12 @@ namespace LawlerBallisticsDesk.ViewModel
             }
             BarrelRecipes.Add(SelectedRecipe);
             RaisePropertyChanged(nameof(BarrelRecipes));
-        }
-        private void SaveRecipeCollection()
-        {
-            LawlerBallisticsFactory.SaveMyRecipes();
+            _frmLoadRecipe.Close();
         }
         private void SaveRecipe()
         {
-            Cartridge lSC;
-            foreach (Recipe lItr in BarrelRecipes)
-            {
-                if (lItr.ID == _SelectedRecipe.ID)
-                {
-                    _frmLoadRecipe.Close();
-                    RaisePropertyChanged(nameof(BarrelRecipes));
-                    RaisePropertyChanged(nameof(SelectedRecipe));
-                    return;
-                }
-            }
-            BarrelRecipes.Add(_SelectedRecipe);
-            _frmLoadRecipe.Close();
-            RaisePropertyChanged(nameof(BarrelRecipes));
-            RaisePropertyChanged(nameof(SelectedRecipe));
+            LawlerBallisticsFactory.SaveBarrelRecipes(BarrelRecipes);
+
         }
         private void KeyUp(System.Windows.Input.KeyEventArgs e)
         {
