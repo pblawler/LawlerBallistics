@@ -844,6 +844,8 @@ namespace LawlerBallisticsDesk.Classes
                     lGF = lGF + "</caseid>" + System.Environment.NewLine;
                     lGF = lGF + "<casetl value=\"" + lr.CaseTrimLength.ToString() + "\">" + System.Environment.NewLine;
                     lGF = lGF + "</casetl>" + System.Environment.NewLine;
+                    lGF = lGF + "<caseml value=\"" + lr.BarrelCaseMaxLength.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+                    lGF = lGF + "</caseml>" + System.Environment.NewLine;   
                     lGF = lGF + "<cbto value=\"" + lr.CBTO.ToString() + "\">" + System.Environment.NewLine;
                     lGF = lGF + "</cbto>" + System.Environment.NewLine;
                     lGF = lGF + "<chargewt value=\"" + lr.ChargeWt.ToString() + "\">" + System.Environment.NewLine;
@@ -1018,6 +1020,10 @@ namespace LawlerBallisticsDesk.Classes
                     XmlNode lcasetl = lgn.SelectSingleNode("casetl");
                     lNR = lcasetl.Attributes["value"].Value;
                     ltg.CaseTrimLength = Convert.ToDouble(lNR);
+                    lcasetl = lgn.SelectSingleNode("caseml");
+                    lNR = "";
+                    lNR = lcasetl.Attributes["value"].Value;
+                    ltg.BarrelCaseMaxLength = Convert.ToDouble(lNR);
                     XmlNode lcbto = lgn.SelectSingleNode("cbto");
                     lNR = lcbto.Attributes["value"].Value;
                     ltg.CBTO = Convert.ToDouble(lNR);

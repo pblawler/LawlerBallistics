@@ -278,6 +278,28 @@ namespace LawlerBallisticsDesk.Classes
 
         #region "Class Routines"
 
+        #region "Gun"
+        public static Gun GetGun(string ID)
+        {
+            Gun lRTN = null;
+
+            foreach(Gun lg in MyGuns)
+            {
+                if(lg.ID == ID)
+                {
+                    lRTN = lg;
+                    break;
+                }
+            }
+            return lRTN;
+        }
+        public static void SaveMyGuns()
+        {
+            DataPersistence lDataPersistence = new DataPersistence();
+            lDataPersistence.SaveGunDB();
+        }
+        #endregion
+
         #region "Barrel"
         public static ObservableCollection<Recipe> BarrelRecipes(string BarrelID)
         {
@@ -363,7 +385,11 @@ namespace LawlerBallisticsDesk.Classes
             }
             return lblt;
         }
-
+        public static void SaveMyBullets()
+        {
+            DataPersistence lDataPersistence = new DataPersistence();
+            lDataPersistence.SaveBulletDB();
+        }
         #endregion
 
         #region "Cartridge"
@@ -524,7 +550,11 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
-
+        public static void SaveMyCases()
+        {
+            DataPersistence lDataPersistence = new DataPersistence();
+            lDataPersistence.SaveCaseDB();
+        }
         #endregion
 
         #region "Powder"
@@ -580,7 +610,11 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
-
+        public static void SaveMyPowders()
+        {
+            DataPersistence lDataPersistence = new DataPersistence();
+            lDataPersistence.SavePowderDB();
+        }
         #endregion
 
         #region "Primer"
@@ -683,26 +717,6 @@ namespace LawlerBallisticsDesk.Classes
         }
         #endregion
 
-        public static void SaveMyGuns()
-        {
-            DataPersistence lDataPersistence = new DataPersistence();
-            lDataPersistence.SaveGunDB();
-        }
-        public static void SaveMyBullets()
-        {
-            DataPersistence lDataPersistence = new DataPersistence();
-            lDataPersistence.SaveBulletDB();
-        }
-        public static void SaveMyCases()
-        {
-            DataPersistence lDataPersistence = new DataPersistence();
-            lDataPersistence.SaveCaseDB();
-        }
-        public static void SaveMyPowders()
-        {
-            DataPersistence lDataPersistence = new DataPersistence();
-            lDataPersistence.SavePowderDB();
-        }
         #endregion
 
         #endregion

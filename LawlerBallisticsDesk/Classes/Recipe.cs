@@ -46,6 +46,7 @@ namespace LawlerBallisticsDesk.Classes
         private Powder _RecpPowder;
         private double _ChargeWt;
         private double _CaseTrimLength;
+        private double _BarrelCaseMaxLength;
         private double _HeadSpace;
         private double _CBTO;
         private double _COAL;
@@ -62,8 +63,21 @@ namespace LawlerBallisticsDesk.Classes
         public string Name { get { return _Name; } set { _Name = value; RaisePropertyChanged(nameof(Name)); } }
         public string CartridgeID { get { return _CartridgeID; } set { _CartridgeID = value; RaisePropertyChanged(nameof(CartridgeID)); } }
         public Cartridge RecpCartridge { get { return _RecpCartridge; } set { _RecpCartridge = value; RaisePropertyChanged(nameof(RecpCartridge)); } }
-        public string GunID { get { return _GunID; } set { _GunID = value; RaisePropertyChanged(nameof(GunID)); } }
-//        public Gun RecpGun { get { return _RecpGun; } set { _RecpGun = value; RaisePropertyChanged(nameof(RecpGun)); } }
+        public string GunID
+        {
+            get
+            {
+                return _GunID;
+            }
+            set
+            {
+                _GunID = value;
+                _RecpGun = LawlerBallisticsFactory.GetGun(_GunID);
+                RaisePropertyChanged(nameof(GunID));
+                RaisePropertyChanged(nameof(RecpGun));
+            }
+        }
+        public Gun RecpGun { get { return _RecpGun; } }
         public string BarrelID { get { return _BarrelID; } set { _BarrelID = value; RaisePropertyChanged(nameof(BarrelID)); } }
  //       public Barrel RecpBarrel { get { return _RecpBarrel; } set { _RecpBarrel = value; RaisePropertyChanged(nameof(RecpBarrel)); } }
         public string CaseID { get { return _CaseID; } set { _CaseID = value; RaisePropertyChanged(nameof(CaseID)); } }
@@ -79,6 +93,7 @@ namespace LawlerBallisticsDesk.Classes
         public Powder RecpPowder { get { return _RecpPowder; } set { _RecpPowder = value; RaisePropertyChanged(nameof(RecpPowder)); } }
         public double ChargeWt { get { return _ChargeWt; } set { _ChargeWt = value; RaisePropertyChanged(nameof(ChargeWt)); } }
         public double CaseTrimLength { get { return _CaseTrimLength; } set { _CaseTrimLength = value; RaisePropertyChanged(nameof(CaseTrimLength)); } }
+        public double BarrelCaseMaxLength { get { return _BarrelCaseMaxLength; } set { _BarrelCaseMaxLength = value; RaisePropertyChanged(nameof(BarrelCaseMaxLength)); } }
         public double HeadSpace { get { return _HeadSpace; } set { _HeadSpace = value; RaisePropertyChanged(nameof(HeadSpace)); } }
         public double CBTO { get { return _CBTO; } set { _CBTO = value; RaisePropertyChanged(nameof(CBTO)); } }
         public double COAL { get { return _COAL; } set { _COAL = value; RaisePropertyChanged(nameof(COAL)); } }

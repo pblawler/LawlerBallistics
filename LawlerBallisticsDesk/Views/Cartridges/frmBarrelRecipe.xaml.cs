@@ -42,5 +42,16 @@ namespace LawlerBallisticsDesk.Views.Cartridges
         {
             txtCBTO.IsReadOnly = false;
         }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            txtCaseTrimLgth.IsReadOnly = false;
+            txtCBTO.IsReadOnly = false;
+            txtChrgWt.IsReadOnly = false;
+            txtCOAL.IsReadOnly = false;
+            txtHeadSpace.IsReadOnly = false;
+            txtJump.IsReadOnly = false;
+            txtName.IsReadOnly = false;
+        }
     }
 }

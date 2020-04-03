@@ -134,6 +134,7 @@ namespace LawlerBallisticsDesk.ViewModel
         private string _BarrelID;
         private ObservableCollection<Recipe> _BarrelRecipes;
         private Barrel _Barrel;
+        private Gun _Gun;
         #endregion
 
         #region "Properties"
@@ -157,7 +158,7 @@ namespace LawlerBallisticsDesk.ViewModel
         #endregion
 
         #region "Constructor"
-        public BarrelRecipeViewModel(string BarrelIDval)
+        public BarrelRecipeViewModel(string BarrelIDval, string GunID = "")
         {
             //GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<PropertyChangedMsg>(this, (action ) => ReceiveMessage(action ));
             Messenger.Default.Register<PropertyChangedMsg>(this, (Msg) => ReceiveMessage(Msg));
@@ -166,6 +167,7 @@ namespace LawlerBallisticsDesk.ViewModel
             _PerformancePlot.Title = "Group Data";
             _BarrelRecipes = LawlerBallisticsFactory.BarrelRecipes(BarrelID);
             _Barrel = LawlerBallisticsFactory.GetBarrel(BarrelID);
+            _Gun = LawlerBallisticsFactory.GetGun(GunID);
         }
         #endregion
 
@@ -184,6 +186,7 @@ namespace LawlerBallisticsDesk.ViewModel
             if (lfrmSC.SelectedCartridgeName == null) return;
             SelectedRecipe = new Recipe();
             SelectedRecipe.BarrelID = BarrelID;
+            SelectedRecipe.GunID = _Gun.ID;
             string lbullet = lfrmSC.SelectedBulletName;
             string lCaseName = lfrmSC.SelectedCaseName;
             string lPwdrNm = lfrmSC.SelectedPowderName;
@@ -226,9 +229,8 @@ namespace LawlerBallisticsDesk.ViewModel
             {
                 if(lR.ID == SelectedRecipe.ID)
                 {
-                    BarrelRecipes.Remove(lR);
-                    BarrelRecipes.Add(SelectedRecipe);
                     RaisePropertyChanged(nameof(BarrelRecipes));
+                    _frmLoadRecipe.Close();
                     return;
                 }
             }

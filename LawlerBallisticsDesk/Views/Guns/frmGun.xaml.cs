@@ -30,7 +30,7 @@ namespace LawlerBallisticsDesk.Views
         {
             if (msg.GunID == _DC.GunID)
             {
-                uctrlBRp.DataContext = new BarrelRecipeViewModel(msg.SelectedBarrelID);
+                uctrlBRp.DataContext = new BarrelRecipeViewModel(msg.SelectedBarrelID, _DC.SelectedGun.ID);
             }
         }
         #endregion
@@ -43,7 +43,7 @@ namespace LawlerBallisticsDesk.Views
             Messenger.Default.Register<GunBarrelMsg>(this, (Msg) => ReceiveGunMessage(Msg));
             try
             {
-                if (_DC.SelectedGun.SelectedBarrel.ID != "") uctrlBRp.DataContext = new BarrelRecipeViewModel(_DC.SelectedGun.SelectedBarrel.ID);
+                if (_DC.SelectedGun.SelectedBarrel.ID != "") uctrlBRp.DataContext = new BarrelRecipeViewModel(_DC.SelectedGun.SelectedBarrel.ID, _DC.SelectedGun.ID);
             }
             catch
             { }
@@ -56,7 +56,7 @@ namespace LawlerBallisticsDesk.Views
             _DC.CloseGunAction = new Action(this.Close);
             try
             {
-                if (_DC.SelectedGun.SelectedBarrel.ID != "") uctrlBRp.DataContext = new BarrelRecipeViewModel(_DC.SelectedGun.SelectedBarrel.ID);
+                if (_DC.SelectedGun.SelectedBarrel.ID != "") uctrlBRp.DataContext = new BarrelRecipeViewModel(_DC.SelectedGun.SelectedBarrel.ID, _DC.SelectedGun.ID);
             }
             catch
             { }

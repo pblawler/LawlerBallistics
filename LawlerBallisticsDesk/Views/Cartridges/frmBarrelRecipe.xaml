@@ -19,12 +19,14 @@
         </Grid.RowDefinitions>
         <Menu HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="150" Name="Tools" Background="{x:Null}">
             <MenuItem Header="Tools" Background="{x:Null}">
-                <MenuItem Header="Load Recipe" Background="{x:Null}" >
+                <MenuItem Header="Load" Background="{x:Null}" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName ="Click">
                             <i:InvokeCommandAction Command="{Binding LoadRecipeCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                </MenuItem>
+                <MenuItem Header="Edit" Background="{x:Null}" Click="MenuItem_Click_2">
                 </MenuItem>
                 <MenuItem Header="" Background="{x:Null}" />
                 <MenuItem Header="Add Lot" Background="{x:Null}" >
@@ -36,7 +38,7 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <TextBox HorizontalAlignment="Left" Height="20" Margin="10,40,0,0" HorizontalContentAlignment="Center" 
+        <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="20" Margin="10,40,0,0" HorizontalContentAlignment="Center" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="393" Text="{Binding SelectedRecipe.Name, UpdateSourceTrigger=Default}" Grid.Row="1"/>
         <Label Content="Name" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
             FontWeight="Bold" Margin="10,10,0,0" VerticalAlignment="Top" Width="393" Grid.Row="1"/>
@@ -120,19 +122,19 @@
             Grid.Row="1" IsReadOnly="True"/>
         <Label Content="Head Space" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
             FontWeight="Bold" Margin="476,232,0,0" VerticalAlignment="Top" Width="136" Grid.Row="1"/>
-        <TextBox HorizontalAlignment="Left" Height="20" Margin="476,262,0,0" HorizontalContentAlignment="Center" 
+        <TextBox x:Name="txtHeadSpace" HorizontalAlignment="Left" Height="20" Margin="476,262,0,0" HorizontalContentAlignment="Center" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="136" 
             Text="{Binding SelectedRecipe.HeadSpace, UpdateSourceTrigger=Default}"
             Grid.Row="1" IsReadOnly="True"/>
         <Label Content="COAL" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
             FontWeight="Bold" Margin="14,287,0,0" VerticalAlignment="Top" Width="136" Grid.Row="1"/>
-        <TextBox HorizontalAlignment="Left" Height="20" Margin="14,317,0,0" HorizontalContentAlignment="Center" 
+        <TextBox x:Name="txtCOAL" HorizontalAlignment="Left" Height="20" Margin="14,317,0,0" HorizontalContentAlignment="Center" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="136" 
             Text="{Binding SelectedRecipe.COAL, UpdateSourceTrigger=Default}"
-            Grid.Row="1" IsReadOnly="False"/>
+            Grid.Row="1" IsReadOnly="True"/>
         <Label Content="Case Trim Length" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
             FontWeight="Bold" Margin="492,65,0,0" VerticalAlignment="Top" Width="121" Grid.Row="1"/>
-        <TextBox HorizontalAlignment="Left" Height="20" Margin="492,96,0,0" HorizontalContentAlignment="Center" 
+        <TextBox x:Name="txtCaseTrimLgth" HorizontalAlignment="Left" Height="20" Margin="492,96,0,0" HorizontalContentAlignment="Center" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="121" 
             Text="{Binding SelectedRecipe.CaseTrimLength, UpdateSourceTrigger=Default}"
             Grid.Row="1" IsReadOnly="True"/>
@@ -216,7 +218,7 @@
             FontWeight="Bold" Margin="618,65,0,0" VerticalAlignment="Top" Width="121" Grid.Row="1"/>
         <TextBox HorizontalAlignment="Left" Height="20" Margin="618,95,0,0" HorizontalContentAlignment="Center" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="121" 
-            Text="{Binding SelectedRecipe.RecpCartridge.MaxCaseLngth, UpdateSourceTrigger=Default}"
+            Text="{Binding SelectedRecipe.BarrelCaseMaxLength, UpdateSourceTrigger=Default}"
             Grid.Row="1" IsReadOnly="True"/>
         <Label Content="CBTO" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
             FontWeight="Bold" Margin="617,232,0,0" VerticalAlignment="Top" Width="122" Grid.Row="1"/>
@@ -226,9 +228,9 @@
             Grid.Row="1" IsReadOnly="True"/>
         <Label Content="Jump" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Height="30" 
             FontWeight="Bold" Margin="155,287,0,0" VerticalAlignment="Top" Width="136" Grid.Row="1"/>
-        <TextBox HorizontalAlignment="Left" Height="20" Margin="155,317,0,0" HorizontalContentAlignment="Center" 
+        <TextBox x:Name="txtJump" HorizontalAlignment="Left" Height="20" Margin="155,317,0,0" HorizontalContentAlignment="Center" 
             TextWrapping="Wrap" VerticalAlignment="Top" Width="136" 
             Text="{Binding SelectedRecipe.JumpDistance, UpdateSourceTrigger=Default}"
-            Grid.Row="1" IsReadOnly="False"/>
+            Grid.Row="1" IsReadOnly="True"/>
     </Grid>
 </Window>
