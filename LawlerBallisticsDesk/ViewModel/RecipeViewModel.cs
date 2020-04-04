@@ -124,7 +124,7 @@ namespace LawlerBallisticsDesk.ViewModel
         public Recipe SelectedRecipe { get { return _SelectedRecipe; } set { _SelectedRecipe = value; LoadCharts(); RaisePropertyChanged(nameof(SelectedRecipe)); } }
         public ObservableCollection<Recipe> MyRecipes { get {return LawlerBallisticsFactory.MyRecipes; } 
             set { LawlerBallisticsFactory.MyRecipes = value; RaisePropertyChanged(nameof(MyRecipes)); } }
-        public ObservableCollection<Case> Cases { get { return LawlerBallisticsFactory.MyCases; } }
+        //public ObservableCollection<Case> Cases { get { return LawlerBallisticsFactory.MyCases; } }
         public PlotModel PerformancePlot { get { return _PerformancePlot; } }
         #endregion
 

@@ -886,6 +886,8 @@ namespace LawlerBallisticsDesk.Classes
                         lGF = lGF + "</PrimerLot>" + System.Environment.NewLine;
                         lGF = lGF + "<SerialNo value=\"" + ll.SerialNo + "\" type=\"string\">" + System.Environment.NewLine;
                         lGF = lGF + "</SerialNo>" + System.Environment.NewLine;
+                        lGF = lGF + "<totalcnt value=\"" + ll.TotalCount + "\" type=\"int\">" + System.Environment.NewLine;
+                        lGF = lGF + "</totalcnt>" + System.Environment.NewLine;
                         lGF = lGF + "<rounds>" + System.Environment.NewLine;
                         foreach(Round lrnd in ll.Rounds)
                         {
@@ -1071,6 +1073,10 @@ namespace LawlerBallisticsDesk.Classes
                             lLotProp = lLot.SelectSingleNode("RecipeID");
                             lLotPropVal = lLotProp.Attributes["value"].Value;
                             lRLC.RecipeID = lLotPropVal;
+                            lLotPropVal = "";
+                            lLotProp = lLot.SelectSingleNode("totalcnt");
+                            lLotPropVal = lLotProp.Attributes["value"].Value;
+                            lRLC.TotalCount = Convert.ToInt32(lLotPropVal);
                             lLotPropVal = "";
                             lLotProp = lLot.SelectSingleNode("BulletLot");
                             lLotPropVal = lLotProp.Attributes["value"].Value;

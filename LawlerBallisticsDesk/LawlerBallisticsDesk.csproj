@@ -243,6 +243,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Atmospherics.cs" />
     <Compile Include="Classes\Ballistics.cs" />
+    <Compile Include="Classes\BallisticClasses\BallisticFunctions.cs" />
     <Compile Include="Classes\Barrel.cs" />
     <Compile Include="Classes\Bullet.cs" />
     <Compile Include="Classes\Cartridge.cs" />

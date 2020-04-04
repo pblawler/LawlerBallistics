@@ -153,7 +153,7 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             { _BarrelRecipes = value; RaisePropertyChanged(nameof(BarrelRecipes)); }
         }
-        public ObservableCollection<Case> Cases { get { return LawlerBallisticsFactory.MyCases; } }
+        //public ObservableCollection<Case> Cases { get { return LawlerBallisticsFactory.MyCases; } }
         public PlotModel PerformancePlot { get { return _PerformancePlot; } }
         #endregion
 

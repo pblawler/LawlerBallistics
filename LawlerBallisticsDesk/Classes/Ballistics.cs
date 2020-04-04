@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Net;
 using System.Xml;
+using LawlerBallisticsDesk.Classes.BallisticClasses;
 
 namespace LawlerBallisticsDesk.Classes
 {
@@ -106,8 +107,10 @@ namespace LawlerBallisticsDesk.Classes
         private BulletShapeEnum _BulletShapeType;
         private double _BarrelTwist;
         private string _BarrelTwistDir = "R";
+        private Barrel _SelectedBarrel;
         private double _BCg1;
         private double _BCz2;
+        private Bullet _SelectedBullet;
         private double _BSG; //Bullet Stability factor
         private double _BulletDiameter;
         private double _BulletLength;
@@ -939,6 +942,7 @@ namespace LawlerBallisticsDesk.Classes
                 return _Zone3Range;
             }           
         }
+        public Barrel SelectedBarrel { get { return _SelectedBarrel; } }
         /// <summary>
         /// Number of inches of barrel length per rev of the rifling.
         /// </summary>
@@ -971,6 +975,7 @@ namespace LawlerBallisticsDesk.Classes
                 RaisePropertyChanged(nameof(BarrelTwistDir));
             }
         }
+        public Bullet SelectedBullet { get { return _SelectedBullet; } }
         /// <summary>
         /// Diameter (in) of the bullet
         /// </summary>
@@ -1016,7 +1021,7 @@ namespace LawlerBallisticsDesk.Classes
             get
             {
                              
-                _BSG = GyroscopicStability(MuzzleVelocity,TempF,BaroPressure);
+                _BSG = BallisticFunctions.GyroscopicStability(SelectedBullet, SelectedBarrel, MuzzleVelocity,TempF,BaroPressure);
                 return _BSG;
             }
         }
@@ -1218,32 +1223,6 @@ namespace LawlerBallisticsDesk.Classes
                 lDIR = lDIR - 0.5;
             }
             return lDIR;
-        }
-        /// <summary>
-        /// The gyroscopic stability measure of the bullet, a value of 1 is minimal stability.
-        /// </summary>
-        /// <param name="Vel">Velocity in fps</param>
-        /// <param name="Temp">Ambient temperature in F</param>
-        /// <param name="BaroPressure">Barometric pressure in inHg</param>
-        /// <returns></returns>
-        public double GyroscopicStability(double Vel, double Temp, double BaroPressure)
-        {
-            //L = bullet length in inches.
-            //d = bullet diameter in inches.
-            //T = barrel inches per turn.
-            //m = bullet mass in grains.
-            //l = L/d
-            //t = T/d
-            //S = ((30m)/((t^2d^3(l)(1+l^2))) * (V/2800)^(1/3) * ((T + 460)/519) * (29.92/Baro)
-            double lS; double lt; double lL;
-            lL = BulletLength / BulletDiameter;
-            lt = BarrelTwist / BulletDiameter;
-            lS = (30 * BulletWeight) / ((Math.Pow((lt), 2)) * (Math.Pow(BulletDiameter, 3)) * lL * (lL + Math.Pow(lL, 2)));
-            lS = lS * Math.Pow((Vel / 2800), (1.00 / 3.00));
-            lS = lS * (Temp+460)/519.00;
-            lS = lS * (29.92 / BaroPressure);
-
-            return lS;
         }
         /// <summary>
         /// The RPM of the bullet
@@ -2121,9 +2100,11 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Constructor"
-        public Ballistics()
+        public Ballistics(Bullet bullet, Barrel barrel)
         {
-            _BulletShapeType = new BulletShapeEnum();            
+            _BulletShapeType = new BulletShapeEnum();
+            _SelectedBullet = bullet;
+            _SelectedBarrel = barrel;
         }
         #endregion
     }

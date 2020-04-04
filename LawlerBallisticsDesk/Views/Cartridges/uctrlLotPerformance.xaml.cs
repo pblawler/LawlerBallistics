@@ -26,6 +26,7 @@ namespace LawlerBallisticsDesk.Views.Cartridges
         {
             InitializeComponent();
             _DC = (RecipeViewModel)this.DataContext;
+
         }
 
         private void DataGrid_KeyUp(object sender, KeyEventArgs e)

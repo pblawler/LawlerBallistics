@@ -810,7 +810,6 @@ namespace LawlerBallisticsDesk.Classes
                 }
             }
         }
-        //TODO: add totalcount to data persistance.
         public int TotalCount { get { return _TotalCnt; } set { _TotalCnt = value; RaisePropertyChanged(nameof(TotalCount)); } }
         public string SerialNo { get { return _SerialNo; } set { _SerialNo = value; RaisePropertyChanged(nameof(SerialNo)); } }
         public string BulletLot { get { return _BulletLot; } set { _BulletLot = value; RaisePropertyChanged(nameof(BulletLot)); } }

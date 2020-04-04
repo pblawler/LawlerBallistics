@@ -12,11 +12,11 @@
         <Button Content="OK" HorizontalAlignment="Left" Height="28" Margin="49,135,0,0" VerticalAlignment="Top" Width="106" Click="Button_Click"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Height="28" Margin="160,135,0,0" VerticalAlignment="Top" Width="106" Click="Button_Click_1"/>
         <TextBox HorizontalAlignment="Left" Height="20" Margin="101,49,0,0" HorizontalContentAlignment="Center" 
-            TextWrapping="Wrap" VerticalAlignment="Top" Width="122" Text="{Binding LotSize, StringFormat=\{0:n0\}, UpdateSourceTrigger=Default}"/>
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="122" Text="{Binding SampleSize, StringFormat=\{0:n0\}, UpdateSourceTrigger=Default}"/>
         <Label Content="Number of Sample Rounds" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="30" 
             FontWeight="Bold" Margin="81,19,0,0" VerticalAlignment="Top" Width="163"/>
         <TextBox HorizontalAlignment="Left" Height="20" Margin="101,104,0,0" HorizontalContentAlignment="Center" 
-            TextWrapping="Wrap" VerticalAlignment="Top" Width="122" Text="{Binding TotLotSize, StringFormat=\{0:n0\}, UpdateSourceTrigger=Default}"/>
+            TextWrapping="Wrap" VerticalAlignment="Top" Width="122" Text="{Binding TotalLotSize, StringFormat=\{0:n0\}, UpdateSourceTrigger=Default}"/>
         <Label Content="Number of Total Rounds" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="30" 
             FontWeight="Bold" Margin="81,74,0,0" VerticalAlignment="Top" Width="163"/>
 
