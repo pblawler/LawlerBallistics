@@ -274,7 +274,7 @@ namespace LawlerBallisticsDesk.Classes
         }
         public Ballistics ParseBallisticSolution(string FileName)
         {
-            Ballistics lBSF = new Ballistics();
+            Ballistics lBSF = new Ballistics(null, null);
             string lBDF = FileName;
             string lValue;
             if (!File.Exists(lBDF) )

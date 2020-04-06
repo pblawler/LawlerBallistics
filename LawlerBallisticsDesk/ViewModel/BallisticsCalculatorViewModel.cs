@@ -15,6 +15,7 @@ using OxyPlot.Axes;
 using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Views.Ballistics;
 using LawlerBallisticsDesk.Views.Maps;
+using LawlerBallisticsDesk.Classes.BallisticClasses;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
@@ -510,7 +511,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 lTD.Velocity = MyBallisticsCalculator.Velocity(lCR);
                 lTD.Energy = MyBallisticsCalculator.Energy(MyBallisticsCalculator.BulletWeight, lCR);
                 lTD.SpinRate = MyBallisticsCalculator.SpinRate(lCR);
-                lTD.GyroStability = MyBallisticsCalculator.GyroscopicStability(MyBallisticsCalculator.Velocity(lCR), MyBallisticsCalculator.TempF, MyBallisticsCalculator.BaroPressure);
+                lTD.GyroStability = BallisticFunctions.GyroscopicStability(MyBallisticsCalculator.Velocity(lCR), MyBallisticsCalculator.TempF, MyBallisticsCalculator.BaroPressure);
                 lTD.HorizDev = MyBallisticsCalculator.TotalHorizontalDrift(lCR);
                 lTD.CoriolisH = MyBallisticsCalculator.GetCoriolisHoriz(lCR);
                 lTD.CoriolisV = MyBallisticsCalculator.GetCoriolisVert(lCR);
@@ -527,7 +528,7 @@ namespace LawlerBallisticsDesk.ViewModel
                     lTD.Velocity = MyBallisticsCalculator.Velocity(_MyBallisticsCalculator.ShotDistance);
                     lTD.Energy = MyBallisticsCalculator.Energy(MyBallisticsCalculator.BulletWeight, _MyBallisticsCalculator.ShotDistance);
                     lTD.SpinRate = MyBallisticsCalculator.SpinRate(lCR);
-                    lTD.GyroStability = MyBallisticsCalculator.GyroscopicStability(MyBallisticsCalculator.Velocity(_MyBallisticsCalculator.ShotDistance), MyBallisticsCalculator.TempF, MyBallisticsCalculator.BaroPressure);
+                    lTD.GyroStability = BallisticFunctions.GyroscopicStability(MyBallisticsCalculator.Velocity(_MyBallisticsCalculator.ShotDistance), MyBallisticsCalculator.TempF, MyBallisticsCalculator.BaroPressure);
                     lTD.HorizDev = MyBallisticsCalculator.TotalHorizontalDrift(_MyBallisticsCalculator.ShotDistance);
                     lTD.CoriolisH = MyBallisticsCalculator.GetCoriolisHoriz(_MyBallisticsCalculator.ShotDistance);
                     lTD.CoriolisV = MyBallisticsCalculator.GetCoriolisVert(_MyBallisticsCalculator.ShotDistance);

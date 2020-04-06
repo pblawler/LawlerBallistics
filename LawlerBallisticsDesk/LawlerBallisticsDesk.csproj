@@ -242,6 +242,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Atmospherics.cs" />
+    <Compile Include="Classes\BallisticClasses\BallisticData.cs" />
+    <Compile Include="Classes\BallisticClasses\DragSlopeData.cs" />
+    <Compile Include="Classes\BallisticClasses\LoadOutData.cs" />
+    <Compile Include="Classes\BallisticClasses\ScenarioData.cs" />
+    <Compile Include="Classes\BallisticClasses\ZeroData.cs" />
     <Compile Include="Classes\Ballistics.cs" />
     <Compile Include="Classes\BallisticClasses\BallisticFunctions.cs" />
     <Compile Include="Classes\Barrel.cs" />
@@ -271,6 +276,7 @@
     <Compile Include="ViewModel\PrimersViewModel.cs" />
     <Compile Include="ViewModel\GunsViewModel.cs" />
     <Compile Include="ViewModel\BarrelRecipeViewModel.cs" />
+    <Compile Include="ViewModel\RecipeLotViewModel.cs" />
     <Compile Include="ViewModel\RecipeViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\PowdersViewModel.cs" />
