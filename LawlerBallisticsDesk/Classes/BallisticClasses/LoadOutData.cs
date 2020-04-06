@@ -22,49 +22,40 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Private Variables"
-        private double _ScopeHeight;
-        private double _MuzzleVelocity;
+        private Gun _MyGun;
+        private Recipe _MyCartridge;
+        private BallisticData _MyScenario = new BallisticData();
         #endregion
 
         #region "Properties"
         /// <summary>
         /// Measured from centerline of scope to centerline of barrel.
         /// </summary>
-        public double ScopeHeight
+        public Gun MyGun
         {
             get
-            {
-                if (_ScopeHeight == 0) _ScopeHeight = 2.50;
-                return _ScopeHeight;
+            {                
+                return _MyGun;
             }
             set
             {
-                _ScopeHeight = value;
-                RaisePropertyChanged(nameof(ScopeHeight));
+                _MyGun = value;
+                RaisePropertyChanged(nameof(MyGun));
             }
         }
-        public double MuzzleVelocity
+        public Recipe MyCartridge
         {
             get
             {
-                return _MuzzleVelocity;
+                return _MyCartridge;
             }
             set
             {
-                _MuzzleVelocity = value;
-                RaisePropertyChanged(nameof(MuzzleVelocity));
+                _MyCartridge = value;
+                RaisePropertyChanged(nameof(MyCartridge));
             }
         }
-        /// <summary>
-        /// Maximum achievable distance (yards)
-        /// </summary>
-        public double MaximumRange
-        {
-            get
-            {
-                return MaxRange();
-            }
-        }
+        public BallisticData MyScenario { get { return _MyScenario; } set { _MyScenario = value; RaisePropertyChanged(nameof(MyScenario)); } }
         #endregion
 
     }

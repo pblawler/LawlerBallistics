@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LawlerBallisticsDesk.Classes.BallisticClasses
 {
-    public class BallisticData : INotifyPropertyChanged
+    public class Solution : INotifyPropertyChanged
     {
         #region "Binding"
         public event PropertyChangedEventHandler PropertyChanged;
@@ -22,20 +22,18 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Private Variables"
-        private Atmospherics _atmospherics = new Atmospherics();
-        private ZeroData _zeroData;
-        private DragSlopeData _dragSlopwData;
+        private Scenario _MyScenario;
+        private Ballistics _MyBallistics;
         #endregion
 
         #region "Properties"
-        public ZeroData zeroData { get { return _zeroData; } set { _zeroData = value; RaisePropertyChanged(nameof(zeroData)); } }
-        public DragSlopeData dragSlopeData { get { return _dragSlopwData; } set { _dragSlopwData = value; RaisePropertyChanged(nameof(dragSlopeData)); } }
+
         #endregion
 
-        #region "Constructor"
-        public BallisticData(Atmospherics atmospherics)
+        #region "Creator"
+        public Solution()
         {
-            _atmospherics = atmospherics;
+
         }
         #endregion
     }

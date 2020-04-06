@@ -29,8 +29,28 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Properties"
-        public double Latitude { get { return _Latitude; } set { _Latitude = value; RaisePropertyChanged(nameof(Latitude)); } }
+        /// <summary>
+        /// The latitude in decimal degrees (DD).
+        /// </summary>
+        public double Latitude
+        {
+            get
+            {
+                if (_Latitude == 0) _Latitude = 34.681129;
+                return _Latitude;
+            }
+            set
+            {
+                _Latitude = value; RaisePropertyChanged(nameof(Latitude));
+            }
+        }
+        /// <summary>
+        /// The longitude in decimal degrees (DD).
+        /// </summary>
         public double Longitude { get { return _Longitude; } set { _Longitude = value; RaisePropertyChanged(nameof(Longitude)); } }
+        /// <summary>
+        /// The altitude in feet.
+        /// </summary>
         public double Altitude { get { return _Altitude; } set { _Altitude = value; RaisePropertyChanged(nameof(Altitude)); } }
         #endregion
 

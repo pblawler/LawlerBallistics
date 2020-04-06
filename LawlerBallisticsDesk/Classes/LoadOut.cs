@@ -32,22 +32,26 @@ namespace LawlerBallisticsDesk.Classes
         #region "Private Variables"
         private Gun _SelectedGun;
         private Recipe _SelectedLoadRecipe;
-        private string _SelectedBarrelID;
-        private string _SelectedLoadRecipeID;
-        private double _CoriolisHZeroRate;
-        private double _CoriolisVZeroRate;
-        private double _SpinDriftZeroRate;
-        private double _Hm;  //Max rise to zero
-        private double _HmRange;
-        private double _ZeroRange;
-        private double _NearZero;
-
-
+        private string _BarrelID;
+        private Barrel _Barrel;
+        private double _ScopeHeight;
+        private double _MuzzleVelocity;
         #endregion
 
         #region "Properties"
         public Gun SelectedGun { get { return _SelectedGun; } set { _SelectedGun = value;  } }
-        public Recipe SelectedLoadRecipe { get { return _SelectedLoadRecipe; } set { _SelectedLoadRecipe = value; RaisePropertyChanged(nameof(SelectedLoadRecipe)); } }
+        public string SelectedBarrelID { get { return _BarrelID; } set { _BarrelID = value; RaisePropertyChanged(nameof(SelectedBarrelID)); } }
+        public Barrel SelectedBarrel { get { return _Barrel; } }
+        public Recipe SelectedCartridge { get { return _SelectedLoadRecipe; } set { _SelectedLoadRecipe = value; RaisePropertyChanged(nameof(SelectedCartridge)); } }
+        public double ScopeHeight
+        {
+            get
+            {
+                //TODO: add the ability for the scope to be mounted on the barrel or reciever.
+                return SelectedGun.ScopeHeight;
+            }
+        }
+        public double MuzzleVelocity { get { return _MuzzleVelocity; } set { _MuzzleVelocity = value; RaisePropertyChanged(nameof(MuzzleVelocity)); } }
         #endregion
 
         #region "Constructor"

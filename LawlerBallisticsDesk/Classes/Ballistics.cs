@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Net;
-using System.Xml;
 using LawlerBallisticsDesk.Classes.BallisticClasses;
 
 namespace LawlerBallisticsDesk.Classes
@@ -88,10 +86,6 @@ namespace LawlerBallisticsDesk.Classes
         //________________ END of Zone 4  ____________________
         #endregion
 
-        #region "Weather Query"
-        private const string _GetWeather = "http://api.openweathermap.org/data/2.5/weather?lat=@latitude@&lon=@longitude@&mode=xml&units=imperial&APPID=";
-        #endregion
-
         #region "Binding"
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -103,67 +97,12 @@ namespace LawlerBallisticsDesk.Classes
         }
         #endregion
 
-        #region "Private Variables"       
-        private BulletShapeEnum _BulletShapeType;
-        private double _BarrelTwist;
-        private string _BarrelTwistDir = "R";
-        private Barrel _SelectedBarrel;
-        private double _BCg1;
-        private double _BCz2;
-        private Bullet _SelectedBullet;
+        #region "Private Variables"
+        private Scenario _MyScenario;
         private double _BSG; //Bullet Stability factor
-        private double _BulletDiameter;
-        private double _BulletLength;
-        private double _BulletWeight;
-        private double _D1;
-        private double _D2;
-        private double _DensityAlt;
-        private double _zDensityAlt;
-        private double _Fo;
-        private double _F2;
-        private double _F3;
-        private double _F4;
         private const double _GravFt = 32.17405;
         private const double _GravIn = 386.0886;
         private const double _G = 41.68211487;      //G = 3*(g(in/s^2)/2)^0.5 = 41.68
-        private double _Hm;
-        private double _zShooterLatitude;
-        private double _zShooterLongitude;
-        private double _zTargetLatitude;
-        private double _zTargetLongitude;
-        private double _ShooterLatitude;
-        private double _ShooterLongitude;
-        private double _TargetLatitude;
-        private double _TargetLongitude;
-        private double _ShotDistance;
-        private double _ShotAngle;
-        private double _MuzzleVelocity;
-        private double _RelHumidity;
-        private double _zRelHumidity;
-        private double _ScopeHeight;
-        private double _TempF;
-        private double _zTempF;
-        private double _BaroPressure;
-        private double _zBaroPressure;
-        private bool _UseMaxRise;
-        private double _V1;
-        private double _V2;
-        private double _ZeroRange;
-        private double _Zone1Range;
-        private double _Zone2Range;
-        private double _Zone3Range;
-        private double _Zone1TransSpeed;
-        private double _Zone2TransSpeed;
-        private double _Zone3TransSpeed;
-        private double _Zone1MachFactor;
-        private double _Zone2MachFactor;
-        private double _Zone3MachFactor;
-        private double _Zone1SlopeMultiplier;
-        private double _Zone3SlopeMultiplier;
-        private double _Zone1Slope;
-        private double _Zone1AngleFactor;
-        private double _Zone3Slope;
-        private double _WindSpeed;
         private float _WindDirectionDeg;
         private double _WindDirectionClock;
         private bool _SpinDriftCalc;
@@ -171,81 +110,7 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Public Properties"
-        /// <summary>
-        /// Used to estimate a bullet's BC and for initial Zone scale multiplier value selection.
-        /// </summary>
-        public BulletShapeEnum BulletShapeType { get { return _BulletShapeType; } }
-        public Barrel SelectedBarrel { get { return _SelectedBarrel; } }
-        /// <summary>
-        /// Number of inches of barrel length per rev of the rifling.
-        /// </summary>
-        public double BarrelTwist
-        {
-            get
-            {
-                if (_BarrelTwist ==0) _BarrelTwist = 9;
-                return _BarrelTwist; 
-            }
-            set
-            {
-                _BarrelTwist = value;
-                RaisePropertyChanged(nameof(BarrelTwist));
-                RaisePropertyChanged(nameof(BSG));
-            }
-        }
-        /// <summary>
-        /// Direction of rifling, R or L.
-        /// </summary>
-        public string BarrelTwistDir
-        {
-            get
-            {
-                return _BarrelTwistDir;
-            }
-            set
-            {
-                _BarrelTwistDir = value;
-                RaisePropertyChanged(nameof(BarrelTwistDir));
-            }
-        }
-        public Bullet SelectedBullet { get { return _SelectedBullet; } }
-        /// <summary>
-        /// Diameter (in) of the bullet
-        /// </summary>
-        public double BulletDiameter { get { return _BulletDiameter; }
-            set
-            {
-                _BulletDiameter = value;
-                RaisePropertyChanged(nameof(BulletDiameter));
-                RaisePropertyChanged(nameof(BSG));
-            }
-        }
-        /// <summary>
-        /// Length of the bullet (in), base to tip
-        /// </summary>
-        public double BulletLength
-        {
-            get { return _BulletLength; }
-            set
-            {
-                _BulletLength = value;
-                RaisePropertyChanged(nameof(BulletLength));
-                RaisePropertyChanged(nameof(BSG));
-            }
-        }
-        /// <summary>
-        /// Weight of the bullet (grn)
-        /// </summary>
-        public double BulletWeight
-        {
-            get { return _BulletWeight; }
-            set
-            {
-                _BulletWeight = value;
-                RaisePropertyChanged(nameof(BulletWeight));
-                RaisePropertyChanged(nameof(BSG));
-            }
-        }
+        public Scenario MyScenario { get { return _MyScenario; } }
         /// <summary>
         /// Bullet stability factor
         /// </summary>
@@ -254,7 +119,9 @@ namespace LawlerBallisticsDesk.Classes
             get
             {
                              
-                _BSG = BallisticFunctions.GyroscopicStability(SelectedBullet, SelectedBarrel, MuzzleVelocity,TempF,BaroPressure);
+                _BSG = BallisticFunctions.GyroscopicStability(MyScenario.MyShooter.MyLoadOut.SelectedCartridge.RecpBullet,
+                    MyScenario.MyShooter.MyLoadOut.SelectedBarrel, MyScenario.MyShooter.MyLoadOut.MuzzleVelocity,
+                    MyScenario.MyAtmospherics.Temp, MyScenario.MyAtmospherics.Pressure);
                 return _BSG;
             }
         }
@@ -285,24 +152,12 @@ namespace LawlerBallisticsDesk.Classes
                 double lZDC;
 
                 //Amount of drift corrected at sight in
-                lZSD = GetRawSpinDrift(ZeroRange);
+                lZSD = GetRawSpinDrift(MyScenario.MyBallisticData.zeroData.ZeroRange);
                 //Correction factor (in/yards), the linear offset induced at sight in.
-                lZDC = lZSD / ZeroRange;
+                lZDC = lZSD / MyScenario.MyBallisticData.zeroData.ZeroRange;
                 return lZDC;
             }
-        }
-        public double WindSpeed
-        {
-            get
-            {
-                return _WindSpeed;
-            }
-            set
-            {
-                _WindSpeed = value;
-                RaisePropertyChanged(nameof(WindSpeed));
-            }
-        }
+        }      
         public float WindDirectionDeg
         {
             get
@@ -327,18 +182,14 @@ namespace LawlerBallisticsDesk.Classes
                 RaisePropertyChanged(nameof(WindDirectionClock));
             }
         }
-        /// <summary>
-        /// The design geometry type of the bullet, i.e. SpitzerBoatTail, Semispitzer, etc...
-        /// </summary>
-        public BulletShapeEnum BulletShapeTyp { get { return _BulletShapeType; } set { _BulletShapeType = value; RaisePropertyChanged(nameof(BulletShapeTyp)); } }
-        #endregion
+        #endregion   
 
         #region "Public Routines"
         /// <summary>
-        /// The PreflightCheck returns an integer pertaining to the shot characteristics that can be
-        /// calculated with the provided data.
-        /// </summary>
-        /// <returns></returns>
+    /// The PreflightCheck returns an integer pertaining to the shot characteristics that can be
+    /// calculated with the provided data.
+    /// </summary>
+    /// <returns></returns>
         public Int16 PreflightCheck()
         {
             Int16 lRtn = 0;
@@ -350,7 +201,7 @@ namespace LawlerBallisticsDesk.Classes
             // Velocity Measurements Provided = 2
             // BC and Muzzle Provided = 4
             //Check to see of Fo is directly provided or must be calculated.
-            if ((_Fo > 0) & (_MuzzleVelocity > 0))
+            if ((MyScenario.MyBallisticData.zeroData.dragSlopeData.Fo > 0) & (MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0))
             {
                 //Fo is provided.  Set First bit value to 1
 
@@ -360,13 +211,14 @@ namespace LawlerBallisticsDesk.Classes
                 lRtn = 1;
             }
             //Check to see if velocity-range or BC-MV method is used to find Fo.
-            if ((_V1 > 0) & (_V2 > 0) & (_D2 > 0))
+            if ((MyScenario.MyBallisticData.dragSlopeData.V1 > 0) & (MyScenario.MyBallisticData.dragSlopeData.V2 > 0) &
+                (MyScenario.MyBallisticData.dragSlopeData.D2 > 0))
             {
                 //Actual velocities and distances provided.
                 lRtn += 2;
                 _FoCalc = true;
             }
-            else if ((_MuzzleVelocity > 0) & (_BCg1 > 0))
+            else if ((MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0) & (MyScenario.MyBallisticData.dragSlopeData.BCg1> 0))
             {
                 //BC and Muzzle velocity rather than Velocity-Range is used to calculate Fo
                 lRtn += 4;
@@ -388,25 +240,27 @@ namespace LawlerBallisticsDesk.Classes
                     return lRtn;
                 }
             }
-            Fo = CalculateFo(D1, V1, D2, V2);
-            BCg1 = CalculateBC(V1, V2, (D2 - D1));
-            if (Fo <= 0)
+            MyScenario.MyBallisticData.dragSlopeData.Fo = CalculateFo(MyScenario.MyBallisticData.dragSlopeData.D1, 
+                MyScenario.MyBallisticData.dragSlopeData.V1, MyScenario.MyBallisticData.dragSlopeData.D2, MyScenario.MyBallisticData.dragSlopeData.V2);
+            MyScenario.MyBallisticData.dragSlopeData.BCg1 = CalculateBC(MyScenario.MyBallisticData.dragSlopeData.V1, 
+                MyScenario.MyBallisticData.dragSlopeData.V2, (MyScenario.MyBallisticData.dragSlopeData.D2 - MyScenario.MyBallisticData.dragSlopeData.D1));
+            if (MyScenario.MyBallisticData.dragSlopeData.Fo <= 0)
             {
                 //Invalid Fo
                 lRtn = -3;
                 return lRtn;
             }
-            if (UseMaxRise & (ZeroMaxRise == 0))
+            if (MyScenario.MyBallisticData.zeroData.UseMaxRise & (MyScenario.MyBallisticData.zeroData.ZeroMaxRise == 0))
             {
                 //Cannot calculate sightline without a valid zero point.
                 lRtn = -8;
                 return lRtn;
             }
-            else if ((UseMaxRise) & (ZeroMaxRise > 0))
+            else if ((MyScenario.MyBallisticData.zeroData.UseMaxRise) & (MyScenario.MyBallisticData.zeroData.ZeroMaxRise > 0))
             {
-                ZeroRange = CalculateZeroRange(_Hm);
+                MyScenario.MyBallisticData.zeroData.ZeroRange = CalculateZeroRange(MyScenario.MyBallisticData.zeroData.ZeroMaxRise);                
             }
-            if ((!UseMaxRise) & (ZeroRange > 0))
+            if ((!MyScenario.MyBallisticData.zeroData.UseMaxRise) & (MyScenario.MyBallisticData.zeroData.ZeroRange > 0))
             {
                 CalculateHm();
             }
@@ -495,7 +349,7 @@ namespace LawlerBallisticsDesk.Classes
         {
             double lFp;
 
-            lFp = RetardCoef + RetardCoef * (DensityAlt - zDensityAlt) / 29733;
+            lFp = RetardCoef + RetardCoef * (MyScenario.MyAtmospherics.DensityAlt - MyScenario.MyBallisticData.zeroData.atmospherics.DensityAlt) / 29733;
             return lFp;
         }
         /// <summary>
@@ -516,64 +370,85 @@ namespace LawlerBallisticsDesk.Classes
             double lD4;     //Component 1 of 1 drop distance in zone 4
             double lFa;     //Drag/Retard coefficent for a specific range distance.
 
-            if (Range <= Zone1Range)
+            if (Range <= MyScenario.MyBallisticData.dragSlopeData.Zone1Range)
             {
                 //Zone 1
 
                 //    'D = (G/Vo/(1/R - 1/Fa))^2
-                lD1 = Math.Pow(((_G / MuzzleVelocity) / ((1 / Range) - (1 / DensityAltCorrection(Fa(Range))))), 2);
+                lD1 = Math.Pow(((_G / MyScenario.MyShooter.MyLoadOut.MuzzleVelocity) / ((1 / Range) - (1 / DensityAltCorrection(Fa(Range))))), 2);
                 ld = lD1;
             }
-            else if ((Range > Zone1Range) & (Range <= Zone2Range))
+            else if ((Range > MyScenario.MyBallisticData.dragSlopeData.Zone1Range) & 
+                (Range <= MyScenario.MyBallisticData.dragSlopeData.Zone2Range))
             {
                 //Zone 2
 
-                if (Zone1Range > 0)
+                if (MyScenario.MyBallisticData.dragSlopeData.Zone1Range > 0)
                 {
                     //D = (G/Vo/(1/R - 1/Fa))^2
-                    lD1 = MuzzleDrop(Zone1Range, true);
+                    lD1 = MuzzleDrop(MyScenario.MyBallisticData.dragSlopeData.Zone1Range, true);
                     //D' = 3gFo(Rt - R)((1 - 3NR / Fo) ^ (1 - 2 / N))/ Vo ^ 2 / (2 - N)
                     //   Corrected to 3gFo(Rt-R)((1+3NR/Fo)^((2/N)-1))/Vo^2/(2-N)
                     //lD1p = lD1p * (Math.Pow(((1 + (3 * Zone1Slope * Zone1Range) / DensityAltCorrection(Fo))), ((2 / Zone1Slope) - 1)));
                     //   Updated to original formula with correction factor 0.696.  First mod moved incorrectly with F.
-                    lD1p = 3 * _GravIn * DensityAltCorrection(Fo) * (Range - Zone1Range);
-                    lD1p = lD1p * (Math.Pow((1 - ((3 * Zone1Slope * Zone1Range) / DensityAltCorrection(Fo))), (1 - (2 / Zone1Slope))));
-                    lD1p = lD1p / (Math.Pow(MuzzleVelocity, 2));
-                    lD1p = lD1p / (2 - Zone1Slope);
-                    lD1p = lD1p * Zone1AngleFactor;
+                    lD1p = 3 * _GravIn * DensityAltCorrection(MyScenario.MyBallisticData.dragSlopeData.Fo) * 
+                        (Range - MyScenario.MyBallisticData.dragSlopeData.Zone1Range);
+                    lD1p = lD1p * (Math.Pow((1 - ((3 * MyScenario.MyBallisticData.dragSlopeData.Zone1Slope * 
+                        MyScenario.MyBallisticData.dragSlopeData.Zone1Range) / 
+                        DensityAltCorrection(MyScenario.MyBallisticData.dragSlopeData.Fo))), 
+                        (1 - (2 / MyScenario.MyBallisticData.dragSlopeData.Zone1Slope))));
+                    lD1p = lD1p / (Math.Pow(MyScenario.MyShooter.MyLoadOut.MuzzleVelocity, 2));
+                    lD1p = lD1p / (2 - MyScenario.MyBallisticData.dragSlopeData.Zone1Slope);
+                    lD1p = lD1p * MyScenario.MyBallisticData.dragSlopeData.Zone1AngleFactor;
                 }
                 //    'D = (G/Vo/(1/R - 1/Fa))^2
-                lD2 = Math.Pow(((_G / Zone1TransSpeed) / ((1 / (Range - Zone1Range)) - (1 / DensityAltCorrection(F2)))), 2);
+                lD2 = Math.Pow(((_G / MyScenario.MyBallisticData.dragSlopeData.Zone1TransSpeed) / 
+                    ((1 / (Range - MyScenario.MyBallisticData.dragSlopeData.Zone1Range)) -
+                    (1 / DensityAltCorrection(MyScenario.MyBallisticData.dragSlopeData.F2)))), 2);
                 ld = lD1 + lD1p + lD2;
             }
-            else if ((Range > Zone2Range) & (Range <= Zone3Range))
+            else if ((Range > MyScenario.MyBallisticData.dragSlopeData.Zone2Range) & (Range <= MyScenario.MyBallisticData.dragSlopeData.Zone3Range))
             {
                 //Zone 3
 
-                if (Zone2Range > 0)
+                if (MyScenario.MyBallisticData.dragSlopeData.Zone2Range > 0)
                 {
-                    lD1t = MuzzleDrop(Zone2Range, true);
+                    lD1t = MuzzleDrop(MyScenario.MyBallisticData.dragSlopeData.Zone2Range, true);
                     //D = (G/Vo/(1/R - 1/Fa))^2
-                    lD2 = Math.Pow(((_G / Zone1TransSpeed) / ((1 / (Zone2Range - Zone1Range)) - (1 / DensityAltCorrection(F2)))), 2);
+                    lD2 = Math.Pow(((_G / MyScenario.MyBallisticData.dragSlopeData.Zone1TransSpeed) / 
+                        ((1 / (MyScenario.MyBallisticData.dragSlopeData.Zone2Range - MyScenario.MyBallisticData.dragSlopeData.Zone1Range)) -
+                        (1 / DensityAltCorrection(MyScenario.MyBallisticData.dragSlopeData.F2)))), 2);
                     //D2' = 2D2(Rt - R1 - R2) / R2 / (1 - R2 / F)
-                    lD2p = (2 * lD2) * (Range - Zone2Range) / (Zone2Range - Zone1Range) / (1 - ((Zone2Range - Zone1Range) / DensityAltCorrection(F2)));
+                    lD2p = (2 * lD2) * (Range - MyScenario.MyBallisticData.dragSlopeData.Zone2Range) / 
+                        (MyScenario.MyBallisticData.dragSlopeData.Zone2Range - MyScenario.MyBallisticData.dragSlopeData.Zone1Range) / 
+                        (1 - ((MyScenario.MyBallisticData.dragSlopeData.Zone2Range - MyScenario.MyBallisticData.dragSlopeData.Zone1Range) /
+                        DensityAltCorrection(MyScenario.MyBallisticData.dragSlopeData.F2)));
                 }
-                lFa = DensityAltCorrection(F2) + (DensityAltCorrection(F3) - DensityAltCorrection(F2)) / 4.000;
+                lFa = DensityAltCorrection(MyScenario.MyBallisticData.dragSlopeData.F2) + 
+                    (DensityAltCorrection(MyScenario.MyBallisticData.dragSlopeData.F3) -
+                    DensityAltCorrection(MyScenario.MyBallisticData.dragSlopeData.F2)) / 4.000;
                 //D = (G/Vo/(1/R - 1/Fa))^2
-                lD3 = Math.Pow(((_G / Zone2TransSpeed) / ((1.00 / (Range - Zone2Range)) - (1.00 / lFa))), 2);
+                lD3 = Math.Pow(((_G / MyScenario.MyBallisticData.dragSlopeData.Zone2TransSpeed) / 
+                    ((1.00 / (Range - MyScenario.MyBallisticData.dragSlopeData.Zone2Range)) - (1.00 / lFa))), 2);
                 ld = lD1t + lD2p + lD3;
             }
-            else if (Range > Zone3Range)
+            else if (Range > MyScenario.MyBallisticData.dragSlopeData.Zone3Range)
             {
-                if (Zone3Range > 0)
+                if (MyScenario.MyBallisticData.dragSlopeData.Zone3Range > 0)
                 {
-                    lD3 = MuzzleDrop(Zone3Range, true);
-                    lFa = DensityAltCorrection(F2) + (DensityAltCorrection(F3) - DensityAltCorrection(F2)) / 4.000;
+                    lD3 = MuzzleDrop(MyScenario.MyBallisticData.dragSlopeData.Zone3Range, true);
+                    lFa = DensityAltCorrection(MyScenario.MyBallisticData.dragSlopeData.F2) + (DensityAltCorrection(F3) - 
+                        DensityAltCorrection(MyScenario.MyBallisticData.dragSlopeData.F2)) / 4.000;
                     //D3' = gF3(Rt - (R1 + R2 + R3)) * 3((1 + 12 * R3 / F2) ^ (3 / 2) - 1) / 6 / (Zone2TransSpeed) ^ 2
-                    lD3p = _GravIn * DensityAltCorrection(F3) * (Range - Zone3Range) * 3 * (Math.Pow((1 + 12 * (Zone3Range - Zone2Range) / lFa), (3 / 2)) - 1) / 6 / Math.Pow(Zone2TransSpeed, 2);
+                    lD3p = _GravIn * DensityAltCorrection(F3) * (Range - MyScenario.MyBallisticData.dragSlopeData.Zone3Range) * 3 * 
+                        (Math.Pow((1 + 12 * (MyScenario.MyBallisticData.dragSlopeData.Zone3Range - 
+                        MyScenario.MyBallisticData.dragSlopeData.Zone2Range) / lFa), (3 / 2)) - 1) / 6 / 
+                        Math.Pow(MyScenario.MyBallisticData.dragSlopeData.Zone2TransSpeed, 2);
                 }
                 //D = (G/Vo/(1/R - 1/Fa))^2
-                lD4 = Math.Pow((_G / Zone3TransSpeed / ((1.00 / (Range - Zone3Range) - 1 / DensityAltCorrection(F3)))), 2);
+                lD4 = Math.Pow((_G /MyScenario.MyBallisticData.dragSlopeData.Zone3TransSpeed / 
+                    ((1.00 / (Range - MyScenario.MyBallisticData.dragSlopeData.Zone3Range) - 
+                    1 / DensityAltCorrection(MyScenario.MyBallisticData.dragSlopeData.F3)))), 2);
                 ld = lD3 + lD3p + lD4;
             }
 
@@ -651,42 +526,53 @@ namespace LawlerBallisticsDesk.Classes
                 lVa = (V1 + V2) / 2;
                 ldV = (V1 - V2);
                 lF = (Range_2 - Range_1) * (lVa / ldV);
-                if (V1 >= Zone1TransSpeed)
+                if (V1 >= MyScenario.MyBallisticData.dragSlopeData.Zone1TransSpeed)
                 {
                     //Zone 1
                     //Fa=Fo-Zone1SlopeMultiplier*N*R
-                    lFo = (lF + Zone1SlopeMultiplier * Zone1Slope * (Range_1 / 3));
-                    Fo = lFo;
+                    lFo = (lF + MyScenario.MyBallisticData.dragSlopeData.Zone1SlopeMultiplier *
+                        MyScenario.MyBallisticData.dragSlopeData.Zone1Slope * (Range_1 / 3));
+                    MyScenario.MyBallisticData.dragSlopeData.Fo = lFo;
                     //V  = Vo(1-3RN/Fo)^2
                     //We must convert the provided range from feet to yards
                     // Solving for Vo we get the solution below.
                     // MuzzleVelocity = V1 / ((1 - (Range_1 / 3) * Zone1Slope / Fo) ^ (1 / Zone1Slope))
-                    MuzzleVelocity = V1 / (Math.Pow((1 - (Range_1 / 3) * Zone1Slope / Fo), (1 / Zone1Slope)));
+                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Pow((1 - (Range_1 / 3) * 
+                        MyScenario.MyBallisticData.dragSlopeData.Zone1Slope / 
+                        MyScenario.MyBallisticData.dragSlopeData.Fo),
+                        (1 / MyScenario.MyBallisticData.dragSlopeData.Zone1Slope)));
                 }
-                else if ((V1 < Zone1TransSpeed) & (V1 >= Zone2TransSpeed))
+                else if ((V1 < MyScenario.MyBallisticData.dragSlopeData.Zone1TransSpeed) &
+                    (V1 >= MyScenario.MyBallisticData.dragSlopeData.Zone2TransSpeed))
                 {
                     //Zone 2
 
                     //F is constant in Zone 2, i.e. no slope N = 0.
                     lFo = lF;
-                    Fo = lFo;
+                    MyScenario.MyBallisticData.dragSlopeData.Fo = lFo;
                     //Vo = V(exp(-3R/F))
-                    MuzzleVelocity = V1 / (Math.Exp((-3 * ((Range_1 / 3) / Fo))));
+                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Exp((-3 * ((Range_1 / 3) / 
+                        MyScenario.MyBallisticData.dragSlopeData.Fo))));
                 }
-                else if ((V1 < Zone2TransSpeed) & (V1 >= Zone3TransSpeed))
+                else if ((V1 < MyScenario.MyBallisticData.dragSlopeData.Zone2TransSpeed) &
+                    (V1 >= MyScenario.MyBallisticData.dragSlopeData.Zone3TransSpeed))
                 {
                     //Zone 3
 
                     //Fa=Fo-0.75*N*R
                     //F0 = Fa + Zone3SlopeMultiplier*N*R
-                    lFo = lF + Zone3SlopeMultiplier * Zone3Slope * (Range_1 / 3);
+                    lFo = lF + MyScenario.MyBallisticData.dragSlopeData.Zone3SlopeMultiplier * 
+                        MyScenario.MyBallisticData.dragSlopeData.Zone3Slope * (Range_1 / 3);
                     F2 = lFo;
                     Fo = F2;
-                    F3 = Fo - (Zone3SlopeMultiplier * Zone3Slope * Zone3Range);
+                    F3 = Fo - (MyScenario.MyBallisticData.dragSlopeData.Zone3SlopeMultiplier * 
+                        MyScenario.MyBallisticData.dragSlopeData.Zone3Slope * MyScenario.MyBallisticData.dragSlopeData.Zone3Range);
                     //V  = Vo(1-3RN/Fo)^2
                     //We must convert the provided range from feet to yards
                     //Solving for Vo we get the solution below.
-                    MuzzleVelocity = V1 / (Math.Pow((1 - (Range_1 / 3) * Zone3Slope / lFo), (1 / Zone3Slope)));
+                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Pow((1 - (Range_1 / 3) * 
+                        MyScenario.MyBallisticData.dragSlopeData.Zone3Slope / lFo),
+                        (1 / MyScenario.MyBallisticData.dragSlopeData.Zone3Slope)));
                 }
                 else
                 {
@@ -694,7 +580,7 @@ namespace LawlerBallisticsDesk.Classes
 
                     //F is constant in Zone 4
                     lFo = lF;
-                    MuzzleVelocity = V1 / (Math.Exp((-3 * ((Range_1 / 3) / Fo))));
+                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Exp((-3 * ((Range_1 / 3) / Fo))));
                 }
 
                 return lFo;
@@ -715,18 +601,18 @@ namespace LawlerBallisticsDesk.Classes
         {
             double lc; double lR1; double lV2; int lRtn = 0;
 
-            if ((_MuzzleVelocity == 0) || (_BCg1 == 0))
+            if ((MyScenario.MyShooter.MyLoadOut.MuzzleVelocity == 0) || (MyScenario.MyBallisticData.dragSlopeData.BCg1 == 0))
             {
                 lRtn = -1;
                 return lRtn;
             }
-            D1 = 0;
-            D2 = 300;
-            V1 = MuzzleVelocity;
+            MyScenario.MyBallisticData.dragSlopeData.D1 = 0;
+            MyScenario.MyBallisticData.dragSlopeData.D2 = 300;
+            MyScenario.MyBallisticData.dragSlopeData.V1 = MyScenario.MyShooter.MyLoadOut.MuzzleVelocity;
             //BC = r/(r2 - r1)
             //r = C*2*(3600^0.5-(V^0.5))
             lc = 166;
-            lR1 = (lc * 2) * (Math.Pow(3600, 0.5) - (Math.Pow(_MuzzleVelocity, 0.5)));
+            lR1 = (lc * 2) * (Math.Pow(3600, 0.5) - (Math.Pow(MyScenario.MyShooter.MyLoadOut.MuzzleVelocity, 0.5)));
             //We must solve r2 for velocity at 100 yards i.e. 300 ft
             //lR2 = (lc * 2) * (((3600#) ^ (0.5)) - (V2^(0.5)))
             //BC = 300 / (lR2 - lR1)
@@ -737,8 +623,9 @@ namespace LawlerBallisticsDesk.Classes
             // V2^(0.5) = -(((300 / BC) + lR1)/(lc * 2)) - (3600# ^ (0.5))
             // V2 = ((((300 / BC) + lR1)/(lc * 2)) - (3600# ^ (0.5)))^2
             //Plug in the value for r1 calculated from provided V1
-            lV2 = Math.Pow(((((300 / _BCg1) + lR1) / (lc * 2)) - (Math.Pow(3600, 0.5))), 2);
-            V2 = lV2;
+            lV2 = Math.Pow(((((300 /MyScenario.MyBallisticData.dragSlopeData.BCg1) + lR1) / (lc * 2)) - 
+                (Math.Pow(3600, 0.5))), 2);
+            MyScenario.MyBallisticData.dragSlopeData.V2 = lV2;
             return lRtn;
         }
         /// <summary>
@@ -775,15 +662,16 @@ namespace LawlerBallisticsDesk.Classes
             //lVd = MuzzleVelocity * Math.Pow((1 - (1.5 * Range) / Fo), (1 / Zone1Slope));
 
             //TODO: Zone errors occur with the below code, needs investigation
-            if ((Zone2Range >= Range) & (Range > Zone1Range))
+            if ((MyScenario.MyBallisticData.dragSlopeData.Zone2Range >= Range) & (Range > MyScenario.MyBallisticData.dragSlopeData.Zone1Range))
             {
                 //'    'Zone 2
                 //'
                 //'    lF = F2
                 //'    'V = Vo(exp(-3R/F))                
-                lVd = Zone1TransSpeed * Math.Exp((-3 * (Range-Zone1Range) / F2));                
+                lVd = MyScenario.MyBallisticData.dragSlopeData.Zone1TransSpeed * 
+                    Math.Exp((-3 * (Range- MyScenario.MyBallisticData.dragSlopeData.Zone1Range) / F2));                
             }
-            else if ((Zone3Range >= Range) & (Range > Zone2Range))
+            else if ((MyScenario.MyBallisticData.dragSlopeData.Zone3Range >= Range) & (Range > MyScenario.MyBallisticData.dragSlopeData.Zone2Range))
             {
                 //'    'Zone 3
                 //'
@@ -794,14 +682,15 @@ namespace LawlerBallisticsDesk.Classes
                 //      Zone 1
 
                 //      V = Vo(1-1.5R/Fo)^(1/N)
-                lVd = MuzzleVelocity * Math.Pow((1 - (1.5 * Range) / Fo), (1 / Zone1Slope));
+                lVd = MuzzleVelocity * Math.Pow((1 - (1.5 * Range) / Fo), (1 / MyScenario.MyBallisticData.dragSlopeData.Zone1Slope));
             }
-            else if (Zone1Range >= Range)
+            else if (MyScenario.MyBallisticData.dragSlopeData.Zone1Range >= Range)
             {
                 //      Zone 1
 
                 //      V = Vo(1-1.5R/Fo)^(1/N)
-                lVd = MuzzleVelocity * Math.Pow((1 - (1.5 * Range) / Fo), (1 / Zone1Slope));
+                lVd = MyScenario.MyShooter.MyLoadOut.MuzzleVelocity * Math.Pow((1 - (1.5 * Range) / MyScenario.MyBallisticData.dragSlopeData.Fo), 
+                    (1 / MyScenario.MyBallisticData.dragSlopeData.Zone1Slope));
             }
             else
             {
@@ -813,7 +702,8 @@ namespace LawlerBallisticsDesk.Classes
                 //      Zone 1
 
                 //      V = Vo(1-1.5R/Fo)^(1/N)
-                lVd = MuzzleVelocity * Math.Pow((1 - (1.5 * Range) / Fo), (1 / Zone1Slope));
+                lVd = MyScenario.MyShooter.MyLoadOut.MuzzleVelocity * Math.Pow((1 - (1.5 * Range) / MyScenario.MyBallisticData.dragSlopeData.Fo), 
+                    (1 / MyScenario.MyBallisticData.dragSlopeData.Zone1Slope));
             }
             
 
@@ -964,9 +854,9 @@ namespace LawlerBallisticsDesk.Classes
             // environmentals be set the same to calculate lM.
 
             //Bullet vertical location relative to scope sight line.           
-            lH = (-MuzzleDrop(ZeroRange) + ScopeHeight);
-            lM = (lH / 2) * (1 / (ZeroRange / 2));
-            lSD = ((Range * lM) + (MuzzleDrop(Range) - ScopeHeight));
+            lH = (-MuzzleDrop(MyScenario.MyBallisticData.zeroData.ZeroRange) + MyScenario.MyShooter.MyLoadOut.ScopeHeight);
+            lM = (lH / 2) * (1 / (MyScenario.MyBallisticData.zeroData.ZeroRange / 2));
+            lSD = ((Range * lM) + (MuzzleDrop(Range) - MyScenario.MyShooter.MyLoadOut.ScopeHeight));
             return lSD;
         }
         /// <summary>
@@ -981,8 +871,8 @@ namespace LawlerBallisticsDesk.Classes
             double lR = 0;
             double lH;
 
-            ld = MuzzleDrop(ZeroRange);
-            lInter = (-ld + ScopeHeight) / 2;
+            ld = MuzzleDrop(MyScenario.MyBallisticData.zeroData.ZeroRange);
+            lInter = (-ld + MyScenario.MyShooter.MyLoadOut.ScopeHeight) / 2;
             lTmpH = -100;
             lH = -100;
             //Iterate through range from 0 to Scope 0 range to find range at max rise.
@@ -994,14 +884,14 @@ namespace LawlerBallisticsDesk.Classes
                 }
                 //Increment the range by 1/2 yard at a time to find the Hm range.
                 lR = lR + 0.5;
-                lH = (lInter * (1 / (ZeroRange / 2)) * lR) - (-MuzzleDrop(lR) + ScopeHeight);
-                if (lR > ZeroRange)
+                lH = (lInter * (1 / (MyScenario.MyBallisticData.zeroData.ZeroRange / 2)) * lR) - (-MuzzleDrop(lR) + MyScenario.MyShooter.MyLoadOut.ScopeHeight);
+                if (lR > MyScenario.MyBallisticData.zeroData.ZeroRange)
                 {
                     break;
                 }
             }
-            _Hm = lTmpH;
-            RaisePropertyChanged(nameof(ZeroMaxRise));
+            MyScenario.MyBallisticData.zeroData.ZeroMaxRise = lTmpH;
+            RaisePropertyChanged(nameof(MyScenario.MyBallisticData.zeroData.ZeroMaxRise));
         }
         /// <summary>
         /// Calculates the range where the vertical travel of the bullet and sight plane equal with a bullet
@@ -1123,37 +1013,6 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Private Routines"
-        private void GetWeather()
-        {
-            try
-            {
-                XmlDocument lWeatherXML = new XmlDocument();
-                string lRtn = "";
-                string lUrl = _GetWeather + Properties.Settings.Default.Openweathermap;
-                string lLat = _ShooterLatitude.ToString();
-                string lLon = _ShooterLongitude.ToString();
-                lUrl = lUrl.Replace("@latitude@", lLat);
-                lUrl = lUrl.Replace("@longitude@", lLon);
-                WebClient lwc = new WebClient();
-                lRtn = lwc.DownloadString(lUrl);
-                lWeatherXML.LoadXml(lRtn);
-                lWeatherXML.Save("C:\\Users\\QIS\\Desktop\\Temp\\Weather.xml");
-                XmlNode lCurr = lWeatherXML.SelectSingleNode("current");
-                lRtn = "temp = ";
-                XmlNode lTmpN = lCurr.SelectSingleNode("temperature");
-                lRtn = lRtn + lTmpN.Attributes["value"].Value + ", Pressure = ";
-                XmlNode lPressN = lCurr.SelectSingleNode("pressure");
-                lRtn = lRtn + lPressN.Attributes["value"].Value;
-                XmlNode lHumN = lCurr.SelectSingleNode("humidity");
-                lRtn = "";
-
-            }
-            catch(Exception ex)
-            {
-
-            }
-
-        }
         /// <summary>
         /// Calculates the horizontal and vertical devation of the flight path due to the Coriolis effect.
         /// </summary>
@@ -1170,9 +1029,11 @@ namespace LawlerBallisticsDesk.Classes
             double lZeroHorizMultiplier; double lZSVM; double lZSHM; double lCorZero; double lCorZVS;
             double lCorZHS; double lFTZ;
 
-
-            if ((zTargetLon == 0) || (zShooterLon == 0) || (zTargetLat == 0) || (zShooterLat == 0)
-                || (ShooterLat == 0) || (ShooterLon == 0) || (TargetLat == 0) || (TargetLon == 0))
+                            
+            if ((MyScenario.MyBallisticData.zeroData.TargetLoc.Longitude == 0) || (MyScenario.MyBallisticData.zeroData.ShooterLoc.Longitude == 0)
+                || (MyScenario.MyBallisticData.zeroData.TargetLoc.Latitude == 0) || (MyScenario.MyBallisticData.zeroData.ShooterLoc.Latitude == 0)
+                || (MyScenario.MyBallisticData.zeroData.ShooterLoc.Latitude == 0) || (MyScenario.MyBallisticData.zeroData.ShooterLoc.Longitude == 0) 
+                || (MyScenario.MyBallisticData.zeroData.TargetLoc.Latitude == 0) || (MyScenario.MyBallisticData.zeroData.TargetLoc.Longitude == 0))
             {
                 HorizontalComponent = 0;
                 VerticalComponent = 0;
@@ -1181,25 +1042,27 @@ namespace LawlerBallisticsDesk.Classes
 
             lYrdPerDeg = 121740.6652;
             lFT = FlightTime(Range);
-            lFTZ = FlightTime(ZeroRange);
+            lFTZ = FlightTime(MyScenario.MyBallisticData.zeroData.ZeroRange);
             lCorMag = 0.00262 * lFT * Range;
-            lCorZero = 0.00262 * lFTZ * ZeroRange;
+            lCorZero = 0.00262 * lFTZ * MyScenario.MyBallisticData.zeroData.ZeroRange;
 
             //______________ Zero bias ___________________________
             //  Solve for the amount of Coriolis correction added during zero, this is
             //  like the sight line in that it is linear with distance and zero at the zero ranges.
 
             //Longitudal distance to target
-            lLonDistZ = (zTargetLon - zShooterLon) * lYrdPerDeg;
+            lLonDistZ = (MyScenario.MyBallisticData.zeroData.TargetLoc.Longitude - 
+                MyScenario.MyBallisticData.zeroData.ShooterLoc.Longitude) * lYrdPerDeg;
             lLonSignZ = Math.Sign(lLonDistZ);  // + = E, - = W
             if (lLonSignZ == 0) lLonSignZ = 1;
             //Latitudal distance to target
-            lLatDistZ = (zTargetLat - zShooterLat) * lYrdPerDeg;
+            lLatDistZ = (MyScenario.MyBallisticData.zeroData.TargetLoc.Latitude - 
+                MyScenario.MyBallisticData.zeroData.ShooterLoc.Latitude) * lYrdPerDeg;
             lLatSignZ = Math.Sign(lLatDistZ);  // + = N, - = S
             if (lLatSignZ == 0) lLatSignZ = 1;
             //Correction factors for location on earth, the larger the lat the less vertical affect and more horizontal,
             //     convert degrees to radians
-            lZeroVertMultiplier = Math.Cos(zShooterLat * (Math.PI / 180));
+            lZeroVertMultiplier = Math.Cos(MyScenario.MyBallisticData.zeroData.ShooterLoc.Latitude * (Math.PI / 180));
             lZeroHorizMultiplier = 1 - lZeroVertMultiplier;
             //Vertical correction factor for Lat/Lon angle
             if (lLonDistZ == 0)
@@ -1217,22 +1080,23 @@ namespace LawlerBallisticsDesk.Classes
             lZSVM = lZSVM * lLonSignZ;
             lZSHM = lZSHM * lLatSignZ;
 
-            lCorZVS = (lCorZero * lZeroVertMultiplier * lZSVM) / ZeroRange;
-            lCorZHS = (lCorZero * lZeroHorizMultiplier * lZSHM) / ZeroRange;
+            lCorZVS = (lCorZero * lZeroVertMultiplier * lZSVM) / MyScenario.MyBallisticData.zeroData.ZeroRange;
+            lCorZHS = (lCorZero * lZeroHorizMultiplier * lZSHM) / MyScenario.MyBallisticData.zeroData.ZeroRange;
 
             //Positive = high, East
             //Negative = low, west
 
             //Longitudal distance to target
-            lLonDist = (TargetLon - ShooterLon) * lYrdPerDeg;
+            lLonDist = (MyScenario.SelectedTarget.TargetLocation.Longitude - 
+                MyScenario.MyShooter.MyLocation.Longitude) * lYrdPerDeg;
             lLonSign = Math.Sign(lLonDist);  // + = E, - = W
             if (lLonSign == 0) lLonSign = 1;
             //Latitudal distance to target
-            lLatDist = (TargetLat - ShooterLat) * lYrdPerDeg;
+            lLatDist = (MyScenario.SelectedTarget.TargetLocation.Latitude - MyScenario.MyShooter.MyLocation.Latitude) * lYrdPerDeg;
             lLatSign = Math.Sign(lLatDist);  // + = N, - = S
             if (lLatSign == 0) lLatSign = 1;
             //Correction factors for location on earth, convert degrees to radians
-            lVertMultiplier = Math.Cos(ShooterLat * (Math.PI / 180));
+            lVertMultiplier = Math.Cos(MyScenario.MyShooter.MyLocation.Latitude * (Math.PI / 180));
             lHorizMultiplier = 1 - lVertMultiplier;
             //Vertical correction factor for Lat/Lon angle
             if (lLonDist == 0)
@@ -1248,7 +1112,7 @@ namespace LawlerBallisticsDesk.Classes
             lSVM = lSVM * lLonSign;
             lSHM = lSHM * lLatSign;
 
-            // __________________ Need to add in residual drop and windage that accumulates past zero distance _______
+            // __________________ Adding in residual drop and windage that accumulates past zero distance _______
             // Zero condition correction is wrong.  should be a linear line with range.  It passes through the
             //  coriolis error at the zero range (i.e. 1" correction at 100 yards = 5" at 500 yet the coriolis
             //  error might be 6" at 500 due to the bullet lossing velocity.
@@ -1273,25 +1137,29 @@ namespace LawlerBallisticsDesk.Classes
         {
             double lFa = 0;
 
-            if (Zone1Range >= Range)
+            if (MyScenario.MyBallisticData.dragSlopeData.Zone1Range >= Range)
             {
                 //F at the provided range.  Applies to Zone 1
-                lFa = (Fo - Zone1SlopeMultiplier * Zone1Slope * Range);
+                lFa = (Fo - MyScenario.MyBallisticData.dragSlopeData.Zone1SlopeMultiplier *
+                    MyScenario.MyBallisticData.dragSlopeData.Zone1Slope * Range);
             }
-            else if ((Zone1Range < Range) & (Zone2Range >= Range))
+            else if ((MyScenario.MyBallisticData.dragSlopeData.Zone1Range < Range) & 
+                (MyScenario.MyBallisticData.dragSlopeData.Zone2Range >= Range))
             {
                 //F at the provided range.  Applies to Zone 2
-                lFa = F2;
+                lFa = MyScenario.MyBallisticData.dragSlopeData.F2;
             }
-            else if ((Zone2Range < Range) & (Zone3Range >= Range))
+            else if ((MyScenario.MyBallisticData.dragSlopeData.Zone2Range < Range) & 
+                (MyScenario.MyBallisticData.dragSlopeData.Zone3Range >= Range))
             {
                 //F at the provided range.  Applies to Zone 3
-                lFa = (F3 - Zone3SlopeMultiplier * Zone3Slope * (Range - Zone3Range));
+                lFa = (MyScenario.MyBallisticData.dragSlopeData.F3 - MyScenario.MyBallisticData.dragSlopeData.Zone3SlopeMultiplier *
+                    MyScenario.MyBallisticData.dragSlopeData.Zone3Slope * (Range - MyScenario.MyBallisticData.dragSlopeData.Zone3Range));
             }
-            else if (Zone3Range < Range)
+            else if (MyScenario.MyBallisticData.dragSlopeData.Zone3Range < Range)
             {
                 //F at the provided range.  Applies to Zone 4
-                lFa = F4;
+                lFa = MyScenario.MyBallisticData.dragSlopeData.F4;
             }
             return lFa;
         }
@@ -1319,11 +1187,9 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Constructor"
-        public Ballistics(Bullet bullet, Barrel barrel)
+        public Ballistics(Scenario scenario)
         {
-            _BulletShapeType = new BulletShapeEnum();
-            _SelectedBullet = bullet;
-            _SelectedBarrel = barrel;
+            _MyScenario = scenario;
         }
         #endregion
     }

@@ -63,10 +63,26 @@ namespace LawlerBallisticsDesk.Classes
         private static ObservableCollection<Primer> _MyPrimers = new ObservableCollection<Primer>();
         private static ObservableCollection<Powder> _MyPowders = new ObservableCollection<Powder>();
         private static DataPersistence _MyData;
+        private static BulletShapeEnum _BulletShapeType = new BulletShapeEnum();
+        private static string _AppDataFolder;
+        private static string _DataFolder;
+        private static string _WeatherFolder;
         #endregion
 
         #region "Properties"
         public static bool Initialized;
+        public static string AppDataFolder
+        {
+            get { return _AppDataFolder; }
+        }
+        public static string DataFolder
+        {
+            get { return _DataFolder; }
+        }
+        public static string WeatherFolder
+        {
+            get { return _WeatherFolder; }
+        }
         public static ObservableCollection<Bullet> MyBullets { get { return _MyBullets; } set { _MyBullets = value; } }
         public static ObservableCollection<Cartridge> MyCartridges { get { return _MyCartridges; } set { _MyCartridges = value; } }
         public static ObservableCollection<Gun> MyGuns { get { return _MyGuns; } set { _MyGuns = value; } }
@@ -86,6 +102,13 @@ namespace LawlerBallisticsDesk.Classes
         public static ObservableCollection<Case> MyCases { get { return _MyCases; } set { _MyCases = value; } }
         public static ObservableCollection<Primer> MyPrimers { get { return _MyPrimers; } set { _MyPrimers = value; } }
         public static ObservableCollection<Powder> MyPowders { get { return _MyPowders; } set { _MyPowders = value; } }
+        /// <summary>
+        /// Used to estimate a bullet's BC and for initial Zone scale multiplier value selection.
+        /// </summary>
+        public static BulletShapeEnum MyBulletTypes
+        {
+            get { return _BulletShapeType; }
+        }
         public static List<string> PowderNameList
         {
             get
@@ -172,6 +195,24 @@ namespace LawlerBallisticsDesk.Classes
         public static void InitializeFactory()
         {
             if (Initialized) return;
+
+            _AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            _AppDataFolder = _AppDataFolder + "\\LawlerBallistics";
+            if (!Directory.Exists(_AppDataFolder))
+            {
+                Directory.CreateDirectory(_AppDataFolder);
+            }
+            _DataFolder = _AppDataFolder + "\\Data";
+            if (!Directory.Exists(_DataFolder))
+            {
+                Directory.CreateDirectory(_DataFolder);
+            }
+            _WeatherFolder = _DataFolder + "\\Weather";
+            if (!Directory.Exists(_WeatherFolder))
+            {
+                Directory.CreateDirectory(_WeatherFolder);
+            }
+
             _MyData = new DataPersistence();
             _MyData.CheckDataFiles();
             _MyCartridges = _MyData.ParseCartridgeDB();

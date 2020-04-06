@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Net;
 
 namespace LawlerBallisticsDesk.Classes
 {
@@ -22,6 +24,10 @@ namespace LawlerBallisticsDesk.Classes
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+        #endregion
+
+        #region "Weather Query"
+        private const string _GetWeather = "http://api.openweathermap.org/data/2.5/weather?lat=@latitude@&lon=@longitude@&mode=xml&units=imperial&APPID=";
         #endregion
 
         #region "Private Variables"
@@ -358,6 +364,41 @@ namespace LawlerBallisticsDesk.Classes
 
             lFt = meters * 3.28084*1000;
             return lFt;
+        }
+        #endregion
+
+        #region "Public Routines"
+        private void GetWeather(double Latitude, double Longitude)
+        {
+            string lTargetFolder = LawlerBallisticsFactory.WeatherFolder + "Weather.xml";
+            try
+            {
+                XmlDocument lWeatherXML = new XmlDocument();
+                string lRtn = "";
+                string lUrl = _GetWeather + Properties.Settings.Default.Openweathermap;
+                string lLat = Latitude.ToString();
+                string lLon = Longitude.ToString();
+                lUrl = lUrl.Replace("@latitude@", lLat);
+                lUrl = lUrl.Replace("@longitude@", lLon);
+                WebClient lwc = new WebClient();
+                lRtn = lwc.DownloadString(lUrl);
+                lWeatherXML.LoadXml(lRtn);
+                lWeatherXML.Save(lTargetFolder);
+                XmlNode lCurr = lWeatherXML.SelectSingleNode("current");
+                lRtn = "temp = ";
+                XmlNode lTmpN = lCurr.SelectSingleNode("temperature");
+                lRtn = lRtn + lTmpN.Attributes["value"].Value + ", Pressure = ";
+                XmlNode lPressN = lCurr.SelectSingleNode("pressure");
+                lRtn = lRtn + lPressN.Attributes["value"].Value;
+                XmlNode lHumN = lCurr.SelectSingleNode("humidity");
+                lRtn = "";
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
         }
         #endregion
     }

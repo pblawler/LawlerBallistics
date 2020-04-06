@@ -11,6 +11,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// <summary>
         /// The gyroscopic stability measure of the bullet, a value of 1 is minimal stability.
         /// </summary>
+        /// <param name="SelectedBullet">Bullet being analyzed.</param>
+        /// <param name="SelectedBarrel">Barrel bullet is shot from.</param>
         /// <param name="Vel">Velocity in fps</param>
         /// <param name="Temp">Ambient temperature in F</param>
         /// <param name="BaroPressure">Barometric pressure in inHg</param>

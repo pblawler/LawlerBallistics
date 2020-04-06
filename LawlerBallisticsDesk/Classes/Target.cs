@@ -25,13 +25,22 @@ namespace LawlerBallisticsDesk.Classes
         }       
         #endregion
 
+        ///TODO: wind speed and direction are saved with the target because obstructions, etc.... can cause the wind
+        ///to be different for different targets.  Add additional wind features such as wind speed and dir for different
+        ///distances to target.
+        
+
         #region "Private Variables"
         private LocationData _TargetLocation;
         private double _WindSpeed;
         private double _WindDirection;
+        private string _ID = Guid.NewGuid().ToString();
+        private string _Name;
         #endregion
 
         #region "Properties"
+        public string ID { get { return _ID; } }
+        public string Name { get { return _Name; } set { _Name = value; RaisePropertyChanged(nameof(Name)); } }
         public LocationData TargetLocation { get { return _TargetLocation; } set { _TargetLocation = value; } }
         public double WindSpeed { get { return _WindSpeed; } set { _WindSpeed = value; RaisePropertyChanged(nameof(WindSpeed)); } }
         public double WindDirection { get { return _WindDirection; } set { _WindDirection = value; RaisePropertyChanged(nameof(WindDirection)); } }

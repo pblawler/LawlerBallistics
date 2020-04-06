@@ -27,19 +27,10 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Private Variables"
-        private string _AppDataFolder;
-        private string _DataFolder;
+
         #endregion
 
         #region "Properties"
-        public string AppDataFolder
-        {
-            get { return _AppDataFolder; }
-            set {
-                _AppDataFolder = value; 
-                RaisePropertyChanged(nameof(AppDataFolder)); 
-                }
-        }
         public string CartridgeFileFilter { get { return "Cartridge Data Files (*.cdf)|*.cdf"; } }
         public string BallisticFileFilter { get { return "Ballistic Data Files (*.bdf)|*.bdf"; } }
         #endregion
@@ -47,18 +38,6 @@ namespace LawlerBallisticsDesk.Classes
         #region "Constructor"
         public DataPersistence ()
         {
-            _AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            _AppDataFolder = _AppDataFolder + "\\LawlerBallistics";
-            if (!Directory.Exists(_AppDataFolder))
-            {
-                Directory.CreateDirectory(_AppDataFolder);
-            }
-            _DataFolder = "\\Data";
-            _DataFolder = _DataFolder + "\\LawlerBallistics";
-            if (!Directory.Exists(_DataFolder))
-            {
-                Directory.CreateDirectory(_DataFolder);
-            }
 
         }
         #endregion
@@ -627,6 +606,8 @@ namespace LawlerBallisticsDesk.Classes
                     lGF = lGF + "</make>" + System.Environment.NewLine;
                     lGF = lGF + "<model value=\"" + lg.Model.ToString() + "\">" + System.Environment.NewLine;
                     lGF = lGF + "</model>" + System.Environment.NewLine;
+                    lGF = lGF + "<scopeheight value=\"" + lg.ScopeHeight.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+                    lGF = lGF + "</scopeheight>" + System.Environment.NewLine;
                     if (lg.SelectedBarrel != null) lsbid = lg.SelectedBarrel.ID;
                     lGF = lGF + "<selectedbarrelid value=\"" + lsbid + "\">" + System.Environment.NewLine;
                     lGF = lGF + "</selectedbarrelid>" + System.Environment.NewLine;
@@ -730,6 +711,9 @@ namespace LawlerBallisticsDesk.Classes
                 XmlNode lmdl = lgn.SelectSingleNode("model");
                 lNR = lmdl.Attributes["value"].Value;
                 ltg.Model = lNR;
+                lmdl = lgn.SelectSingleNode("scopeheight");
+                lNR = lmdl.Attributes["value"].Value;
+                ltg.ScopeHeight = Convert.ToDouble(lNR);
                 try
                 {
                     XmlNode lsbid = lgn.SelectSingleNode("selectedbarrelid");

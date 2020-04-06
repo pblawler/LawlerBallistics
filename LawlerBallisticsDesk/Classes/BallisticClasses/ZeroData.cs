@@ -23,14 +23,9 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
         #region "Private Variables"
         private LoadOutData _loadOutData;
-        private double _zTargetLatitude;
-        private double _zTargetLongitude;
-        private double _zShooterLatitude;
-        private double _zShooterLongitude;
-        private double _zRelHumidity;
-        private double _zBaroPressure;
-        private double _zDensityAlt;
-        private double _zTempF;
+        private Atmospherics _atmospherics;
+        private LocationData _TargetLoc;
+        private LocationData _ShooterLoc;
         private double _Hm;
         private double _ZeroRange;
         private bool _UseMaxRise;
@@ -44,139 +39,15 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Properties"
+        public Atmospherics atmospherics { get { return _atmospherics; } set { _atmospherics = value; RaisePropertyChanged(nameof(atmospherics)); } }
         public DragSlopeData dragSlopeData
         {
             get { return _dragSlopeData; }
             set { _dragSlopeData = value; RaisePropertyChanged(nameof(dragSlopeData)); }
         }
         public LoadOutData loadOutData { get { return _loadOutData; } set { _loadOutData = value; RaisePropertyChanged(nameof(loadOutData)); } }
-        /// <summary>
-        /// Ambient Temperature in fahrenheit when zeroed.
-        /// </summary>
-        public double zTempF
-        {
-            get
-            {
-                if (_zTempF == 0) _zTempF = 60.00;
-                return _zTempF;
-            }
-            set
-            {
-                _zTempF = value;
-                RaisePropertyChanged(nameof(zTempF));
-            }
-        }
-        /// <summary>
-        /// Density Altitude at time of zero.
-        /// </summary>
-        public double zDensityAlt
-        {
-            get
-            {
-                return _zDensityAlt;
-            }
-            set
-            {
-                _zDensityAlt = value;
-                RaisePropertyChanged(nameof(zDensityAlt));
-            }
-        }
-        /// <summary>
-        /// The relative humidity when zeroed.
-        /// </summary>
-        public double zRelHumidity
-        {
-            get
-            {
-                if (_zRelHumidity == 0) _zRelHumidity = 50.00;
-                return _zRelHumidity;
-            }
-            set
-            {
-                _zRelHumidity = value;
-                RaisePropertyChanged(nameof(zRelHumidity));
-            }
-        }
-        /// <summary>
-        /// The barometric pressure in inches Hg at sight in.
-        /// </summary>
-        public double zBaroPressure
-        {
-            get
-            {
-                if (_zBaroPressure == 0) _zBaroPressure = 29.92;
-                return _zBaroPressure;
-            }
-            set
-            {
-                _zBaroPressure = value;
-                RaisePropertyChanged(nameof(zBaroPressure));
-            }
-        }
-        /// <summary>
-        /// The latitude of the target at zero in decimal degrees (DD).
-        /// </summary>
-        public double zTargetLat
-        {
-            get
-            {
-                if (_zTargetLatitude == 0) _zTargetLatitude = 34.681129;
-                return _zTargetLatitude;
-            }
-            set
-            {
-                _zTargetLatitude = value;
-                RaisePropertyChanged(nameof(zTargetLat));
-            }
-        }
-        /// <summary>
-        /// The longitude of the target at zero in decimal degrees (DD).
-        /// </summary>
-        public double zTargetLon
-        {
-            get
-            {
-                if (_zTargetLongitude == 0) _zTargetLongitude = -86.987622;
-                return _zTargetLongitude;
-            }
-            set
-            {
-                _zTargetLongitude = value;
-                RaisePropertyChanged(nameof(zTargetLon));
-            }
-        }
-        /// <summary>
-        /// The latitude of the shooter at zero time in decimal degrees (DD).
-        /// </summary>
-        public double zShooterLat
-        {
-            get
-            {
-                if (_zShooterLatitude == 0) _zShooterLatitude = 34.681129;
-                return _zShooterLatitude;
-            }
-            set
-            {
-                _zShooterLatitude = value;
-                RaisePropertyChanged(nameof(zShooterLat));
-            }
-        }
-        /// <summary>
-        /// The longitude of the shooter at zero in decimal degrees (DD).
-        /// </summary>
-        public double zShooterLon
-        {
-            get
-            {
-                if (_zShooterLongitude == 0) _zShooterLongitude = -86.988711;
-                return _zShooterLongitude;
-            }
-            set
-            {
-                _zShooterLongitude = value;
-                RaisePropertyChanged(nameof(zShooterLon));
-            }
-        }
+        public LocationData ShooterLoc { get { return _ShooterLoc; } set { _ShooterLoc = value; RaisePropertyChanged(nameof(ShooterLoc)); } }
+        public LocationData TargetLoc { get { return _TargetLoc; } set { _TargetLoc = value; RaisePropertyChanged(nameof(TargetLoc)); } }
         /// <summary>
         /// The maximum bullet rise from the muzzle to the zero range.
         /// </summary>

@@ -44,6 +44,7 @@ namespace LawlerBallisticsDesk.Classes
         private string _Desc;
         private string _Make;
         private string _Model;
+        private double _ScopeHeight;
         private Barrel _SelectedBarrel;
         private Barrel _TargetBarrel;
         private ObservableCollection<Barrel> _Barrels;
@@ -56,6 +57,7 @@ namespace LawlerBallisticsDesk.Classes
         public string Make { get { return _Make; } set { _Make = value; RaisePropertyChanged(nameof(Make)); } }
         public string Model { get { return _Model; } set { _Model = value; RaisePropertyChanged(nameof(Model)); } }
         public string Description { get { return _Desc; } set { _Desc = value; RaisePropertyChanged(nameof(Description)); } }
+        public double ScopeHeight { get { return _ScopeHeight; } set { _ScopeHeight = value; RaisePropertyChanged(nameof(ScopeHeight)); } }
         public Barrel SelectedBarrel
         {
             get

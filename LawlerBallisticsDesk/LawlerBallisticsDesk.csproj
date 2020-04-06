@@ -242,10 +242,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Atmospherics.cs" />
-    <Compile Include="Classes\BallisticClasses\BallisticData.cs" />
     <Compile Include="Classes\BallisticClasses\DragSlopeData.cs" />
     <Compile Include="Classes\BallisticClasses\LoadOutData.cs" />
-    <Compile Include="Classes\BallisticClasses\ScenarioData.cs" />
+    <Compile Include="Classes\BallisticClasses\BallisticData.cs" />
+    <Compile Include="Classes\BallisticClasses\Solution.cs" />
     <Compile Include="Classes\BallisticClasses\ZeroData.cs" />
     <Compile Include="Classes\Ballistics.cs" />
     <Compile Include="Classes\BallisticClasses\BallisticFunctions.cs" />

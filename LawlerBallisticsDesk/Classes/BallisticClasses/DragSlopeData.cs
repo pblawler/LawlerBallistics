@@ -22,13 +22,37 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Private Variables"
+        private double _MuzzleVelocity;
+        private Atmospherics _Atmospherics = new Atmospherics();
         private double _Fo;
         private double _F2;
         private double _F3;
         private double _F4;
+        private double _V1;
+        private double _V2;
+        private double _D1;
+        private double _D2;
+        private double _BCg1;
+        private double _BCz2;
+        private double _Zone1MachFactor;
+        private double _Zone2MachFactor;
+        private double _Zone3MachFactor;
+        private double _Zone1TransSpeed;
+        private double _Zone2TransSpeed;
+        private double _Zone3TransSpeed;
+        private double _Zone1SlopeMultiplier;
+        private double _Zone3SlopeMultiplier;
+        private double _Zone1Slope;
+        private double _Zone1AngleFactor;
+        private double _Zone3Slope;
+        private double _Zone1Range;
+        private double _Zone2Range;
+        private double _Zone3Range;
         #endregion
 
         #region "Properties"
+
+        #region "Drag Coefficents"
         /// <summary>
         /// Fo = the initial drag/retard factor starting at the muzzle.  Calculated from V1, V2, and the
         /// distance between where the two velocities were measured.  If V1 is not at the muzzle then
@@ -110,6 +134,9 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 RaisePropertyChanged(nameof(Zone3Range));
             }
         }
+        #endregion
+
+        #region "Velocity Distance Data for Drag Coefficent Calculation"
         /// <summary>
         /// The first velocity measured.  This value should be taken as close to the muzzle as possible.
         /// </summary>
@@ -128,10 +155,16 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// as 300, 800 ft is ideal.
         /// </summary>
         public double D2 { get { return _D2; } set { _D2 = value; RaisePropertyChanged(nameof(D2)); } }
+        #endregion
+
+        #region "Ballistic Coefficents"
         /// <summary>
         /// Ballistic Coefficient G1
         /// </summary>
         public double BCg1 { get { return _BCg1; } set { _BCg1 = value; RaisePropertyChanged(nameof(BCg1)); } }
+        /// <summary>
+        /// Zone 2 ballistic coefficent
+        /// </summary>
         public double BCz2
         {
             get
@@ -141,120 +174,9 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             }
             set { _BCz2 = value; RaisePropertyChanged(nameof(BCz2)); }
         }
-        /// <summary>
-        /// The speed where Supersonic enters first transonic zone approx 1.2 Mach or 1340 fps.
-        /// </summary>
-        public double Zone1TransSpeed
-        {
-            get
-            {
-                double lZ1;
-                double lDA;
+        #endregion
 
-                Atmospherics lA = new Atmospherics();
-                lA.Temp = TempF;
-                lA.TempUnits = "F";
-                lA.HumidityRel = RelHumidity;
-                lA.Pressure = BaroPressure;
-                lA.PressureUnits = "inHg";
-                lZ1 = lA.SpeedOfSound;
-                lZ1 = lZ1 * Zone1MachFactor;
-                lDA = lA.DensityAlt;
-                _Zone1TransSpeed = lZ1;
-                if (_Zone1TransSpeed == 0) _Zone1TransSpeed = 1340;
-                return _Zone1TransSpeed;
-            }
-        }
-        /// <summary>
-        /// The speed where the first transonic zone enters the second transonic zone, approx 1.0 Mach or 1125 fps.
-        /// </summary>
-        public double Zone2TransSpeed
-        {
-            get
-            {
-                double lZ2;
-                Atmospherics lA = new Atmospherics();
-                lA.Temp = TempF;
-                lA.TempUnits = "F";
-                lA.HumidityRel = RelHumidity;
-                lA.Pressure = BaroPressure;
-                lA.PressureUnits = "inHg";
-                lZ2 = lA.SpeedOfSound;
-                lZ2 = lZ2 * Zone2MachFactor;
-                _Zone2TransSpeed = lZ2;
-                if (_Zone2TransSpeed == 0) _Zone2TransSpeed = 1125;
-                return _Zone2TransSpeed;
-            }
-        }
-        /// <summary>
-        /// The speed where the second transonic zone enters the subsonic zone, approx 890 fps.
-        /// </summary>
-        public double Zone3TransSpeed
-        {
-            get
-            {
-                double lZ3;
-                Atmospherics lA = new Atmospherics();
-                lA.Temp = TempF;
-                lA.TempUnits = "F";
-                lA.HumidityRel = RelHumidity;
-                lA.Pressure = BaroPressure;
-                lA.PressureUnits = "inHg";
-                lZ3 = lA.SpeedOfSound;
-                lZ3 = lZ3 * Zone3MachFactor;
-                _Zone3TransSpeed = lZ3;
-                if (_Zone3TransSpeed == 0) _Zone3TransSpeed = 890;
-                return _Zone3TransSpeed;
-            }
-        }
-        /// <summary>
-        /// The factor of the speed of sound to transition drag zones.
-        /// </summary>
-        public double Zone1MachFactor
-        {
-            get
-            {
-                if (_Zone1MachFactor == 0) _Zone1MachFactor = 1.2;
-                return _Zone1MachFactor;
-            }
-            set
-            {
-                _Zone1MachFactor = value;
-                RaisePropertyChanged(nameof(Zone1MachFactor));
-            }
-        }
-        /// <summary>
-        /// The factor of the speed of sound to transition drag zones.
-        /// </summary>
-        public double Zone2MachFactor
-        {
-            get
-            {
-                if (_Zone2MachFactor == 0) _Zone2MachFactor = 1;
-                return _Zone2MachFactor;
-            }
-            set
-            {
-                _Zone2MachFactor = value;
-                RaisePropertyChanged(nameof(Zone2MachFactor));
-            }
-        }
-        /// <summary>
-        /// The factor of the speed of sound to transition drag zones.
-        /// </summary>
-        public double Zone3MachFactor
-        {
-            get
-            {
-                if (_Zone3MachFactor == 0) _Zone3MachFactor = 0.8;
-                return _Zone3MachFactor;
-            }
-            set
-            {
-                _Zone3MachFactor = value;
-                RaisePropertyChanged(nameof(Zone3MachFactor));
-            }
-        }
+        #region "Slope Data"
         /// <summary>
         /// A slope adjustment term based on the bullet design.  Default is 0.78.
         /// </summary>
@@ -314,6 +236,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 RaisePropertyChanged(nameof(Zone3Range));
             }
         }
+        //TODO: The Zone1AngleFactor is a correction factor for the Pejsa D1' value.  Need to find the correct algorithm for D1'.
         /// <summary>
         /// A correction factor for drop resulting from the downward angle of the bullet as a result of zone 1 arc.
         /// </summary>
@@ -346,6 +269,111 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
             }
         }
+        #endregion
+
+        #region "Sonic Zone Factors"
+        /// <summary>
+        /// The factor of the speed of sound to transition drag zones.
+        /// </summary>
+        public double Zone1MachFactor
+        {
+            get
+            {
+                if (_Zone1MachFactor == 0) _Zone1MachFactor = 1.2;
+                return _Zone1MachFactor;
+            }
+            set
+            {
+                _Zone1MachFactor = value;
+                RaisePropertyChanged(nameof(Zone1MachFactor));
+            }
+        }
+        /// <summary>
+        /// The factor of the speed of sound to transition drag zones.
+        /// </summary>
+        public double Zone2MachFactor
+        {
+            get
+            {
+                if (_Zone2MachFactor == 0) _Zone2MachFactor = 1;
+                return _Zone2MachFactor;
+            }
+            set
+            {
+                _Zone2MachFactor = value;
+                RaisePropertyChanged(nameof(Zone2MachFactor));
+            }
+        }
+        /// <summary>
+        /// The factor of the speed of sound to transition drag zones.
+        /// </summary>
+        public double Zone3MachFactor
+        {
+            get
+            {
+                if (_Zone3MachFactor == 0) _Zone3MachFactor = 0.8;
+                return _Zone3MachFactor;
+            }
+            set
+            {
+                _Zone3MachFactor = value;
+                RaisePropertyChanged(nameof(Zone3MachFactor));
+            }
+        }
+        #endregion
+
+        #region "Sonic Speed Data"
+        /// <summary>
+        /// The speed where Supersonic enters first transonic zone approx 1.2 Mach or 1340 fps.
+        /// </summary>
+        public double Zone1TransSpeed
+        {
+            get
+            {
+                double lZ1;
+                double lDA;
+
+                lZ1 = _Atmospherics.SpeedOfSound;
+                lZ1 = lZ1 * Zone1MachFactor;
+                lDA = _Atmospherics.DensityAlt;
+                _Zone1TransSpeed = lZ1;
+                if (_Zone1TransSpeed == 0) _Zone1TransSpeed = 1340;
+                return _Zone1TransSpeed;
+            }
+        }
+        /// <summary>
+        /// The speed where the first transonic zone enters the second transonic zone, approx 1.0 Mach or 1125 fps.
+        /// </summary>
+        public double Zone2TransSpeed
+        {
+            get
+            {
+                double lZ2;
+                lZ2 = _Atmospherics.SpeedOfSound;
+                lZ2 = lZ2 * Zone2MachFactor;
+                _Zone2TransSpeed = lZ2;
+                if (_Zone2TransSpeed == 0) _Zone2TransSpeed = 1125;
+                return _Zone2TransSpeed;
+            }
+        }
+        /// <summary>
+        /// The speed where the second transonic zone enters the subsonic zone, approx 890 fps.
+        /// </summary>
+        public double Zone3TransSpeed
+        {
+            get
+            {
+                double lZ3;
+                lZ3 = _Atmospherics.SpeedOfSound;
+                lZ3 = lZ3 * Zone3MachFactor;
+                _Zone3TransSpeed = lZ3;
+                if (_Zone3TransSpeed == 0) _Zone3TransSpeed = 890;
+                return _Zone3TransSpeed;
+            }
+        }
+        #endregion
+
+        #region "Sonic Range Data"
         /// <summary>
         /// The range where the bullet passes our of Zone 1 into zone 2.
         /// </summary>
@@ -354,7 +382,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             get
             {
                 //R = (2/3)*Fo(1 - (V/Vo)^N)
-                _Zone1Range = (2.00 / 3.00) * Fo * (1 - Math.Pow((Zone1TransSpeed / MuzzleVelocity), Zone1Slope));
+                _Zone1Range = (2.00 / 3.00) * Fo * (1 - Math.Pow((Zone1TransSpeed / _MuzzleVelocity), Zone1Slope));
                 if (_Zone1Range < 0) _Zone1Range = 0;
                 return _Zone1Range;
             }
@@ -367,7 +395,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             get
             {
                 //R = F/(3ln(Vo/V))
-                if (MuzzleVelocity < Zone2TransSpeed)
+                if (_MuzzleVelocity < Zone2TransSpeed)
                 {
                     _Zone2Range = 0;
                 }
@@ -387,7 +415,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             get
             {
                 //R = (F2-F3)/3N
-                if (MuzzleVelocity < Zone3TransSpeed)
+                if (_MuzzleVelocity < Zone3TransSpeed)
                 {
                     _Zone3Range = 0;
                 }
@@ -398,6 +426,25 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 }
                 return _Zone3Range;
             }
+        }
+        #endregion
+
+        #endregion
+
+        #region "Constructor"
+        public DragSlopeData(double MuzzleVelocity)
+        {
+            _MuzzleVelocity = MuzzleVelocity;
+        }
+        #endregion
+
+        #region "Public Routines"
+        public void SetAtmospherics(Atmospherics atmosherics)
+        {
+            _Atmospherics = atmosherics;
+            RaisePropertyChanged(nameof(Zone1TransSpeed));
+            RaisePropertyChanged(nameof(Zone2TransSpeed));
+            RaisePropertyChanged(nameof(Zone3TransSpeed));
         }
         #endregion
     }

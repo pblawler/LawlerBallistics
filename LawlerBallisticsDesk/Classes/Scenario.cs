@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LawlerBallisticsDesk.Classes.BallisticClasses;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -40,6 +41,7 @@ namespace LawlerBallisticsDesk.Classes
         private Shooter _MyShooter;
         private ObservableCollection<Target> _Targets;
         private Target _SelectedTarget;
+        private BallisticData _MyBallisticData;
         #endregion
 
         #region "Properties"
@@ -58,6 +60,7 @@ namespace LawlerBallisticsDesk.Classes
         public Shooter MyShooter { get { return _MyShooter; } set { _MyShooter = value; RaisePropertyChanged(nameof(MyShooter)); } }
         public ObservableCollection<Target> Targets { get { return _Targets; } set { _Targets = value; RaisePropertyChanged(nameof(Targets)); } }
         public Target SelectedTarget { get { return _SelectedTarget; } set { _SelectedTarget = value; RaisePropertyChanged(nameof(SelectedTarget)); } }
+        public BallisticData MyBallisticData { get { return _MyBallisticData; } set { _MyBallisticData = value; RaisePropertyChanged(nameof(MyBallisticData)); } }
         #endregion
 
         #region "Constructor"
