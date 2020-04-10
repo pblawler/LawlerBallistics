@@ -89,7 +89,192 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         }
         #endregion
 
+        #region "Drag Functions"
+        /// <summary>
+        /// Calculates an estimate for the BCg1 of a bullet with the beginning and ending 
+        /// velocities provided over the distance provided.
+        /// </summary>
+        /// <param name="V1">Velocity (fps) at the beginning of the distance provided.</param>
+        /// <param name="V2">Velocity (fps) at the end of the distance provided.</param>
+        /// <param name="DistanceFt">Distance (ft) between the two velocity values.  Should be 300' for more.</param>
+        /// <returns></returns>
+        public static double CalculateBC(double V1, double V2, double DistanceFt)
+        {
+            double lc; double lR1; double lR2; double lBC;
+
+            //R = C*2*(3600^0.5-(Vo^0.5))
+            lc = 166;
+            lR1 = (lc * 2) * ((Math.Pow(3600, 0.5)) - (Math.Pow(V1, 0.5)));
+            lR2 = (lc * 2) * ((Math.Pow(3600, 0.5)) - (Math.Pow(V2, 0.5)));
+
+            //BC = r/(r2 - r1)
+            lBC = DistanceFt / (lR2 - lR1);
+            return lBC;
+        }
+        /// <summary>
+        /// Calculate the drag/retard coefficient at the muzzle.
+        /// </summary>
+        /// <param name="Range_1">Distance (ft) from the muzzle to where the V1 speed is recorded.</param>
+        /// <param name="V1">Velocity (fps) at Range_1 ft from the muzzle.  Should be measured close to the barrel</param>
+        /// <param name="Range_2">Distance (ft) from the muzzle to where the V2 speed is recorded.</param>
+        /// <param name="V2">Velocity (fps) at Range_2 ft from the muzzle.</param>
+        /// <returns>Fo</returns>
+        public static double CalculateFo(double Range_1, double V1, double Range_2, double V2, double Zone1TransSpeed,
+            double Zone1Slope, double Zone1SlopeMultiplier, double Zone2TransSpeed, double Zone3TransSpeed, 
+            double Zone3Slope, double Zone3SlopeMultiplier)
+        {
+            double lFo = 0; double lVa; double ldV; double lF;
+
+            try
+            {
+
+                //F=r*(Va/dV)
+                lVa = (V1 + V2) / 2;
+                ldV = (V1 - V2);
+                lF = (Range_2 - Range_1) * (lVa / ldV);
+                if (V1 >= Zone1TransSpeed)
+                {
+                    //Zone 1
+                    //Fa=Fo-Zone1SlopeMultiplier*N*R
+                    //Where R is in feet so we must convert yards to feet by dividing by 3.
+                    lFo = (lF + Zone1SlopeMultiplier * Zone1Slope * (Range_1 / 3));
+                    //V  = Vo(1-3RN/Fo)^2
+                    //We must convert the provided range from feet to yards
+                    // Solving for Vo we get the solution below.
+                    // MuzzleVelocity = V1 / ((1 - (Range_1 / 3) * Zone1Slope / Fo) ^ (1 / Zone1Slope))
+                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Pow((1 - (Range_1 / 3) *
+                        MyScenario.MyBallisticData.dragSlopeData.Zone1Slope /
+                        MyScenario.MyBallisticData.dragSlopeData.Fo),
+                        (1 / MyScenario.MyBallisticData.dragSlopeData.Zone1Slope)));
+                }
+                else if ((V1 < Zone1TransSpeed) &
+                    (V1 >= Zone2TransSpeed))
+                {
+                    //Zone 2
+
+                    //F is constant in Zone 2, i.e. no slope N = 0.
+                    lFo = lF;
+                    //Vo = V(exp(-3R/F))
+                    //Where R is in feet so we must convert yards to feet by dividing by 3.
+                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Exp((-3 * ((Range_1 / 3) /
+                        MyScenario.MyBallisticData.dragSlopeData.Fo))));
+                }
+                else if ((V1 < Zone2TransSpeed) &
+                    (V1 >= Zone3TransSpeed))
+                {
+                    //Zone 3
+
+                    //Fa=Fo-0.75*N*R
+                    //F0 = Fa + Zone3SlopeMultiplier*N*R
+                    //Where R is in feet so we must convert yards to feet by dividing by 3.
+                    lFo = lF + Zone3SlopeMultiplier * Zone3Slope * (Range_1 / 3);
+                    MyScenario.MyBallisticData.dragSlopeData.F2 = lFo;
+                    MyScenario.MyBallisticData.dragSlopeData.Fo = MyScenario.MyBallisticData.dragSlopeData.F2;
+                    MyScenario.MyBallisticData.dragSlopeData.F3 = MyScenario.MyBallisticData.dragSlopeData.Fo - (MyScenario.MyBallisticData.dragSlopeData.Zone3SlopeMultiplier *
+                        MyScenario.MyBallisticData.dragSlopeData.Zone3Slope * MyScenario.MyBallisticData.dragSlopeData.Zone3Range);
+                    //V  = Vo(1-3RN/Fo)^2
+                    //We must convert the provided range from feet to yards
+                    //Solving for Vo we get the solution below.
+                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Pow((1 - (Range_1 / 3) *
+                        MyScenario.MyBallisticData.dragSlopeData.Zone3Slope / lFo),
+                        (1 / MyScenario.MyBallisticData.dragSlopeData.Zone3Slope)));
+                }
+                else
+                {
+                    //Zone 4
+
+                    //F is constant in Zone 4
+                    lFo = lF;
+                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Exp((-3 * ((Range_1 / 3) / MyScenario.MyBallisticData.dragSlopeData.Fo))));
+                }
+
+                return lFo;
+            }
+            catch
+            {
+                lFo = 0;
+                return lFo;
+            }
+        }
+        /// <summary>
+        /// Calculates the V2 velocity at a D2 of 300' using muzzle velocity as V1, D1 =0 ,and Ballistic Coefficient.
+        /// </summary>
+        /// <param name="MuzzleVelocity"></param>
+        /// <param name="BCg1"></param>
+        /// <param name="D2">Feet to calculate V2 at. D1 will be zero.</param>
+        /// <returns></returns>
+        public static double CalculateV2FromBC(double MuzzleVelocity, double BCg1, double D2)
+        {
+            double lc; double lR1; double lR2; double lV2; int lRtn = 0;
+
+            if ((MuzzleVelocity == 0) || (BCg1 == 0))
+            {
+                lRtn = -1;
+                return lRtn;
+            }
+            lR1 = 0;
+            lR2 = D2;
+            //BC = r/(r2 - r1)
+            //r = C*2*(3600^0.5-(V^0.5))
+            lc = 166;
+            lR1 = (lc * 2) * (Math.Pow(3600, 0.5) - (Math.Pow(MuzzleVelocity, 0.5)));
+            //We must solve r2 for velocity at 100 yards i.e. 300 ft
+            //lR2 = (lc * 2) * (((3600#) ^ (0.5)) - (V2^(0.5)))
+            //BC = 300 / (lR2 - lR1)
+            //(lR2 - lR1) = 300 / BC
+            //(lR2) = (300 / BC) + lR1
+            //(lc * 2) * (((3600#) ^ (0.5)) - (V2^(0.5))) = (300 / BC) + lR1
+            // - V2^(0.5) = (((300 / BC) + lR1)/(lc * 2)) - (3600# ^ (0.5))
+            // V2^(0.5) = -(((300 / BC) + lR1)/(lc * 2)) - (3600# ^ (0.5))
+            // V2 = ((((300 / BC) + lR1)/(lc * 2)) - (3600# ^ (0.5)))^2
+            //Plug in the value for r1 calculated from provided V1
+            lV2 = Math.Pow(((((300 / BCg1) + lR1) / (lc * 2)) -
+                (Math.Pow(3600, 0.5))), 2);
+            return lV2;
+        }
+        #endregion
+
         #region "Horizontal Trajectory"
+        public static double TotalHorizontalDrift(double Range, double WindSpeed, double WindDirection, double MuzzleVelocity, double Fo,
+            LocationData ZeroTargetLoc, LocationData ZeroShooterLoc, LocationData TargetLoc, LocationData ShooterLoc, double ZeroRange,
+            string TwistDirection, double BSG)
+        {
+            double lTW;
+
+            lTW = GetCoriolisHoriz(Range, MuzzleVelocity, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc, ZeroRange, Fo) + 
+                GetSpinDrift(Range, TwistDirection, BSG, Fo, MuzzleVelocity, ZeroRange) + 
+                WindDrift(WindSpeed, WindDirection, Range, Fo, MuzzleVelocity);
+
+            return lTW;
+        }
+        /// <summary>
+        /// Horizontal Coriolis affect at the provided range.
+        /// </summary>
+        /// <param name="Range">Distance to calculate Coriolis affect at.</param>
+        /// <returns>Inches of horizontal drift caused by Coriolis addect.</returns>
+        public static double GetCoriolisHoriz(double Range, double MuzzleVelocity, LocationData ZeroTargetLoc, LocationData ZeroShooterLoc,
+            LocationData TargetLoc, LocationData ShooterLoc, double ZeroRange, double Fo)
+        {
+            double lCorVert = 0; double lCorHoriz = 0;
+            int lR;
+
+            lR = GetCoriolisComponents(ref lCorVert, ref lCorHoriz, Range, ZeroTargetLoc, ZeroShooterLoc, TargetLoc,
+                ShooterLoc, ZeroRange, Fo, MuzzleVelocity);
+            return lCorHoriz;
+        }
+        /// <summary>
+        /// Returns the horizontal displacement related to the gyroscopic forces of the bullet.
+        /// </summary>
+        /// <param name="Range">The range to find the displacement for.</param>
+        /// <returns>The horizontal displacement in inches related to the bullets gyroscopic force.</returns>
+        public static double GetSpinDrift(double Range, string TwistDirection, double BSG, double Fo, double MuzzleVelocity, double ZeroRange)
+        {
+            double lDrift;
+
+            lDrift = GetRawSpinDrift(Range, TwistDirection, BSG, Fo, MuzzleVelocity);
+            lDrift = lDrift - (SpindDriftCorrection(ZeroRange, TwistDirection, BSG, Fo, MuzzleVelocity) * Range);
+            return lDrift;
+        }
         /// <summary>
         ///  The spin drift correction rate. When zeroing it is automatically accounted for and continues in a
         /// straight line past the zero range. Since the bullet is slowing the rate will be over come past the
@@ -209,6 +394,73 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
         #region "Other Flight Characteristics"
         /// <summary>
+        /// Calculates a bullets enery with the given weight at the provided range.
+        /// </summary>
+        /// <param name="Weight">Bullet weight (grns).</param>
+        /// <param name="Range">Distance to calculate energy at (yrds).</param>
+        /// <returns>Bullet energy (ft.lb.)</returns>
+        public static double Energy(double Weight, double Range, double MuzzleVelocity,double Zone1Range, double Zone1TransSpeed,
+            double Fo, double Zone1Slope, double Zone2Range, double Zone2TransSpeed, double F2, double Zone3Range)
+        {
+            double lE;
+
+            //E=V^2Wt/450380 ftlb
+            lE = (Math.Pow(Velocity(MuzzleVelocity, Range, Zone1Range, Zone1TransSpeed, Fo, Zone1Slope, Zone2Range, 
+                Zone2TransSpeed, F2, Zone3Range), 2) * Weight) / 450380;
+            return lE;
+        }
+        /// <summary>
+        /// Calculates a bullets enery with the given weight at the provided velocity.
+        /// </summary>
+        /// <param name="Weight">Bullet weight (grns).</param>
+        /// <param name="Velocity">Bullet speed (fps)</param>
+        /// <returns>Bullet energy (ft.lb.)</returns>
+        public static double Energy(double Weight, double Velocity)
+        {
+            double lE;
+
+            //E = V ^ 2Wt / 450380 ftlb
+            lE = (Math.Pow(Velocity, 2) * Weight) / 450380;
+            return lE;
+        }
+        /// <summary>
+        /// Estimated Ballistic Coeficient
+        /// </summary>
+        /// <param name="Weight">Bullet weight in grains</param>
+        /// <param name="Diameter">Bullet diameter</param>
+        /// <param name="Shape">Shape type of bullet</param>
+        /// <returns>BC</returns>
+        public static double EstimateBC(double Weight, double Diameter, BulletShapeEnum Shape)
+        {
+            double lBC; double lSC; double lDiv = 1;
+
+            //'Shape Class:
+            //'   Spitzer boat-tail = 1
+            //'   Spitzer flat-base = 2
+            //'   Semi-Spitzer = 3
+            //'   Round Nose or Flat Nose = 4
+            //'
+            //'  BC = Wt(D + 0.5)/D^2/415/(SC^2 - 2SC + 8)
+            //'
+            switch (Shape)
+            {
+                case BulletShapeEnum.VLD_BoatTail:
+                    lSC = 1;
+                    lDiv = .8632;
+                    break;
+
+                default:
+                    lSC = Convert.ToDouble(Shape);
+                    lDiv = 1;
+                    break;
+            }
+            // lBC = (((Weight * (Diameter + 0.5)) / ((Diameter) ^ 2)) / 415) / ((lSC) ^ 2 - 2 * lSC + 8)
+
+            lBC = ((Weight * (Diameter + 0.5)) / (Math.Pow(Diameter, 2)) / 415) / (Math.Pow(lSC, 2) - 2 * lSC + 8);
+            lBC = lBC / lDiv;
+            return lBC;
+        }
+        /// <summary>
         /// Calculates the bullet flight time to the provided range.
         /// </summary>
         /// <param name="Range">Distance (yrds) to calculate the flight time for.</param>
@@ -256,6 +508,83 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 return 0;
             }
         }
+        /// <summary>
+        /// Maximum distance the bullet/rifle combination can achieve.
+        /// </summary>
+        /// <returns></returns>
+        public static double MaxRange(double Fo)
+        {
+            double lMR = 0;
+
+            //lV = Vo * (1 - (1.5 * Range) / lF) ^ (1 / Zone1Slope)
+            //0 = Vo * (1 - (1.5 * Range) / lF) ^ (1 / Zone1Slope)
+            //0 = (1 - (1.5 * Range) / lF) ^ (1 / Zone1Slope)
+            //0 = (1 - (1.5 * Range) / lF)
+            //0 = 1 - (1.5 * Range) / lF
+            //(1.5 * Range) / lF = 1
+            //(1.5 * Range) = lF
+            //Range = lF/1.5
+            lMR = Fo / 1.5;
+            return lMR;
+        }
+        /// <summary>
+        /// Caclulates the bullet velocity at the provided range.
+        /// </summary>
+        /// <param name="Range">The range to calculate the velocity at.</param>
+        /// <returns>Bullet velocity (fps)</returns>
+        public static double Velocity(double MuzzleVelocity, double Range, double Zone1Range, double Zone1TransSpeed, double Fo,
+            double Zone1Slope, double Zone2Range, double Zone2TransSpeed, double F2,  double Zone3Range)
+        {
+            double lV; double lF; double lVd;
+
+            //V = Vo(1-1.5R/Fo)^(1/N)
+            //lVd = MuzzleVelocity * Math.Pow((1 - (1.5 * Range) / Fo), (1 / Zone1Slope));
+
+            //TODO: Zone errors occur with the below code, needs investigation
+            if ((Zone2Range >= Range) & (Range > Zone1Range))
+            {
+                //'    'Zone 2
+                //'
+                //'    lF = F2
+                //'    'V = Vo(exp(-3R/F))                
+                lVd = Zone1TransSpeed *
+                    Math.Exp((-3 * (Range - Zone1Range) / F2));
+            }
+            else if ((Zone3Range >= Range) & (Range > Zone2Range))
+            {
+                //'    'Zone 3
+                //'
+                //'    lF = F3
+                //'    'V = Vo(1-1.5R/Fo)^(1/N)
+                //lVd = Zone2TransSpeed * Math.Pow((1 - (1.5 * (Range-Zone2Range)) / F2), (1 / -Zone3Slope));
+
+                //      Zone 1
+
+                //      V = Vo(1-1.5R/Fo)^(1/N)
+                lVd = MuzzleVelocity * Math.Pow((1 - (1.5 * Range) / Fo), (1 / Zone1Slope));
+            }
+            else if (Zone1Range >= Range)
+            {
+                //      Zone 1
+
+                //      V = Vo(1-1.5R/Fo)^(1/N)
+                lVd = MuzzleVelocity * Math.Pow((1 - (1.5 * Range) / Fo), (1 / Zone1Slope));
+            }
+            else
+            {
+                //'    'Zone 4
+                //'
+                //'    'V = Vo(exp(-3R/F))
+                //lVd = Zone3TransSpeed * Math.Exp((-3 * (Range-Zone3Range) / F4));
+
+                //      Zone 1
+
+                //      V = Vo(1-1.5R/Fo)^(1/N)
+                lVd = MuzzleVelocity * Math.Pow((1 - (1.5 * Range) / Fo), (1 / Zone1Slope));
+            }
+
+            return lVd;
+        }
         #endregion
 
         #region "Vertical Trajectory"
@@ -266,9 +595,11 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// <param name="ShotAngle">The angle absolute value of the shot angle.</param>
         /// <param name="LOSrange">The line-of-sight (LOS) range.</param>
         /// <returns></returns>
-        public static double AngleCompRange(double ShotAngle, double LOSrange, double MuzzleVelocity, double Range, double Zone1Range, double Zone2Range, double Zone3Range,
-            double Zone1Slope, double Zone1AngleFactor, double Zone1TransSpeed, double Zone2TransSpeed, double Zone3TransSpeed,
-            double Fo, double F2, double F3, double DensityAlt, double DensityAltAtZero)
+        public static double AngleCompRange(double ShotAngle, double LOSrange, double MuzzleVelocity, double Range, double Zone1Range,
+            double Zone2Range, double Zone3Range, double Zone1Slope, double Zone1SlopeMultiplier, double Zone1AngleFactor,
+            double Zone3Slope, double Zone3SlopeMultiplier, double Zone1TransSpeed, double Zone2TransSpeed, double Zone3TransSpeed,
+            double Fo, double F2, double F3, double F4, double DensityAlt, double DensityAltAtZero, LocationData ZeroTargetLoc,
+            LocationData ZeroShooterLoc, LocationData TargetLoc, LocationData ShooterLoc, double ZeroRange)
         {
             double lTDA;    //True drop angle
             double lTDD;    //True drop distance
@@ -282,8 +613,10 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 return LOSrange;
             }
             lPi = Math.PI; //3.141592654
-            lLOSD = MuzzleDrop(MuzzleVelocity, LOSrange, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone1AngleFactor,
-                        Zone1TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo, F2, F3, DensityAlt, DensityAltAtZero);
+            lLOSD = MuzzleDrop(MuzzleVelocity, LOSrange, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope,
+                        Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed,
+                        Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc,
+                        TargetLoc, ShooterLoc, ZeroRange);
             lTDA = 90 - ShotAngle;
             lTDD = Math.Abs(Math.Sin(lTDA * (lPi / 180)) * lLOSD);
             lDID = Math.Abs(lLOSD);
@@ -291,11 +624,56 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             //Iterate drop function to find the range that equals the corrected drop distance.
             while (lDID > lTDD)
             {
-                lDID = Math.Abs(MuzzleDrop(MuzzleVelocity, lDIR, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone1AngleFactor,
-                        Zone1TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo, F2, F3, DensityAlt, DensityAltAtZero));
+                lDID = Math.Abs(MuzzleDrop(MuzzleVelocity, lDIR, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope, 
+                        Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed, 
+                        Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc,
+                        TargetLoc, ShooterLoc, ZeroRange));
                 lDIR = lDIR - 0.5;
             }
             return lDIR;
+        }
+        /// <summary>
+        /// Calculates the maximum bullet rise on the way to the zero range.
+        /// </summary>
+        public static double CalculateHm(double Range, double ZeroRange, double ScopeHeight, double MuzzleVelocity, double Zone1Range,
+            double Zone2Range, double Zone3Range, double Zone1Slope, double Zone3Slope, double Zone1SlopeMultiplier,
+            double Zone3SlopeMultiplier, double Zone1AngleFactor, double Zone1TransSpeed, double Zone2TransSpeed, double Zone3TransSpeed,
+            double Fo, double F2, double F3, double F4, double DensityAlt, double DensityAltAtZero, LocationData ZeroTargetLoc,
+            LocationData ZeroShooterLoc, LocationData TargetLoc, LocationData ShooterLoc)
+        {
+            //Must iterate flight path to find Hm
+            double ld;
+            double lInter;
+            double lTmpH;
+            double lR = 0;
+            double lH;
+
+            ld = MuzzleDrop(MuzzleVelocity, ZeroRange, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope, Zone1SlopeMultiplier,
+                Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo, F2,F3,F4,DensityAlt,
+                DensityAltAtZero, ZeroTargetLoc,ZeroShooterLoc,TargetLoc,ShooterLoc,ZeroRange);
+            lInter = (-ld + ScopeHeight) / 2;
+            lTmpH = -100;
+            lH = -100;
+            //Iterate through range from 0 to Scope 0 range to find range at max rise.
+            while (lH >= lTmpH)
+            {
+                if (lH > lTmpH)
+                {
+                    lTmpH = lH;
+                }
+                //Increment the range by 1/2 yard at a time to find the Hm range.
+                lR = lR + 0.5;
+                lH = (lInter * (1 / (ZeroRange / 2)) * lR) - ( -
+                    MuzzleDrop(MuzzleVelocity, lR, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope, Zone1SlopeMultiplier,
+                Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt,
+                DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc, ZeroRange)
+                + ScopeHeight);
+                if (lR > ZeroRange)
+                {
+                    break;
+                }
+            }
+            return lTmpH;
         }
         /// <summary>
         /// The bullet drop from the muzzle of the barrel.
@@ -315,12 +693,18 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// <param name="F3"></param>
         /// <param name="DensityAlt">Density Altitude of the current location and atmospheric conditions.</param>
         /// <param name="DensityAltAtZero">Density Altitude for the zero location and atmospheric conditions.</param>
+        /// <param name="ZeroTargetLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="ZeroShooterLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="TargetLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="ShooterLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="ZeroRange">Distance (yrds) to caclculate the Coriolis effect for.</param>
         /// <param name="RawMagnatude"></param>
         /// <returns>Muzzle drop distance in inches.</returns>
         public static double MuzzleDrop(double MuzzleVelocity, double Range, double Zone1Range, double Zone2Range, double Zone3Range,
             double Zone1Slope, double Zone3Slope, double Zone1SlopeMultiplier, double Zone3SlopeMultiplier,
             double Zone1AngleFactor, double Zone1TransSpeed, double Zone2TransSpeed, double Zone3TransSpeed,
-            double Fo, double F2, double F3, double F4, double DensityAlt, double DensityAltAtZero, bool RawMagnatude = false)
+            double Fo, double F2, double F3, double F4, double DensityAlt, double DensityAltAtZero,LocationData ZeroTargetLoc,
+            LocationData ZeroShooterLoc, LocationData TargetLoc, LocationData ShooterLoc, double ZeroRange, bool RawMagnatude = false)
         {
             double ld = 0;      //Temporary drop accumulation variable.
             double lD1 = 0;     //Component 1 of 2 drop distance in zone 1
@@ -353,7 +737,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                     //D = (G/Vo/(1/R - 1/Fa))^2
                     lD1 = MuzzleDrop(MuzzleVelocity, Zone1Range, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope,
                         Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed,
-                        Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, true);
+                        Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc,
+                        TargetLoc, ShooterLoc, ZeroRange, true);
                     //D' = 3gFo(Rt - R)((1 - 3NR / Fo) ^ (1 - 2 / N))/ Vo ^ 2 / (2 - N)
                     //   Corrected to 3gFo(Rt-R)((1+3NR/Fo)^((2/N)-1))/Vo^2/(2-N)
                     //lD1p = lD1p * (Math.Pow(((1 + (3 * Zone1Slope * Zone1Range) / DensityAltCorrection(Fo))), ((2 / Zone1Slope) - 1)));
@@ -382,7 +767,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 {
                     lD1t = MuzzleDrop(MuzzleVelocity, Zone2Range, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope,
                         Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed, 
-                        Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, true);
+                        Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc,
+                        TargetLoc, ShooterLoc, ZeroRange, true);
                     //D = (G/Vo/(1/R - 1/Fa))^2
                     lD2 = Math.Pow(((BallisticFunctions.G / Zone1TransSpeed) /
                         ((1 / (Zone2Range - Zone1Range)) -
@@ -407,7 +793,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 {
                     lD3 = MuzzleDrop(MuzzleVelocity, Zone3Range, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope,
                         Zone1SlopeMultiplier, Zone3SlopeMultiplier,  Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed, 
-                        Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, true);
+                        Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc,
+                        TargetLoc, ShooterLoc, ZeroRange, true);
                     lFa = DensityAltCorrection(F2, DensityAlt, DensityAltAtZero) + (DensityAltCorrection(F3, DensityAlt, DensityAltAtZero) -
                         DensityAltCorrection(F2, DensityAlt, DensityAltAtZero)) / 4.000;
                     //D3' = gF3(Rt - (R1 + R2 + R3)) * 3((1 + 12 * R3 / F2) ^ (3 / 2) - 1) / 6 / (Zone2TransSpeed) ^ 2
@@ -435,7 +822,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             ld = ld * (-1);
 
             //Add the earth rotation component
-            ld = ld + GetCoriolisVert(Range);
+            ld = ld + GetCoriolisVert(Range, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc, ZeroRange, Fo, MuzzleVelocity);
 
             return ld;
         }
@@ -443,14 +830,65 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// Vertical Coriolis affect at the provided range.
         /// </summary>
         /// <param name="Range">Distance to calculate Coriolis affect at.</param>
+        /// <param name="ZeroTargetLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="ZeroShooterLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="TargetLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="ShooterLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="ZeroRange">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="Fo">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="MuzzleVelocity">Distance (yrds) to caclculate the Coriolis effect for.</param>
         /// <returns>Inches of rise or drop caused by Coriolis addect.</returns>
-        public static double GetCoriolisVert(double Range)
-        {
-            double lCorVert = 0; double lCorHoriz = 0;
-            int lR;
+        public static double GetCoriolisVert(double Range, LocationData ZeroTargetLoc, LocationData ZeroShooterLoc, 
+                LocationData TargetLoc, LocationData ShooterLoc, double ZeroRange, double Fo, double MuzzleVelocity)
+            {
+                double lCorVert = 0; double lCorHoriz = 0;
+                int lR;
 
-            lR = GetCoriolisComponents(ref lCorVert, ref lCorHoriz, Range);
-            return lCorVert;
+                lR = GetCoriolisComponents(ref lCorVert, ref lCorHoriz, Range, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc,
+                    ZeroRange, Fo, MuzzleVelocity);
+                return lCorVert;
+            }
+        /// <summary>
+        /// The bullet vertical location with respect to the sight plane.
+        /// </summary>
+        /// <param name="Range">The range to return the bullet location vs sight plane at.</param>
+        /// <returns>Inches above or below the sight plane.</returns>
+        public static double SightDelta(double Range, double ZeroRange, double ScopeHeight, double MuzzleVelocity, double Zone1Range,
+            double Zone2Range, double Zone3Range, double Zone1Slope, double Zone3Slope, double Zone1SlopeMultiplier, 
+            double Zone3SlopeMultiplier, double Zone1AngleFactor, double Zone1TransSpeed, double Zone2TransSpeed, double Zone3TransSpeed,
+            double Fo, double F2, double F3, double F4, double DensityAlt, double DensityAltAtZero, LocationData ZeroTargetLoc,
+            LocationData ZeroShooterLoc, LocationData TargetLoc, LocationData ShooterLoc)
+        {
+            double lH;
+            double lM;
+            double lSD;
+
+            //Bullet vertical location relative to scope sight line.           
+            lH = (-MuzzleDrop(MuzzleVelocity, ZeroRange, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope, Zone1SlopeMultiplier,
+                Zone3SlopeMultiplier,Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo, F2,F3,F4,
+                DensityAltAtZero, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc, ZeroRange) + ScopeHeight);
+            lM = (lH / 2) * (1 / (ZeroRange / 2));
+            lSD = ((Range * lM) + 
+                MuzzleDrop(MuzzleVelocity, Range, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope, Zone1SlopeMultiplier,
+                Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo, F2, F3, F4,
+                DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc, ZeroRange)
+                - ScopeHeight);
+            return lSD;
+        }
+        /// <summary>
+        /// Calculates the range where the vertical travel of the bullet and sight plane equal with a bullet
+        /// travel that rises above the sight plan by exactly Hm.
+        /// </summary>
+        /// <param name="Hm">The maximum rise above the sight plan between the muzzle and zero range.</param>
+        /// <returns>Zero Range (yrds)</returns>
+        public static double CalculateZeroRange()
+        {
+            double lZ;
+
+            if ((SH() == 0) || (MyScenario.MyBallisticData.zeroData.MidRange == 0)) return 0;
+            //Z = (1+SH)/(1/Fo + SH/M)
+            lZ = (1 + SH()) / ((1 / MyScenario.MyBallisticData.dragSlopeData.Fo) + (SH() / MyScenario.MyBallisticData.zeroData.MidRange));
+            return lZ;
         }
         #endregion
 
@@ -510,9 +948,17 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// <param name="VerticalComponent">Vertical drop or rise (in.) caused by the Coriolis effect.</param>
         /// <param name="HorizontalComponent">Horizontal left or right drift (in.) caused by the Coriolis effect.</param>
         /// <param name="Range">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="ZeroTargetLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="ZeroShooterLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="TargetLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="ShooterLoc">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="ZeroRange">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="Fo">Distance (yrds) to caclculate the Coriolis effect for.</param>
+        /// <param name="MuzzleVelocity">Distance (yrds) to caclculate the Coriolis effect for.</param>
         /// <returns>A routine trouble code and the horizontal and vertical effect of the earths rotation.</returns>
-        private int GetCoriolisComponents(ref double VerticalComponent, ref double HorizontalComponent, double Range,
-            LocationData ZeroTargetLoc)
+        private static int GetCoriolisComponents(ref double VerticalComponent, ref double HorizontalComponent, double Range,
+            LocationData ZeroTargetLoc, LocationData ZeroShooterLoc, LocationData TargetLoc, LocationData ShooterLoc,
+            double ZeroRange, double Fo, double MuzzleVelocity)
         {
             double lYrdPerDeg; double lLonDist; double lLatDist; double lVertMultiplier;
             double lHorizMultiplier; double lFT; double lCorMag; double lSVM; double lSHM;
@@ -522,10 +968,10 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             double lCorZHS; double lFTZ;
 
 
-            if ((ZeroTargetLoc.Longitude == 0) || (MyScenario.MyBallisticData.zeroData.ShooterLoc.Longitude == 0)
-                || (ZeroTargetLoc.Latitude == 0) || (MyScenario.MyBallisticData.zeroData.ShooterLoc.Latitude == 0)
-                || (MyScenario.MyBallisticData.zeroData.ShooterLoc.Latitude == 0) || (MyScenario.MyBallisticData.zeroData.ShooterLoc.Longitude == 0)
-                || (ZeroTargetLoc.Latitude == 0) || (ZeroTargetLoc.Longitude == 0))
+            if ((ZeroTargetLoc.Longitude == 0) || (ZeroShooterLoc.Longitude == 0)
+                || (ZeroTargetLoc.Latitude == 0) || (ZeroShooterLoc.Latitude == 0)
+                || (ShooterLoc.Latitude == 0) || (ShooterLoc.Longitude == 0)
+                || (TargetLoc.Latitude == 0) || (TargetLoc.Longitude == 0))
             {
                 HorizontalComponent = 0;
                 VerticalComponent = 0;
@@ -533,28 +979,26 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             }
 
             lYrdPerDeg = 121740.6652;
-            lFT = FlightTime(Range);
-            lFTZ = FlightTime(MyScenario.MyBallisticData.zeroData.ZeroRange);
+            lFT = FlightTime(Range, Fo, MuzzleVelocity);
+            lFTZ = FlightTime(ZeroRange, Fo, MuzzleVelocity);
             lCorMag = 0.00262 * lFT * Range;
-            lCorZero = 0.00262 * lFTZ * MyScenario.MyBallisticData.zeroData.ZeroRange;
+            lCorZero = 0.00262 * lFTZ * ZeroRange;
 
             //______________ Zero bias ___________________________
             //  Solve for the amount of Coriolis correction added during zero, this is
             //  like the sight line in that it is linear with distance and zero at the zero ranges.
 
             //Longitudal distance to target
-            lLonDistZ = (MyScenario.MyBallisticData.zeroData.TargetLoc.Longitude -
-                MyScenario.MyBallisticData.zeroData.ShooterLoc.Longitude) * lYrdPerDeg;
+            lLonDistZ = (ZeroTargetLoc.Longitude - ZeroShooterLoc.Longitude) * lYrdPerDeg;
             lLonSignZ = Math.Sign(lLonDistZ);  // + = E, - = W
             if (lLonSignZ == 0) lLonSignZ = 1;
             //Latitudal distance to target
-            lLatDistZ = (MyScenario.MyBallisticData.zeroData.TargetLoc.Latitude -
-                MyScenario.MyBallisticData.zeroData.ShooterLoc.Latitude) * lYrdPerDeg;
+            lLatDistZ = (ZeroTargetLoc.Latitude - ZeroShooterLoc.Latitude) * lYrdPerDeg;
             lLatSignZ = Math.Sign(lLatDistZ);  // + = N, - = S
             if (lLatSignZ == 0) lLatSignZ = 1;
             //Correction factors for location on earth, the larger the lat the less vertical affect and more horizontal,
             //     convert degrees to radians
-            lZeroVertMultiplier = Math.Cos(MyScenario.MyBallisticData.zeroData.ShooterLoc.Latitude * (Math.PI / 180));
+            lZeroVertMultiplier = Math.Cos(ZeroShooterLoc.Latitude * (Math.PI / 180));
             lZeroHorizMultiplier = 1 - lZeroVertMultiplier;
             //Vertical correction factor for Lat/Lon angle
             if (lLonDistZ == 0)
@@ -572,23 +1016,22 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             lZSVM = lZSVM * lLonSignZ;
             lZSHM = lZSHM * lLatSignZ;
 
-            lCorZVS = (lCorZero * lZeroVertMultiplier * lZSVM) / MyScenario.MyBallisticData.zeroData.ZeroRange;
-            lCorZHS = (lCorZero * lZeroHorizMultiplier * lZSHM) / MyScenario.MyBallisticData.zeroData.ZeroRange;
+            lCorZVS = (lCorZero * lZeroVertMultiplier * lZSVM) / ZeroRange;
+            lCorZHS = (lCorZero * lZeroHorizMultiplier * lZSHM) / ZeroRange;
 
             //Positive = high, East
             //Negative = low, west
 
             //Longitudal distance to target
-            lLonDist = (MyScenario.SelectedTarget.TargetLocation.Longitude -
-                MyScenario.MyShooter.MyLocation.Longitude) * lYrdPerDeg;
+            lLonDist = (TargetLoc.Longitude - ZeroShooterLoc.Longitude) * lYrdPerDeg;
             lLonSign = Math.Sign(lLonDist);  // + = E, - = W
             if (lLonSign == 0) lLonSign = 1;
             //Latitudal distance to target
-            lLatDist = (MyScenario.SelectedTarget.TargetLocation.Latitude - MyScenario.MyShooter.MyLocation.Latitude) * lYrdPerDeg;
+            lLatDist = (TargetLoc.Latitude - ZeroShooterLoc.Latitude) * lYrdPerDeg;
             lLatSign = Math.Sign(lLatDist);  // + = N, - = S
             if (lLatSign == 0) lLatSign = 1;
             //Correction factors for location on earth, convert degrees to radians
-            lVertMultiplier = Math.Cos(MyScenario.MyShooter.MyLocation.Latitude * (Math.PI / 180));
+            lVertMultiplier = Math.Cos(ZeroShooterLoc.Latitude * (Math.PI / 180));
             lHorizMultiplier = 1 - lVertMultiplier;
             //Vertical correction factor for Lat/Lon angle
             if (lLonDist == 0)
