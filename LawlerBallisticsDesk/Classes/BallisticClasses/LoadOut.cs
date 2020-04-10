@@ -25,7 +25,7 @@ namespace LawlerBallisticsDesk.Classes
         }
         private void SelectedLoadRecipe_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RaisePropertyChanged(nameof(SelectedLoadRecipe));
+            RaisePropertyChanged(nameof(SelectedCartridge));
         }
         #endregion
 
@@ -36,6 +36,7 @@ namespace LawlerBallisticsDesk.Classes
         private Barrel _Barrel;
         private double _ScopeHeight;
         private double _MuzzleVelocity;
+        private double _BSG;
         #endregion
 
         #region "Properties"
@@ -52,13 +53,17 @@ namespace LawlerBallisticsDesk.Classes
             }
         }
         public double MuzzleVelocity { get { return _MuzzleVelocity; } set { _MuzzleVelocity = value; RaisePropertyChanged(nameof(MuzzleVelocity)); } }
+        /// <summary>
+        /// Bullet stability factor
+        /// </summary>
+        public double BSG { get { return _BSG; } set { _BSG = value; RaisePropertyChanged(nameof(BSG)); } }
         #endregion
 
         #region "Constructor"
         public LoadOut()
         {
             SelectedGun.PropertyChanged += SelectedGun_PropertyChanged;
-            SelectedLoadRecipe.PropertyChanged += SelectedLoadRecipe_PropertyChanged;
+            SelectedCartridge.PropertyChanged += SelectedLoadRecipe_PropertyChanged;
         }
         #endregion
 
@@ -66,7 +71,7 @@ namespace LawlerBallisticsDesk.Classes
         ~LoadOut()
         {
             SelectedGun.PropertyChanged -= SelectedGun_PropertyChanged;
-            SelectedLoadRecipe.PropertyChanged -= SelectedLoadRecipe_PropertyChanged;
+            SelectedCartridge.PropertyChanged -= SelectedLoadRecipe_PropertyChanged;
 
         }
         #endregion

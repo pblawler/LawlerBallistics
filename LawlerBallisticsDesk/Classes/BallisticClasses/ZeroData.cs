@@ -132,19 +132,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Private Routines"
-        /// <summary>
-        /// Factor used to calculate Zero range, Near Zero Range, and Point-Blank-Range (PBR)
-        /// </summary>
-        /// <returns></returns>
-        private double SH()
-        {
-            double lSH;
 
-            if (_Hm == 0) return 0;
-            //SH = (1 + S/Hm)^0.5
-            lSH = Math.Pow((1 + (loadOutData.ScopeHeight / _Hm)), 0.5);
-            return lSH;
-        }
         #endregion
     }
 }

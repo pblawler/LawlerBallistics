@@ -243,7 +243,6 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Atmospherics.cs" />
     <Compile Include="Classes\BallisticClasses\DragSlopeData.cs" />
-    <Compile Include="Classes\BallisticClasses\LoadOutData.cs" />
     <Compile Include="Classes\BallisticClasses\BallisticData.cs" />
     <Compile Include="Classes\BallisticClasses\Solution.cs" />
     <Compile Include="Classes\BallisticClasses\ZeroData.cs" />
@@ -258,7 +257,7 @@
     <Compile Include="Classes\Case.cs" />
     <Compile Include="Classes\DataPersistence.cs" />
     <Compile Include="Classes\Gun.cs" />
-    <Compile Include="Classes\LoadOut.cs" />
+    <Compile Include="Classes\BallisticClasses\LoadOut.cs" />
     <Compile Include="Classes\Recipe.cs" />
     <Compile Include="Classes\LocationData.cs" />
     <Compile Include="Classes\Powder.cs" />
