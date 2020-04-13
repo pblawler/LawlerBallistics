@@ -122,7 +122,7 @@ namespace LawlerBallisticsDesk.Classes
             // Velocity Measurements Provided = 2
             // BC and Muzzle Provided = 4
             //Check to see of Fo is directly provided or must be calculated.
-            if ((_MyScenario.MyBallisticData.zeroData.dragSlopeData.Fo > 0) & (_MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0))
+            if ((_MyScenario.MyBallisticData.dragSlopeData.Fo > 0) & (_MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0))
             {
                 //Fo is provided.  Set First bit value to 1
 
@@ -171,17 +171,17 @@ namespace LawlerBallisticsDesk.Classes
                 lRtn = -3;
                 return lRtn;
             }
-            if (_MyScenario.MyBallisticData.zeroData.UseMaxRise & (_MyScenario.MyBallisticData.zeroData.ZeroMaxRise == 0))
+            if (_MyScenario.MyShooter.MyLoadOut.zeroData.UseMaxRise & (_MyScenario.MyShooter.MyLoadOut.zeroData.ZeroMaxRise == 0))
             {
                 //Cannot calculate sightline without a valid zero point.
                 lRtn = -8;
                 return lRtn;
             }
-            else if ((_MyScenario.MyBallisticData.zeroData.UseMaxRise) & (_MyScenario.MyBallisticData.zeroData.ZeroMaxRise > 0))
+            else if ((_MyScenario.MyShooter.MyLoadOut.zeroData.UseMaxRise) & (_MyScenario.MyShooter.MyLoadOut.zeroData.ZeroMaxRise > 0))
             {
                 //MyScenario.MyBallisticData.zeroData.ZeroRange = CalculateZeroRange(MyScenario.MyBallisticData.zeroData.ZeroMaxRise);                
             }
-            if ((!_MyScenario.MyBallisticData.zeroData.UseMaxRise) & (_MyScenario.MyBallisticData.zeroData.ZeroRange > 0))
+            if ((!_MyScenario.MyShooter.MyLoadOut.zeroData.UseMaxRise) & (_MyScenario.MyShooter.MyLoadOut.zeroData.ZeroRange > 0))
             {
                 //CalculateHm();
             }

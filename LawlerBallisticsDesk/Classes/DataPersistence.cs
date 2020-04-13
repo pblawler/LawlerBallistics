@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LawlerBallisticsDesk.Classes.BallisticClasses;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -49,7 +50,7 @@ namespace LawlerBallisticsDesk.Classes
         public void CheckDataFiles()
         {
             //Load default data file for ballistic solution menu view
-            string lDatFile = AppDataFolder + "\\default.bdf";
+            string lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\default.bdf";
             string lSource = "Data/default.bdf";
             if (!File.Exists(lDatFile))
             {
@@ -57,7 +58,7 @@ namespace LawlerBallisticsDesk.Classes
             }
 
             //Load Cartridge data file
-             lDatFile = AppDataFolder + "\\CartridgeDB.cdf";
+             lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\CartridgeDB.cdf";
              lSource = "Data/CartridgeDB.cdf";
             if (!File.Exists(lDatFile))
             {
@@ -65,7 +66,7 @@ namespace LawlerBallisticsDesk.Classes
             }
 
             //Load Bullet data file
-            lDatFile = AppDataFolder + "\\BulletDB.bdf";
+            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\BulletDB.bdf";
             lSource = "Data/BulletDB.bdf";
             if (!File.Exists(lDatFile))
             {
@@ -73,7 +74,7 @@ namespace LawlerBallisticsDesk.Classes
             }
 
             //Load Case data file
-            lDatFile = AppDataFolder + "\\CaseDB.cdf";
+            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\CaseDB.cdf";
             lSource = "Data/CaseDB.cdf";
             if (!File.Exists(lDatFile))
             {
@@ -81,7 +82,7 @@ namespace LawlerBallisticsDesk.Classes
             }
 
             //Load Gun data file
-            lDatFile = AppDataFolder + "\\GunDB.gdf";
+            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\GunDB.gdf";
             lSource = "Data/GunDB.gdf";
             if (!File.Exists(lDatFile))
             {
@@ -89,7 +90,7 @@ namespace LawlerBallisticsDesk.Classes
             }
 
             //Load Powder data file
-            lDatFile = AppDataFolder + "\\PowderDB.ddf";
+            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\PowderDB.ddf";
             lSource = "Data/PowderDB.ddf";
             if (!File.Exists(lDatFile))
             {
@@ -97,7 +98,7 @@ namespace LawlerBallisticsDesk.Classes
             }
 
             //Load Primer data file
-            lDatFile = AppDataFolder + "\\PrimerDB.pdf";
+            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\PrimerDB.pdf";
             lSource = "Data/PrimerDB.pdf";
             if (!File.Exists(lDatFile))
             {
@@ -105,7 +106,7 @@ namespace LawlerBallisticsDesk.Classes
             }
 
             //Load Recipe data file
-            lDatFile = AppDataFolder + "\\RecipeDB.rdf";
+            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\RecipeDB.rdf";
             lSource = "Data/RecipeDB.rdf";
             if (!File.Exists(lDatFile))
             {
@@ -127,8 +128,8 @@ namespace LawlerBallisticsDesk.Classes
                     lCF = lCF + lCdat;
                 }
                 lCF = lCF + "</catridgedatabasefile>" + System.Environment.NewLine;
-                lCfilename = AppDataFolder + "\\CartridgeDB.cdf";
-                lCfileBak = AppDataFolder + "\\CartridgeDB.BAK";
+                lCfilename = LawlerBallisticsFactory.AppDataFolder + "\\CartridgeDB.cdf";
+                lCfileBak = LawlerBallisticsFactory.AppDataFolder + "\\CartridgeDB.BAK";
                 if (File.Exists(lCfilename))
                 {
                     if (File.Exists(lCfileBak))
@@ -149,8 +150,8 @@ namespace LawlerBallisticsDesk.Classes
         public ObservableCollection<Cartridge> ParseCartridgeDB(bool LoadBAK = false)
         {
             ObservableCollection<Cartridge> lRtn = new ObservableCollection<Cartridge>();
-            string lCDF = AppDataFolder + "\\CartridgeDB.cdf";
-            if (LoadBAK) lCDF = AppDataFolder + "\\CartridgeDB.BAK";
+            string lCDF = LawlerBallisticsFactory.AppDataFolder + "\\CartridgeDB.cdf";
+            if (LoadBAK) lCDF = LawlerBallisticsFactory.AppDataFolder + "\\CartridgeDB.BAK";
             if(!File.Exists(lCDF)&!LoadBAK)
             {
                 lRtn = ParseCartridgeDB(true);
@@ -169,413 +170,413 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRtn;
         }
-        public int SaveBallisticSolutionData(Ballistics TargetBallisticData, string FileName)
+        public int SaveBallisticSolutionData(Solution BallisticSolutionData, string FileName)
         {
             int lRtn = 0;
             string lBfilename;  //Then path and file name of the the exported data file.
             string lBF;         //Balistic file string variable.
 
-            try
-            {
-                lBF = "<Ballistic Solution File>" + System.Environment.NewLine;
-                lBF = lBF + "<PROPERTIES>" + System.Environment.NewLine;
-                lBF = lBF + "<zTargetLat>" + TargetBallisticData.zTargetLat.ToString() + "</zTargetLat>" + System.Environment.NewLine;
-                lBF = lBF + "<zTargetLon>" + TargetBallisticData.zTargetLon.ToString() + "</zTargetLon>" + System.Environment.NewLine;
-                lBF = lBF + "<zShooterLat>" + TargetBallisticData.zShooterLat.ToString() + "</zShooterLat>" + System.Environment.NewLine;
-                lBF = lBF + "<zShooterLon>" + TargetBallisticData.zShooterLon.ToString() + "</zShooterLon>" + System.Environment.NewLine;
-                lBF = lBF + "<ShooterLon>" + TargetBallisticData.ShooterLon.ToString() + "</ShooterLon>" + System.Environment.NewLine;
-                lBF = lBF + "<ShooterLat>" + TargetBallisticData.ShooterLat.ToString() + "</ShooterLat>" + System.Environment.NewLine;
-                lBF = lBF + "<ShotDistance>" + TargetBallisticData.ShotDistance.ToString() + "</ShotDistance>" + System.Environment.NewLine;
-                lBF = lBF + "<ShotAngle>" + TargetBallisticData.ShotAngle.ToString() + "</ShotAngle>" + System.Environment.NewLine;
-                lBF = lBF + "<TargetLat>" + TargetBallisticData.TargetLat.ToString() + "</TargetLat>" + System.Environment.NewLine;
-                lBF = lBF + "<TargetLon>" + TargetBallisticData.TargetLon.ToString() + "</TargetLon>" + System.Environment.NewLine;
-                lBF = lBF + "<RelHumidity>" + TargetBallisticData.RelHumidity.ToString() + "</RelHumidity>" + System.Environment.NewLine;
-                lBF = lBF + "<zRelHumidity>" + TargetBallisticData.zRelHumidity.ToString() + "</zRelHumidity>" + System.Environment.NewLine;                
-                lBF = lBF + "<zBaroPressure>" + TargetBallisticData.zBaroPressure.ToString() + "</zBaroPressure>" + System.Environment.NewLine;
-                lBF = lBF + "<BaroPressure>" + TargetBallisticData.BaroPressure.ToString() + "</BaroPressure>" + System.Environment.NewLine;
-                lBF = lBF + "<DensityAlt>" + TargetBallisticData.DensityAlt.ToString() + "</DensityAlt>" + System.Environment.NewLine;
-                lBF = lBF + "<zDensityAlt>" + TargetBallisticData.zDensityAlt.ToString() + "</zDensityAlt>" + System.Environment.NewLine;
-                lBF = lBF + "<TempF>" + TargetBallisticData.TempF.ToString() + "</TempF>" + System.Environment.NewLine;
-                lBF = lBF + "<zTempF>" + TargetBallisticData.zTempF.ToString() + "</zTempF>" + System.Environment.NewLine;
-                lBF = lBF + "<ScopeHeight>" + TargetBallisticData.ScopeHeight.ToString() + "</ScopeHeight>" + System.Environment.NewLine;
-                lBF = lBF + "<MuzzleVelocity>" + TargetBallisticData.MuzzleVelocity.ToString() + "</MuzzleVelocity>" + System.Environment.NewLine;
-                lBF = lBF + "<Fo>" + TargetBallisticData.Fo.ToString() + "</Fo>" + System.Environment.NewLine;
-                lBF = lBF + "<F2>" + TargetBallisticData.F2.ToString() + "</F2>" + System.Environment.NewLine;
-                lBF = lBF + "<F3>" + TargetBallisticData.F3.ToString() + "</F3>" + System.Environment.NewLine;
-                lBF = lBF + "<F4>" + TargetBallisticData.F4.ToString() + "</F4>" + System.Environment.NewLine;
-                lBF = lBF + "<V1>" + TargetBallisticData.V1.ToString() + "</V1>" + System.Environment.NewLine;
-                lBF = lBF + "<V2>" + TargetBallisticData.V2.ToString() + "</V2>" + System.Environment.NewLine;
-                lBF = lBF + "<D1>" + TargetBallisticData.D1.ToString() + "</D1>" + System.Environment.NewLine;
-                lBF = lBF + "<D2>" + TargetBallisticData.D2.ToString() + "</D2>" + System.Environment.NewLine;
-                lBF = lBF + "<BCg1>" + TargetBallisticData.BCg1.ToString() + "</BCg1>" + System.Environment.NewLine;
-                lBF = lBF + "<BCz2>" + TargetBallisticData.BCz2.ToString() + "</BCz2>" + System.Environment.NewLine;
-                lBF = lBF + "<ZeroMaxRise>" + TargetBallisticData.ZeroMaxRise.ToString() + "</ZeroMaxRise>" + System.Environment.NewLine;
-                lBF = lBF + "<ZeroRange>" + TargetBallisticData.ZeroRange.ToString() + "</ZeroRange>" + System.Environment.NewLine;
-                lBF = lBF + "<UseMaxRise>" + TargetBallisticData.UseMaxRise.ToString() + "</UseMaxRise>" + System.Environment.NewLine;
+            //try
+            //{
+            //    lBF = "<Ballistic Solution File>" + System.Environment.NewLine;
+            //    lBF = lBF + "<PROPERTIES>" + System.Environment.NewLine;
+            //    lBF = lBF + "<zTargetLat>" + TargetBallisticData.zTargetLat.ToString() + "</zTargetLat>" + System.Environment.NewLine;
+            //    lBF = lBF + "<zTargetLon>" + TargetBallisticData.zTargetLon.ToString() + "</zTargetLon>" + System.Environment.NewLine;
+            //    lBF = lBF + "<zShooterLat>" + TargetBallisticData.zShooterLat.ToString() + "</zShooterLat>" + System.Environment.NewLine;
+            //    lBF = lBF + "<zShooterLon>" + TargetBallisticData.zShooterLon.ToString() + "</zShooterLon>" + System.Environment.NewLine;
+            //    lBF = lBF + "<ShooterLon>" + TargetBallisticData.ShooterLon.ToString() + "</ShooterLon>" + System.Environment.NewLine;
+            //    lBF = lBF + "<ShooterLat>" + TargetBallisticData.ShooterLat.ToString() + "</ShooterLat>" + System.Environment.NewLine;
+            //    lBF = lBF + "<ShotDistance>" + TargetBallisticData.ShotDistance.ToString() + "</ShotDistance>" + System.Environment.NewLine;
+            //    lBF = lBF + "<ShotAngle>" + TargetBallisticData.ShotAngle.ToString() + "</ShotAngle>" + System.Environment.NewLine;
+            //    lBF = lBF + "<TargetLat>" + TargetBallisticData.TargetLat.ToString() + "</TargetLat>" + System.Environment.NewLine;
+            //    lBF = lBF + "<TargetLon>" + TargetBallisticData.TargetLon.ToString() + "</TargetLon>" + System.Environment.NewLine;
+            //    lBF = lBF + "<RelHumidity>" + TargetBallisticData.RelHumidity.ToString() + "</RelHumidity>" + System.Environment.NewLine;
+            //    lBF = lBF + "<zRelHumidity>" + TargetBallisticData.zRelHumidity.ToString() + "</zRelHumidity>" + System.Environment.NewLine;                
+            //    lBF = lBF + "<zBaroPressure>" + TargetBallisticData.zBaroPressure.ToString() + "</zBaroPressure>" + System.Environment.NewLine;
+            //    lBF = lBF + "<BaroPressure>" + TargetBallisticData.BaroPressure.ToString() + "</BaroPressure>" + System.Environment.NewLine;
+            //    lBF = lBF + "<DensityAlt>" + TargetBallisticData.DensityAlt.ToString() + "</DensityAlt>" + System.Environment.NewLine;
+            //    lBF = lBF + "<zDensityAlt>" + TargetBallisticData.zDensityAlt.ToString() + "</zDensityAlt>" + System.Environment.NewLine;
+            //    lBF = lBF + "<TempF>" + TargetBallisticData.TempF.ToString() + "</TempF>" + System.Environment.NewLine;
+            //    lBF = lBF + "<zTempF>" + TargetBallisticData.zTempF.ToString() + "</zTempF>" + System.Environment.NewLine;
+            //    lBF = lBF + "<ScopeHeight>" + TargetBallisticData.ScopeHeight.ToString() + "</ScopeHeight>" + System.Environment.NewLine;
+            //    lBF = lBF + "<MuzzleVelocity>" + TargetBallisticData.MuzzleVelocity.ToString() + "</MuzzleVelocity>" + System.Environment.NewLine;
+            //    lBF = lBF + "<Fo>" + TargetBallisticData.Fo.ToString() + "</Fo>" + System.Environment.NewLine;
+            //    lBF = lBF + "<F2>" + TargetBallisticData.F2.ToString() + "</F2>" + System.Environment.NewLine;
+            //    lBF = lBF + "<F3>" + TargetBallisticData.F3.ToString() + "</F3>" + System.Environment.NewLine;
+            //    lBF = lBF + "<F4>" + TargetBallisticData.F4.ToString() + "</F4>" + System.Environment.NewLine;
+            //    lBF = lBF + "<V1>" + TargetBallisticData.V1.ToString() + "</V1>" + System.Environment.NewLine;
+            //    lBF = lBF + "<V2>" + TargetBallisticData.V2.ToString() + "</V2>" + System.Environment.NewLine;
+            //    lBF = lBF + "<D1>" + TargetBallisticData.D1.ToString() + "</D1>" + System.Environment.NewLine;
+            //    lBF = lBF + "<D2>" + TargetBallisticData.D2.ToString() + "</D2>" + System.Environment.NewLine;
+            //    lBF = lBF + "<BCg1>" + TargetBallisticData.BCg1.ToString() + "</BCg1>" + System.Environment.NewLine;
+            //    lBF = lBF + "<BCz2>" + TargetBallisticData.BCz2.ToString() + "</BCz2>" + System.Environment.NewLine;
+            //    lBF = lBF + "<ZeroMaxRise>" + TargetBallisticData.ZeroMaxRise.ToString() + "</ZeroMaxRise>" + System.Environment.NewLine;
+            //    lBF = lBF + "<ZeroRange>" + TargetBallisticData.ZeroRange.ToString() + "</ZeroRange>" + System.Environment.NewLine;
+            //    lBF = lBF + "<UseMaxRise>" + TargetBallisticData.UseMaxRise.ToString() + "</UseMaxRise>" + System.Environment.NewLine;
 
-                //  These are now calculated by atmospheric conditions and Mach factors.
-                //lBF = lBF + "<Zone1TransSpeed>" + TargetBallisticData.Zone1TransSpeed.ToString() + "</Zone1TransSpeed>" + System.Environment.NewLine;
-                //lBF = lBF + "<Zone2TransSpeed>" + TargetBallisticData.Zone2TransSpeed.ToString() + "</Zone2TransSpeed>" + System.Environment.NewLine;
-                //lBF = lBF + "<Zone3TransSpeed>" + TargetBallisticData.Zone3TransSpeed.ToString() + "</Zone3TransSpeed>" + System.Environment.NewLine;
+            //    //  These are now calculated by atmospheric conditions and Mach factors.
+            //    //lBF = lBF + "<Zone1TransSpeed>" + TargetBallisticData.Zone1TransSpeed.ToString() + "</Zone1TransSpeed>" + System.Environment.NewLine;
+            //    //lBF = lBF + "<Zone2TransSpeed>" + TargetBallisticData.Zone2TransSpeed.ToString() + "</Zone2TransSpeed>" + System.Environment.NewLine;
+            //    //lBF = lBF + "<Zone3TransSpeed>" + TargetBallisticData.Zone3TransSpeed.ToString() + "</Zone3TransSpeed>" + System.Environment.NewLine;
                 
-                lBF = lBF + "<Zone1MachFactor>" + TargetBallisticData.Zone1MachFactor.ToString() + "</Zone1MachFactor>" + System.Environment.NewLine;
-                lBF = lBF + "<Zone2MachFactor>" + TargetBallisticData.Zone2MachFactor.ToString() + "</Zone2MachFactor>" + System.Environment.NewLine;
-                lBF = lBF + "<Zone3MachFactor>" + TargetBallisticData.Zone3MachFactor.ToString() + "</Zone3MachFactor>" + System.Environment.NewLine;
-                lBF = lBF + "<Zone1SlopeMultiplier>" + TargetBallisticData.Zone1SlopeMultiplier.ToString() + "</Zone1SlopeMultiplier>" + System.Environment.NewLine;
-                lBF = lBF + "<Zone3SlopeMultiplier>" + TargetBallisticData.Zone3SlopeMultiplier.ToString() + "</Zone3SlopeMultiplier>" + System.Environment.NewLine;
-                lBF = lBF + "<Zone1Slope>" + TargetBallisticData.Zone1Slope.ToString() + "</Zone1Slope>" + System.Environment.NewLine;
-                lBF = lBF + "<Zone1AngleFactor>" + TargetBallisticData.Zone1AngleFactor.ToString() + "</Zone1AngleFactor>" + System.Environment.NewLine;
-                lBF = lBF + "<Zone3Slope>" + TargetBallisticData.Zone3Slope.ToString() + "</Zone3Slope>" + System.Environment.NewLine;
-                lBF = lBF + "<BarrelTwist>" + TargetBallisticData.BarrelTwist.ToString() + "</BarrelTwist>" + System.Environment.NewLine;
-                lBF = lBF + "<BarrelTwistDir>" + TargetBallisticData.BarrelTwistDir.ToString() + "</BarrelTwistDir>" + System.Environment.NewLine;
-                lBF = lBF + "<BulletDiameter>" + TargetBallisticData.BulletDiameter.ToString() + "</BulletDiameter>" + System.Environment.NewLine;
-                lBF = lBF + "<BulletLength>" + TargetBallisticData.BulletLength.ToString() + "</BulletLength>" + System.Environment.NewLine;
-                lBF = lBF + "<BulletWeight>" + TargetBallisticData.BulletWeight.ToString() + "</BulletWeight>" + System.Environment.NewLine;
+            //    lBF = lBF + "<Zone1MachFactor>" + TargetBallisticData.Zone1MachFactor.ToString() + "</Zone1MachFactor>" + System.Environment.NewLine;
+            //    lBF = lBF + "<Zone2MachFactor>" + TargetBallisticData.Zone2MachFactor.ToString() + "</Zone2MachFactor>" + System.Environment.NewLine;
+            //    lBF = lBF + "<Zone3MachFactor>" + TargetBallisticData.Zone3MachFactor.ToString() + "</Zone3MachFactor>" + System.Environment.NewLine;
+            //    lBF = lBF + "<Zone1SlopeMultiplier>" + TargetBallisticData.Zone1SlopeMultiplier.ToString() + "</Zone1SlopeMultiplier>" + System.Environment.NewLine;
+            //    lBF = lBF + "<Zone3SlopeMultiplier>" + TargetBallisticData.Zone3SlopeMultiplier.ToString() + "</Zone3SlopeMultiplier>" + System.Environment.NewLine;
+            //    lBF = lBF + "<Zone1Slope>" + TargetBallisticData.Zone1Slope.ToString() + "</Zone1Slope>" + System.Environment.NewLine;
+            //    lBF = lBF + "<Zone1AngleFactor>" + TargetBallisticData.Zone1AngleFactor.ToString() + "</Zone1AngleFactor>" + System.Environment.NewLine;
+            //    lBF = lBF + "<Zone3Slope>" + TargetBallisticData.Zone3Slope.ToString() + "</Zone3Slope>" + System.Environment.NewLine;
+            //    lBF = lBF + "<BarrelTwist>" + TargetBallisticData.BarrelTwist.ToString() + "</BarrelTwist>" + System.Environment.NewLine;
+            //    lBF = lBF + "<BarrelTwistDir>" + TargetBallisticData.BarrelTwistDir.ToString() + "</BarrelTwistDir>" + System.Environment.NewLine;
+            //    lBF = lBF + "<BulletDiameter>" + TargetBallisticData.BulletDiameter.ToString() + "</BulletDiameter>" + System.Environment.NewLine;
+            //    lBF = lBF + "<BulletLength>" + TargetBallisticData.BulletLength.ToString() + "</BulletLength>" + System.Environment.NewLine;
+            //    lBF = lBF + "<BulletWeight>" + TargetBallisticData.BulletWeight.ToString() + "</BulletWeight>" + System.Environment.NewLine;
 
-                // Calculated with bullet, barrel, and atmospheric conditions
-                //lBF = lBF + "<BSG>" + TargetBallisticData.BSG.ToString() + "</BSG>" + System.Environment.NewLine;
+            //    // Calculated with bullet, barrel, and atmospheric conditions
+            //    //lBF = lBF + "<BSG>" + TargetBallisticData.BSG.ToString() + "</BSG>" + System.Environment.NewLine;
                 
-                lBF = lBF + "<BulletShapeTyp>" + TargetBallisticData.BulletShapeTyp.ToString() + "</BulletShapeTyp>" + System.Environment.NewLine;
-                lBF = lBF + "</PROPERTIES>" + System.Environment.NewLine;
-                lBF = lBF + "</Ballistic Solution File>";
-                lBfilename = FileName;
-                if (File.Exists(lBfilename))
-                {                    
-                    File.Delete(lBfilename);
-                }
-                File.WriteAllText(lBfilename, lBF);
-            }
-            catch
-            {
-                lRtn = -1;
-            }
+            //    lBF = lBF + "<BulletShapeTyp>" + TargetBallisticData.BulletShapeTyp.ToString() + "</BulletShapeTyp>" + System.Environment.NewLine;
+            //    lBF = lBF + "</PROPERTIES>" + System.Environment.NewLine;
+            //    lBF = lBF + "</Ballistic Solution File>";
+            //    lBfilename = FileName;
+            //    if (File.Exists(lBfilename))
+            //    {                    
+            //        File.Delete(lBfilename);
+            //    }
+            //    File.WriteAllText(lBfilename, lBF);
+            //}
+            //catch
+            //{
+            //    lRtn = -1;
+            //}
             return lRtn;
         }
-        public Ballistics ParseBallisticSolution(string FileName)
+        public Solution ParseBallisticSolution(string FileName)
         {
-            Ballistics lBSF = new Ballistics(null, null);
-            string lBDF = FileName;
-            string lValue;
-            if (!File.Exists(lBDF) )
-            {
-                return lBSF;
-            }            
-            string[] BDFL = File.ReadAllLines(lBDF, Encoding.UTF8);
-            if (!IsBallisticSol(BDFL))
-            {               
-                return lBSF;
-            }
-            foreach (string L in BDFL)
-            {                
-                if (L.StartsWith("<zTargetLat>"))
-                {
-                    lValue = L.Replace("<zTargetLat>", "");
-                    lValue = lValue.Replace("</zTargetLat>", "");
-                    lBSF.zTargetLat = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<zTargetLon>"))
-                {
-                    lValue = L.Replace("<zTargetLon>", "");
-                    lValue = lValue.Replace("</zTargetLon>", "");
-                    lBSF.zTargetLon = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<zShooterLat>"))
-                {
-                    lValue = L.Replace("<zShooterLat>", "");
-                    lValue = lValue.Replace("</zShooterLat>", "");
-                    lBSF.zTargetLon = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<zShooterLon>"))
-                {
-                    lValue = L.Replace("<zShooterLon>", "");
-                    lValue = lValue.Replace("</zShooterLon>", "");
-                    lBSF.zShooterLon = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<ShooterLon>"))
-                {
-                    lValue = L.Replace("<ShooterLon>", "");
-                    lValue = lValue.Replace("</ShooterLon>", "");
-                    lBSF.ShooterLon = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<ShooterLat>"))
-                {
-                    lValue = L.Replace("<ShooterLat>", "");
-                    lValue = lValue.Replace("</ShooterLat>", "");
-                    lBSF.ShooterLat = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<ShotDistance>"))
-                {
-                    lValue = L.Replace("<ShotDistance>", "");
-                    lValue = lValue.Replace("</ShotDistance>", "");
-                    lBSF.ShotDistance = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<ShotAngle>"))
-                {
-                    lValue = L.Replace("<ShotAngle>", "");
-                    lValue = lValue.Replace("</ShotAngle>", "");
-                    lBSF.ShotAngle = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<TargetLat>"))
-                {
-                    lValue = L.Replace("<TargetLat>", "");
-                    lValue = lValue.Replace("</TargetLat>", "");
-                    lBSF.TargetLat = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<TargetLon>"))
-                {
-                    lValue = L.Replace("<TargetLon>", "");
-                    lValue = lValue.Replace("</TargetLon>", "");
-                    lBSF.TargetLon = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<RelHumidity>"))
-                {
-                    lValue = L.Replace("<RelHumidity>", "");
-                    lValue = lValue.Replace("</RelHumidity>", "");
-                    lBSF.RelHumidity = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<zRelHumidity>"))
-                {
-                    lValue = L.Replace("<zRelHumidity>", "");
-                    lValue = lValue.Replace("</zRelHumidity>", "");
-                    lBSF.zRelHumidity = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<DensityAlt>"))
-                {
-                    lValue = L.Replace("<DensityAlt>", "");
-                    lValue = lValue.Replace("</DensityAlt>", "");
-                    lBSF.DensityAlt = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<zDensityAlt>"))
-                {
-                    lValue = L.Replace("<zDensityAlt>", "");
-                    lValue = lValue.Replace("</zDensityAlt>", "");
-                    lBSF.zDensityAlt = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<zBaroPressure>"))
-                {
-                    lValue = L.Replace("<zBaroPressure>", "");
-                    lValue = lValue.Replace("</zBaroPressure>", "");
-                    lBSF.zBaroPressure = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<BaroPressure>"))
-                {
-                    lValue = L.Replace("<BaroPressure>", "");
-                    lValue = lValue.Replace("</BaroPressure>", "");
-                    lBSF.BaroPressure = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<TempF>"))
-                {
-                    lValue = L.Replace("<TempF>", "");
-                    lValue = lValue.Replace("</TempF>", "");
-                    lBSF.TempF = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<zTempF>"))
-                {
-                    lValue = L.Replace("<zTempF>", "");
-                    lValue = lValue.Replace("</zTempF>", "");
-                    lBSF.zTempF = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<ScopeHeight>"))
-                {
-                    lValue = L.Replace("<ScopeHeight>", "");
-                    lValue = lValue.Replace("</ScopeHeight>", "");
-                    lBSF.ScopeHeight = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<MuzzleVelocity>"))
-                {
-                    lValue = L.Replace("<MuzzleVelocity>", "");
-                    lValue = lValue.Replace("</MuzzleVelocity>", "");
-                    lBSF.MuzzleVelocity = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<Fo>"))
-                {
-                    lValue = L.Replace("<Fo>", "");
-                    lValue = lValue.Replace("</Fo>", "");
-                    lBSF.Fo = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<F2>"))
-                {
-                    lValue = L.Replace("<F2>", "");
-                    lValue = lValue.Replace("</F2>", "");
-                    lBSF.F2 = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<F3>"))
-                {
-                    lValue = L.Replace("<F3>", "");
-                    lValue = lValue.Replace("</F3>", "");
-                    lBSF.F3 = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<F4>"))
-                {
-                    lValue = L.Replace("<F4>", "");
-                    lValue = lValue.Replace("</F4>", "");
-                    lBSF.F4 = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<V1>"))
-                {
-                    lValue = L.Replace("<V1>", "");
-                    lValue = lValue.Replace("</V1>", "");
-                    lBSF.V1 = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<V2>"))
-                {
-                    lValue = L.Replace("<V2>", "");
-                    lValue = lValue.Replace("</V2>", "");
-                    lBSF.V2 = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<D1>"))
-                {
-                    lValue = L.Replace("<D1>", "");
-                    lValue = lValue.Replace("</D1>", "");
-                    lBSF.D1 = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<D2>"))
-                {
-                    lValue = L.Replace("<D2>", "");
-                    lValue = lValue.Replace("</D2>", "");
-                    lBSF.D2 = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<BCg1>"))
-                {
-                    lValue = L.Replace("<BCg1>", "");
-                    lValue = lValue.Replace("</BCg1>", "");
-                    lBSF.BCg1 = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<BCz2>"))
-                {
-                    lValue = L.Replace("<BCz2>", "");
-                    lValue = lValue.Replace("</BCz2>", "");
-                    lBSF.BCz2 = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<ZeroMaxRise>"))
-                {
-                    lValue = L.Replace("<ZeroMaxRise>", "");
-                    lValue = lValue.Replace("</ZeroMaxRise>", "");
-                    lBSF.ZeroMaxRise = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<ZeroRange>"))
-                {
-                    lValue = L.Replace("<ZeroRange>", "");
-                    lValue = lValue.Replace("</ZeroRange>", "");
-                    lBSF.ZeroRange = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<UseMaxRise>"))
-                {
-                    lValue = L.Replace("<UseMaxRise>", "");
-                    lValue = lValue.Replace("</UseMaxRise>", "");
-                    lBSF.UseMaxRise = Convert.ToBoolean(lValue);
-                }
-                //  These are calculated from atmospheric data and Mach factors now.
-                //else if (L.StartsWith("<Zone1TransSpeed>"))
-                //{
-                //    lValue = L.Replace("<Zone1TransSpeed>", "");
-                //    lValue = lValue.Replace("</Zone1TransSpeed>", "");
-                //    lBSF.Zone1TransSpeed = Convert.ToDouble(lValue);
-                //}
-                //else if (L.StartsWith("<Zone2TransSpeed>"))
-                //{
-                //    lValue = L.Replace("<Zone2TransSpeed>", "");
-                //    lValue = lValue.Replace("</Zone2TransSpeed>", "");
-                //    lBSF.Zone2TransSpeed = Convert.ToDouble(lValue);
-                //}
-                //else if (L.StartsWith("<Zone3TransSpeed>"))
-                //{
-                //    lValue = L.Replace("<Zone3TransSpeed>", "");
-                //    lValue = lValue.Replace("</Zone3TransSpeed>", "");
-                //    lBSF.Zone3TransSpeed = Convert.ToDouble(lValue);
-                //}
-                else if (L.StartsWith("<Zone1MachFactor>"))
-                {
-                    lValue = L.Replace("<Zone1MachFactor>", "");
-                    lValue = lValue.Replace("</Zone1MachFactor>", "");
-                    lBSF.Zone1MachFactor = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<Zone2MachFactor>"))
-                {
-                    lValue = L.Replace("<Zone2MachFactor>", "");
-                    lValue = lValue.Replace("</Zone2MachFactor>", "");
-                    lBSF.Zone2MachFactor = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<Zone3MachFactor>"))
-                {
-                    lValue = L.Replace("<Zone3MachFactor>", "");
-                    lValue = lValue.Replace("</Zone3MachFactor>", "");
-                    lBSF.Zone3MachFactor = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<Zone1SlopeMultiplier>"))
-                {
-                    lValue = L.Replace("<Zone1SlopeMultiplier>", "");
-                    lValue = lValue.Replace("</Zone1SlopeMultiplier>", "");
-                    lBSF.Zone1SlopeMultiplier = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<Zone3SlopeMultiplier>"))
-                {
-                    lValue = L.Replace("<Zone3SlopeMultiplier>", "");
-                    lValue = lValue.Replace("</Zone3SlopeMultiplier>", "");
-                    lBSF.Zone3SlopeMultiplier = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<Zone1Slope>"))
-                {
-                    lValue = L.Replace("<Zone1Slope>", "");
-                    lValue = lValue.Replace("</Zone1Slope>", "");
-                    lBSF.Zone1Slope = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<Zone1AngleFactor>"))
-                {
-                    lValue = L.Replace("<Zone1AngleFactor>", "");
-                    lValue = lValue.Replace("</Zone1AngleFactor>", "");
-                    lBSF.Zone1AngleFactor = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<Zone3Slope>"))
-                {
-                    lValue = L.Replace("<Zone3Slope>", "");
-                    lValue = lValue.Replace("</Zone3Slope>", "");
-                    lBSF.Zone3Slope = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<BarrelTwist>"))
-                {
-                    lValue = L.Replace("<BarrelTwist>", "");
-                    lValue = lValue.Replace("</BarrelTwist>", "");
-                    lBSF.BarrelTwist = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<BarrelTwistDir>"))
-                {
-                    lValue = L.Replace("<BarrelTwistDir>", "");
-                    lValue = lValue.Replace("</BarrelTwistDir>", "");
-                    lBSF.BarrelTwistDir = Convert.ToString(lValue);
-                }
-                else if (L.StartsWith("<BulletDiameter>"))
-                {
-                    lValue = L.Replace("<BulletDiameter>", "");
-                    lValue = lValue.Replace("</BulletDiameter>", "");
-                    lBSF.BulletDiameter = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<BulletLength>"))
-                {
-                    lValue = L.Replace("<BulletLength>", "");
-                    lValue = lValue.Replace("</BulletLength>", "");
-                    lBSF.BulletLength = Convert.ToDouble(lValue);
-                }
-                else if (L.StartsWith("<BulletWeight>"))
-                {
-                    lValue = L.Replace("<BulletWeight>", "");
-                    lValue = lValue.Replace("</BulletWeight>", "");
-                    lBSF.BulletWeight = Convert.ToDouble(lValue);
-                }
-                // Value is not a calculation
-                //else if (L.StartsWith("<BSG>"))
-                //{
-                //    lValue = L.Replace("<BSG>", "");
-                //    lValue = lValue.Replace("</BSG>", "");
-                //    lBSF.BSG = Convert.ToDouble(lValue);
-                //}
-                else if (L.StartsWith("<BulletShapeTyp>"))
-                {
-                    lValue = L.Replace("<BulletShapeTyp>", "");
-                    lValue = lValue.Replace("</BulletShapeTyp>", "");
-                    lBSF.BulletShapeTyp = (BulletShapeEnum) Enum.Parse(typeof(BulletShapeEnum), lValue);
-                }
-            }
+            Solution lBSF = new Solution();
+            //string lBDF = FileName;
+            //string lValue;
+            //if (!File.Exists(lBDF) )
+            //{
+            //    return lBSF;
+            //}            
+            //string[] BDFL = File.ReadAllLines(lBDF, Encoding.UTF8);
+            //if (!IsBallisticSol(BDFL))
+            //{               
+            //    return lBSF;
+            //}
+            //foreach (string L in BDFL)
+            //{                
+            //    if (L.StartsWith("<zTargetLat>"))
+            //    {
+            //        lValue = L.Replace("<zTargetLat>", "");
+            //        lValue = lValue.Replace("</zTargetLat>", "");
+            //        lBSF.zTargetLat = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<zTargetLon>"))
+            //    {
+            //        lValue = L.Replace("<zTargetLon>", "");
+            //        lValue = lValue.Replace("</zTargetLon>", "");
+            //        lBSF.zTargetLon = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<zShooterLat>"))
+            //    {
+            //        lValue = L.Replace("<zShooterLat>", "");
+            //        lValue = lValue.Replace("</zShooterLat>", "");
+            //        lBSF.zTargetLon = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<zShooterLon>"))
+            //    {
+            //        lValue = L.Replace("<zShooterLon>", "");
+            //        lValue = lValue.Replace("</zShooterLon>", "");
+            //        lBSF.zShooterLon = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<ShooterLon>"))
+            //    {
+            //        lValue = L.Replace("<ShooterLon>", "");
+            //        lValue = lValue.Replace("</ShooterLon>", "");
+            //        lBSF.ShooterLon = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<ShooterLat>"))
+            //    {
+            //        lValue = L.Replace("<ShooterLat>", "");
+            //        lValue = lValue.Replace("</ShooterLat>", "");
+            //        lBSF.ShooterLat = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<ShotDistance>"))
+            //    {
+            //        lValue = L.Replace("<ShotDistance>", "");
+            //        lValue = lValue.Replace("</ShotDistance>", "");
+            //        lBSF.ShotDistance = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<ShotAngle>"))
+            //    {
+            //        lValue = L.Replace("<ShotAngle>", "");
+            //        lValue = lValue.Replace("</ShotAngle>", "");
+            //        lBSF.ShotAngle = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<TargetLat>"))
+            //    {
+            //        lValue = L.Replace("<TargetLat>", "");
+            //        lValue = lValue.Replace("</TargetLat>", "");
+            //        lBSF.TargetLat = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<TargetLon>"))
+            //    {
+            //        lValue = L.Replace("<TargetLon>", "");
+            //        lValue = lValue.Replace("</TargetLon>", "");
+            //        lBSF.TargetLon = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<RelHumidity>"))
+            //    {
+            //        lValue = L.Replace("<RelHumidity>", "");
+            //        lValue = lValue.Replace("</RelHumidity>", "");
+            //        lBSF.RelHumidity = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<zRelHumidity>"))
+            //    {
+            //        lValue = L.Replace("<zRelHumidity>", "");
+            //        lValue = lValue.Replace("</zRelHumidity>", "");
+            //        lBSF.zRelHumidity = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<DensityAlt>"))
+            //    {
+            //        lValue = L.Replace("<DensityAlt>", "");
+            //        lValue = lValue.Replace("</DensityAlt>", "");
+            //        lBSF.DensityAlt = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<zDensityAlt>"))
+            //    {
+            //        lValue = L.Replace("<zDensityAlt>", "");
+            //        lValue = lValue.Replace("</zDensityAlt>", "");
+            //        lBSF.zDensityAlt = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<zBaroPressure>"))
+            //    {
+            //        lValue = L.Replace("<zBaroPressure>", "");
+            //        lValue = lValue.Replace("</zBaroPressure>", "");
+            //        lBSF.zBaroPressure = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<BaroPressure>"))
+            //    {
+            //        lValue = L.Replace("<BaroPressure>", "");
+            //        lValue = lValue.Replace("</BaroPressure>", "");
+            //        lBSF.BaroPressure = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<TempF>"))
+            //    {
+            //        lValue = L.Replace("<TempF>", "");
+            //        lValue = lValue.Replace("</TempF>", "");
+            //        lBSF.TempF = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<zTempF>"))
+            //    {
+            //        lValue = L.Replace("<zTempF>", "");
+            //        lValue = lValue.Replace("</zTempF>", "");
+            //        lBSF.zTempF = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<ScopeHeight>"))
+            //    {
+            //        lValue = L.Replace("<ScopeHeight>", "");
+            //        lValue = lValue.Replace("</ScopeHeight>", "");
+            //        lBSF.ScopeHeight = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<MuzzleVelocity>"))
+            //    {
+            //        lValue = L.Replace("<MuzzleVelocity>", "");
+            //        lValue = lValue.Replace("</MuzzleVelocity>", "");
+            //        lBSF.MuzzleVelocity = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<Fo>"))
+            //    {
+            //        lValue = L.Replace("<Fo>", "");
+            //        lValue = lValue.Replace("</Fo>", "");
+            //        lBSF.Fo = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<F2>"))
+            //    {
+            //        lValue = L.Replace("<F2>", "");
+            //        lValue = lValue.Replace("</F2>", "");
+            //        lBSF.F2 = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<F3>"))
+            //    {
+            //        lValue = L.Replace("<F3>", "");
+            //        lValue = lValue.Replace("</F3>", "");
+            //        lBSF.F3 = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<F4>"))
+            //    {
+            //        lValue = L.Replace("<F4>", "");
+            //        lValue = lValue.Replace("</F4>", "");
+            //        lBSF.F4 = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<V1>"))
+            //    {
+            //        lValue = L.Replace("<V1>", "");
+            //        lValue = lValue.Replace("</V1>", "");
+            //        lBSF.V1 = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<V2>"))
+            //    {
+            //        lValue = L.Replace("<V2>", "");
+            //        lValue = lValue.Replace("</V2>", "");
+            //        lBSF.V2 = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<D1>"))
+            //    {
+            //        lValue = L.Replace("<D1>", "");
+            //        lValue = lValue.Replace("</D1>", "");
+            //        lBSF.D1 = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<D2>"))
+            //    {
+            //        lValue = L.Replace("<D2>", "");
+            //        lValue = lValue.Replace("</D2>", "");
+            //        lBSF.D2 = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<BCg1>"))
+            //    {
+            //        lValue = L.Replace("<BCg1>", "");
+            //        lValue = lValue.Replace("</BCg1>", "");
+            //        lBSF.BCg1 = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<BCz2>"))
+            //    {
+            //        lValue = L.Replace("<BCz2>", "");
+            //        lValue = lValue.Replace("</BCz2>", "");
+            //        lBSF.BCz2 = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<ZeroMaxRise>"))
+            //    {
+            //        lValue = L.Replace("<ZeroMaxRise>", "");
+            //        lValue = lValue.Replace("</ZeroMaxRise>", "");
+            //        lBSF.ZeroMaxRise = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<ZeroRange>"))
+            //    {
+            //        lValue = L.Replace("<ZeroRange>", "");
+            //        lValue = lValue.Replace("</ZeroRange>", "");
+            //        lBSF.ZeroRange = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<UseMaxRise>"))
+            //    {
+            //        lValue = L.Replace("<UseMaxRise>", "");
+            //        lValue = lValue.Replace("</UseMaxRise>", "");
+            //        lBSF.UseMaxRise = Convert.ToBoolean(lValue);
+            //    }
+            //    //  These are calculated from atmospheric data and Mach factors now.
+            //    //else if (L.StartsWith("<Zone1TransSpeed>"))
+            //    //{
+            //    //    lValue = L.Replace("<Zone1TransSpeed>", "");
+            //    //    lValue = lValue.Replace("</Zone1TransSpeed>", "");
+            //    //    lBSF.Zone1TransSpeed = Convert.ToDouble(lValue);
+            //    //}
+            //    //else if (L.StartsWith("<Zone2TransSpeed>"))
+            //    //{
+            //    //    lValue = L.Replace("<Zone2TransSpeed>", "");
+            //    //    lValue = lValue.Replace("</Zone2TransSpeed>", "");
+            //    //    lBSF.Zone2TransSpeed = Convert.ToDouble(lValue);
+            //    //}
+            //    //else if (L.StartsWith("<Zone3TransSpeed>"))
+            //    //{
+            //    //    lValue = L.Replace("<Zone3TransSpeed>", "");
+            //    //    lValue = lValue.Replace("</Zone3TransSpeed>", "");
+            //    //    lBSF.Zone3TransSpeed = Convert.ToDouble(lValue);
+            //    //}
+            //    else if (L.StartsWith("<Zone1MachFactor>"))
+            //    {
+            //        lValue = L.Replace("<Zone1MachFactor>", "");
+            //        lValue = lValue.Replace("</Zone1MachFactor>", "");
+            //        lBSF.Zone1MachFactor = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<Zone2MachFactor>"))
+            //    {
+            //        lValue = L.Replace("<Zone2MachFactor>", "");
+            //        lValue = lValue.Replace("</Zone2MachFactor>", "");
+            //        lBSF.Zone2MachFactor = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<Zone3MachFactor>"))
+            //    {
+            //        lValue = L.Replace("<Zone3MachFactor>", "");
+            //        lValue = lValue.Replace("</Zone3MachFactor>", "");
+            //        lBSF.Zone3MachFactor = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<Zone1SlopeMultiplier>"))
+            //    {
+            //        lValue = L.Replace("<Zone1SlopeMultiplier>", "");
+            //        lValue = lValue.Replace("</Zone1SlopeMultiplier>", "");
+            //        lBSF.Zone1SlopeMultiplier = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<Zone3SlopeMultiplier>"))
+            //    {
+            //        lValue = L.Replace("<Zone3SlopeMultiplier>", "");
+            //        lValue = lValue.Replace("</Zone3SlopeMultiplier>", "");
+            //        lBSF.Zone3SlopeMultiplier = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<Zone1Slope>"))
+            //    {
+            //        lValue = L.Replace("<Zone1Slope>", "");
+            //        lValue = lValue.Replace("</Zone1Slope>", "");
+            //        lBSF.Zone1Slope = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<Zone1AngleFactor>"))
+            //    {
+            //        lValue = L.Replace("<Zone1AngleFactor>", "");
+            //        lValue = lValue.Replace("</Zone1AngleFactor>", "");
+            //        lBSF.Zone1AngleFactor = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<Zone3Slope>"))
+            //    {
+            //        lValue = L.Replace("<Zone3Slope>", "");
+            //        lValue = lValue.Replace("</Zone3Slope>", "");
+            //        lBSF.Zone3Slope = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<BarrelTwist>"))
+            //    {
+            //        lValue = L.Replace("<BarrelTwist>", "");
+            //        lValue = lValue.Replace("</BarrelTwist>", "");
+            //        lBSF.BarrelTwist = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<BarrelTwistDir>"))
+            //    {
+            //        lValue = L.Replace("<BarrelTwistDir>", "");
+            //        lValue = lValue.Replace("</BarrelTwistDir>", "");
+            //        lBSF.BarrelTwistDir = Convert.ToString(lValue);
+            //    }
+            //    else if (L.StartsWith("<BulletDiameter>"))
+            //    {
+            //        lValue = L.Replace("<BulletDiameter>", "");
+            //        lValue = lValue.Replace("</BulletDiameter>", "");
+            //        lBSF.BulletDiameter = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<BulletLength>"))
+            //    {
+            //        lValue = L.Replace("<BulletLength>", "");
+            //        lValue = lValue.Replace("</BulletLength>", "");
+            //        lBSF.BulletLength = Convert.ToDouble(lValue);
+            //    }
+            //    else if (L.StartsWith("<BulletWeight>"))
+            //    {
+            //        lValue = L.Replace("<BulletWeight>", "");
+            //        lValue = lValue.Replace("</BulletWeight>", "");
+            //        lBSF.BulletWeight = Convert.ToDouble(lValue);
+            //    }
+            //    // Value is not a calculation
+            //    //else if (L.StartsWith("<BSG>"))
+            //    //{
+            //    //    lValue = L.Replace("<BSG>", "");
+            //    //    lValue = lValue.Replace("</BSG>", "");
+            //    //    lBSF.BSG = Convert.ToDouble(lValue);
+            //    //}
+            //    else if (L.StartsWith("<BulletShapeTyp>"))
+            //    {
+            //        lValue = L.Replace("<BulletShapeTyp>", "");
+            //        lValue = lValue.Replace("</BulletShapeTyp>", "");
+            //        lBSF.BulletShapeTyp = (BulletShapeEnum) Enum.Parse(typeof(BulletShapeEnum), lValue);
+            //    }
+            //}
             return lBSF;
         }
         public int SaveGunDB()
@@ -588,8 +589,8 @@ namespace LawlerBallisticsDesk.Classes
 
             //try
             //{
-                lGfilename = AppDataFolder + "\\GunDB.gdf";
-                lGfileBak = AppDataFolder + "\\GunDB.BAK";
+                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\GunDB.gdf";
+                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\GunDB.BAK";
                 lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
                 lGF = lGF + "<gundatabasefile>" + System.Environment.NewLine;
                 foreach (Gun lg in LawlerBallisticsFactory.MyGuns)
@@ -689,7 +690,7 @@ namespace LawlerBallisticsDesk.Classes
             string lNR;
             string lsb;
 
-            lGfilename = AppDataFolder + "\\GunDB.gdf";
+            lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\GunDB.gdf";
             lGF = File.ReadAllText(lGfilename);
             XmlDocument lXML = new XmlDocument();
 
@@ -799,8 +800,8 @@ namespace LawlerBallisticsDesk.Classes
 
             //try
             //{
-                lGfilename = AppDataFolder + "\\RecipeDB.rdf";
-                lGfileBak = AppDataFolder + "\\RecipeDB.BAK";
+                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\RecipeDB.rdf";
+                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\RecipeDB.BAK";
                 lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
                 lGF = lGF + "<recipedatabasefile>" + System.Environment.NewLine;
                 foreach (Recipe lr in LawlerBallisticsFactory.MyRecipes)
@@ -960,7 +961,7 @@ namespace LawlerBallisticsDesk.Classes
 
             //try
             //{
-                lGfilename = AppDataFolder + "\\RecipeDB.rdf";
+                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\RecipeDB.rdf";
                 lGF = File.ReadAllText(lGfilename);
                 XmlDocument lXML = new XmlDocument();
 
@@ -1216,8 +1217,8 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lGfilename = AppDataFolder + "\\BulletDB.bdf";
-                lGfileBak = AppDataFolder + "\\BulletDB.BAK";
+                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\BulletDB.bdf";
+                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\BulletDB.BAK";
                 lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
                 lGF = lGF + "<bulletdatabasefile>" + System.Environment.NewLine;
                 foreach (Bullet lg in LawlerBallisticsFactory.MyBullets)
@@ -1273,7 +1274,7 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lGfilename = AppDataFolder + "\\BulletDB.bdf";
+                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\BulletDB.bdf";
                 lGF = File.ReadAllText(lGfilename);
                 XmlDocument lXML = new XmlDocument();
 
@@ -1338,8 +1339,8 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lGfilename = AppDataFolder + "\\CaseDB.cdf";
-                lGfileBak = AppDataFolder + "\\CaseDB.BAK";
+                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\CaseDB.cdf";
+                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\CaseDB.BAK";
                 lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
                 lGF = lGF + "<casedatabasefile>" + System.Environment.NewLine;
                 foreach (Case lg in LawlerBallisticsFactory.MyCases)
@@ -1387,7 +1388,7 @@ namespace LawlerBallisticsDesk.Classes
 
             //try
             //{
-                lGfilename = AppDataFolder + "\\CaseDB.cdf";
+                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\CaseDB.cdf";
                 lGF = File.ReadAllText(lGfilename);
                 XmlDocument lXML = new XmlDocument();
 
@@ -1435,8 +1436,8 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lGfilename = AppDataFolder + "\\PrimerDB.pdf";
-                lGfileBak = AppDataFolder + "\\PrimerDB.BAK";
+                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\PrimerDB.pdf";
+                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\PrimerDB.BAK";
                 lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
                 lGF = lGF + "<primerdatabasefile>" + System.Environment.NewLine;
                 foreach (Primer lg in LawlerBallisticsFactory.MyPrimers)
@@ -1482,7 +1483,7 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lGfilename = AppDataFolder + "\\PrimerDB.pdf";
+                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\PrimerDB.pdf";
                 lGF = File.ReadAllText(lGfilename);
                 XmlDocument lXML = new XmlDocument();
 
@@ -1525,8 +1526,8 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lGfilename = AppDataFolder + "\\PowderDB.ddf";
-                lGfileBak = AppDataFolder + "\\PowderDB.BAK";
+                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\PowderDB.ddf";
+                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\PowderDB.BAK";
                 lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
                 lGF = lGF + "<powderdatabasefile>" + System.Environment.NewLine;
                 foreach (Powder lg in LawlerBallisticsFactory.MyPowders)
@@ -1572,7 +1573,7 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lGfilename = AppDataFolder + "\\PowderDB.ddf";
+                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\PowderDB.ddf";
                 lGF = File.ReadAllText(lGfilename);
                 XmlDocument lXML = new XmlDocument();
 

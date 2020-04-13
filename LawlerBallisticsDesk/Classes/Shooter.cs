@@ -42,6 +42,8 @@ namespace LawlerBallisticsDesk.Classes
         #region "Constructor"
         public Shooter()
         {
+            MyLocation = new LocationData();
+            MyLoadOut = new LoadOut();
             MyLocation.PropertyChanged += MyLocation_PropertyChanged;
             MyLoadOut.PropertyChanged += MyLoadOut_PropertyChanged;            
         }

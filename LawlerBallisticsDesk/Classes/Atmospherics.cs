@@ -50,12 +50,17 @@ namespace LawlerBallisticsDesk.Classes
         double _HumidityAbs;
         double _HumiditySpec;
         double _WindSpeed;
+        string _WindSpeedUnits;
         double _WindDirection;
+        string _WindDirTxt;
+        string _Station;
         #endregion
 
         #region "Properties"
         public double WindSpeed { get { return _WindSpeed; } set { _WindSpeed = value; RaisePropertyChanged(nameof(WindSpeed)); } }
+        public string WindSpeedUnits { get { return _WindSpeedUnits; } set { _WindSpeedUnits = value; RaisePropertyChanged(nameof(WindSpeedUnits)); } }
         public double WindDirection { get { return _WindDirection; } set { _WindDirection = value; RaisePropertyChanged(nameof(WindDirection)); } }
+        public string WindDirTxt { get { return _WindDirTxt; } set { _WindDirTxt = value; RaisePropertyChanged(nameof(WindDirTxt)); } }
         public double Temp { get { return _Temp; }
             set
             {
@@ -279,12 +284,15 @@ namespace LawlerBallisticsDesk.Classes
                 return lSOS;
             }
         }
+        public string Station { get { return _Station; } set { _Station = value; RaisePropertyChanged(nameof(Station)); } }
         #endregion
 
         #region "Constructor"
         public Atmospherics()
         {
-
+            _TempUnits = "Fahrenheit";
+            _PressureUnits = "inHg";
+            _WindSpeedUnits = "mph";
         }
         #endregion
 
@@ -343,6 +351,14 @@ namespace LawlerBallisticsDesk.Classes
             double lR = PressureKPa / 3.38639;
             return lR;
         }
+        private double hPaToInHg(double PressurehPa)
+        {
+            double lRTN = 0;
+
+            lRTN = PressurehPa * 0.02953;
+
+            return lRTN;
+        }
         private double M_S_to_fps(double MetersPerSec)
         {
             double lfps;
@@ -368,9 +384,9 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Public Routines"
-        private void GetWeather(double Latitude, double Longitude)
+        public void GetWeather(double Latitude, double Longitude)
         {
-            string lTargetFolder = LawlerBallisticsFactory.WeatherFolder + "Weather.xml";
+            string lTargetFolder = LawlerBallisticsFactory.WeatherFolder + "\\Weather.xml";
             try
             {
                 XmlDocument lWeatherXML = new XmlDocument();
@@ -385,18 +401,55 @@ namespace LawlerBallisticsDesk.Classes
                 lWeatherXML.LoadXml(lRtn);
                 lWeatherXML.Save(lTargetFolder);
                 XmlNode lCurr = lWeatherXML.SelectSingleNode("current");
-                lRtn = "temp = ";
-                XmlNode lTmpN = lCurr.SelectSingleNode("temperature");
-                lRtn = lRtn + lTmpN.Attributes["value"].Value + ", Pressure = ";
-                XmlNode lPressN = lCurr.SelectSingleNode("pressure");
-                lRtn = lRtn + lPressN.Attributes["value"].Value;
-                XmlNode lHumN = lCurr.SelectSingleNode("humidity");
+                XmlNode lNode = lCurr.SelectSingleNode("city");
+                Station = lNode.Attributes["name"].Value;
+                XmlNode lcNode = lNode.SelectSingleNode("timezone");
+                lRtn = lcNode.InnerText;
+                int lTo = Convert.ToInt32(lRtn);
+                lTo = lTo / 3600;
+                lcNode = lcNode.SelectSingleNode("sun");
+                lRtn = lcNode.Attributes["rise"].Value;
+                SunRise = ParseWeatherTime(lRtn);
+                SunRise = SunRise + lTo;
+                lRtn = lcNode.Attributes["set"].Value;
+                SunSet = ParseWeatherTime(lRtn);
+                SunSet = SunSet + lTo;
+
+                lNode = lCurr.SelectSingleNode("feels_like");
+                lRtn = lNode.Attributes["value"].Value;
+                TempFeelsLike = Convert.ToDouble(lRtn);
+                TempFeelsLikeUnits = lNode.Attributes["unit"].Value;
+
+
+
+                lNode = lCurr.SelectSingleNode("temperature");
+                lRtn = lNode.Attributes["value"].Value;
+                Temp = Convert.ToDouble(lRtn);
+                TempUnits = lNode.Attributes["unit"].Value;
+                lNode = lCurr.SelectSingleNode("pressure");
+                lRtn = lNode.Attributes["value"].Value;
+                Pressure = Convert.ToDouble(lRtn);
+                PressureUnits = lNode.Attributes["unit"].Value;
+                lNode = lCurr.SelectSingleNode("humidity");
+                lRtn = lNode.Attributes["value"].Value;
+                HumidityRel = Convert.ToDouble(lRtn);
+                lNode = lCurr.SelectSingleNode("wind");
+                lcNode = lNode.SelectSingleNode("speed");
+                lRtn = lcNode.Attributes["value"].Value;
+                WindSpeed = Convert.ToDouble(lRtn);
+                WindSpeedUnits = lcNode.Attributes["unit"].Value;
+                lcNode = lNode.SelectSingleNode("direction");
+                lRtn = lcNode.Attributes["value"].Value;
+                WindDirection = Convert.ToDouble(lRtn);
+                //TODO: convert shooter and target location to deg and get wind dir relative to flight path from here.
+                WindDirTxt = lcNode.Attributes["code"].Value;
+
                 lRtn = "";
 
             }
             catch (Exception ex)
             {
-
+                WindDirTxt = "ERR";
             }
 
         }

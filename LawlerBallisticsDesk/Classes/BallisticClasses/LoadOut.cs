@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LawlerBallisticsDesk.Classes.BallisticClasses;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace LawlerBallisticsDesk.Classes
         private double _MuzzleVelocity;
         private double _BSG;
         private double _MaxRange;
+        private ZeroData _zeroData;
         #endregion
 
         #region "Properties"
@@ -59,11 +61,15 @@ namespace LawlerBallisticsDesk.Classes
         /// </summary>
         public double BSG { get { return _BSG; } set { _BSG = value; RaisePropertyChanged(nameof(BSG)); } }
         public double MaxRange { get { return _MaxRange; } set { _MaxRange = value; RaisePropertyChanged(nameof(MaxRange)); } }
+        public ZeroData zeroData { get { return _zeroData; } set { _zeroData = value; RaisePropertyChanged(nameof(zeroData)); } }
         #endregion
 
         #region "Constructor"
         public LoadOut()
         {
+            SelectedGun = new Gun();
+            SelectedCartridge = new Recipe();
+            zeroData = new ZeroData();
             SelectedGun.PropertyChanged += SelectedGun_PropertyChanged;
             SelectedCartridge.PropertyChanged += SelectedLoadRecipe_PropertyChanged;
         }

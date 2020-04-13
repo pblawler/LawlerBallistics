@@ -64,13 +64,10 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Constructor"
-        public Scenario(Atmospherics atmospherics, Shooter shooter, ObservableCollection<Target> targets)
+        public Scenario()
         {
-            MyAtmospherics = atmospherics;
-            MyShooter = shooter;
-            Targets = targets;
-            MyShooter.MyLoadOut.BSG = BallisticFunctions.GyroscopicStability(MyShooter.MyLoadOut.SelectedCartridge.RecpBullet,
-                MyShooter.MyLoadOut.SelectedBarrel, MyShooter.MyLoadOut.MuzzleVelocity, MyAtmospherics.Temp, MyAtmospherics.Pressure);
+            MyAtmospherics = new Atmospherics();
+            MyShooter = new Shooter();
             MyAtmospherics.PropertyChanged += MyAtmospherics_PropertyChanged;
             MyShooter.PropertyChanged += MyShooter_PropertyChanged;
         }

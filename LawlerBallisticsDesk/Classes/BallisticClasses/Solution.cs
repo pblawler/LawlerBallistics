@@ -34,7 +34,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #region "Creator"
         public Solution()
         {
-
+            MyScenario = new Scenario();
+            MyBallistics = new Ballistics(MyScenario);
         }
         #endregion
     }

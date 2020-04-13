@@ -22,6 +22,8 @@ namespace LawlerBallisticsDesk.ViewModel
     public class SolutionViewModel : ViewModelBase, IDisposable
     {
         #region "Private Variables"
+        private int _ZeroMsgVal = 0;
+        private string _ZeroMsg;
         private Solution _MySolution;
         private List<string> _BulletTypes;
         private double _TestBulletWeight;
@@ -139,7 +141,6 @@ namespace LawlerBallisticsDesk.ViewModel
                 LoadCharts();
             }
         }
-        
         public ObservableCollection<TrajectoryData> MyTrajectories { get { return _MyTrajectories; } set { _MyTrajectories = value; RaisePropertyChanged(nameof(MyTrajectories)); } }
         public string ShotMsg { get { return _ShotMsg; } set { _ShotMsg = value; RaisePropertyChanged(nameof(ShotMsg)); } }
         public List<string> BarrelDirList { get { return LawlerBallisticsFactory.BarrelRiflingDirection; } }
@@ -153,9 +154,12 @@ namespace LawlerBallisticsDesk.ViewModel
         public double TestBulletLength { get { return _TestBulletLength; } set { _TestBulletLength = value; RaisePropertyChanged(nameof(TestBulletLength)); } }
         public double TestBulletBC { get { return _TestBulletBC; } set { _TestBulletBC = value; RaisePropertyChanged(nameof(TestBulletBC)); } }
         public string TestBulletType { get { return _TestBulletType; } set { _TestBulletType = value; RaisePropertyChanged(nameof(TestBulletType)); } }
+        public string ZeroMsg { get {return _ZeroMsg; } }
         #endregion
 
         #region "Relay Commands"
+        private RelayCommand _ZeroAtmosphericsCommand;
+
         public RelayCommand EstimateBCCommand { get; set; }
         public RelayCommand OpenBCestimatorCommand { get; set; }
         public RelayCommand RunPreShotCheckCommand { get; set; }
@@ -164,13 +168,21 @@ namespace LawlerBallisticsDesk.ViewModel
         public RelayCommand SaveFileAsCommand { get; set; }
         public RelayCommand OpenRangeFinderCommand { get; set; }
         public RelayCommand ZeroLocationCommand { get; set; }
-        public RelayCommand ShotLocationCommand { get; set; }        
+        public RelayCommand ShotLocationCommand { get; set; }
+        public RelayCommand ZeroAtmosphericsCommand
+        {
+            get
+            {
+                return _ZeroAtmosphericsCommand ?? (_ZeroAtmosphericsCommand = new RelayCommand(() => ZeroAtmospherics()));
+            }
+        }
         #endregion
 
         #region "Constructor"
         public SolutionViewModel()
         {
             _FileName = "";
+            MySolution = new Solution();
             _TrajectoryPlot = new PlotModel();
             _TrajectoryPlot.Title = "Trajectory";
             _WindagePlot = new PlotModel();
@@ -194,7 +206,7 @@ namespace LawlerBallisticsDesk.ViewModel
             DataPersistence lDP = new DataPersistence();
             Ballistics lBCls;
             string lf = LawlerBallisticsFactory.AppDataFolder + "\\default.bdf";
-            lBCls = lDP.ParseBallisticSolution(lf);
+            //lBCls = lDP.ParseBallisticSolution(lf);
         }
         #endregion
 
@@ -211,13 +223,13 @@ namespace LawlerBallisticsDesk.ViewModel
         }
         public void SetShooterZeroLocation(double Lat, double Lon)
         {
-            MySolution.MyScenario.MyBallisticData.zeroData.ShooterLoc.Latitude = Lat;
-            MySolution.MyScenario.MyBallisticData.zeroData.ShooterLoc.Longitude = Lon;
+            MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Latitude = Lat;
+            MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Longitude = Lon;
         }
         public void SetTargetZeroLocation(double Lat, double Lon)
         {
-            MySolution.MyScenario.MyBallisticData.zeroData.TargetLoc.Latitude = Lat;
-            MySolution.MyScenario.MyBallisticData.zeroData.TargetLoc.Longitude = Lon;
+            MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.TargetLoc.Latitude = Lat;
+            MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.TargetLoc.Longitude = Lon;
         }
         public void SetBCestimatefrm(frmBCcalculator TargetBCcalc)
         {
@@ -298,15 +310,15 @@ namespace LawlerBallisticsDesk.ViewModel
             lBSG.Title = "Gyroscopic Stability (SG)";           
             foreach (TrajectoryData lTD in _MyTrajectories)
             {
-                if (lTD.Range <= _MyBallisticsCalculator.Zone1Range)
+                if (lTD.Range <= Zone1Range)
                 {
                     lZ1.Points.Add(new DataPoint(lTD.Range, lTD.SightDelta));
                 }
-                else if ((lTD.Range > _MyBallisticsCalculator.Zone1Range) & (lTD.Range <= _MyBallisticsCalculator.Zone2Range))
+                else if ((lTD.Range > Zone1Range) & (lTD.Range <= Zone2Range))
                 {
                     lZ2.Points.Add(new DataPoint(lTD.Range, lTD.SightDelta));
                 }
-                else if ((lTD.Range > _MyBallisticsCalculator.Zone2Range) & (lTD.Range <= _MyBallisticsCalculator.Zone3Range))
+                else if ((lTD.Range > Zone2Range) & (lTD.Range <= Zone3Range))
                 {
                     lZ3.Points.Add(new DataPoint(lTD.Range, lTD.SightDelta));
                 }
@@ -505,32 +517,32 @@ namespace LawlerBallisticsDesk.ViewModel
                 lTD.MuzzleDrop = MuzzleDrop(lCR);
                 lTD.SightDelta = SightDelta(lCR);
                 lTD.Velocity = Velocity(lCR);
-                lTD.Energy = Energy(MyBallisticsCalculator.BulletWeight, lCR);
+                lTD.Energy = Energy(lCR);
                 lTD.SpinRate = SpinRate(lCR);
-                lTD.GyroStability = GyroscopicStability(Velocity(lCR), MyBallisticsCalculator.TempF, MyBallisticsCalculator.BaroPressure);
+                lTD.GyroStability = GyroscopicStability(lCR);
                 lTD.HorizDev = TotalHorizontalDrift(lCR);
                 lTD.CoriolisH = GetCoriolisHoriz(lCR);
                 lTD.CoriolisV = GetCoriolisVert(lCR);
                 lTD.SpinDrift = GetSpinDrift(lCR);
-                lTD.WindDeflect = WindDriftDegrees(WindSpeed, WindDirectionDeg, lCR);
+                lTD.WindDeflect = WindDrift(lCR);
                 lTD.FlightTime = FlightTime(lCR);
                 lCR += lDR;
                 if(lCR >= MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange)
                 {
                     lTD = new TrajectoryData();
-                    lTD.Range = MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange;
-                    lTD.MuzzleDrop = MuzzleDrop(MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange);
-                    lTD.SightDelta = SightDelta(_MyBallisticsCalculator.ShotDistance);
-                    lTD.Velocity = Velocity(_MyBallisticsCalculator.ShotDistance);
-                    lTD.Energy = Energy(MyBallisticsCalculator.BulletWeight, _MyBallisticsCalculator.ShotDistance);
-                    lTD.SpinRate = SpinRate(lCR);
-                    lTD.GyroStability = GyroscopicStability(MyBallisticsCalculator.Velocity(_MyBallisticsCalculator.ShotDistance), MyBallisticsCalculator.TempF, MyBallisticsCalculator.BaroPressure);
-                    lTD.HorizDev = TotalHorizontalDrift(_MyBallisticsCalculator.ShotDistance);
-                    lTD.CoriolisH = GetCoriolisHoriz(_MyBallisticsCalculator.ShotDistance);
-                    lTD.CoriolisV = GetCoriolisVert(_MyBallisticsCalculator.ShotDistance);
-                    lTD.SpinDrift = GetSpinDrift(_MyBallisticsCalculator.ShotDistance);
-                    lTD.WindDeflect = WindDriftDegrees(_MyBallisticsCalculator.WindSpeed, _MyBallisticsCalculator.WindDirectionDeg, _MyBallisticsCalculator.ShotDistance);
-                    lTD.FlightTime = FlightTime(_MyBallisticsCalculator.ShotDistance);
+                    lTD.Range = MaxRange;
+                    lTD.MuzzleDrop = MuzzleDrop(MaxRange);
+                    lTD.SightDelta = SightDelta(MaxRange);
+                    lTD.Velocity = Velocity(MaxRange);
+                    lTD.Energy = Energy(MaxRange);
+                    lTD.SpinRate = SpinRate(MaxRange);
+                    lTD.GyroStability = GyroscopicStability(MaxRange);
+                    lTD.HorizDev = TotalHorizontalDrift(MaxRange);
+                    lTD.CoriolisH = GetCoriolisHoriz(MaxRange);
+                    lTD.CoriolisV = GetCoriolisVert(MaxRange);
+                    lTD.SpinDrift = GetSpinDrift(MaxRange);
+                    lTD.WindDeflect = WindDrift(MaxRange);
+                    lTD.FlightTime = FlightTime(MaxRange);
                 }
                 _MyTrajectories.Add(lTD);
             }
@@ -551,7 +563,7 @@ namespace LawlerBallisticsDesk.ViewModel
             lSFD.Title = "Save Ballistic Solution";            
             if (lSFD.ShowDialog() == DialogResult.OK)
             {
-                lDP.SaveBallisticSolutionData(_MyBallisticsCalculator, lSFD.FileName);
+                lDP.SaveBallisticSolutionData(MySolution, lSFD.FileName);
             }
         }
         private void SaveFile()
@@ -562,27 +574,203 @@ namespace LawlerBallisticsDesk.ViewModel
                 return;
             }
             DataPersistence lDP = new DataPersistence();
-            lDP.SaveBallisticSolutionData(_MyBallisticsCalculator, _FileName);
+            lDP.SaveBallisticSolutionData(MySolution, _FileName);
         }
         private void ZeroLocation()
         {
             LocationFinder frmZlf = new LocationFinder();
-            frmZlf.Latitude = _MyBallisticsCalculator.zShooterLat;
-            frmZlf.Longitude = _MyBallisticsCalculator.zShooterLon;
+            frmZlf.Latitude = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Latitude;
+            frmZlf.Longitude = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Longitude;
             frmZlf.NavigateTo();
             frmZlf.Mode = "Zero";
             frmZlf.DataContext = this;
             frmZlf.Show();
         }
+        private void ZeroAtmospherics()
+        {
+            if ((MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Latitude == 0) ||
+                    (MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Longitude == 0))
+            {
+                _ZeroMsgVal = 1;
+                ParseZeroMessages();
+            }
+            else
+            {
+                MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.LoadCurrentLocationWeather();
+            }
+        }
         private void ShotLocation()
         {
             LocationFinder frmZlf = new LocationFinder();
-            frmZlf.Latitude = _MyBallisticsCalculator.ShooterLat;
-            frmZlf.Longitude = _MyBallisticsCalculator.ShooterLon;
+            frmZlf.Latitude = MySolution.MyScenario.MyShooter.MyLocation.Latitude;
+            frmZlf.Longitude = MySolution.MyScenario.MyShooter.MyLocation.Longitude;
             frmZlf.NavigateTo();
             frmZlf.Mode = "Shot";
             frmZlf.DataContext = this;
             frmZlf.Show();
+        }
+        #endregion
+
+        #region "Solution Data Aliases"
+        public double BarrelTwist { get { return MyBarrel.Twist; } }
+        public string BarrelTwistDirection { get { return MyBarrel.RiflingTwistDirection; } }
+        public double BaroPressure { get { return MyAtmospherics.Pressure; } }
+        public double BSG { get { return MySolution.MyScenario.MyShooter.MyLoadOut.BSG; } }
+        public double BulletDiameter { get { return MyBullet.Diameter; } }
+        public double BulletWeight { get { return MyBullet.Weight; } }
+        public double DensityAlt { get { return MySolution.MyScenario.MyAtmospherics.DensityAlt; } }
+        public double DensityAltAtZero { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.DensityAlt; } }
+        public double Fo { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Fo; } }
+        public double F2 { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.F2; } }
+        public double F3 { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.F3; } }
+        public double F4 { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.F4; } }
+        public double MaxRange { get { return MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange; } }
+        public double MuzzleVelocity { get { return MySolution.MyScenario.MyShooter.MyLoadOut.MuzzleVelocity; } }
+        public Atmospherics MyAtmospherics { get { return MySolution.MyScenario.MyAtmospherics; } }
+        public Barrel MyBarrel { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedBarrel; } }
+        public Bullet MyBullet { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge.RecpBullet; } }
+        public double ScopeHeight { get { return MySolution.MyScenario.MyShooter.MyLoadOut.ScopeHeight; } }
+        public double TempF { get { return MySolution.MyScenario.MyAtmospherics.Temp; } }
+        public double WindDirection { get { return MySolution.MyScenario.MyAtmospherics.WindDirection; } }
+        public double WindSpeed { get { return MySolution.MyScenario.MyAtmospherics.WindSpeed; } }
+        public double Zone1Range { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone1Range; } }
+        public double Zone1AngleFactor { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone1AngleFactor; } }
+        public double Zone1Slope { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone1Slope; } }
+        public double Zone1SlopeMultiplier { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone1SlopeMultiplier; } }
+        public double Zone1TransSpeed { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone1TransSpeed; } }
+        public double Zone2Range { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone2Range; } }
+        public double Zone2TransSpeed { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone2TransSpeed; } }
+        public double Zone3Range { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone3Range; } }
+        public double Zone3Slope { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone3Slope; } }
+        public double Zone3SlopeMultiplier { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone3SlopeMultiplier; } }
+        public double Zone3TransSpeed { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone3TransSpeed; } }
+        public LocationData ZeroTargetLoc { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.TargetLoc; } }
+        public LocationData ZeroShooterLoc { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc; } }
+        public LocationData TargetLoc { get { return MySolution.MyScenario.SelectedTarget.TargetLocation; } }
+        public LocationData ShooterLoc { get { return MySolution.MyScenario.MyShooter.MyLocation; } }
+        public double ZeroRange { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ZeroRange; } }
+        #endregion
+
+        #region "Solution Routine Aliases"
+        public double FlightTime(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.FlightTime(Range, Fo, MuzzleVelocity);
+
+            return lRTN;
+        }
+        public double GyroscopicStability(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.GyroscopicStability(MyBullet, MyBarrel, Velocity(Range), TempF, BaroPressure);
+
+            return lRTN;
+        }
+        public double SightDelta(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.SightDelta(Range, ZeroRange, ScopeHeight, MuzzleVelocity, Zone1Range, Zone2Range, Zone3Range,
+                Zone1Slope, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed,
+                Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc);
+
+            return lRTN;
+        }
+        public double GetCoriolisHoriz(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.GetCoriolisHoriz(Range, MuzzleVelocity, ZeroTargetLoc, ZeroShooterLoc,
+                TargetLoc, ShooterLoc, ZeroRange, Fo);
+
+            return lRTN;
+        }
+        public double GetCoriolisVert(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.GetCoriolisVert(Range, ZeroTargetLoc, ZeroShooterLoc,
+                TargetLoc, ShooterLoc, ZeroRange, Fo, MuzzleVelocity);
+
+            return lRTN;
+        }
+        public double GetSpinDrift(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.GetSpinDrift(Range, BarrelTwistDirection, BSG, Fo, MuzzleVelocity, ZeroRange);
+
+            return lRTN;
+        }
+        public double SpinRate(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.SpinRate(Range, MuzzleVelocity, BarrelTwist, BulletDiameter, Fo);
+
+            return lRTN;
+        }
+        public double TotalHorizontalDrift(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.TotalHorizontalDrift(Range, WindSpeed, WindDirection, MuzzleVelocity, Fo, ZeroTargetLoc,
+                ZeroShooterLoc, TargetLoc, ShooterLoc, ZeroRange, BarrelTwistDirection, BSG);
+
+            return lRTN;
+        }
+        public double Velocity(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.Velocity(MuzzleVelocity, Range, Zone1Range, Zone1TransSpeed, Fo, Zone1Slope, Zone2Range,
+                Zone2TransSpeed, F2, Zone3Range);
+
+            return lRTN;
+        }
+        public double WindDrift(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.WindDrift(WindSpeed, WindDirection, Range, Fo, MuzzleVelocity);
+
+            return lRTN;
+        }
+        public double MuzzleDrop(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.MuzzleDrop(MuzzleVelocity, Range, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope,
+                Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo,
+                F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc, ZeroRange);
+
+            return lRTN;
+        }
+        public double Energy(double Range)
+        {
+            double lRTN = 0;
+
+            lRTN = BallisticFunctions.Energy(BulletWeight, Velocity(Range));
+
+            return lRTN;
+        }
+        #endregion
+
+        #region "Zero Messages"
+        private void ParseZeroMessages()
+        {
+            switch(_ZeroMsgVal)
+            {
+                case 1:
+                    _ZeroMsg = "A shooter location must be provided before retrieving the weather data.";
+                    break;
+                default:
+                    _ZeroMsg = "";
+                    break;
+            }
+            RaisePropertyChanged(nameof(ZeroMsg));
         }
         #endregion
     }

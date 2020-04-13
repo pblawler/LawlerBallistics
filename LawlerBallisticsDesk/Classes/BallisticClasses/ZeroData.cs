@@ -22,30 +22,27 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Private Variables"
-        private LoadOut _loadOutData;
+        //private LoadOut _loadOutData;
         private Atmospherics _atmospherics;
         private LocationData _TargetLoc;
         private LocationData _ShooterLoc;
         private double _Hm;
         private double _ZeroRange;
+        private double _NearZeroRange;
+        private double _MidRange;
         private bool _UseMaxRise;
-        private DragSlopeData _dragSlopeData;
-        #endregion
-
-        #region "Private Constants"
-        private const double _GravFt = 32.17405;
-        private const double _GravIn = 386.0886;
-        private const double _G = 41.68211487;      //G = 3*(g(in/s^2)/2)^0.5 = 41.68
+        private double _PointBlankRange;
+        //private DragSlopeData _dragSlopeData;
         #endregion
 
         #region "Properties"
         public Atmospherics atmospherics { get { return _atmospherics; } set { _atmospherics = value; RaisePropertyChanged(nameof(atmospherics)); } }
-        public DragSlopeData dragSlopeData
-        {
-            get { return _dragSlopeData; }
-            set { _dragSlopeData = value; RaisePropertyChanged(nameof(dragSlopeData)); }
-        }
-        public LoadOut loadOutData { get { return _loadOutData; } set { _loadOutData = value; RaisePropertyChanged(nameof(loadOutData)); } }
+        //public DragSlopeData dragSlopeData
+        //{
+        //    get { return _dragSlopeData; }
+        //    set { _dragSlopeData = value; RaisePropertyChanged(nameof(dragSlopeData)); }
+        //}
+        //public LoadOut loadOutData { get { return _loadOutData; } set { _loadOutData = value; RaisePropertyChanged(nameof(loadOutData)); } }
         public LocationData ShooterLoc { get { return _ShooterLoc; } set { _ShooterLoc = value; RaisePropertyChanged(nameof(ShooterLoc)); } }
         public LocationData TargetLoc { get { return _TargetLoc; } set { _TargetLoc = value; RaisePropertyChanged(nameof(TargetLoc)); } }
         /// <summary>
@@ -80,15 +77,31 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 RaisePropertyChanged(nameof(ZeroRange));
             }
         }
+        public double NearZeroRange { get { return _NearZeroRange; } set { _NearZeroRange = value; RaisePropertyChanged(nameof(NearZeroRange)); } }
+        public double MidRange { get { return _MidRange; } set { _MidRange = value; RaisePropertyChanged(nameof(_MidRange)); } } 
         /// <summary>
         /// True if the zero range is to be calculated from the maximum desired rise above the sight plane
         /// on the trajectory to zero.
         /// </summary>
         public bool UseMaxRise { get { return _UseMaxRise; } set { _UseMaxRise = value; RaisePropertyChanged(nameof(UseMaxRise)); } }
+        public double PointBlankRange { get { return _PointBlankRange; } set { _PointBlankRange = value; RaisePropertyChanged(nameof(PointBlankRange)); } }
         #endregion
 
-        #region "Private Routines"
-
+        #region "Constructor"
+        public ZeroData()
+        {
+            atmospherics = new Atmospherics();
+            ShooterLoc = new LocationData();
+            TargetLoc = new LocationData();
+        }
         #endregion
+
+        #region "Public Routines"
+        public void LoadCurrentLocationWeather()
+        {
+            atmospherics.GetWeather(ShooterLoc.Latitude, ShooterLoc.Longitude);
+        }
+        #endregion
+
     }
 }

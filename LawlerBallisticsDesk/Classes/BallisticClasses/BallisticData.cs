@@ -23,12 +23,12 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
         #region "Private Variables"
         private Atmospherics _atmospherics = new Atmospherics();
-        private ZeroData _zeroData;
+       // private ZeroData _zeroData;
         private DragSlopeData _dragSlopwData;
         #endregion
 
         #region "Properties"
-        public ZeroData zeroData { get { return _zeroData; } set { _zeroData = value; RaisePropertyChanged(nameof(zeroData)); } }
+       // public ZeroData zeroData { get { return _zeroData; } set { _zeroData = value; RaisePropertyChanged(nameof(zeroData)); } }
         public DragSlopeData dragSlopeData { get { return _dragSlopwData; } set { _dragSlopwData = value; RaisePropertyChanged(nameof(dragSlopeData)); } }
         #endregion
 
