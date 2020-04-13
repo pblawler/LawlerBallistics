@@ -102,7 +102,7 @@ namespace LawlerBallisticsDesk.Views.Maps
 
         private void Label_MouseUp(object sender, MouseButtonEventArgs e)
         { 
-            BallisticsCalculatorViewModel mDC = (BallisticsCalculatorViewModel) this.DataContext;
+            SolutionViewModel mDC = (SolutionViewModel) this.DataContext;
             int lchk = 0;
             switch (Mode)
             {

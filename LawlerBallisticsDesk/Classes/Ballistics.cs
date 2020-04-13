@@ -98,23 +98,23 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Private Variables"
-
+        Scenario _MyScenario;
         #endregion
 
         #region "Public Properties"
 
-        #endregion   
+        #endregion
 
         #region "Public Routines"
         /// <summary>
-    /// The PreflightCheck returns an integer pertaining to the shot characteristics that can be
-    /// calculated with the provided data.
-    /// </summary>
-    /// <returns></returns>
+        /// The PreflightCheck returns an integer pertaining to the shot characteristics that can be
+        /// calculated with the provided data.
+        /// </summary>
+        /// <returns></returns>
         public Int16 PreflightCheck()
         {
             Int16 lRtn = 0;
-            int lFR; // Function return
+            int lFR =0; // Function return
 
             //GetWeather();
 
@@ -122,74 +122,74 @@ namespace LawlerBallisticsDesk.Classes
             // Velocity Measurements Provided = 2
             // BC and Muzzle Provided = 4
             //Check to see of Fo is directly provided or must be calculated.
-            if ((MyScenario.MyBallisticData.zeroData.dragSlopeData.Fo > 0) & (MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0))
+            if ((_MyScenario.MyBallisticData.zeroData.dragSlopeData.Fo > 0) & (_MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0))
             {
                 //Fo is provided.  Set First bit value to 1
 
                 //TODO: Calculate V1, D1, V2, D2 so BC and other calculations can be solved.
 
-                _FoCalc = true;
+                //_FoCalc = true;
                 lRtn = 1;
             }
             //Check to see if velocity-range or BC-MV method is used to find Fo.
-            if ((MyScenario.MyBallisticData.dragSlopeData.V1 > 0) & (MyScenario.MyBallisticData.dragSlopeData.V2 > 0) &
-                (MyScenario.MyBallisticData.dragSlopeData.D2 > 0))
+            if ((_MyScenario.MyBallisticData.dragSlopeData.V1 > 0) & (_MyScenario.MyBallisticData.dragSlopeData.V2 > 0) &
+                (_MyScenario.MyBallisticData.dragSlopeData.D2 > 0))
             {
                 //Actual velocities and distances provided.
                 lRtn += 2;
-                _FoCalc = true;
+                //_FoCalc = true;
             }
-            else if ((MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0) & (MyScenario.MyBallisticData.dragSlopeData.BCg1> 0))
+            else if ((_MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0) & (_MyScenario.MyBallisticData.dragSlopeData.BCg1> 0))
             {
                 //BC and Muzzle velocity rather than Velocity-Range is used to calculate Fo
                 lRtn += 4;
-                _FoCalc = true;
+                //_FoCalc = true;
             }
             if (lRtn < 1)
             {
                 //Insufficent data to produce a solution.  Must have Velocity-Range or BC-MV.
-                _FoCalc = false;
+                //_FoCalc = false;
                 lRtn = -1;
                 return lRtn;
             }
             if (lRtn == 4)
             {
-                lFR = CalculateV2FromBC();
+                //lFR = CalculateV2FromBC();
                 if (lFR != 0)
                 {
                     lRtn = -2;
                     return lRtn;
                 }
             }
-            MyScenario.MyBallisticData.dragSlopeData.Fo = CalculateFo(MyScenario.MyBallisticData.dragSlopeData.D1, 
-                MyScenario.MyBallisticData.dragSlopeData.V1, MyScenario.MyBallisticData.dragSlopeData.D2, MyScenario.MyBallisticData.dragSlopeData.V2);
-            MyScenario.MyBallisticData.dragSlopeData.BCg1 = CalculateBC(MyScenario.MyBallisticData.dragSlopeData.V1, 
-                MyScenario.MyBallisticData.dragSlopeData.V2, (MyScenario.MyBallisticData.dragSlopeData.D2 - MyScenario.MyBallisticData.dragSlopeData.D1));
-            if (MyScenario.MyBallisticData.dragSlopeData.Fo <= 0)
+            //MyScenario.MyBallisticData.dragSlopeData.Fo = CalculateFo(MyScenario.MyBallisticData.dragSlopeData.D1, 
+            //    MyScenario.MyBallisticData.dragSlopeData.V1, MyScenario.MyBallisticData.dragSlopeData.D2, MyScenario.MyBallisticData.dragSlopeData.V2);
+            //MyScenario.MyBallisticData.dragSlopeData.BCg1 = CalculateBC(MyScenario.MyBallisticData.dragSlopeData.V1, 
+            //    MyScenario.MyBallisticData.dragSlopeData.V2, (MyScenario.MyBallisticData.dragSlopeData.D2 - MyScenario.MyBallisticData.dragSlopeData.D1));
+            if (_MyScenario.MyBallisticData.dragSlopeData.Fo <= 0)
             {
                 //Invalid Fo
                 lRtn = -3;
                 return lRtn;
             }
-            if (MyScenario.MyBallisticData.zeroData.UseMaxRise & (MyScenario.MyBallisticData.zeroData.ZeroMaxRise == 0))
+            if (_MyScenario.MyBallisticData.zeroData.UseMaxRise & (_MyScenario.MyBallisticData.zeroData.ZeroMaxRise == 0))
             {
                 //Cannot calculate sightline without a valid zero point.
                 lRtn = -8;
                 return lRtn;
             }
-            else if ((MyScenario.MyBallisticData.zeroData.UseMaxRise) & (MyScenario.MyBallisticData.zeroData.ZeroMaxRise > 0))
+            else if ((_MyScenario.MyBallisticData.zeroData.UseMaxRise) & (_MyScenario.MyBallisticData.zeroData.ZeroMaxRise > 0))
             {
-                MyScenario.MyBallisticData.zeroData.ZeroRange = CalculateZeroRange(MyScenario.MyBallisticData.zeroData.ZeroMaxRise);                
+                //MyScenario.MyBallisticData.zeroData.ZeroRange = CalculateZeroRange(MyScenario.MyBallisticData.zeroData.ZeroMaxRise);                
             }
-            if ((!MyScenario.MyBallisticData.zeroData.UseMaxRise) & (MyScenario.MyBallisticData.zeroData.ZeroRange > 0))
+            if ((!_MyScenario.MyBallisticData.zeroData.UseMaxRise) & (_MyScenario.MyBallisticData.zeroData.ZeroRange > 0))
             {
-                CalculateHm();
+                //CalculateHm();
             }
             
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             //All required data is present to calculate raw muzzle drop just counting drag and gravity.
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            if (MyScenario.MyShooter.MyLoadOut.BSG != 0)
+            if (_MyScenario.MyShooter.MyLoadOut.BSG != 0)
             {
                 //Spin Drify calculation enabled.
                 lRtn += 8;
@@ -201,19 +201,6 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Private Routines"
-        /// <summary>
-        /// Factor used to calculate Zero range, Near Zero Range, and Point-Blank-Range (PBR)
-        /// </summary>
-        /// <returns></returns>
-        private double SH()
-        {
-            double lSH;
-
-            if (MyScenario.MyBallisticData.zeroData.ZeroMaxRise == 0) return 0;
-            //SH = (1 + S/Hm)^0.5
-            lSH = Math.Pow((1 + (MyScenario.MyShooter.MyLoadOut.ScopeHeight / MyScenario.MyBallisticData.zeroData.ZeroMaxRise)), 0.5);
-            return lSH;
-        }
         #endregion
 
         #region "Constructor"

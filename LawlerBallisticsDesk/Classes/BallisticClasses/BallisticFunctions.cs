@@ -137,30 +137,16 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                     //Zone 1
                     //Fa=Fo-Zone1SlopeMultiplier*N*R
                     //Where R is in feet so we must convert yards to feet by dividing by 3.
-                    lFo = (lF + Zone1SlopeMultiplier * Zone1Slope * (Range_1 / 3));
-                    //V  = Vo(1-3RN/Fo)^2
-                    //We must convert the provided range from feet to yards
-                    // Solving for Vo we get the solution below.
-                    // MuzzleVelocity = V1 / ((1 - (Range_1 / 3) * Zone1Slope / Fo) ^ (1 / Zone1Slope))
-                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Pow((1 - (Range_1 / 3) *
-                        MyScenario.MyBallisticData.dragSlopeData.Zone1Slope /
-                        MyScenario.MyBallisticData.dragSlopeData.Fo),
-                        (1 / MyScenario.MyBallisticData.dragSlopeData.Zone1Slope)));
+                    lFo = (lF + Zone1SlopeMultiplier * Zone1Slope * (Range_1 / 3));                  
                 }
-                else if ((V1 < Zone1TransSpeed) &
-                    (V1 >= Zone2TransSpeed))
+                else if ((V1 < Zone1TransSpeed) & (V1 >= Zone2TransSpeed))
                 {
                     //Zone 2
 
                     //F is constant in Zone 2, i.e. no slope N = 0.
                     lFo = lF;
-                    //Vo = V(exp(-3R/F))
-                    //Where R is in feet so we must convert yards to feet by dividing by 3.
-                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Exp((-3 * ((Range_1 / 3) /
-                        MyScenario.MyBallisticData.dragSlopeData.Fo))));
                 }
-                else if ((V1 < Zone2TransSpeed) &
-                    (V1 >= Zone3TransSpeed))
+                else if ((V1 < Zone2TransSpeed) & (V1 >= Zone3TransSpeed))
                 {
                     //Zone 3
 
@@ -168,16 +154,9 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                     //F0 = Fa + Zone3SlopeMultiplier*N*R
                     //Where R is in feet so we must convert yards to feet by dividing by 3.
                     lFo = lF + Zone3SlopeMultiplier * Zone3Slope * (Range_1 / 3);
-                    MyScenario.MyBallisticData.dragSlopeData.F2 = lFo;
-                    MyScenario.MyBallisticData.dragSlopeData.Fo = MyScenario.MyBallisticData.dragSlopeData.F2;
-                    MyScenario.MyBallisticData.dragSlopeData.F3 = MyScenario.MyBallisticData.dragSlopeData.Fo - (MyScenario.MyBallisticData.dragSlopeData.Zone3SlopeMultiplier *
-                        MyScenario.MyBallisticData.dragSlopeData.Zone3Slope * MyScenario.MyBallisticData.dragSlopeData.Zone3Range);
-                    //V  = Vo(1-3RN/Fo)^2
-                    //We must convert the provided range from feet to yards
-                    //Solving for Vo we get the solution below.
-                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Pow((1 - (Range_1 / 3) *
-                        MyScenario.MyBallisticData.dragSlopeData.Zone3Slope / lFo),
-                        (1 / MyScenario.MyBallisticData.dragSlopeData.Zone3Slope)));
+                    //F2 = lFo;
+                    //Fo = F2;
+                    //F3 = Fo - (Zone3SlopeMultiplier * Zone3Slope * Zone3Range);
                 }
                 else
                 {
@@ -185,7 +164,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
                     //F is constant in Zone 4
                     lFo = lF;
-                    MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = V1 / (Math.Exp((-3 * ((Range_1 / 3) / MyScenario.MyBallisticData.dragSlopeData.Fo))));
                 }
 
                 return lFo;
@@ -527,6 +505,43 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             lMR = Fo / 1.5;
             return lMR;
         }
+        public static double MuzzleVelocity(double Velocity_1, double Range_1, double Fo, double Zone1Slope, double Zone1TransSpeed,
+            double Zone2TransSpeed, double Zone3Slope, double Zone3TransSpeed)
+        {
+            double lRTN = 0;
+
+            if (Velocity_1 >= Zone1TransSpeed)
+            {
+                //Zone 1
+                //V  = Vo(1-3RN/Fo)^2
+                //We must convert the provided range from feet to yards
+                // Solving for Vo we get the solution below.
+                // MuzzleVelocity = V1 / ((1 - (Range_1 / 3) * Zone1Slope / Fo) ^ (1 / Zone1Slope))
+                lRTN = Velocity_1 / (Math.Pow((1 - (Range_1 / 3) * Zone1Slope / Fo), (1 / Zone1Slope)));
+            }
+            else if ((Velocity_1 < Zone1TransSpeed) & (Velocity_1 >= Zone2TransSpeed))
+            {
+                //Zone 2
+                //Vo = V(exp(-3R/F))
+                //Where R is in feet so we must convert yards to feet by dividing by 3.
+                lRTN = Velocity_1 / (Math.Exp((-3 * ((Range_1 / 3) / Fo))));
+            }
+            else if ((Velocity_1 < Zone2TransSpeed) & (Velocity_1 >= Zone3TransSpeed))
+            {
+                //Zone 3
+                //V  = Vo(1-3RN/Fo)^2
+                //We must convert the provided range from feet to yards
+                //Solving for Vo we get the solution below.
+                lRTN = Velocity_1 / (Math.Pow((1 - (Range_1 / 3) * Zone3Slope / Fo), (1 / Zone3Slope)));
+            }
+            else
+            {
+                //Zone 4
+                lRTN = Velocity_1 / (Math.Exp((-3 * ((Range_1 / 3) / Fo))));
+            }
+
+                return lRTN;
+        }
         /// <summary>
         /// Caclulates the bullet velocity at the provided range.
         /// </summary>
@@ -584,6 +599,43 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             }
 
             return lVd;
+        }
+        /// <summary>
+        /// Midrange where PBR height (Hm) or maximum rise occurs
+        /// </summary>
+        public static double MidRange(double MuzzleVelocity, double MaxRise, double ScopeHeight, double Fo)
+        {
+            double lMR;
+
+            //M = 1/(((G/Vo)/((Hm+S)^0.5)) + 2/Fo)
+            lMR = 1 / (((G / MuzzleVelocity) / (Math.Pow((MaxRise + ScopeHeight), 0.5))) + 2 / Fo); ;
+            return lMR;
+        }
+        /// <summary>
+        /// Calculate Point Blank Range Distance
+        /// </summary>
+        public static double PointBlankRange(double MaxRise, double MidRange, double ScopeHeight, double Fo)
+        {
+            double lSQ; double lP;
+
+            //P = (1 + SQ)/(1/Fo + SQ/M)
+            //SQ  = SH/2^0.5
+            lSQ = SH(MaxRise,ScopeHeight) / (Math.Pow(2, 0.5));
+            lP = (1 + lSQ) / ((1 / Fo) + (lSQ / MidRange));
+
+            return lP;
+        }
+        /// <summary>
+        /// The near range where the bullet crosses the sight plane on the way to the far zero vertical deviation.
+        /// </summary>
+        public static double ZeroNearRange(double MaxRise, double ScopeHeight, double MidRange, double Fo)
+        {
+            double lNZ;
+
+            //Zn = (1 - SH) / (1 / Fo - SH / M)
+            lNZ = (1 - SH(MaxRise, ScopeHeight)) / ((1 / Fo) - (SH(MaxRise, ScopeHeight) / MidRange));
+
+            return lNZ;
         }
         #endregion
 
@@ -881,13 +933,13 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// </summary>
         /// <param name="Hm">The maximum rise above the sight plan between the muzzle and zero range.</param>
         /// <returns>Zero Range (yrds)</returns>
-        public static double CalculateZeroRange()
+        public static double CalculateZeroRange(double Fo, double MidRange, double ZeroMaxRise, double ScopeHeight)
         {
             double lZ;
 
-            if ((SH() == 0) || (MyScenario.MyBallisticData.zeroData.MidRange == 0)) return 0;
+            if (SH(ZeroMaxRise, ScopeHeight) == 0) return 0;
             //Z = (1+SH)/(1/Fo + SH/M)
-            lZ = (1 + SH()) / ((1 / MyScenario.MyBallisticData.dragSlopeData.Fo) + (SH() / MyScenario.MyBallisticData.zeroData.MidRange));
+            lZ = (1 + SH(ZeroMaxRise,ScopeHeight)) / ((1 / Fo) + (SH(ZeroMaxRise, ScopeHeight) / MidRange));
             return lZ;
         }
         #endregion
@@ -1085,6 +1137,19 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 lDrift = lDrift * (-1);
             }
             return lDrift;
+        }
+        /// <summary>
+        /// Factor used to calculate Zero range, Near Zero Range, and Point-Blank-Range (PBR)
+        /// </summary>
+        /// <returns></returns>
+        private static double SH(double ZeroMaxRise, double ScopeHeight)
+        {
+            double lSH;
+
+            if (ZeroMaxRise == 0) return 0;
+            //SH = (1 + S/Hm)^0.5
+            lSH = Math.Pow((1 + (ScopeHeight / ZeroMaxRise)), 0.5);
+            return lSH;
         }
         #endregion
 

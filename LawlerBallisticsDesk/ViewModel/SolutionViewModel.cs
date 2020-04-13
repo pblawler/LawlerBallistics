@@ -19,10 +19,10 @@ using LawlerBallisticsDesk.Classes.BallisticClasses;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
-    public class BallisticsCalculatorViewModel : ViewModelBase, IDisposable
+    public class SolutionViewModel : ViewModelBase, IDisposable
     {
         #region "Private Variables"
-        private Ballistics _MyBallisticsCalculator;
+        private Solution _MySolution;
         private List<string> _BulletTypes;
         private double _TestBulletWeight;
         private double _TestBulletDiameter;
@@ -30,7 +30,6 @@ namespace LawlerBallisticsDesk.ViewModel
         private double _TestBulletBC;
         private string _TestBulletType;
         private frmBCcalculator _frmBCcalc;
-        private string[] _BarrelDirList = new string[2] { "R", "L" };
         private string _ShotMsg;
         private string _FileName;
         private PlotModel _TrajectoryPlot;
@@ -46,6 +45,7 @@ namespace LawlerBallisticsDesk.ViewModel
         #endregion
 
         #region "Properties"
+        public Solution MySolution { get { return _MySolution; } set { _MySolution = value; RaisePropertyChanged(nameof(MySolution)); } }
         public PlotModel TrajectoryPlot { get { return _TrajectoryPlot; } }
         public PlotModel WindagePlot { get { return _WindagePlot; } }
         public bool PlotWindDrift
@@ -142,8 +142,7 @@ namespace LawlerBallisticsDesk.ViewModel
         
         public ObservableCollection<TrajectoryData> MyTrajectories { get { return _MyTrajectories; } set { _MyTrajectories = value; RaisePropertyChanged(nameof(MyTrajectories)); } }
         public string ShotMsg { get { return _ShotMsg; } set { _ShotMsg = value; RaisePropertyChanged(nameof(ShotMsg)); } }
-        public string[] BarrelDirList { get { return _BarrelDirList; } }
-        public Ballistics MyBallisticsCalculator { get { return _MyBallisticsCalculator; } }
+        public List<string> BarrelDirList { get { return LawlerBallisticsFactory.BarrelRiflingDirection; } }
         public List<string> BulletTypes { get { return _BulletTypes; } }
         public double TestBulletWeight {
             get { return _TestBulletWeight; } 
@@ -169,7 +168,7 @@ namespace LawlerBallisticsDesk.ViewModel
         #endregion
 
         #region "Constructor"
-        public BallisticsCalculatorViewModel()
+        public SolutionViewModel()
         {
             _FileName = "";
             _TrajectoryPlot = new PlotModel();
@@ -194,34 +193,31 @@ namespace LawlerBallisticsDesk.ViewModel
             ShotLocationCommand = new RelayCommand(ShotLocation, null);
             DataPersistence lDP = new DataPersistence();
             Ballistics lBCls;
-            string lf = lDP.AppDataFolder + "\\default.bdf";
+            string lf = LawlerBallisticsFactory.AppDataFolder + "\\default.bdf";
             lBCls = lDP.ParseBallisticSolution(lf);
-            _MyBallisticsCalculator = lBCls;
-            if (_MyBallisticsCalculator.ShotDistance == 0) _MyBallisticsCalculator.ShotDistance = _MyBallisticsCalculator.MaxRange() * 0.75;
-            Shoot();
         }
         #endregion
 
         #region "Public Routines"      
         public void SetShooterLocation(double Lat, double Lon)
         {
-            _MyBallisticsCalculator.ShooterLat = Lat;
-            _MyBallisticsCalculator.ShooterLon = Lon;
+            MySolution.MyScenario.MyShooter.MyLocation.Latitude = Lat;
+            MySolution.MyScenario.MyShooter.MyLocation.Longitude = Lon;
         }
         public void SetTargetLocation(double Lat, double Lon)
         {
-            _MyBallisticsCalculator.TargetLat = Lat;
-            _MyBallisticsCalculator.TargetLon = Lon;
+            MySolution.MyScenario.SelectedTarget.TargetLocation.Latitude = Lat;
+            MySolution.MyScenario.SelectedTarget.TargetLocation.Longitude = Lon;
         }
         public void SetShooterZeroLocation(double Lat, double Lon)
         {
-            _MyBallisticsCalculator.zShooterLat = Lat;
-            _MyBallisticsCalculator.zShooterLon = Lon;
+            MySolution.MyScenario.MyBallisticData.zeroData.ShooterLoc.Latitude = Lat;
+            MySolution.MyScenario.MyBallisticData.zeroData.ShooterLoc.Longitude = Lon;
         }
         public void SetTargetZeroLocation(double Lat, double Lon)
         {
-            _MyBallisticsCalculator.zTargetLat = Lat;
-            _MyBallisticsCalculator.zTargetLon = Lon;
+            MySolution.MyScenario.MyBallisticData.zeroData.TargetLoc.Latitude = Lat;
+            MySolution.MyScenario.MyBallisticData.zeroData.TargetLoc.Longitude = Lon;
         }
         public void SetBCestimatefrm(frmBCcalculator TargetBCcalc)
         {
@@ -444,7 +440,7 @@ namespace LawlerBallisticsDesk.ViewModel
             _frmBCcalc.txtBulletDia.GetBindingExpression(System.Windows.Controls.TextBox.TextProperty).UpdateSource();
             _frmBCcalc.txtBulletWt.GetBindingExpression(System.Windows.Controls.TextBox.TextProperty).UpdateSource();
             lShape = (BulletShapeEnum) Enum.Parse(typeof(BulletShapeEnum), _TestBulletType);
-            lBC = MyBallisticsCalculator.EstimateBC(_TestBulletWeight, _TestBulletDiameter, lShape);
+            lBC = BallisticFunctions.EstimateBC(_TestBulletWeight, _TestBulletDiameter, lShape);
             _TestBulletBC = Math.Round(lBC,4);
             RaisePropertyChanged(nameof(TestBulletBC));
         }
@@ -462,7 +458,7 @@ namespace LawlerBallisticsDesk.ViewModel
         {
             int lRtn;
 
-            lRtn = _MyBallisticsCalculator.PreflightCheck();
+            lRtn = MySolution.MyBallistics.PreflightCheck();
             PostFlightCheck(lRtn);
         }
         private void PostFlightCheck(int FightCheckReturn)
@@ -493,7 +489,7 @@ namespace LawlerBallisticsDesk.ViewModel
             double lCR; //Current Range.
             TrajectoryData lTD;
 
-            lRtn = _MyBallisticsCalculator.PreflightCheck();
+            lRtn = MySolution.MyBallistics.PreflightCheck();
             if (lRtn < 0)
             {
                 PostFlightCheck(lRtn);
@@ -502,39 +498,39 @@ namespace LawlerBallisticsDesk.ViewModel
             lDR = 1;
             lCR = lDR;
             _MyTrajectories = new ObservableCollection<TrajectoryData>();
-            while(lCR < _MyBallisticsCalculator.ShotDistance)
+            while(lCR < MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange)
             {
                 lTD = new TrajectoryData();
                 lTD.Range = lCR;
-                lTD.MuzzleDrop = MyBallisticsCalculator.MuzzleDrop(lCR);
-                lTD.SightDelta = MyBallisticsCalculator.SightDelta(lCR);
-                lTD.Velocity = MyBallisticsCalculator.Velocity(lCR);
-                lTD.Energy = MyBallisticsCalculator.Energy(MyBallisticsCalculator.BulletWeight, lCR);
-                lTD.SpinRate = MyBallisticsCalculator.SpinRate(lCR);
-                lTD.GyroStability = BallisticFunctions.GyroscopicStability(MyBallisticsCalculator.Velocity(lCR), MyBallisticsCalculator.TempF, MyBallisticsCalculator.BaroPressure);
-                lTD.HorizDev = MyBallisticsCalculator.TotalHorizontalDrift(lCR);
-                lTD.CoriolisH = MyBallisticsCalculator.GetCoriolisHoriz(lCR);
-                lTD.CoriolisV = MyBallisticsCalculator.GetCoriolisVert(lCR);
-                lTD.SpinDrift = MyBallisticsCalculator.GetSpinDrift(lCR);
-                lTD.WindDeflect = MyBallisticsCalculator.WindDriftDegrees(_MyBallisticsCalculator.WindSpeed, _MyBallisticsCalculator.WindDirectionDeg, lCR);
-                lTD.FlightTime = MyBallisticsCalculator.FlightTime(lCR);
+                lTD.MuzzleDrop = MuzzleDrop(lCR);
+                lTD.SightDelta = SightDelta(lCR);
+                lTD.Velocity = Velocity(lCR);
+                lTD.Energy = Energy(MyBallisticsCalculator.BulletWeight, lCR);
+                lTD.SpinRate = SpinRate(lCR);
+                lTD.GyroStability = GyroscopicStability(Velocity(lCR), MyBallisticsCalculator.TempF, MyBallisticsCalculator.BaroPressure);
+                lTD.HorizDev = TotalHorizontalDrift(lCR);
+                lTD.CoriolisH = GetCoriolisHoriz(lCR);
+                lTD.CoriolisV = GetCoriolisVert(lCR);
+                lTD.SpinDrift = GetSpinDrift(lCR);
+                lTD.WindDeflect = WindDriftDegrees(WindSpeed, WindDirectionDeg, lCR);
+                lTD.FlightTime = FlightTime(lCR);
                 lCR += lDR;
-                if(lCR >= _MyBallisticsCalculator.ShotDistance)
+                if(lCR >= MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange)
                 {
                     lTD = new TrajectoryData();
-                    lTD.Range = _MyBallisticsCalculator.ShotDistance;
-                    lTD.MuzzleDrop = MyBallisticsCalculator.MuzzleDrop(_MyBallisticsCalculator.ShotDistance);
-                    lTD.SightDelta = MyBallisticsCalculator.SightDelta(_MyBallisticsCalculator.ShotDistance);
-                    lTD.Velocity = MyBallisticsCalculator.Velocity(_MyBallisticsCalculator.ShotDistance);
-                    lTD.Energy = MyBallisticsCalculator.Energy(MyBallisticsCalculator.BulletWeight, _MyBallisticsCalculator.ShotDistance);
-                    lTD.SpinRate = MyBallisticsCalculator.SpinRate(lCR);
-                    lTD.GyroStability = BallisticFunctions.GyroscopicStability(MyBallisticsCalculator.Velocity(_MyBallisticsCalculator.ShotDistance), MyBallisticsCalculator.TempF, MyBallisticsCalculator.BaroPressure);
-                    lTD.HorizDev = MyBallisticsCalculator.TotalHorizontalDrift(_MyBallisticsCalculator.ShotDistance);
-                    lTD.CoriolisH = MyBallisticsCalculator.GetCoriolisHoriz(_MyBallisticsCalculator.ShotDistance);
-                    lTD.CoriolisV = MyBallisticsCalculator.GetCoriolisVert(_MyBallisticsCalculator.ShotDistance);
-                    lTD.SpinDrift = MyBallisticsCalculator.GetSpinDrift(_MyBallisticsCalculator.ShotDistance);
-                    lTD.WindDeflect = MyBallisticsCalculator.WindDriftDegrees(_MyBallisticsCalculator.WindSpeed, _MyBallisticsCalculator.WindDirectionDeg, _MyBallisticsCalculator.ShotDistance);
-                    lTD.FlightTime = MyBallisticsCalculator.FlightTime(_MyBallisticsCalculator.ShotDistance);
+                    lTD.Range = MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange;
+                    lTD.MuzzleDrop = MuzzleDrop(MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange);
+                    lTD.SightDelta = SightDelta(_MyBallisticsCalculator.ShotDistance);
+                    lTD.Velocity = Velocity(_MyBallisticsCalculator.ShotDistance);
+                    lTD.Energy = Energy(MyBallisticsCalculator.BulletWeight, _MyBallisticsCalculator.ShotDistance);
+                    lTD.SpinRate = SpinRate(lCR);
+                    lTD.GyroStability = GyroscopicStability(MyBallisticsCalculator.Velocity(_MyBallisticsCalculator.ShotDistance), MyBallisticsCalculator.TempF, MyBallisticsCalculator.BaroPressure);
+                    lTD.HorizDev = TotalHorizontalDrift(_MyBallisticsCalculator.ShotDistance);
+                    lTD.CoriolisH = GetCoriolisHoriz(_MyBallisticsCalculator.ShotDistance);
+                    lTD.CoriolisV = GetCoriolisVert(_MyBallisticsCalculator.ShotDistance);
+                    lTD.SpinDrift = GetSpinDrift(_MyBallisticsCalculator.ShotDistance);
+                    lTD.WindDeflect = WindDriftDegrees(_MyBallisticsCalculator.WindSpeed, _MyBallisticsCalculator.WindDirectionDeg, _MyBallisticsCalculator.ShotDistance);
+                    lTD.FlightTime = FlightTime(_MyBallisticsCalculator.ShotDistance);
                 }
                 _MyTrajectories.Add(lTD);
             }
@@ -548,7 +544,7 @@ namespace LawlerBallisticsDesk.ViewModel
             DataPersistence lDP = new DataPersistence();
 
             lSFD.Filter = lDP.BallisticFileFilter;
-            lSFD.InitialDirectory = lDP.AppDataFolder;
+            lSFD.InitialDirectory = LawlerBallisticsFactory.AppDataFolder;
             lSFD.RestoreDirectory = true;
             //lSFD.CheckFileExists = true;
             lSFD.OverwritePrompt = true;

@@ -27,7 +27,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Properties"
-
+        public Scenario MyScenario { get { return _MyScenario; } set { _MyScenario = value; RaisePropertyChanged(nameof(MyScenario)); } }
+        public Ballistics MyBallistics { get { return _MyBallistics; } set { _MyBallistics = value; RaisePropertyChanged(nameof(MyBallistics)); } }
         #endregion
 
         #region "Creator"

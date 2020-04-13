@@ -102,6 +102,20 @@ namespace LawlerBallisticsDesk.Classes
         public static ObservableCollection<Case> MyCases { get { return _MyCases; } set { _MyCases = value; } }
         public static ObservableCollection<Primer> MyPrimers { get { return _MyPrimers; } set { _MyPrimers = value; } }
         public static ObservableCollection<Powder> MyPowders { get { return _MyPowders; } set { _MyPowders = value; } }
+        public static List<string> BarrelRiflingDirection
+        {
+            get
+            {
+                List<string> lBRD = new List<string>();
+                string[] values = Enum.GetNames(typeof(TwistDirection));
+                foreach (string B in values)
+                {
+                    lBRD.Add(B.ToString());
+                }
+                return lBRD;
+            }
+        }
+
         /// <summary>
         /// Used to estimate a bullet's BC and for initial Zone scale multiplier value selection.
         /// </summary>

@@ -44,7 +44,7 @@ namespace LawlerBallisticsDesk.ViewModel
             ////}
 
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<BallisticsCalculatorViewModel>();
+            SimpleIoc.Default.Register<SolutionViewModel>();
             SimpleIoc.Default.Register<CartridgesViewModel>();
             SimpleIoc.Default.Register<GunsViewModel>();
             SimpleIoc.Default.Register<RecipeViewModel>();
@@ -61,13 +61,11 @@ namespace LawlerBallisticsDesk.ViewModel
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
-        public BallisticsCalculatorViewModel BC
+        public SolutionViewModel BC
         {
             get
             {
-               
-
-                return ServiceLocator.Current.GetInstance<BallisticsCalculatorViewModel> (Guid.NewGuid().ToString());
+                return ServiceLocator.Current.GetInstance<SolutionViewModel> (Guid.NewGuid().ToString());
             }
         }
         public CartridgesViewModel CVM

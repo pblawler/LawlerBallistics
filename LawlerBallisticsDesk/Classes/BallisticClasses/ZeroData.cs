@@ -22,7 +22,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Private Variables"
-        private LoadOutData _loadOutData;
+        private LoadOut _loadOutData;
         private Atmospherics _atmospherics;
         private LocationData _TargetLoc;
         private LocationData _ShooterLoc;
@@ -45,7 +45,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             get { return _dragSlopeData; }
             set { _dragSlopeData = value; RaisePropertyChanged(nameof(dragSlopeData)); }
         }
-        public LoadOutData loadOutData { get { return _loadOutData; } set { _loadOutData = value; RaisePropertyChanged(nameof(loadOutData)); } }
+        public LoadOut loadOutData { get { return _loadOutData; } set { _loadOutData = value; RaisePropertyChanged(nameof(loadOutData)); } }
         public LocationData ShooterLoc { get { return _ShooterLoc; } set { _ShooterLoc = value; RaisePropertyChanged(nameof(ShooterLoc)); } }
         public LocationData TargetLoc { get { return _TargetLoc; } set { _TargetLoc = value; RaisePropertyChanged(nameof(TargetLoc)); } }
         /// <summary>
@@ -85,50 +85,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// on the trajectory to zero.
         /// </summary>
         public bool UseMaxRise { get { return _UseMaxRise; } set { _UseMaxRise = value; RaisePropertyChanged(nameof(UseMaxRise)); } }
-        /// <summary>
-        /// Midrange where PBR height (Hm) or maximum rise occurs
-        /// </summary>
-        public double MidRange
-        {
-            get
-            {
-                double lMR;
-                //M = 1/(((G/Vo)/((Hm+S)^0.5)) + 2/Fo)
-                lMR = 1 / (((_G /loadOutData.MuzzleVelocity) / (Math.Pow((_Hm + loadOutData.ScopeHeight), 0.5))) + 2 / Fo); ;
-                return lMR;
-            }
-        }
-        /// <summary>
-        /// Calculate Point Blank Range Distance
-        /// </summary>
-        public double PointBlankRange
-        {
-            get
-            {
-                double lSQ; double lP;
-
-                //P = (1 + SQ)/(1/Fo + SQ/M)
-                //SQ  = SH/2^0.5
-                lSQ = SH() / (Math.Pow(2, 0.5));
-                lP = (1 + lSQ) / ((1 / Fo) + (lSQ / MidRange));
-                return lP;
-            }
-        }
-        /// <summary>
-        /// The near range where the bullet crosses the sight plane on the way to the far zero vertical deviation.
-        /// </summary>
-        public double ZeroNearRange
-        {
-            get
-            {
-                double lNZ;
-
-                //Zn = (1 - SH) / (1 / Fo - SH / M)
-                lNZ = (1 - SH()) / ((1 / Fo) - (SH() / MidRange));
-
-                return lNZ;
-            }
-        }
         #endregion
 
         #region "Private Routines"

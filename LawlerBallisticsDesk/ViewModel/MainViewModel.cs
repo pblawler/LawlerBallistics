@@ -36,7 +36,7 @@ namespace LawlerBallisticsDesk.ViewModel
         {
             frmBCcalculator lBCform = new frmBCcalculator();
             lBCform.Show();
-            BallisticsCalculatorViewModel bcvm = (BallisticsCalculatorViewModel)lBCform.DataContext;
+            SolutionViewModel bcvm = (SolutionViewModel)lBCform.DataContext;
             bcvm.SetBCestimatefrm(lBCform);
         }
         private void OpenBcalculator()

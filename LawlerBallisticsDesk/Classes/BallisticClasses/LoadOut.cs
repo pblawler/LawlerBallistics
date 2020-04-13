@@ -37,6 +37,7 @@ namespace LawlerBallisticsDesk.Classes
         private double _ScopeHeight;
         private double _MuzzleVelocity;
         private double _BSG;
+        private double _MaxRange;
         #endregion
 
         #region "Properties"
@@ -57,6 +58,7 @@ namespace LawlerBallisticsDesk.Classes
         /// Bullet stability factor
         /// </summary>
         public double BSG { get { return _BSG; } set { _BSG = value; RaisePropertyChanged(nameof(BSG)); } }
+        public double MaxRange { get { return _MaxRange; } set { _MaxRange = value; RaisePropertyChanged(nameof(MaxRange)); } }
         #endregion
 
         #region "Constructor"
