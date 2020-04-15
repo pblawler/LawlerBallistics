@@ -19,6 +19,19 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+        private void atmospherics_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaisePropertyChanged(nameof(atmospherics));
+            switch (e.PropertyName)
+            {
+                case "Message":
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         #endregion
 
         #region "Private Variables"
@@ -32,6 +45,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         private double _MidRange;
         private bool _UseMaxRise;
         private double _PointBlankRange;
+        private string _Message;
+        private string[] _MsgQ = new string[12];
         //private DragSlopeData _dragSlopeData;
         #endregion
 
@@ -85,12 +100,15 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// </summary>
         public bool UseMaxRise { get { return _UseMaxRise; } set { _UseMaxRise = value; RaisePropertyChanged(nameof(UseMaxRise)); } }
         public double PointBlankRange { get { return _PointBlankRange; } set { _PointBlankRange = value; RaisePropertyChanged(nameof(PointBlankRange)); } }
+        public string Message { get { return _Message; } }
         #endregion
 
         #region "Constructor"
         public ZeroData()
         {
+            _Message = "";
             atmospherics = new Atmospherics();
+            atmospherics.PropertyChanged += atmospherics_PropertyChanged;
             ShooterLoc = new LocationData();
             TargetLoc = new LocationData();
         }
@@ -100,6 +118,33 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         public void LoadCurrentLocationWeather()
         {
             atmospherics.GetWeather(ShooterLoc.Latitude, ShooterLoc.Longitude);
+        }
+        #endregion
+
+        #region "Private Routines"
+        private void LoadMessage(string msg)
+        {
+            string lmsg = "";
+
+            for (int I = 11; I > 0; I--)
+            {
+                _MsgQ[I] = _MsgQ[I - 1];
+            }
+            _MsgQ[0] = msg;
+            for (int I = 0; I < 12; I++)
+            {
+                lmsg = lmsg + _MsgQ[I] + System.Environment.NewLine;
+            }
+            _Message = lmsg;
+            RaisePropertyChanged(nameof(Message));
+
+        }
+        #endregion
+
+        #region "Destructor"
+        ~ZeroData()
+        {
+            atmospherics.PropertyChanged -= atmospherics_PropertyChanged;
         }
         #endregion
 

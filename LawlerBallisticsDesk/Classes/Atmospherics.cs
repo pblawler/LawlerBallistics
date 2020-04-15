@@ -44,6 +44,8 @@ namespace LawlerBallisticsDesk.Classes
         double _DensityAlt;
         double _Temp;
         string _TempUnits;
+        double _FeelsLike;
+        string _FeelsLikeUnits;
         double _Pressure;
         string _PressureUnits;
         double _HumidityRel;
@@ -54,6 +56,11 @@ namespace LawlerBallisticsDesk.Classes
         double _WindDirection;
         string _WindDirTxt;
         string _Station;
+        DateTime _Sunrise;
+        DateTime _SunSet;
+        DateTime _LastUpdated;
+        string _Precipitation;
+        string _Weather;
         #endregion
 
         #region "Properties"
@@ -73,6 +80,22 @@ namespace LawlerBallisticsDesk.Classes
         /// F, C, K
         /// </summary>
         public string TempUnits { get { return _TempUnits; } set { _TempUnits = value; RaisePropertyChanged(nameof(TempUnits)); } }
+        public double FeelsLike
+        {
+            get { return _FeelsLike; }
+            set
+            {
+                _FeelsLike = value;
+                //TODO: recalculate density alt here
+                _DensityAlt = 0;
+                
+                RaisePropertyChanged(nameof(Temp));
+            }
+        }
+        /// <summary>
+        /// F, C, K
+        /// </summary>
+        public string FeelsLikeUnits { get { return _FeelsLikeUnits; } set { _FeelsLikeUnits = value; RaisePropertyChanged(nameof(TempUnits)); } }
         public double Pressure 
         {
             get
@@ -285,6 +308,11 @@ namespace LawlerBallisticsDesk.Classes
             }
         }
         public string Station { get { return _Station; } set { _Station = value; RaisePropertyChanged(nameof(Station)); } }
+        public DateTime SunRise { get { return _Sunrise; } set { _Sunrise = value; RaisePropertyChanged(nameof(SunRise)); } }
+        public DateTime SunSet { get { return _SunSet; } set { _SunSet = value; RaisePropertyChanged(nameof(SunSet)); } }
+        public DateTime LastUpdated { get { return _LastUpdated; } set { _LastUpdated = value; RaisePropertyChanged(nameof(LastUpdated)); } }
+        public string Precipitation { get { return _Precipitation; } set { _Precipitation = value; RaisePropertyChanged(nameof(Precipitation)); } }
+        public string Weather { get { return _Weather; } set { _Weather = value; RaisePropertyChanged(nameof(Weather)); } }
         #endregion
 
         #region "Constructor"
@@ -381,6 +409,23 @@ namespace LawlerBallisticsDesk.Classes
             lFt = meters * 3.28084*1000;
             return lFt;
         }
+        private DateTime ParseWeatherTime(string WeatherXMLdateTimeVal)
+        {
+            DateTime lRTN = DateTime.Now;
+            string lDate;
+            string lTime;
+            string lDateTime;
+
+            lDate = WeatherXMLdateTimeVal.Substring(0, WeatherXMLdateTimeVal.IndexOf("T"));
+            lTime = WeatherXMLdateTimeVal.Substring(WeatherXMLdateTimeVal.IndexOf("T")+1);
+            lDateTime = lDate + " " + lTime;
+            lRTN = Convert.ToDateTime(lDateTime);
+            return lRTN;
+        }
+        private void PropertysChanged()
+        {
+            RaisePropertyChanged when the principle properties change
+        }
         #endregion
 
         #region "Public Routines"
@@ -407,21 +452,15 @@ namespace LawlerBallisticsDesk.Classes
                 lRtn = lcNode.InnerText;
                 int lTo = Convert.ToInt32(lRtn);
                 lTo = lTo / 3600;
-                lcNode = lcNode.SelectSingleNode("sun");
+                lcNode = lNode.SelectSingleNode("sun");
                 lRtn = lcNode.Attributes["rise"].Value;
                 SunRise = ParseWeatherTime(lRtn);
-                SunRise = SunRise + lTo;
                 lRtn = lcNode.Attributes["set"].Value;
                 SunSet = ParseWeatherTime(lRtn);
-                SunSet = SunSet + lTo;
-
                 lNode = lCurr.SelectSingleNode("feels_like");
                 lRtn = lNode.Attributes["value"].Value;
-                TempFeelsLike = Convert.ToDouble(lRtn);
-                TempFeelsLikeUnits = lNode.Attributes["unit"].Value;
-
-
-
+                FeelsLike = Convert.ToDouble(lRtn);
+                FeelsLikeUnits = lNode.Attributes["unit"].Value;
                 lNode = lCurr.SelectSingleNode("temperature");
                 lRtn = lNode.Attributes["value"].Value;
                 Temp = Convert.ToDouble(lRtn);
@@ -443,13 +482,56 @@ namespace LawlerBallisticsDesk.Classes
                 WindDirection = Convert.ToDouble(lRtn);
                 //TODO: convert shooter and target location to deg and get wind dir relative to flight path from here.
                 WindDirTxt = lcNode.Attributes["code"].Value;
-
+                lNode = lCurr.SelectSingleNode("precipitation");
+                Precipitation = lNode.Attributes["mode"].Value;
+                lNode = lCurr.SelectSingleNode("weather");
+                Weather = lNode.Attributes["value"].Value;
+                lNode = lCurr.SelectSingleNode("lastupdate");
+                lRtn = lNode.Attributes["value"].Value;
+                LastUpdated = ParseWeatherTime(lRtn);                
                 lRtn = "";
-
+                switch(PressureUnits.ToLower())
+                {
+                    case "hpa":
+                        Pressure = hPaToInHg(Pressure);
+                        PressureUnits = "inHg";
+                        break;
+                    case "kpa":
+                        Pressure = kPaToInHg(Pressure);
+                        PressureUnits = "inHg";
+                        break;
+                    default:
+                        break;
+                }
+                switch(TempUnits.ToLower().Substring(0,1))
+                {
+                    case "c":
+                        Temp = DegCtoDegF(Temp);
+                        TempUnits = "fahrenheit";
+                        break;
+                    case "k":
+                        Temp = DegKtoDegF(Temp);
+                        TempUnits = "fahrenheit";
+                        break;
+                    default:
+                        break;
+                }
+                switch (WindSpeedUnits.ToLower())
+                {
+                    //TODO: convert wind speed to mph
+                    case "ms":
+                       
+                        break;
+                    case "fps":
+                        
+                        break;
+                    default:
+                        break;
+                }
             }
             catch (Exception ex)
             {
-                WindDirTxt = "ERR";
+               WindDirTxt = "ERR";
             }
 
         }

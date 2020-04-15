@@ -10,7 +10,7 @@
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         DataContext="{Binding BC, Source={StaticResource Locator}}"        
         mc:Ignorable="d"
-        Title="Ballistic Calculator" Height="544" Width="895" Closed="Window_Closed">
+        Title="Ballistic Calculator" Height="672" Width="895" Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="33*"/>
@@ -227,6 +227,20 @@
                     </TabItem>
                     <TabItem Header="Zero Information">
                         <Grid Background="White">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="413*"/>
+                                <RowDefinition Height="129*"/>
+                            </Grid.RowDefinitions>
+                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="177" Margin="506,11,0,0" VerticalAlignment="Top" Width="346">
+                                <Label Content="Get Atmospherics" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                    FontWeight="Bold" Height="25" VerticalAlignment="Top" Width="193" Foreground="#FF1250F5" Margin="130,131,0,0">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName ="MouseUp">
+                                            <i:InvokeCommandAction Command="{Binding ZeroAtmosphericsCommand}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Label>
+                            </Border>
                             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="229" Margin="11,11,0,0" VerticalAlignment="Top" Width="465"/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="71,103,0,0" HorizontalContentAlignment="Center" 
                         TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ZeroMaxRise, UpdateSourceTrigger=PropertyChanged}"/>
@@ -255,16 +269,6 @@
                             <Label Content="Point Blank Range" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="179,140,0,0" VerticalAlignment="Top" Width="114" 
                         ToolTip="Centerline of scope to centerline of barrel." />
-                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="142" Margin="506,46,0,0" VerticalAlignment="Top" Width="346">
-                                <Label Content="Get Atmospherics" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                    FontWeight="Bold" Height="26" VerticalAlignment="Top" Width="211" Foreground="#FF1250F5" Margin="124,94,0,0">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName ="MouseUp">
-                                            <i:InvokeCommandAction Command="{Binding ZeroAtmosphericsCommand}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </Label>
-                            </Border>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="520,92,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.DensityAlt, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Density Altitude" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
@@ -277,15 +281,14 @@
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.HumidityRel, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Rel. Humidity %" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="736,62,0,0" VerticalAlignment="Top" Width="103" />
-                            <Label Content="Zero Atmospherics" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="35" Margin="506,11,0,0" VerticalAlignment="Top" Width="346" />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="520,150,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Baro Pressure" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="520,120,0,0" VerticalAlignment="Top" Width="103" />
-                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="185" Margin="507,231,0,-16" VerticalAlignment="Top" Width="346"/>
-                            <Label Content="Zero Location and Direction" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="507,201,0,0" VerticalAlignment="Top" Width="346" />
+                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="203" Margin="507,193,0,0" VerticalAlignment="Top" Width="346">
+                                <Label Content="Zero Location and Direction" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                    FontWeight="Bold" Height="30" Margin="-1,9,-1,0" VerticalAlignment="Top" Width="346" />
+                            </Border>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="557,280,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Latitude, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Shooter Lat. (DD)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
@@ -307,13 +310,16 @@
                                 FontWeight="Bold" Height="30" Margin="686,307,0,0" VerticalAlignment="Top" Width="119" 
                                 ToolTip="Centerline of scope to centerline of barrel." />
                             <Label Content="Location" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="557,370,0,0" VerticalAlignment="Top" Width="248" Foreground="#FF1250F5">
+                                FontWeight="Bold" Height="25" Margin="557,360,0,0" VerticalAlignment="Top" Width="248" Foreground="#FF1250F5">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName ="MouseUp">
                                         <i:InvokeCommandAction Command="{Binding ZeroLocationCommand}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </Label>
+                            <TextBox HorizontalAlignment="Stretch" Grid.Row="1" IsReadOnly="True"
+                                     TextWrapping="Wrap" VerticalAlignment="Stretch"
+                                     Text="{Binding ZeroMessage, Mode=OneWay}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Zone Data">

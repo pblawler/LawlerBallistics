@@ -29,5 +29,6 @@ namespace LawlerBallisticsDesk.Views.Ballistics
             this.DataContext = null;
             GC.Collect();
         }
+
     }
 }

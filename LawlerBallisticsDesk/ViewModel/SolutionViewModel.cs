@@ -23,7 +23,8 @@ namespace LawlerBallisticsDesk.ViewModel
     {
         #region "Private Variables"
         private int _ZeroMsgVal = 0;
-        private string _ZeroMsg;
+        private string[] _ZeroMsg = new string[12];
+        private string _ZeroMessage;
         private Solution _MySolution;
         private List<string> _BulletTypes;
         private double _TestBulletWeight;
@@ -154,7 +155,8 @@ namespace LawlerBallisticsDesk.ViewModel
         public double TestBulletLength { get { return _TestBulletLength; } set { _TestBulletLength = value; RaisePropertyChanged(nameof(TestBulletLength)); } }
         public double TestBulletBC { get { return _TestBulletBC; } set { _TestBulletBC = value; RaisePropertyChanged(nameof(TestBulletBC)); } }
         public string TestBulletType { get { return _TestBulletType; } set { _TestBulletType = value; RaisePropertyChanged(nameof(TestBulletType)); } }
-        public string ZeroMsg { get {return _ZeroMsg; } }
+        public string ZeroMessage { get {return _ZeroMessage; } }
+        
         #endregion
 
         #region "Relay Commands"
@@ -761,16 +763,35 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Zero Messages"
         private void ParseZeroMessages()
         {
+            string lmsg;
+
             switch(_ZeroMsgVal)
             {
                 case 1:
-                    _ZeroMsg = "A shooter location must be provided before retrieving the weather data.";
+                    lmsg = "A shooter location must be provided before retrieving the weather data.";
+                    LoadZeroMessage(lmsg);
                     break;
                 default:
-                    _ZeroMsg = "";
+                    lmsg = "";
                     break;
             }
-            RaisePropertyChanged(nameof(ZeroMsg));
+            RaisePropertyChanged(nameof(ZeroMessage));
+        }
+        private void LoadZeroMessage(string msg)
+        {
+            string lmsg="";
+
+            for (int I = 11; I > 0; I--)
+            {
+                _ZeroMsg[I] = _ZeroMsg[I - 1];
+            }
+            _ZeroMsg[0] = msg;
+            for(int I=0; I < 12; I++)
+            {
+                lmsg = lmsg + _ZeroMsg[I] + System.Environment.NewLine;
+            }
+            _ZeroMessage = lmsg;
+            RaisePropertyChanged(nameof(ZeroMessage));
         }
         #endregion
     }
