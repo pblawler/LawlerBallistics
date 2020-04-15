@@ -67,6 +67,7 @@ namespace LawlerBallisticsDesk.Classes
         private static string _AppDataFolder;
         private static string _DataFolder;
         private static string _WeatherFolder;
+        private static string _DefaultDaFolder;
         #endregion
 
         #region "Properties"
@@ -83,6 +84,10 @@ namespace LawlerBallisticsDesk.Classes
         {
             get { return _WeatherFolder; }
         }
+        public static string DefaultDaFolder
+        {
+            get { return _DefaultDaFolder; }
+        }        
         public static ObservableCollection<Bullet> MyBullets { get { return _MyBullets; } set { _MyBullets = value; } }
         public static ObservableCollection<Cartridge> MyCartridges { get { return _MyCartridges; } set { _MyCartridges = value; } }
         public static ObservableCollection<Gun> MyGuns { get { return _MyGuns; } set { _MyGuns = value; } }
@@ -115,7 +120,6 @@ namespace LawlerBallisticsDesk.Classes
                 return lBRD;
             }
         }
-
         /// <summary>
         /// Used to estimate a bullet's BC and for initial Zone scale multiplier value selection.
         /// </summary>
@@ -225,6 +229,11 @@ namespace LawlerBallisticsDesk.Classes
             if (!Directory.Exists(_WeatherFolder))
             {
                 Directory.CreateDirectory(_WeatherFolder);
+            }
+            _DefaultDaFolder = _DataFolder + "\\defaultdat";
+            if (!Directory.Exists(_DefaultDaFolder))
+            {
+                Directory.CreateDirectory(_DefaultDat);
             }
 
             _MyData = new DataPersistence();

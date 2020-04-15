@@ -31,6 +31,7 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Private Variables"
+        private string _ID;
         private Gun _SelectedGun;
         private Recipe _SelectedLoadRecipe;
         private string _BarrelID;
@@ -43,6 +44,7 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Properties"
+        public string ID { get { return _ID; } }
         public Gun SelectedGun { get { return _SelectedGun; } set { _SelectedGun = value;  } }
         public string SelectedBarrelID { get { return _BarrelID; } set { _BarrelID = value; RaisePropertyChanged(nameof(SelectedBarrelID)); } }
         public Barrel SelectedBarrel { get { return _Barrel; } }
@@ -67,6 +69,7 @@ namespace LawlerBallisticsDesk.Classes
         #region "Constructor"
         public LoadOut()
         {
+            _ID = Guid.NewGuid().ToString();
             SelectedGun = new Gun();
             SelectedCartridge = new Recipe();
             zeroData = new ZeroData();
@@ -81,6 +84,13 @@ namespace LawlerBallisticsDesk.Classes
             SelectedGun.PropertyChanged -= SelectedGun_PropertyChanged;
             SelectedCartridge.PropertyChanged -= SelectedLoadRecipe_PropertyChanged;
 
+        }
+        #endregion
+
+        #region "Public Routines"
+        public void SetID(string IDvalue)
+        {
+            _ID = IDvalue;
         }
         #endregion
     }
