@@ -279,7 +279,7 @@
                                 FontWeight="Bold" Height="30" Margin="628,62,0,0" VerticalAlignment="Top" Width="103" />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="736,92,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.HumidityRel, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Rel. Humidity %" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                            <Label Content="Rel. Humidity" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="736,62,0,0" VerticalAlignment="Top" Width="103" />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="520,150,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.Pressure, UpdateSourceTrigger=PropertyChanged}"/>

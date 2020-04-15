@@ -13,8 +13,6 @@ namespace LawlerBallisticsDesk.Classes
     public class Atmospherics : INotifyPropertyChanged
     {
 
-        //TODO: call raise property on dependent properties when independent values change
-
         #region "Binding"
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -72,7 +70,7 @@ namespace LawlerBallisticsDesk.Classes
             set
             {
                 _Temp = value;
-                _DensityAlt = 0;
+                PropertysChanged();
                 RaisePropertyChanged(nameof(Temp));
             }
         }
@@ -106,7 +104,10 @@ namespace LawlerBallisticsDesk.Classes
             {
                 _Pressure = value;
                 _DensityAlt = 0;
-                RaisePropertyChanged(nameof(Pressure)); } }
+                RaisePropertyChanged(nameof(Pressure));
+                PropertysChanged();
+            }
+        }
         /// <summary>
         /// inHg, kPa
         /// </summary>
@@ -138,19 +139,19 @@ namespace LawlerBallisticsDesk.Classes
                 return _HumidityAbs;
             }
         }
-        public double HumidityRel 
+        public double HumidityRel
         {
             get
             {
-                if( _HumidityRel > 1.0) _HumidityRel = _HumidityRel / 100.0;                
+                if (_HumidityRel > 1.0) _HumidityRel = _HumidityRel / 100.0;
                 return _HumidityRel;
             }
             set
             {
                 _HumidityRel = value;
-                _DensityAlt = 0;
-                RaisePropertyChanged(nameof(HumidityRel));
-                RaisePropertyChanged(nameof(HumidityAbs)); } }
+                PropertysChanged();
+            }
+        }
         /// <summary>
         /// In a system of moist air, the (dimensionless) ratio of the mass of water vapor to the total mass of the system.
         /// </summary>
@@ -245,8 +246,6 @@ namespace LawlerBallisticsDesk.Classes
         {
             get
             {
-                if (_DensityAlt == 0)
-                {
                     double lTv = 0;
                     double lTK = 0;
                     double lPkpa = 1;
@@ -261,6 +260,7 @@ namespace LawlerBallisticsDesk.Classes
                     {
                         lTK = DegCtoDegK(Temp);
                     }
+                   
                     if ((PressureUnits.ToLower() == "inhg")) lPkpa = InHgTokPa(Pressure);
 
                     lD = ((lPkpa * 1000) * MolecularWeightOfAir) / (_R * lTK * 1000);
@@ -268,8 +268,7 @@ namespace LawlerBallisticsDesk.Classes
                     DensityALTh = (_StandardTempK / _L) * (1 - Math.Pow(((1000 * _R * _StandardTempK * lD) / (_AirMolMass * _StandPressKpa * 1000)), ((_L * _R) / (_GoMS * MolecularWeightOfAir - _L * _R))));
                     DensityALTh = (_E * DensityALTh) / (_E - DensityALTh);
 
-                    _DensityAlt = KilometersToFeet(DensityALTh);
-                }
+                    _DensityAlt = KilometersToFeet(DensityALTh);                    
                 return _DensityAlt;
             }
             set
@@ -351,7 +350,7 @@ namespace LawlerBallisticsDesk.Classes
             lT = (T - 273.15);
             return lT;
         }
-         private double DegCtoDegK(double T)
+        private double DegCtoDegK(double T)
         {
             double lT = 0;
             lT = (T + 273.15);
@@ -424,7 +423,14 @@ namespace LawlerBallisticsDesk.Classes
         }
         private void PropertysChanged()
         {
-            RaisePropertyChanged when the principle properties change
+            RaisePropertyChanged(nameof(DensityAlt));
+            RaisePropertyChanged(nameof(WaterVaporSaturationPressure));
+            RaisePropertyChanged(nameof(WaterVaporPartialPressure));
+            RaisePropertyChanged(nameof(AirVaporMixingRatio));
+            RaisePropertyChanged(nameof(MolecularWeightOfAir));
+            RaisePropertyChanged(nameof(SpeedOfSound));
+            RaisePropertyChanged(nameof(HumidityRel));
+            RaisePropertyChanged(nameof(HumidityAbs));
         }
         #endregion
 
