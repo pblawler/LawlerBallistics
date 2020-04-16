@@ -28,7 +28,7 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Private Variables"
-
+        private string _XML_Header = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + Environment.NewLine;
         #endregion
 
         #region "Properties"
@@ -127,15 +127,15 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lCF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
+                lCF = _XML_Header;
                 lCF = lCF + "<catridgedatabasefile>" + System.Environment.NewLine;
                 foreach (Cartridge iC in LawlerBallisticsFactory.MyCartridges)
                 {
                     lCF = lCF + CartridgeDatXML(iC);
                 }
                 lCF = lCF + "</catridgedatabasefile>" + System.Environment.NewLine;
-                lCfilename = LawlerBallisticsFactory.AppDataFolder + "\\CartridgeDB.cdf";
-                lCfileBak = LawlerBallisticsFactory.AppDataFolder + "\\CartridgeDB.BAK";
+                lCfilename = LawlerBallisticsFactory.DataFolder + "\\CartridgeDB.cdf";
+                lCfileBak = LawlerBallisticsFactory.DataFolder + "\\CartridgeDB.BAK";
                 if (File.Exists(lCfilename))
                 {
                     if (File.Exists(lCfileBak))
@@ -156,8 +156,8 @@ namespace LawlerBallisticsDesk.Classes
         public ObservableCollection<Cartridge> ParseCartridgeDB(bool LoadBAK = false)
         {
             ObservableCollection<Cartridge> lRtn = new ObservableCollection<Cartridge>();
-            string lCDF = LawlerBallisticsFactory.AppDataFolder + "\\CartridgeDB.cdf";
-            if (LoadBAK) lCDF = LawlerBallisticsFactory.AppDataFolder + "\\CartridgeDB.BAK";
+            string lCDF = LawlerBallisticsFactory.DataFolder + "\\CartridgeDB.cdf";
+            if (LoadBAK) lCDF = LawlerBallisticsFactory.DataFolder + "\\CartridgeDB.BAK";
             if(!File.Exists(lCDF)&!LoadBAK)
             {
                 lRtn = ParseCartridgeDB(true);
@@ -594,9 +594,9 @@ namespace LawlerBallisticsDesk.Classes
 
             //try
             //{
-                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\GunDB.gdf";
-                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\GunDB.BAK";
-                lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
+                lGfilename = LawlerBallisticsFactory.DataFolder + "\\GunDB.gdf";
+                lGfileBak = LawlerBallisticsFactory.DataFolder + "\\GunDB.BAK";
+                lGF = _XML_Header;
                 lGF = lGF + "<gundatabasefile>" + System.Environment.NewLine;
                 foreach (Gun lg in LawlerBallisticsFactory.MyGuns)
                 {
@@ -628,7 +628,7 @@ namespace LawlerBallisticsDesk.Classes
             string lGF; // string containing gun data from file.
             Gun ltg;
 
-            lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\GunDB.gdf";
+            lGfilename = LawlerBallisticsFactory.DataFolder + "\\GunDB.gdf";
             lGF = File.ReadAllText(lGfilename);
             XmlDocument lXML = new XmlDocument();
 
@@ -650,9 +650,9 @@ namespace LawlerBallisticsDesk.Classes
 
             //try
             //{
-                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\RecipeDB.rdf";
-                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\RecipeDB.BAK";
-                lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + Environment.NewLine;
+                lGfilename = LawlerBallisticsFactory.DataFolder + "\\RecipeDB.rdf";
+                lGfileBak = LawlerBallisticsFactory.DataFolder + "\\RecipeDB.BAK";
+                lGF = _XML_Header;
                 lGF = lGF + "<recipedatabasefile>" + System.Environment.NewLine;
                 foreach (Recipe lr in LawlerBallisticsFactory.MyRecipes)
                 {
@@ -683,10 +683,11 @@ namespace LawlerBallisticsDesk.Classes
             string lGfilename;  //The path and file name of the the exported data file.
             string lGF; // string containing recipe data from file.
             string lNR;
+            Recipe ltg;
 
             //try
             //{
-                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\RecipeDB.rdf";
+                lGfilename = LawlerBallisticsFactory.DataFolder + "\\RecipeDB.rdf";
                 lGF = File.ReadAllText(lGfilename);
                 XmlDocument lXML = new XmlDocument();
 
@@ -694,236 +695,7 @@ namespace LawlerBallisticsDesk.Classes
                 XmlNode lRecipe = lXML.SelectSingleNode("recipedatabasefile");
                 foreach (XmlNode lgn in lRecipe)
                 {
-                    Recipe ltg = new Recipe();
-
-                    XmlNode lName = lgn.SelectSingleNode("name");
-                    lNR = lName.Attributes["value"].Value;
-                    ltg.Name = lNR;
-                    XmlNode lid = lgn.SelectSingleNode("id");
-                    lNR = lid.Attributes["value"].Value;
-                    ltg.ID = lNR;
-                    XmlNode lmk = lgn.SelectSingleNode("notes");
-                    lNR = lmk.Attributes["value"].Value;
-                    ltg.Notes = lNR;
-                    XmlNode lmdl = lgn.SelectSingleNode("barrelid");
-                    lNR = lmdl.Attributes["value"].Value;
-                    ltg.BarrelID = lNR;                    
-                    XmlNode ldesc = lgn.SelectSingleNode("bulletid");
-                    lNR = ldesc.Attributes["value"].Value;
-                    ltg.BulletID = lNR;
-                    ltg.RecpBullet = LawlerBallisticsFactory.GetBullet(ltg.BulletID);
-                    XmlNode lbulletsbto = lgn.SelectSingleNode("bulletsbto");
-                    lNR = lbulletsbto.Attributes["value"].Value;
-                    ltg.BulletSortBTO = Convert.ToDouble(lNR);
-                    XmlNode lbulletsoal = lgn.SelectSingleNode("bulletsoal");
-                    lNR = lbulletsoal.Attributes["value"].Value;
-                    ltg.BulletSortOAL = Convert.ToDouble(lNR);
-                    XmlNode lbulletswt = lgn.SelectSingleNode("bulletswt");
-                    lNR = lbulletswt.Attributes["value"].Value;
-                    ltg.BulletSortWt = Convert.ToDouble(lNR);
-                    XmlNode lcartid = lgn.SelectSingleNode("cartid");
-                    lNR = lcartid.Attributes["value"].Value;
-                    ltg.CartridgeID = lNR;
-                    ltg.RecpCartridge = LawlerBallisticsFactory.GetCartridge(ltg.CartridgeID);
-                    XmlNode lcaseID = lgn.SelectSingleNode("caseid");
-                    lNR = lcaseID.Attributes["value"].Value;
-                    ltg.CaseID = lNR;
-                    ltg.RecpCase = LawlerBallisticsFactory.GetCase(ltg.CaseID);
-                    XmlNode lcasetl = lgn.SelectSingleNode("casetl");
-                    lNR = lcasetl.Attributes["value"].Value;
-                    ltg.CaseTrimLength = Convert.ToDouble(lNR);
-                    lcasetl = lgn.SelectSingleNode("caseml");
-                    lNR = "";
-                    lNR = lcasetl.Attributes["value"].Value;
-                    ltg.BarrelCaseMaxLength = Convert.ToDouble(lNR);
-                    XmlNode lcbto = lgn.SelectSingleNode("cbto");
-                    lNR = lcbto.Attributes["value"].Value;
-                    ltg.CBTO = Convert.ToDouble(lNR);
-                    XmlNode lchargewt = lgn.SelectSingleNode("chargewt");
-                    lNR = lchargewt.Attributes["value"].Value;
-                    ltg.ChargeWt = Convert.ToDouble(lNR);
-                    XmlNode lcoal = lgn.SelectSingleNode("coal");
-                    lNR = lcoal.Attributes["value"].Value;
-                    ltg.COAL = Convert.ToDouble(lNR);
-                    XmlNode ldorate = lgn.SelectSingleNode("dorate");
-                    lNR = ldorate.Attributes["value"].Value;
-                    ltg.FoRate = Convert.ToDouble(lNR);
-                    XmlNode lgunid = lgn.SelectSingleNode("gunid");
-                    lNR = lgunid.Attributes["value"].Value;
-                    ltg.GunID = lNR;
-                    XmlNode lheadspace = lgn.SelectSingleNode("headspace");
-                    lNR = lheadspace.Attributes["value"].Value;
-                    ltg.HeadSpace = Convert.ToDouble(lNR);
-                    XmlNode ljump = lgn.SelectSingleNode("jump");
-                    lNR = ljump.Attributes["value"].Value;
-                    ltg.JumpDistance = Convert.ToDouble(lNR);
-                    XmlNode lneckclearance = lgn.SelectSingleNode("neckclearance");
-                    lNR = lneckclearance.Attributes["value"].Value;
-                    ltg.NeckClearance = Convert.ToDouble(lNR);
-                    XmlNode lpowderid = lgn.SelectSingleNode("powderid");
-                    lNR = lpowderid.Attributes["value"].Value;
-                    ltg.PowderID = lNR;
-                    ltg.RecpPowder = LawlerBallisticsFactory.GetPowder(ltg.PowderID);
-                    XmlNode lprimermfgr = lgn.SelectSingleNode("primerid");
-                    lNR = lprimermfgr.Attributes["value"].Value;
-                    ltg.PrimerID = lNR;
-                    ltg.RecpPrimer = LawlerBallisticsFactory.GetPrimer(ltg.PrimerID);
-
-                    ltg.Lots = new ObservableCollection<RecipeLot>();
-                    XmlNode lLots = lgn.SelectSingleNode("Lots");
-                    XmlNode lLotProp;
-                    string lLotPropVal;
-                    RecipeLot lRLC;
-                    if(lLots != null)
-                    {
-                        foreach (XmlNode lLot in lLots)
-                        {
-                            lRLC = new RecipeLot();
-                            lLotPropVal = "";
-                            lLotProp = lLot.SelectSingleNode("RecipeID");
-                            lLotPropVal = lLotProp.Attributes["value"].Value;
-                            lRLC.RecipeID = lLotPropVal;
-                            lLotPropVal = "";
-                            lLotProp = lLot.SelectSingleNode("totalcnt");
-                            lLotPropVal = lLotProp.Attributes["value"].Value;
-                            lRLC.TotalCount = Convert.ToInt32(lLotPropVal);
-                            lLotPropVal = "";
-                            lLotProp = lLot.SelectSingleNode("BulletLot");
-                            lLotPropVal = lLotProp.Attributes["value"].Value;
-                            lRLC.BulletLot = lLotPropVal;
-                            lLotPropVal = "";
-                            lLotProp = lLot.SelectSingleNode("CaseLot");
-                            lLotPropVal = lLotProp.Attributes["value"].Value;
-                            lRLC.CaseLot = lLotPropVal;
-                            lLotPropVal = "";
-                            lLotProp = lLot.SelectSingleNode("ID");
-                            lLotPropVal = lLotProp.Attributes["value"].Value;
-                            lRLC.ID = lLotPropVal;
-                            lLotPropVal = "";
-                            lLotProp = lLot.SelectSingleNode("LotDate");
-                            lLotPropVal = lLotProp.Attributes["value"].Value;
-                            lRLC.LotDate = lLotPropVal;
-                            lLotPropVal = "";
-                            lLotProp = lLot.SelectSingleNode("PowderLot");
-                            lLotPropVal = lLotProp.Attributes["value"].Value;
-                            lRLC.PowderLot = lLotPropVal;
-                            lLotPropVal = "";
-                            lLotProp = lLot.SelectSingleNode("PrimerLot");
-                            lLotPropVal = lLotProp.Attributes["value"].Value;
-                            lRLC.PrimerLot = lLotPropVal;
-                            lLotPropVal = "";
-                            lLotProp = lLot.SelectSingleNode("SerialNo");
-                            lLotPropVal = lLotProp.Attributes["value"].Value;
-                            lRLC.SerialNo = lLotPropVal;
-
-                            lRLC.Rounds = new ObservableCollection<Round>();
-                            XmlNode lRds = lLot.SelectSingleNode("rounds");
-                            XmlNode lRdprop;
-                            string lRdPropVal;
-                            Round lRnd;
-                            if (lRds != null)
-                            {
-                                foreach (XmlNode lrd in lRds)
-                                {
-                                    lRnd = new Round();
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("ID");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.ID = lRdPropVal;
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("RndNo");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.RndNo = Convert.ToInt32(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("BBTO");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.BBTO = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("BD");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.BD = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("BL");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.BL = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("BW");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.BW = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("CHS");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.CHS = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("CL");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.CL = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("CNOD");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.CNOD = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("CNID");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.CNID = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("CVW");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.CVW = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("CW");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.CW = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("PCW");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.PCW = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("CBTO");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.CBTO = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("COAL");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.COAL = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("MV");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.MV = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("VD");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.VD = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("HD");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.HD = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("VAD");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.VAD = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("HAD");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.HAD = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("RMSD");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.RMSD = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("GDV");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.GDV = Convert.ToDouble(lRdPropVal);
-                                    lRdPropVal = "";
-                                    lRdprop = lrd.SelectSingleNode("VELAD");
-                                    lRdPropVal = lRdprop.Attributes["value"].Value;
-                                    lRnd.VELAD = Convert.ToDouble(lRdPropVal);
-                                    lRLC.Rounds.Add(lRnd);
-                                }
-                            }
-                            ltg.Lots.Add(lRLC);
-                        }
-                    }
+                    ltg = LoadRecipe(lgn);
                     lLR.Add(ltg);
                 }
             //}
@@ -942,34 +714,13 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\BulletDB.bdf";
-                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\BulletDB.BAK";
-                lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
+                lGfilename = LawlerBallisticsFactory.DataFolder + "\\BulletDB.bdf";
+                lGfileBak = LawlerBallisticsFactory.DataFolder + "\\BulletDB.BAK";
+                lGF = _XML_Header;
                 lGF = lGF + "<bulletdatabasefile>" + System.Environment.NewLine;
                 foreach (Bullet lg in LawlerBallisticsFactory.MyBullets)
                 {
-                    lGF = lGF + "<bullet>" + System.Environment.NewLine;
-                    lGF = lGF + "<id value=\"" + lg.ID.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</id>" + System.Environment.NewLine;
-                    lGF = lGF + "<bcg1 value=\"" + lg.BCg1.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</bcg1>" + System.Environment.NewLine;
-                    lGF = lGF + "<bcg7 value=\"" + lg.BCg7.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</bcg7>" + System.Environment.NewLine;
-                    lGF = lGF + "<diameter value=\"" + lg.Diameter.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</diameter>" + System.Environment.NewLine;
-                    lGF = lGF + "<length value=\"" + lg.Length.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</length>" + System.Environment.NewLine;
-                    lGF = lGF + "<bto value=\"" + lg.BTO.ToString() + "\" type='double'>" + System.Environment.NewLine;
-                    lGF = lGF + "</bto>" + System.Environment.NewLine;
-                    lGF = lGF + "<model value=\"" + lg.Model.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</model>" + System.Environment.NewLine;
-                    lGF = lGF + "<manufacturer value=\"" + lg.Manufacturer.ToString() + "\" type='bytearray'>" + System.Environment.NewLine;
-                    lGF = lGF + "</manufacturer>" + System.Environment.NewLine;
-                    lGF = lGF + "<type value=\"" + lg.Type.ToString() + "\" type='bytearray'>" + System.Environment.NewLine;
-                    lGF = lGF + "</type>" + System.Environment.NewLine;
-                    lGF = lGF + "<weight value=\"" + lg.Weight.ToString() + "\" type='bytearray'>" + System.Environment.NewLine;
-                    lGF = lGF + "</weight>" + System.Environment.NewLine;
-                    lGF = lGF + "</bullet>" + System.Environment.NewLine;
+                    lGF = lGF + BulletDatXML(lg);
                 }
                 lGF = lGF + "</bulletdatabasefile>";
                 if (File.Exists(lGfilename))
@@ -995,11 +746,11 @@ namespace LawlerBallisticsDesk.Classes
             ObservableCollection<Bullet> lLR = new ObservableCollection<Bullet>();
             string lGfilename;  //The path and file name of the the exported data file.
             string lGF; // string containing recipe data from file.
-            string lNR;
+            Bullet ltg;
 
             try
             {
-                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\BulletDB.bdf";
+                lGfilename = LawlerBallisticsFactory.DataFolder + "\\BulletDB.bdf";
                 lGF = File.ReadAllText(lGfilename);
                 XmlDocument lXML = new XmlDocument();
 
@@ -1007,45 +758,7 @@ namespace LawlerBallisticsDesk.Classes
                 XmlNode lBullets = lXML.SelectSingleNode("bulletdatabasefile");
                 foreach (XmlNode lgn in lBullets)
                 {
-                    Bullet ltg = new Bullet();
-
-                    XmlNode lid = lgn.SelectSingleNode("id");
-                    lNR = lid.Attributes["value"].Value;
-                    ltg.ID = lNR;
-                    XmlNode lmk = lgn.SelectSingleNode("bcg1");
-                    lNR = lmk.Attributes["value"].Value;
-                    ltg.BCg1 = Convert.ToDouble(lNR);
-                    try
-                    {
-                        XmlNode lmkk = lgn.SelectSingleNode("bcg7");
-                        lNR = lmkk.Attributes["value"].Value;
-                        ltg.BCg7 = Convert.ToDouble(lNR);
-                    }
-                    catch
-                    {
-                        //Older file does not have BCg7
-                    }
-                    XmlNode lmdl = lgn.SelectSingleNode("diameter");
-                    lNR = lmdl.Attributes["value"].Value;
-                    ltg.Diameter = Convert.ToDouble(lNR);
-                    XmlNode ldesc = lgn.SelectSingleNode("length");
-                    lNR = ldesc.Attributes["value"].Value;
-                    ltg.Length = Convert.ToDouble(lNR);
-                    XmlNode lbto = lgn.SelectSingleNode("bto");
-                    lNR = lbto.Attributes["value"].Value;
-                    ltg.BTO = Convert.ToDouble(lNR);
-                    XmlNode lbulletsbto = lgn.SelectSingleNode("model");
-                    lNR = lbulletsbto.Attributes["value"].Value;
-                    ltg.Model = lNR;
-                    XmlNode lbulletsoal = lgn.SelectSingleNode("manufacturer");
-                    lNR = lbulletsoal.Attributes["value"].Value;
-                    ltg.Manufacturer = lNR;
-                    XmlNode lbulletswt = lgn.SelectSingleNode("type");
-                    lNR = lbulletswt.Attributes["value"].Value;
-                    ltg.Type = lNR;
-                    XmlNode lcartid = lgn.SelectSingleNode("weight");
-                    lNR = lcartid.Attributes["value"].Value;
-                    ltg.Weight = Convert.ToDouble(lNR);
+                    ltg = LoadBullet(lgn);
                     lLR.Add(ltg);
                 }
             }
@@ -1064,9 +777,9 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\CaseDB.cdf";
-                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\CaseDB.BAK";
-                lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
+                lGfilename = LawlerBallisticsFactory.DataFolder + "\\CaseDB.cdf";
+                lGfileBak = LawlerBallisticsFactory.DataFolder + "\\CaseDB.BAK";
+                lGF = _XML_Header;
                 lGF = lGF + "<casedatabasefile>" + System.Environment.NewLine;
                 foreach (Case lg in LawlerBallisticsFactory.MyCases)
                 {
@@ -1163,7 +876,7 @@ namespace LawlerBallisticsDesk.Classes
             {
                 lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\PrimerDB.pdf";
                 lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\PrimerDB.BAK";
-                lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
+                lGF = _XML_Header;
                 lGF = lGF + "<primerdatabasefile>" + System.Environment.NewLine;
                 foreach (Primer lg in LawlerBallisticsFactory.MyPrimers)
                 {
@@ -1253,7 +966,7 @@ namespace LawlerBallisticsDesk.Classes
             {
                 lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\PowderDB.ddf";
                 lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\PowderDB.BAK";
-                lGF = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + System.Environment.NewLine;
+                lGF = _XML_Header;
                 lGF = lGF + "<powderdatabasefile>" + System.Environment.NewLine;
                 foreach (Powder lg in LawlerBallisticsFactory.MyPowders)
                 {
@@ -1344,31 +1057,57 @@ namespace LawlerBallisticsDesk.Classes
 
         public int ImportCartridgeDat(string File)
         {
+            int lRTN = 0;
 
+
+
+            return lRTN;
         }
         public int ImportRecipeDat(string File)
         {
+            int lRTN = 0;
 
+
+
+            return lRTN;
         }
         public int ExportCartridgeDat(string File)
         {
+            int lRTN = 0;
 
+
+
+            return lRTN;
         }
         public int ExportRecipeDat(string File)
         {
+            int lRTN = 0;
 
+
+
+            return lRTN;
         }
         public int ExportThisRecipe(string File)
         {
+            int lRTN = 0;
 
+
+
+            return lRTN;
         }
         public int BackupAllData(string Folder)
         {
+            int lRTN = 0;
 
+
+
+            return lRTN;
         }
         #endregion
 
         #region "Private Routines"
+
+        #region "Class to XML"
         private string CartridgeDatXML(Cartridge TargetCartridge)
         {
             string lCDS;
@@ -1403,6 +1142,10 @@ namespace LawlerBallisticsDesk.Classes
             lCDS = lCDS + "</powders>" + System.Environment.NewLine;
             lCDS = lCDS + "</cartridgedata>" + Environment.NewLine;
             return lCDS;
+        }
+        private string CaseDatXML(Case TargetCase)
+        {
+
         }
         private string GunDatXML(Gun TargetGun)
         {
@@ -1486,6 +1229,35 @@ namespace LawlerBallisticsDesk.Classes
             lBDS = lBDS + "</barrel>" + Environment.NewLine;
 
             return lBDS;
+        }
+        private string BulletDatXML(Bullet TargetBullet)
+        {
+            string lRTN;
+
+            lRTN = "<bullet>" + System.Environment.NewLine;
+            lRTN = lRTN + "<id value=\"" + TargetBullet.ID.ToString() + "\" type='string'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</id>" + System.Environment.NewLine;
+            lRTN = lRTN + "<bcg1 value=\"" + TargetBullet.BCg1.ToString() + "\" type='double'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</bcg1>" + System.Environment.NewLine;
+            lRTN = lRTN + "<bcg7 value=\"" + TargetBullet.BCg7.ToString() + "\" type='double'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</bcg7>" + System.Environment.NewLine;
+            lRTN = lRTN + "<diameter value=\"" + TargetBullet.Diameter.ToString() + "\" type='double'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</diameter>" + System.Environment.NewLine;
+            lRTN = lRTN + "<length value=\"" + TargetBullet.Length.ToString() + "\" type='double'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</length>" + System.Environment.NewLine;
+            lRTN = lRTN + "<bto value=\"" + TargetBullet.BTO.ToString() + "\" type='double'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</bto>" + System.Environment.NewLine;
+            lRTN = lRTN + "<model value=\"" + TargetBullet.Model.ToString() + "\" type='string'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</model>" + System.Environment.NewLine;
+            lRTN = lRTN + "<manufacturer value=\"" + TargetBullet.Manufacturer.ToString() + "\" type='string'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</manufacturer>" + System.Environment.NewLine;
+            lRTN = lRTN + "<type value=\"" + TargetBullet.Type.ToString() + "\" type='string'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</type>" + System.Environment.NewLine;
+            lRTN = lRTN + "<weight value=\"" + TargetBullet.Weight.ToString() + "\" type='double'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</weight>" + System.Environment.NewLine;
+            lRTN = lRTN + "</bullet>" + System.Environment.NewLine;
+
+            return lRTN;
         }
         private string RecipeDatXML(Recipe TargetRecipe)
         {
@@ -1572,56 +1344,7 @@ namespace LawlerBallisticsDesk.Classes
             lRTN = lRTN + "<rounds>" + System.Environment.NewLine;
             foreach (Round lrnd in TargetLot.Rounds)
             {
-                lRTN = lRTN + "<round>" + System.Environment.NewLine;
-                lRTN = lRTN + "<ID value=\"" + lrnd.ID + "\" type=\"string\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</ID>" + System.Environment.NewLine;
-                lRTN = lRTN + "<RndNo value=\"" + lrnd.RndNo.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</RndNo>" + System.Environment.NewLine;
-                lRTN = lRTN + "<BBTO value=\"" + lrnd.BBTO.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</BBTO>" + System.Environment.NewLine;
-                lRTN = lRTN + "<BD value=\"" + lrnd.BD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</BD>" + System.Environment.NewLine;
-                lRTN = lRTN + "<BL value=\"" + lrnd.BL.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</BL>" + System.Environment.NewLine;
-                lRTN = lRTN + "<BW value=\"" + lrnd.BW.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</BW>" + System.Environment.NewLine;
-                lRTN = lRTN + "<CHS value=\"" + lrnd.CHS.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</CHS>" + System.Environment.NewLine;
-                lRTN = lRTN + "<CL value=\"" + lrnd.CL.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</CL>" + System.Environment.NewLine;
-                lRTN = lRTN + "<CNOD value=\"" + lrnd.CNOD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</CNOD>" + System.Environment.NewLine;
-                lRTN = lRTN + "<CVW value=\"" + lrnd.CVW.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</CVW>" + System.Environment.NewLine;
-                lRTN = lRTN + "<CW value=\"" + lrnd.CW.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</CW>" + System.Environment.NewLine;
-                lRTN = lRTN + "<CNID value=\"" + lrnd.CNID.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</CNID>" + System.Environment.NewLine;
-                lRTN = lRTN + "<PCW value=\"" + lrnd.PCW.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</PCW>" + System.Environment.NewLine;
-                lRTN = lRTN + "<CBTO value=\"" + lrnd.CBTO.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</CBTO>" + System.Environment.NewLine;
-                lRTN = lRTN + "<COAL value=\"" + lrnd.COAL.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</COAL>" + System.Environment.NewLine;
-                lRTN = lRTN + "<MV value=\"" + lrnd.MV.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</MV>" + System.Environment.NewLine;
-                lRTN = lRTN + "<VD value=\"" + lrnd.VD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</VD>" + System.Environment.NewLine;
-                lRTN = lRTN + "<VD value=\"" + lrnd.VD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</VD>" + System.Environment.NewLine;
-                lRTN = lRTN + "<HD value=\"" + lrnd.HD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</HD>" + System.Environment.NewLine;
-                lRTN = lRTN + "<VAD value=\"" + lrnd.VAD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</VAD>" + System.Environment.NewLine;
-                lRTN = lRTN + "<HAD value=\"" + lrnd.HAD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</HAD>" + System.Environment.NewLine;
-                lRTN = lRTN + "<RMSD value=\"" + lrnd.RMSD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</RMSD>" + System.Environment.NewLine;
-                lRTN = lRTN + "<GDV value=\"" + lrnd.GDV.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</GDV>" + System.Environment.NewLine;
-                lRTN = lRTN + "<VELAD value=\"" + lrnd.VELAD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
-                lRTN = lRTN + "</VELAD>" + System.Environment.NewLine;
-                lRTN = lRTN + "</round>" + System.Environment.NewLine;
+                lRTN = lRTN + RoundDatXML(lrnd);
             }
             lRTN = lRTN + "</rounds>" + System.Environment.NewLine;
             lRTN = lRTN + "</Lot>" + System.Environment.NewLine;
@@ -1630,8 +1353,62 @@ namespace LawlerBallisticsDesk.Classes
         }
         private string RoundDatXML(Round TargetRound)
         {
+            string lRTN;
 
+            lRTN = "<round>" + System.Environment.NewLine;
+            lRTN = lRTN + "<ID value=\"" + TargetRound.ID + "\" type=\"string\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</ID>" + System.Environment.NewLine;
+            lRTN = lRTN + "<RndNo value=\"" + TargetRound.RndNo.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</RndNo>" + System.Environment.NewLine;
+            lRTN = lRTN + "<BBTO value=\"" + TargetRound.BBTO.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</BBTO>" + System.Environment.NewLine;
+            lRTN = lRTN + "<BD value=\"" + TargetRound.BD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</BD>" + System.Environment.NewLine;
+            lRTN = lRTN + "<BL value=\"" + TargetRound.BL.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</BL>" + System.Environment.NewLine;
+            lRTN = lRTN + "<BW value=\"" + TargetRound.BW.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</BW>" + System.Environment.NewLine;
+            lRTN = lRTN + "<CHS value=\"" + TargetRound.CHS.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</CHS>" + System.Environment.NewLine;
+            lRTN = lRTN + "<CL value=\"" + TargetRound.CL.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</CL>" + System.Environment.NewLine;
+            lRTN = lRTN + "<CNOD value=\"" + TargetRound.CNOD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</CNOD>" + System.Environment.NewLine;
+            lRTN = lRTN + "<CVW value=\"" + TargetRound.CVW.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</CVW>" + System.Environment.NewLine;
+            lRTN = lRTN + "<CW value=\"" + TargetRound.CW.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</CW>" + System.Environment.NewLine;
+            lRTN = lRTN + "<CNID value=\"" + TargetRound.CNID.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</CNID>" + System.Environment.NewLine;
+            lRTN = lRTN + "<PCW value=\"" + TargetRound.PCW.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</PCW>" + System.Environment.NewLine;
+            lRTN = lRTN + "<CBTO value=\"" + TargetRound.CBTO.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</CBTO>" + System.Environment.NewLine;
+            lRTN = lRTN + "<COAL value=\"" + TargetRound.COAL.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</COAL>" + System.Environment.NewLine;
+            lRTN = lRTN + "<MV value=\"" + TargetRound.MV.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</MV>" + System.Environment.NewLine;
+            lRTN = lRTN + "<VD value=\"" + TargetRound.VD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</VD>" + System.Environment.NewLine;
+            lRTN = lRTN + "<VD value=\"" + TargetRound.VD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</VD>" + System.Environment.NewLine;
+            lRTN = lRTN + "<HD value=\"" + TargetRound.HD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</HD>" + System.Environment.NewLine;
+            lRTN = lRTN + "<VAD value=\"" + TargetRound.VAD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</VAD>" + System.Environment.NewLine;
+            lRTN = lRTN + "<HAD value=\"" + TargetRound.HAD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</HAD>" + System.Environment.NewLine;
+            lRTN = lRTN + "<RMSD value=\"" + TargetRound.RMSD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</RMSD>" + System.Environment.NewLine;
+            lRTN = lRTN + "<GDV value=\"" + TargetRound.GDV.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</GDV>" + System.Environment.NewLine;
+            lRTN = lRTN + "<VELAD value=\"" + TargetRound.VELAD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</VELAD>" + System.Environment.NewLine;
+            lRTN = lRTN + "</round>" + System.Environment.NewLine;
+
+            return lRTN;
         }
+        #endregion
 
         //private bool IsBallisticSol(string[] FileLines)
         //{
@@ -1651,6 +1428,7 @@ namespace LawlerBallisticsDesk.Classes
         //    return lRtn;
         //}
 
+        #region "XML to Class"
         private ObservableCollection<Cartridge> LoadCartridges(XmlNode Cartridges)
         {
             ObservableCollection<Cartridge> lRtn = new ObservableCollection<Cartridge>();
@@ -1817,6 +1595,300 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
+        private Bullet LoadBullet(XmlNode BulletNode)
+        {
+            Bullet lRTN = new Bullet();
+            string lNR;
+
+            XmlNode lid = BulletNode.SelectSingleNode("id");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.ID = lNR;
+            XmlNode lmk = BulletNode.SelectSingleNode("bcg1");
+            lNR = lmk.Attributes["value"].Value;
+            lRTN.BCg1 = Convert.ToDouble(lNR);
+            try
+            {
+                XmlNode lmkk = BulletNode.SelectSingleNode("bcg7");
+                lNR = lmkk.Attributes["value"].Value;
+                lRTN.BCg7 = Convert.ToDouble(lNR);
+            }
+            catch
+            {
+                //Older file does not have BCg7
+            }
+            XmlNode lmdl = BulletNode.SelectSingleNode("diameter");
+            lNR = lmdl.Attributes["value"].Value;
+            lRTN.Diameter = Convert.ToDouble(lNR);
+            XmlNode ldesc = BulletNode.SelectSingleNode("length");
+            lNR = ldesc.Attributes["value"].Value;
+            lRTN.Length = Convert.ToDouble(lNR);
+            XmlNode lbto = BulletNode.SelectSingleNode("bto");
+            lNR = lbto.Attributes["value"].Value;
+            lRTN.BTO = Convert.ToDouble(lNR);
+            XmlNode lbulletsbto = BulletNode.SelectSingleNode("model");
+            lNR = lbulletsbto.Attributes["value"].Value;
+            lRTN.Model = lNR;
+            XmlNode lbulletsoal = BulletNode.SelectSingleNode("manufacturer");
+            lNR = lbulletsoal.Attributes["value"].Value;
+            lRTN.Manufacturer = lNR;
+            XmlNode lbulletswt = BulletNode.SelectSingleNode("type");
+            lNR = lbulletswt.Attributes["value"].Value;
+            lRTN.Type = lNR;
+            XmlNode lcartid = BulletNode.SelectSingleNode("weight");
+            lNR = lcartid.Attributes["value"].Value;
+            lRTN.Weight = Convert.ToDouble(lNR);
+
+            return lRTN;
+        }
+        private Recipe LoadRecipe(XmlNode RecipeNode)
+        {
+            string lNR;
+            Recipe lRTN = new Recipe();
+
+            XmlNode lName = RecipeNode.SelectSingleNode("name");
+            lNR = lName.Attributes["value"].Value;
+            lRTN.Name = lNR;
+            XmlNode lid = RecipeNode.SelectSingleNode("id");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.ID = lNR;
+            XmlNode lmk = RecipeNode.SelectSingleNode("notes");
+            lNR = lmk.Attributes["value"].Value;
+            lRTN.Notes = lNR;
+            XmlNode lmdl = RecipeNode.SelectSingleNode("barrelid");
+            lNR = lmdl.Attributes["value"].Value;
+            lRTN.BarrelID = lNR;
+            XmlNode ldesc = RecipeNode.SelectSingleNode("bulletid");
+            lNR = ldesc.Attributes["value"].Value;
+            lRTN.BulletID = lNR;
+            lRTN.RecpBullet = LawlerBallisticsFactory.GetBullet(lRTN.BulletID);
+            XmlNode lbulletsbto = RecipeNode.SelectSingleNode("bulletsbto");
+            lNR = lbulletsbto.Attributes["value"].Value;
+            lRTN.BulletSortBTO = Convert.ToDouble(lNR);
+            XmlNode lbulletsoal = RecipeNode.SelectSingleNode("bulletsoal");
+            lNR = lbulletsoal.Attributes["value"].Value;
+            lRTN.BulletSortOAL = Convert.ToDouble(lNR);
+            XmlNode lbulletswt = RecipeNode.SelectSingleNode("bulletswt");
+            lNR = lbulletswt.Attributes["value"].Value;
+            lRTN.BulletSortWt = Convert.ToDouble(lNR);
+            XmlNode lcartid = RecipeNode.SelectSingleNode("cartid");
+            lNR = lcartid.Attributes["value"].Value;
+            lRTN.CartridgeID = lNR;
+            lRTN.RecpCartridge = LawlerBallisticsFactory.GetCartridge(lRTN.CartridgeID);
+            XmlNode lcaseID = RecipeNode.SelectSingleNode("caseid");
+            lNR = lcaseID.Attributes["value"].Value;
+            lRTN.CaseID = lNR;
+            lRTN.RecpCase = LawlerBallisticsFactory.GetCase(lRTN.CaseID);
+            XmlNode lcasetl = RecipeNode.SelectSingleNode("casetl");
+            lNR = lcasetl.Attributes["value"].Value;
+            lRTN.CaseTrimLength = Convert.ToDouble(lNR);
+            lcasetl = RecipeNode.SelectSingleNode("caseml");
+            lNR = "";
+            lNR = lcasetl.Attributes["value"].Value;
+            lRTN.BarrelCaseMaxLength = Convert.ToDouble(lNR);
+            XmlNode lcbto = RecipeNode.SelectSingleNode("cbto");
+            lNR = lcbto.Attributes["value"].Value;
+            lRTN.CBTO = Convert.ToDouble(lNR);
+            XmlNode lchargewt = RecipeNode.SelectSingleNode("chargewt");
+            lNR = lchargewt.Attributes["value"].Value;
+            lRTN.ChargeWt = Convert.ToDouble(lNR);
+            XmlNode lcoal = RecipeNode.SelectSingleNode("coal");
+            lNR = lcoal.Attributes["value"].Value;
+            lRTN.COAL = Convert.ToDouble(lNR);
+            XmlNode ldorate = RecipeNode.SelectSingleNode("dorate");
+            lNR = ldorate.Attributes["value"].Value;
+            lRTN.FoRate = Convert.ToDouble(lNR);
+            XmlNode lgunid = RecipeNode.SelectSingleNode("gunid");
+            lNR = lgunid.Attributes["value"].Value;
+            lRTN.GunID = lNR;
+            XmlNode lheadspace = RecipeNode.SelectSingleNode("headspace");
+            lNR = lheadspace.Attributes["value"].Value;
+            lRTN.HeadSpace = Convert.ToDouble(lNR);
+            XmlNode ljump = RecipeNode.SelectSingleNode("jump");
+            lNR = ljump.Attributes["value"].Value;
+            lRTN.JumpDistance = Convert.ToDouble(lNR);
+            XmlNode lneckclearance = RecipeNode.SelectSingleNode("neckclearance");
+            lNR = lneckclearance.Attributes["value"].Value;
+            lRTN.NeckClearance = Convert.ToDouble(lNR);
+            XmlNode lpowderid = RecipeNode.SelectSingleNode("powderid");
+            lNR = lpowderid.Attributes["value"].Value;
+            lRTN.PowderID = lNR;
+            lRTN.RecpPowder = LawlerBallisticsFactory.GetPowder(lRTN.PowderID);
+            XmlNode lprimermfgr = RecipeNode.SelectSingleNode("primerid");
+            lNR = lprimermfgr.Attributes["value"].Value;
+            lRTN.PrimerID = lNR;
+            lRTN.RecpPrimer = LawlerBallisticsFactory.GetPrimer(lRTN.PrimerID);
+
+            lRTN.Lots = new ObservableCollection<RecipeLot>();
+            XmlNode lLots = RecipeNode.SelectSingleNode("Lots");
+            RecipeLot lRLC;
+            if (lLots != null)
+            {
+                foreach (XmlNode lLot in lLots)
+                {
+                    lRLC = LoadRecipeLot(lLot);
+                    lRTN.Lots.Add(lRLC);
+                }
+            }
+
+            return lRTN;
+        }
+        private RecipeLot LoadRecipeLot(XmlNode RecipeLotNode)
+        {
+            string lLotPropVal;
+            RecipeLot lRTN = new RecipeLot();
+            XmlNode lLotProp;
+
+            lLotPropVal = "";
+            lLotProp = RecipeLotNode.SelectSingleNode("RecipeID");
+            lLotPropVal = lLotProp.Attributes["value"].Value;
+            lRTN.RecipeID = lLotPropVal;
+            lLotPropVal = "";
+            lLotProp = RecipeLotNode.SelectSingleNode("totalcnt");
+            lLotPropVal = lLotProp.Attributes["value"].Value;
+            lRTN.TotalCount = Convert.ToInt32(lLotPropVal);
+            lLotPropVal = "";
+            lLotProp = RecipeLotNode.SelectSingleNode("BulletLot");
+            lLotPropVal = lLotProp.Attributes["value"].Value;
+            lRTN.BulletLot = lLotPropVal;
+            lLotPropVal = "";
+            lLotProp = RecipeLotNode.SelectSingleNode("CaseLot");
+            lLotPropVal = lLotProp.Attributes["value"].Value;
+            lRTN.CaseLot = lLotPropVal;
+            lLotPropVal = "";
+            lLotProp = RecipeLotNode.SelectSingleNode("ID");
+            lLotPropVal = lLotProp.Attributes["value"].Value;
+            lRTN.ID = lLotPropVal;
+            lLotPropVal = "";
+            lLotProp = RecipeLotNode.SelectSingleNode("LotDate");
+            lLotPropVal = lLotProp.Attributes["value"].Value;
+            lRTN.LotDate = lLotPropVal;
+            lLotPropVal = "";
+            lLotProp = RecipeLotNode.SelectSingleNode("PowderLot");
+            lLotPropVal = lLotProp.Attributes["value"].Value;
+            lRTN.PowderLot = lLotPropVal;
+            lLotPropVal = "";
+            lLotProp = RecipeLotNode.SelectSingleNode("PrimerLot");
+            lLotPropVal = lLotProp.Attributes["value"].Value;
+            lRTN.PrimerLot = lLotPropVal;
+            lLotPropVal = "";
+            lLotProp = RecipeLotNode.SelectSingleNode("SerialNo");
+            lLotPropVal = lLotProp.Attributes["value"].Value;
+            lRTN.SerialNo = lLotPropVal;
+
+            lRTN.Rounds = new ObservableCollection<Round>();
+            XmlNode lRds = RecipeLotNode.SelectSingleNode("rounds");
+            Round lRnd;
+            if (lRds != null)
+            {
+                foreach (XmlNode lrd in lRds)
+                {
+                    lRnd = LoadRound(lrd);
+                    lRTN.Rounds.Add(lRnd);
+                }
+            }
+            return lRTN;
+        }
+        private Round LoadRound(XmlNode RoundNode)
+        {
+            Round lRTN = new Round();
+            XmlNode lRdprop;
+            string lRdPropVal;
+
+            lRdprop = RoundNode.SelectSingleNode("ID");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.ID = lRdPropVal;
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("RndNo");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.RndNo = Convert.ToInt32(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("BBTO");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.BBTO = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("BD");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.BD = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("BL");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.BL = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("BW");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.BW = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("CHS");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.CHS = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("CL");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.CL = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("CNOD");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.CNOD = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("CNID");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.CNID = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("CVW");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.CVW = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("CW");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.CW = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("PCW");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.PCW = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("CBTO");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.CBTO = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("COAL");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.COAL = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("MV");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.MV = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("VD");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.VD = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("HD");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.HD = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("VAD");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.VAD = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("HAD");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.HAD = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("RMSD");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.RMSD = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("GDV");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.GDV = Convert.ToDouble(lRdPropVal);
+            lRdPropVal = "";
+            lRdprop = RoundNode.SelectSingleNode("VELAD");
+            lRdPropVal = lRdprop.Attributes["value"].Value;
+            lRTN.VELAD = Convert.ToDouble(lRdPropVal);
+
+            return lRTN;
+        }
+        #endregion
         #endregion
     }
 }
