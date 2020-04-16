@@ -246,7 +246,7 @@
     <Compile Include="Classes\BallisticClasses\BallisticData.cs" />
     <Compile Include="Classes\BallisticClasses\Solution.cs" />
     <Compile Include="Classes\BallisticClasses\ZeroData.cs" />
-    <Compile Include="Classes\Ballistics.cs" />
+    <Compile Include="Classes\BallisticClasses\Ballistics.cs" />
     <Compile Include="Classes\BallisticClasses\BallisticFunctions.cs" />
     <Compile Include="Classes\Barrel.cs" />
     <Compile Include="Classes\Bullet.cs" />
@@ -265,7 +265,7 @@
     <Compile Include="Classes\PropertyChangedMsg.cs" />
     <Compile Include="Classes\Round.cs" />
     <Compile Include="Classes\BallisticClasses\Scenario.cs" />
-    <Compile Include="Classes\Shooter.cs" />
+    <Compile Include="Classes\BallisticClasses\Shooter.cs" />
     <Compile Include="Classes\Target.cs" />
     <Compile Include="Classes\TrajectoryData.cs" />
     <Compile Include="ViewModel\SolutionViewModel.cs" />

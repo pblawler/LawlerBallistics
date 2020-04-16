@@ -66,8 +66,9 @@ namespace LawlerBallisticsDesk.Classes
         private static BulletShapeEnum _BulletShapeType = new BulletShapeEnum();
         private static string _AppDataFolder;
         private static string _DataFolder;
+        private static string _BackupFolder;
         private static string _WeatherFolder;
-        private static string _DefaultDaFolder;
+        private static string _DefaultDataFolder;
         #endregion
 
         #region "Properties"
@@ -80,13 +81,17 @@ namespace LawlerBallisticsDesk.Classes
         {
             get { return _DataFolder; }
         }
+        public static string BackupFolder
+        {
+            get { return _BackupFolder; }
+        }
         public static string WeatherFolder
         {
             get { return _WeatherFolder; }
         }
-        public static string DefaultDaFolder
+        public static string DefaultDataFolder
         {
-            get { return _DefaultDaFolder; }
+            get { return _DefaultDataFolder; }
         }        
         public static ObservableCollection<Bullet> MyBullets { get { return _MyBullets; } set { _MyBullets = value; } }
         public static ObservableCollection<Cartridge> MyCartridges { get { return _MyCartridges; } set { _MyCartridges = value; } }
@@ -230,10 +235,15 @@ namespace LawlerBallisticsDesk.Classes
             {
                 Directory.CreateDirectory(_WeatherFolder);
             }
-            _DefaultDaFolder = _DataFolder + "\\defaultdat";
-            if (!Directory.Exists(_DefaultDaFolder))
+            _DefaultDataFolder = _DataFolder + "\\defaultdat";
+            if (!Directory.Exists(_DefaultDataFolder))
             {
-                Directory.CreateDirectory(_DefaultDat);
+                Directory.CreateDirectory(_DefaultDataFolder);
+            }
+            _BackupFolder = _DataFolder + "\\Bak";
+            if (!Directory.Exists(_BackupFolder))
+            {
+                Directory.CreateDirectory(_BackupFolder);
             }
 
             _MyData = new DataPersistence();

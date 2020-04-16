@@ -29,6 +29,7 @@ namespace LawlerBallisticsDesk.Classes
 
         #region "Private Variables"
         private string _XML_Header = "<?xml version=\"1.0\" encoding=\"UTF - 8\"?>" + Environment.NewLine;
+        private string[] _DataFileList;
         #endregion
 
         #region "Properties"
@@ -39,7 +40,17 @@ namespace LawlerBallisticsDesk.Classes
         #region "Constructor"
         public DataPersistence ()
         {
-
+            _DataFileList = new string[]
+            {
+                "default.bdf",
+                "CartridgeDB.cdf",
+                "BulletDB.bdf",
+                "CaseDB.cdf",
+                "GunDB.gdf",
+                "PowderDB.ddf",
+                "PrimerDB.pdf",
+                "RecipeDB.rdf"
+            };
         }
         #endregion
 
@@ -53,71 +64,19 @@ namespace LawlerBallisticsDesk.Classes
         /// </summary>
         public void CheckDataFiles()
         {
-            //Load default data file for ballistic solution menu view
-            string lDatFile = LawlerBallisticsFactory.DataFolder + "\\default.bdf";
+            
 
             //TODO: Add a restore default files function for all initially provided files.
             //Restore missing file from installation files.
-            string lSource = "Data/default.bdf";
-            if (!File.Exists(lDatFile))
+            foreach (string lF in _DataFileList)
             {
-                File.Copy(lSource, lDatFile);
-            }
-
-            //Load Cartridge data file
-             lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\CartridgeDB.cdf";
-             lSource = "Data/CartridgeDB.cdf";
-            if (!File.Exists(lDatFile))
-            {
-                File.Copy(lSource, lDatFile);
-            }
-
-            //Load Bullet data file
-            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\BulletDB.bdf";
-            lSource = "Data/BulletDB.bdf";
-            if (!File.Exists(lDatFile))
-            {
-                File.Copy(lSource, lDatFile);
-            }
-
-            //Load Case data file
-            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\CaseDB.cdf";
-            lSource = "Data/CaseDB.cdf";
-            if (!File.Exists(lDatFile))
-            {
-                File.Copy(lSource, lDatFile);
-            }
-
-            //Load Gun data file
-            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\GunDB.gdf";
-            lSource = "Data/GunDB.gdf";
-            if (!File.Exists(lDatFile))
-            {
-                File.Copy(lSource, lDatFile);
-            }
-
-            //Load Powder data file
-            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\PowderDB.ddf";
-            lSource = "Data/PowderDB.ddf";
-            if (!File.Exists(lDatFile))
-            {
-                File.Copy(lSource, lDatFile);
-            }
-
-            //Load Primer data file
-            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\PrimerDB.pdf";
-            lSource = "Data/PrimerDB.pdf";
-            if (!File.Exists(lDatFile))
-            {
-                File.Copy(lSource, lDatFile);
-            }
-
-            //Load Recipe data file
-            lDatFile = LawlerBallisticsFactory.AppDataFolder + "\\RecipeDB.rdf";
-            lSource = "Data/RecipeDB.rdf";
-            if (!File.Exists(lDatFile))
-            {
-                File.Copy(lSource, lDatFile);
+                //Load default data file for ballistic solution menu view
+                string lDatFile = LawlerBallisticsFactory.DataFolder + "\\" + lF;
+                string lSource = LawlerBallisticsFactory.DefaultDataFolder + "\\" + lF;
+                if (!File.Exists(lDatFile))
+                {
+                    File.Copy(lSource, lDatFile);
+                }
             }
         }
         public int SaveCartridgeData()
@@ -176,81 +135,23 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRtn;
         }
-        public int SaveBallisticSolutionData(Solution BallisticSolutionData, string FileName)
+        public int SaveBallisticSolutionData(Solution BallisticSolutionData, string FileName="")
         {
             int lRtn = 0;
-            string lBfilename;  //Then path and file name of the the exported data file.
             string lBF;         //Balistic file string variable.
+
+            if (FileName == "") FileName = LawlerBallisticsFactory.DataFolder + "\\default.bdf";
 
             //try
             //{
-            //    lBF = "<Ballistic Solution File>" + System.Environment.NewLine;
-            //    lBF = lBF + "<PROPERTIES>" + System.Environment.NewLine;
-            //    lBF = lBF + "<zTargetLat>" + TargetBallisticData.zTargetLat.ToString() + "</zTargetLat>" + System.Environment.NewLine;
-            //    lBF = lBF + "<zTargetLon>" + TargetBallisticData.zTargetLon.ToString() + "</zTargetLon>" + System.Environment.NewLine;
-            //    lBF = lBF + "<zShooterLat>" + TargetBallisticData.zShooterLat.ToString() + "</zShooterLat>" + System.Environment.NewLine;
-            //    lBF = lBF + "<zShooterLon>" + TargetBallisticData.zShooterLon.ToString() + "</zShooterLon>" + System.Environment.NewLine;
-            //    lBF = lBF + "<ShooterLon>" + TargetBallisticData.ShooterLon.ToString() + "</ShooterLon>" + System.Environment.NewLine;
-            //    lBF = lBF + "<ShooterLat>" + TargetBallisticData.ShooterLat.ToString() + "</ShooterLat>" + System.Environment.NewLine;
-            //    lBF = lBF + "<ShotDistance>" + TargetBallisticData.ShotDistance.ToString() + "</ShotDistance>" + System.Environment.NewLine;
-            //    lBF = lBF + "<ShotAngle>" + TargetBallisticData.ShotAngle.ToString() + "</ShotAngle>" + System.Environment.NewLine;
-            //    lBF = lBF + "<TargetLat>" + TargetBallisticData.TargetLat.ToString() + "</TargetLat>" + System.Environment.NewLine;
-            //    lBF = lBF + "<TargetLon>" + TargetBallisticData.TargetLon.ToString() + "</TargetLon>" + System.Environment.NewLine;
-            //    lBF = lBF + "<RelHumidity>" + TargetBallisticData.RelHumidity.ToString() + "</RelHumidity>" + System.Environment.NewLine;
-            //    lBF = lBF + "<zRelHumidity>" + TargetBallisticData.zRelHumidity.ToString() + "</zRelHumidity>" + System.Environment.NewLine;                
-            //    lBF = lBF + "<zBaroPressure>" + TargetBallisticData.zBaroPressure.ToString() + "</zBaroPressure>" + System.Environment.NewLine;
-            //    lBF = lBF + "<BaroPressure>" + TargetBallisticData.BaroPressure.ToString() + "</BaroPressure>" + System.Environment.NewLine;
-            //    lBF = lBF + "<DensityAlt>" + TargetBallisticData.DensityAlt.ToString() + "</DensityAlt>" + System.Environment.NewLine;
-            //    lBF = lBF + "<zDensityAlt>" + TargetBallisticData.zDensityAlt.ToString() + "</zDensityAlt>" + System.Environment.NewLine;
-            //    lBF = lBF + "<TempF>" + TargetBallisticData.TempF.ToString() + "</TempF>" + System.Environment.NewLine;
-            //    lBF = lBF + "<zTempF>" + TargetBallisticData.zTempF.ToString() + "</zTempF>" + System.Environment.NewLine;
-            //    lBF = lBF + "<ScopeHeight>" + TargetBallisticData.ScopeHeight.ToString() + "</ScopeHeight>" + System.Environment.NewLine;
-            //    lBF = lBF + "<MuzzleVelocity>" + TargetBallisticData.MuzzleVelocity.ToString() + "</MuzzleVelocity>" + System.Environment.NewLine;
-            //    lBF = lBF + "<Fo>" + TargetBallisticData.Fo.ToString() + "</Fo>" + System.Environment.NewLine;
-            //    lBF = lBF + "<F2>" + TargetBallisticData.F2.ToString() + "</F2>" + System.Environment.NewLine;
-            //    lBF = lBF + "<F3>" + TargetBallisticData.F3.ToString() + "</F3>" + System.Environment.NewLine;
-            //    lBF = lBF + "<F4>" + TargetBallisticData.F4.ToString() + "</F4>" + System.Environment.NewLine;
-            //    lBF = lBF + "<V1>" + TargetBallisticData.V1.ToString() + "</V1>" + System.Environment.NewLine;
-            //    lBF = lBF + "<V2>" + TargetBallisticData.V2.ToString() + "</V2>" + System.Environment.NewLine;
-            //    lBF = lBF + "<D1>" + TargetBallisticData.D1.ToString() + "</D1>" + System.Environment.NewLine;
-            //    lBF = lBF + "<D2>" + TargetBallisticData.D2.ToString() + "</D2>" + System.Environment.NewLine;
-            //    lBF = lBF + "<BCg1>" + TargetBallisticData.BCg1.ToString() + "</BCg1>" + System.Environment.NewLine;
-            //    lBF = lBF + "<BCz2>" + TargetBallisticData.BCz2.ToString() + "</BCz2>" + System.Environment.NewLine;
-            //    lBF = lBF + "<ZeroMaxRise>" + TargetBallisticData.ZeroMaxRise.ToString() + "</ZeroMaxRise>" + System.Environment.NewLine;
-            //    lBF = lBF + "<ZeroRange>" + TargetBallisticData.ZeroRange.ToString() + "</ZeroRange>" + System.Environment.NewLine;
-            //    lBF = lBF + "<UseMaxRise>" + TargetBallisticData.UseMaxRise.ToString() + "</UseMaxRise>" + System.Environment.NewLine;
+            lBF = _XML_Header;
+            lBF = lBF + SolutionDatXML(BallisticSolutionData);
 
-            //    //  These are now calculated by atmospheric conditions and Mach factors.
-            //    //lBF = lBF + "<Zone1TransSpeed>" + TargetBallisticData.Zone1TransSpeed.ToString() + "</Zone1TransSpeed>" + System.Environment.NewLine;
-            //    //lBF = lBF + "<Zone2TransSpeed>" + TargetBallisticData.Zone2TransSpeed.ToString() + "</Zone2TransSpeed>" + System.Environment.NewLine;
-            //    //lBF = lBF + "<Zone3TransSpeed>" + TargetBallisticData.Zone3TransSpeed.ToString() + "</Zone3TransSpeed>" + System.Environment.NewLine;
-                
-            //    lBF = lBF + "<Zone1MachFactor>" + TargetBallisticData.Zone1MachFactor.ToString() + "</Zone1MachFactor>" + System.Environment.NewLine;
-            //    lBF = lBF + "<Zone2MachFactor>" + TargetBallisticData.Zone2MachFactor.ToString() + "</Zone2MachFactor>" + System.Environment.NewLine;
-            //    lBF = lBF + "<Zone3MachFactor>" + TargetBallisticData.Zone3MachFactor.ToString() + "</Zone3MachFactor>" + System.Environment.NewLine;
-            //    lBF = lBF + "<Zone1SlopeMultiplier>" + TargetBallisticData.Zone1SlopeMultiplier.ToString() + "</Zone1SlopeMultiplier>" + System.Environment.NewLine;
-            //    lBF = lBF + "<Zone3SlopeMultiplier>" + TargetBallisticData.Zone3SlopeMultiplier.ToString() + "</Zone3SlopeMultiplier>" + System.Environment.NewLine;
-            //    lBF = lBF + "<Zone1Slope>" + TargetBallisticData.Zone1Slope.ToString() + "</Zone1Slope>" + System.Environment.NewLine;
-            //    lBF = lBF + "<Zone1AngleFactor>" + TargetBallisticData.Zone1AngleFactor.ToString() + "</Zone1AngleFactor>" + System.Environment.NewLine;
-            //    lBF = lBF + "<Zone3Slope>" + TargetBallisticData.Zone3Slope.ToString() + "</Zone3Slope>" + System.Environment.NewLine;
-            //    lBF = lBF + "<BarrelTwist>" + TargetBallisticData.BarrelTwist.ToString() + "</BarrelTwist>" + System.Environment.NewLine;
-            //    lBF = lBF + "<BarrelTwistDir>" + TargetBallisticData.BarrelTwistDir.ToString() + "</BarrelTwistDir>" + System.Environment.NewLine;
-            //    lBF = lBF + "<BulletDiameter>" + TargetBallisticData.BulletDiameter.ToString() + "</BulletDiameter>" + System.Environment.NewLine;
-            //    lBF = lBF + "<BulletLength>" + TargetBallisticData.BulletLength.ToString() + "</BulletLength>" + System.Environment.NewLine;
-            //    lBF = lBF + "<BulletWeight>" + TargetBallisticData.BulletWeight.ToString() + "</BulletWeight>" + System.Environment.NewLine;
-
-            //    // Calculated with bullet, barrel, and atmospheric conditions
-            //    //lBF = lBF + "<BSG>" + TargetBallisticData.BSG.ToString() + "</BSG>" + System.Environment.NewLine;
-                
-            //    lBF = lBF + "<BulletShapeTyp>" + TargetBallisticData.BulletShapeTyp.ToString() + "</BulletShapeTyp>" + System.Environment.NewLine;
-            //    lBF = lBF + "</PROPERTIES>" + System.Environment.NewLine;
-            //    lBF = lBF + "</Ballistic Solution File>";
-            //    lBfilename = FileName;
-            //    if (File.Exists(lBfilename))
-            //    {                    
-            //        File.Delete(lBfilename);
-            //    }
-            //    File.WriteAllText(lBfilename, lBF);
+            if (File.Exists(FileName))
+            {
+                File.Delete(FileName);
+            }
+            File.WriteAllText(FileName, lBF);
             //}
             //catch
             //{
@@ -258,331 +159,18 @@ namespace LawlerBallisticsDesk.Classes
             //}
             return lRtn;
         }
-        public Solution ParseBallisticSolution(string FileName)
+        public Solution ParseBallisticSolution(string FileName="")
         {
             Solution lBSF = new Solution();
-            //string lBDF = FileName;
-            //string lValue;
-            //if (!File.Exists(lBDF) )
-            //{
-            //    return lBSF;
-            //}            
-            //string[] BDFL = File.ReadAllLines(lBDF, Encoding.UTF8);
-            //if (!IsBallisticSol(BDFL))
-            //{               
-            //    return lBSF;
-            //}
-            //foreach (string L in BDFL)
-            //{                
-            //    if (L.StartsWith("<zTargetLat>"))
-            //    {
-            //        lValue = L.Replace("<zTargetLat>", "");
-            //        lValue = lValue.Replace("</zTargetLat>", "");
-            //        lBSF.zTargetLat = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<zTargetLon>"))
-            //    {
-            //        lValue = L.Replace("<zTargetLon>", "");
-            //        lValue = lValue.Replace("</zTargetLon>", "");
-            //        lBSF.zTargetLon = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<zShooterLat>"))
-            //    {
-            //        lValue = L.Replace("<zShooterLat>", "");
-            //        lValue = lValue.Replace("</zShooterLat>", "");
-            //        lBSF.zTargetLon = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<zShooterLon>"))
-            //    {
-            //        lValue = L.Replace("<zShooterLon>", "");
-            //        lValue = lValue.Replace("</zShooterLon>", "");
-            //        lBSF.zShooterLon = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<ShooterLon>"))
-            //    {
-            //        lValue = L.Replace("<ShooterLon>", "");
-            //        lValue = lValue.Replace("</ShooterLon>", "");
-            //        lBSF.ShooterLon = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<ShooterLat>"))
-            //    {
-            //        lValue = L.Replace("<ShooterLat>", "");
-            //        lValue = lValue.Replace("</ShooterLat>", "");
-            //        lBSF.ShooterLat = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<ShotDistance>"))
-            //    {
-            //        lValue = L.Replace("<ShotDistance>", "");
-            //        lValue = lValue.Replace("</ShotDistance>", "");
-            //        lBSF.ShotDistance = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<ShotAngle>"))
-            //    {
-            //        lValue = L.Replace("<ShotAngle>", "");
-            //        lValue = lValue.Replace("</ShotAngle>", "");
-            //        lBSF.ShotAngle = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<TargetLat>"))
-            //    {
-            //        lValue = L.Replace("<TargetLat>", "");
-            //        lValue = lValue.Replace("</TargetLat>", "");
-            //        lBSF.TargetLat = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<TargetLon>"))
-            //    {
-            //        lValue = L.Replace("<TargetLon>", "");
-            //        lValue = lValue.Replace("</TargetLon>", "");
-            //        lBSF.TargetLon = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<RelHumidity>"))
-            //    {
-            //        lValue = L.Replace("<RelHumidity>", "");
-            //        lValue = lValue.Replace("</RelHumidity>", "");
-            //        lBSF.RelHumidity = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<zRelHumidity>"))
-            //    {
-            //        lValue = L.Replace("<zRelHumidity>", "");
-            //        lValue = lValue.Replace("</zRelHumidity>", "");
-            //        lBSF.zRelHumidity = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<DensityAlt>"))
-            //    {
-            //        lValue = L.Replace("<DensityAlt>", "");
-            //        lValue = lValue.Replace("</DensityAlt>", "");
-            //        lBSF.DensityAlt = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<zDensityAlt>"))
-            //    {
-            //        lValue = L.Replace("<zDensityAlt>", "");
-            //        lValue = lValue.Replace("</zDensityAlt>", "");
-            //        lBSF.zDensityAlt = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<zBaroPressure>"))
-            //    {
-            //        lValue = L.Replace("<zBaroPressure>", "");
-            //        lValue = lValue.Replace("</zBaroPressure>", "");
-            //        lBSF.zBaroPressure = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<BaroPressure>"))
-            //    {
-            //        lValue = L.Replace("<BaroPressure>", "");
-            //        lValue = lValue.Replace("</BaroPressure>", "");
-            //        lBSF.BaroPressure = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<TempF>"))
-            //    {
-            //        lValue = L.Replace("<TempF>", "");
-            //        lValue = lValue.Replace("</TempF>", "");
-            //        lBSF.TempF = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<zTempF>"))
-            //    {
-            //        lValue = L.Replace("<zTempF>", "");
-            //        lValue = lValue.Replace("</zTempF>", "");
-            //        lBSF.zTempF = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<ScopeHeight>"))
-            //    {
-            //        lValue = L.Replace("<ScopeHeight>", "");
-            //        lValue = lValue.Replace("</ScopeHeight>", "");
-            //        lBSF.ScopeHeight = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<MuzzleVelocity>"))
-            //    {
-            //        lValue = L.Replace("<MuzzleVelocity>", "");
-            //        lValue = lValue.Replace("</MuzzleVelocity>", "");
-            //        lBSF.MuzzleVelocity = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<Fo>"))
-            //    {
-            //        lValue = L.Replace("<Fo>", "");
-            //        lValue = lValue.Replace("</Fo>", "");
-            //        lBSF.Fo = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<F2>"))
-            //    {
-            //        lValue = L.Replace("<F2>", "");
-            //        lValue = lValue.Replace("</F2>", "");
-            //        lBSF.F2 = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<F3>"))
-            //    {
-            //        lValue = L.Replace("<F3>", "");
-            //        lValue = lValue.Replace("</F3>", "");
-            //        lBSF.F3 = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<F4>"))
-            //    {
-            //        lValue = L.Replace("<F4>", "");
-            //        lValue = lValue.Replace("</F4>", "");
-            //        lBSF.F4 = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<V1>"))
-            //    {
-            //        lValue = L.Replace("<V1>", "");
-            //        lValue = lValue.Replace("</V1>", "");
-            //        lBSF.V1 = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<V2>"))
-            //    {
-            //        lValue = L.Replace("<V2>", "");
-            //        lValue = lValue.Replace("</V2>", "");
-            //        lBSF.V2 = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<D1>"))
-            //    {
-            //        lValue = L.Replace("<D1>", "");
-            //        lValue = lValue.Replace("</D1>", "");
-            //        lBSF.D1 = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<D2>"))
-            //    {
-            //        lValue = L.Replace("<D2>", "");
-            //        lValue = lValue.Replace("</D2>", "");
-            //        lBSF.D2 = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<BCg1>"))
-            //    {
-            //        lValue = L.Replace("<BCg1>", "");
-            //        lValue = lValue.Replace("</BCg1>", "");
-            //        lBSF.BCg1 = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<BCz2>"))
-            //    {
-            //        lValue = L.Replace("<BCz2>", "");
-            //        lValue = lValue.Replace("</BCz2>", "");
-            //        lBSF.BCz2 = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<ZeroMaxRise>"))
-            //    {
-            //        lValue = L.Replace("<ZeroMaxRise>", "");
-            //        lValue = lValue.Replace("</ZeroMaxRise>", "");
-            //        lBSF.ZeroMaxRise = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<ZeroRange>"))
-            //    {
-            //        lValue = L.Replace("<ZeroRange>", "");
-            //        lValue = lValue.Replace("</ZeroRange>", "");
-            //        lBSF.ZeroRange = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<UseMaxRise>"))
-            //    {
-            //        lValue = L.Replace("<UseMaxRise>", "");
-            //        lValue = lValue.Replace("</UseMaxRise>", "");
-            //        lBSF.UseMaxRise = Convert.ToBoolean(lValue);
-            //    }
-            //    //  These are calculated from atmospheric data and Mach factors now.
-            //    //else if (L.StartsWith("<Zone1TransSpeed>"))
-            //    //{
-            //    //    lValue = L.Replace("<Zone1TransSpeed>", "");
-            //    //    lValue = lValue.Replace("</Zone1TransSpeed>", "");
-            //    //    lBSF.Zone1TransSpeed = Convert.ToDouble(lValue);
-            //    //}
-            //    //else if (L.StartsWith("<Zone2TransSpeed>"))
-            //    //{
-            //    //    lValue = L.Replace("<Zone2TransSpeed>", "");
-            //    //    lValue = lValue.Replace("</Zone2TransSpeed>", "");
-            //    //    lBSF.Zone2TransSpeed = Convert.ToDouble(lValue);
-            //    //}
-            //    //else if (L.StartsWith("<Zone3TransSpeed>"))
-            //    //{
-            //    //    lValue = L.Replace("<Zone3TransSpeed>", "");
-            //    //    lValue = lValue.Replace("</Zone3TransSpeed>", "");
-            //    //    lBSF.Zone3TransSpeed = Convert.ToDouble(lValue);
-            //    //}
-            //    else if (L.StartsWith("<Zone1MachFactor>"))
-            //    {
-            //        lValue = L.Replace("<Zone1MachFactor>", "");
-            //        lValue = lValue.Replace("</Zone1MachFactor>", "");
-            //        lBSF.Zone1MachFactor = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<Zone2MachFactor>"))
-            //    {
-            //        lValue = L.Replace("<Zone2MachFactor>", "");
-            //        lValue = lValue.Replace("</Zone2MachFactor>", "");
-            //        lBSF.Zone2MachFactor = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<Zone3MachFactor>"))
-            //    {
-            //        lValue = L.Replace("<Zone3MachFactor>", "");
-            //        lValue = lValue.Replace("</Zone3MachFactor>", "");
-            //        lBSF.Zone3MachFactor = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<Zone1SlopeMultiplier>"))
-            //    {
-            //        lValue = L.Replace("<Zone1SlopeMultiplier>", "");
-            //        lValue = lValue.Replace("</Zone1SlopeMultiplier>", "");
-            //        lBSF.Zone1SlopeMultiplier = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<Zone3SlopeMultiplier>"))
-            //    {
-            //        lValue = L.Replace("<Zone3SlopeMultiplier>", "");
-            //        lValue = lValue.Replace("</Zone3SlopeMultiplier>", "");
-            //        lBSF.Zone3SlopeMultiplier = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<Zone1Slope>"))
-            //    {
-            //        lValue = L.Replace("<Zone1Slope>", "");
-            //        lValue = lValue.Replace("</Zone1Slope>", "");
-            //        lBSF.Zone1Slope = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<Zone1AngleFactor>"))
-            //    {
-            //        lValue = L.Replace("<Zone1AngleFactor>", "");
-            //        lValue = lValue.Replace("</Zone1AngleFactor>", "");
-            //        lBSF.Zone1AngleFactor = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<Zone3Slope>"))
-            //    {
-            //        lValue = L.Replace("<Zone3Slope>", "");
-            //        lValue = lValue.Replace("</Zone3Slope>", "");
-            //        lBSF.Zone3Slope = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<BarrelTwist>"))
-            //    {
-            //        lValue = L.Replace("<BarrelTwist>", "");
-            //        lValue = lValue.Replace("</BarrelTwist>", "");
-            //        lBSF.BarrelTwist = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<BarrelTwistDir>"))
-            //    {
-            //        lValue = L.Replace("<BarrelTwistDir>", "");
-            //        lValue = lValue.Replace("</BarrelTwistDir>", "");
-            //        lBSF.BarrelTwistDir = Convert.ToString(lValue);
-            //    }
-            //    else if (L.StartsWith("<BulletDiameter>"))
-            //    {
-            //        lValue = L.Replace("<BulletDiameter>", "");
-            //        lValue = lValue.Replace("</BulletDiameter>", "");
-            //        lBSF.BulletDiameter = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<BulletLength>"))
-            //    {
-            //        lValue = L.Replace("<BulletLength>", "");
-            //        lValue = lValue.Replace("</BulletLength>", "");
-            //        lBSF.BulletLength = Convert.ToDouble(lValue);
-            //    }
-            //    else if (L.StartsWith("<BulletWeight>"))
-            //    {
-            //        lValue = L.Replace("<BulletWeight>", "");
-            //        lValue = lValue.Replace("</BulletWeight>", "");
-            //        lBSF.BulletWeight = Convert.ToDouble(lValue);
-            //    }
-            //    // Value is not a calculation
-            //    //else if (L.StartsWith("<BSG>"))
-            //    //{
-            //    //    lValue = L.Replace("<BSG>", "");
-            //    //    lValue = lValue.Replace("</BSG>", "");
-            //    //    lBSF.BSG = Convert.ToDouble(lValue);
-            //    //}
-            //    else if (L.StartsWith("<BulletShapeTyp>"))
-            //    {
-            //        lValue = L.Replace("<BulletShapeTyp>", "");
-            //        lValue = lValue.Replace("</BulletShapeTyp>", "");
-            //        lBSF.BulletShapeTyp = (BulletShapeEnum) Enum.Parse(typeof(BulletShapeEnum), lValue);
-            //    }
-            //}
+            string lSF;
+
+            lSF = File.ReadAllText(FileName);
+            XmlDocument lXML = new XmlDocument();
+
+            lXML.LoadXml(lSF);
+            XmlNode lSN = lXML.SelectSingleNode("Ballistic Solution File");
+            lBSF = LoadSolution(lSN);
+
             return lBSF;
         }
         public int SaveGunDB()
@@ -780,23 +368,10 @@ namespace LawlerBallisticsDesk.Classes
                 lGfilename = LawlerBallisticsFactory.DataFolder + "\\CaseDB.cdf";
                 lGfileBak = LawlerBallisticsFactory.DataFolder + "\\CaseDB.BAK";
                 lGF = _XML_Header;
-                lGF = lGF + "<casedatabasefile>" + System.Environment.NewLine;
+                lGF = lGF + "<casedatabasefile>" + Environment.NewLine;
                 foreach (Case lg in LawlerBallisticsFactory.MyCases)
                 {
-                    lGF = lGF + "<case>" + System.Environment.NewLine;
-                    lGF = lGF + "<id value=\"" + lg.ID.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
-                    lGF = lGF + "</id>" + System.Environment.NewLine;                    
-                    lGF = lGF + "<cartridgeid value=\"" + lg.CartridgeID.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
-                    lGF = lGF + "</cartridgeid>" + System.Environment.NewLine;
-                    lGF = lGF + "<name value=\"" + lg.Name.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
-                    lGF = lGF + "</name>" + System.Environment.NewLine;                    
-                    lGF = lGF + "<model value=\"" + lg.Model.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
-                    lGF = lGF + "</model>" + System.Environment.NewLine;
-                    lGF = lGF + "<manufacturer value=\"" + lg.Manufacturer.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
-                    lGF = lGF + "</manufacturer>" + System.Environment.NewLine;
-                    lGF = lGF + "<primersize value=\"" + lg.PrimerSize.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
-                    lGF = lGF + "</primersize>" + System.Environment.NewLine;
-                    lGF = lGF + "</case>" + System.Environment.NewLine;
+                    lGF = lGF + CaseDatXML(lg);
                 }
                 lGF = lGF + "</casedatabasefile>";
                 if (File.Exists(lGfilename))
@@ -822,11 +397,11 @@ namespace LawlerBallisticsDesk.Classes
             ObservableCollection<Case> lLR = new ObservableCollection<Case>();
             string lGfilename;  //The path and file name of the the exported data file.
             string lGF; // string containing recipe data from file.
-            string lNR;
+            Case ltg;
 
             //try
             //{
-                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\CaseDB.cdf";
+                lGfilename = LawlerBallisticsFactory.DataFolder + "\\CaseDB.cdf";
                 lGF = File.ReadAllText(lGfilename);
                 XmlDocument lXML = new XmlDocument();
 
@@ -834,28 +409,7 @@ namespace LawlerBallisticsDesk.Classes
                 XmlNode lBullets = lXML.SelectSingleNode("casedatabasefile");
                 foreach (XmlNode lgn in lBullets)
                 {
-                    Case ltg = new Case();
-
-                    XmlNode lid = lgn.SelectSingleNode("id");
-                    lNR = lid.Attributes["value"].Value;
-                    ltg.ID = lNR;
-                    XmlNode lmk = lgn.SelectSingleNode("cartridgeid");
-                    lNR = lmk.Attributes["value"].Value;
-                    ltg.CartridgeID = lNR;
-                    ltg.CartridgeName = LawlerBallisticsFactory.GetCartridgeName(ltg.CartridgeID);
-                    XmlNode lmdl = lgn.SelectSingleNode("name");
-                    lNR = lmdl.Attributes["value"].Value;
-                    ltg.Name = lNR;                   
-                    XmlNode lbulletsbto = lgn.SelectSingleNode("model");
-                    lNR = lbulletsbto.Attributes["value"].Value;
-                    ltg.Model = lNR;
-                    XmlNode lbulletsoal = lgn.SelectSingleNode("manufacturer");
-                    lNR = lbulletsoal.Attributes["value"].Value;
-                    ltg.Manufacturer = lNR;
-                    lNR = "";
-                    lbulletsoal = lgn.SelectSingleNode("primersize");
-                    if(lbulletsoal!=null) lNR = lbulletsoal.Attributes["value"].Value;
-                    ltg.PrimerSize = lNR;                    
+                    ltg = LoadCase(lgn);
                     lLR.Add(ltg);
                 }
             //}
@@ -874,24 +428,13 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\PrimerDB.pdf";
-                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\PrimerDB.BAK";
+                lGfilename = LawlerBallisticsFactory.DataFolder + "\\PrimerDB.pdf";
+                lGfileBak = LawlerBallisticsFactory.DataFolder + "\\PrimerDB.BAK";
                 lGF = _XML_Header;
                 lGF = lGF + "<primerdatabasefile>" + System.Environment.NewLine;
                 foreach (Primer lg in LawlerBallisticsFactory.MyPrimers)
                 {
-                    lGF = lGF + "<primer>" + System.Environment.NewLine;
-                    lGF = lGF + "<id value=\"" + lg.ID.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</id>" + System.Environment.NewLine;
-                    lGF = lGF + "<name value=\"" + lg.Name.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</name>" + System.Environment.NewLine;
-                    lGF = lGF + "<model value=\"" + lg.Model.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</model>" + System.Environment.NewLine;
-                    lGF = lGF + "<manufacturer value=\"" + lg.Manufacturer.ToString() + "\" type='string'>" + System.Environment.NewLine;
-                    lGF = lGF + "</manufacturer>" + System.Environment.NewLine;
-                    lGF = lGF + "<type value=\"" + lg.Type.ToString() + "\" type='string'>" + System.Environment.NewLine;
-                    lGF = lGF + "</type>" + System.Environment.NewLine;
-                    lGF = lGF + "</primer>" + System.Environment.NewLine;
+                    lGF = lGF + PrimerDatXML(lg);
                 }
                 lGF = lGF + "</primerdatabasefile>";
                 if (File.Exists(lGfilename))
@@ -917,11 +460,11 @@ namespace LawlerBallisticsDesk.Classes
             ObservableCollection<Primer> lLR = new ObservableCollection<Primer>();
             string lGfilename;  //The path and file name of the the exported data file.
             string lGF; // string containing recipe data from file.
-            string lNR;
+            Primer ltg;
 
             try
             {
-                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\PrimerDB.pdf";
+                lGfilename = LawlerBallisticsFactory.DataFolder + "\\PrimerDB.pdf";
                 lGF = File.ReadAllText(lGfilename);
                 XmlDocument lXML = new XmlDocument();
 
@@ -929,23 +472,7 @@ namespace LawlerBallisticsDesk.Classes
                 XmlNode lBullets = lXML.SelectSingleNode("primerdatabasefile");
                 foreach (XmlNode lgn in lBullets)
                 {
-                    Primer ltg = new Primer();
-
-                    XmlNode lid = lgn.SelectSingleNode("id");
-                    lNR = lid.Attributes["value"].Value;
-                    ltg.ID = lNR;
-                    XmlNode lname = lgn.SelectSingleNode("name");
-                    lNR = lname.Attributes["value"].Value;
-                    ltg.Name = lNR;
-                    XmlNode lbulletsbto = lgn.SelectSingleNode("model");
-                    lNR = lbulletsbto.Attributes["value"].Value;
-                    ltg.Model = lNR;
-                    XmlNode lbulletsoal = lgn.SelectSingleNode("manufacturer");
-                    lNR = lbulletsoal.Attributes["value"].Value;
-                    ltg.Manufacturer = lNR;
-                    XmlNode ltype = lgn.SelectSingleNode("type");
-                    lNR = ltype.Attributes["value"].Value;
-                    ltg.Type = lNR;
+                    ltg = LoadPrimer(lgn);
                     lLR.Add(ltg);
                 }
             }
@@ -964,24 +491,13 @@ namespace LawlerBallisticsDesk.Classes
 
             try
             {
-                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\PowderDB.ddf";
-                lGfileBak = LawlerBallisticsFactory.AppDataFolder + "\\PowderDB.BAK";
+                lGfilename = LawlerBallisticsFactory.DataFolder + "\\PowderDB.ddf";
+                lGfileBak = LawlerBallisticsFactory.DataFolder + "\\PowderDB.BAK";
                 lGF = _XML_Header;
                 lGF = lGF + "<powderdatabasefile>" + System.Environment.NewLine;
                 foreach (Powder lg in LawlerBallisticsFactory.MyPowders)
                 {
-                    lGF = lGF + "<powder>" + System.Environment.NewLine;
-                    lGF = lGF + "<id value=\"" + lg.ID.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</id>" + System.Environment.NewLine;
-                    lGF = lGF + "<name value=\"" + lg.Name.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</name>" + System.Environment.NewLine;
-                    lGF = lGF + "<model value=\"" + lg.Model.ToString() + "\">" + System.Environment.NewLine;
-                    lGF = lGF + "</model>" + System.Environment.NewLine;
-                    lGF = lGF + "<manufacturer value=\"" + lg.Manufacturer.ToString() + "\" type='string'>" + System.Environment.NewLine;
-                    lGF = lGF + "</manufacturer>" + System.Environment.NewLine;
-                    lGF = lGF + "<basetype value=\"" + lg.BaseType.ToString() + "\" type='string'>" + System.Environment.NewLine;
-                    lGF = lGF + "</basetype>" + System.Environment.NewLine;
-                    lGF = lGF + "</powder>" + System.Environment.NewLine;
+                    lGF = lGF + PowderDatXML(lg);
                 }
                 lGF = lGF + "</powderdatabasefile>";
                 if (File.Exists(lGfilename))
@@ -1007,11 +523,11 @@ namespace LawlerBallisticsDesk.Classes
             ObservableCollection<Powder> lLR = new ObservableCollection<Powder>();
             string lGfilename;  //The path and file name of the the exported data file.
             string lGF; // string containing recipe data from file.
-            string lNR;
+            Powder ltg;
 
             try
             {
-                lGfilename = LawlerBallisticsFactory.AppDataFolder + "\\PowderDB.ddf";
+                lGfilename = LawlerBallisticsFactory.DataFolder + "\\PowderDB.ddf";
                 lGF = File.ReadAllText(lGfilename);
                 XmlDocument lXML = new XmlDocument();
 
@@ -1019,23 +535,7 @@ namespace LawlerBallisticsDesk.Classes
                 XmlNode lBullets = lXML.SelectSingleNode("powderdatabasefile");
                 foreach (XmlNode lgn in lBullets)
                 {
-                    Powder ltg = new Powder();
-
-                    XmlNode lid = lgn.SelectSingleNode("id");
-                    lNR = lid.Attributes["value"].Value;
-                    ltg.ID = lNR;
-                    XmlNode lname = lgn.SelectSingleNode("name");
-                    lNR = lname.Attributes["value"].Value;
-                    ltg.Name = lNR;
-                    XmlNode lbulletsbto = lgn.SelectSingleNode("model");
-                    lNR = lbulletsbto.Attributes["value"].Value;
-                    ltg.Model = lNR;
-                    XmlNode lbulletsoal = lgn.SelectSingleNode("manufacturer");
-                    lNR = lbulletsoal.Attributes["value"].Value;
-                    ltg.Manufacturer = lNR;
-                    XmlNode ltype = lgn.SelectSingleNode("basetype");
-                    lNR = ltype.Attributes["value"].Value;
-                    ltg.BaseType = lNR;
+                    ltg = LoadPowder(lgn);
                     lLR.Add(ltg);
                 }
             }
@@ -1095,6 +595,8 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
+
+
         public int BackupAllData(string Folder)
         {
             int lRTN = 0;
@@ -1145,7 +647,24 @@ namespace LawlerBallisticsDesk.Classes
         }
         private string CaseDatXML(Case TargetCase)
         {
+            string lRTN;
 
+            lRTN = "<case>" + Environment.NewLine;
+            lRTN = lRTN + "<id value=\"" + TargetCase.ID.ToString() + "\" type=\"string\">" + Environment.NewLine;
+            lRTN = lRTN + "</id>" + Environment.NewLine;
+            lRTN = lRTN + "<cartridgeid value=\"" + TargetCase.CartridgeID.ToString() + "\" type=\"string\">" + Environment.NewLine;
+            lRTN = lRTN + "</cartridgeid>" + Environment.NewLine;
+            lRTN = lRTN + "<name value=\"" + TargetCase.Name.ToString() + "\" type=\"string\">" + Environment.NewLine;
+            lRTN = lRTN + "</name>" + Environment.NewLine;
+            lRTN = lRTN + "<model value=\"" + TargetCase.Model.ToString() + "\" type=\"string\">" + Environment.NewLine;
+            lRTN = lRTN + "</model>" + Environment.NewLine;
+            lRTN = lRTN + "<manufacturer value=\"" + TargetCase.Manufacturer.ToString() + "\" type=\"string\">" + Environment.NewLine;
+            lRTN = lRTN + "</manufacturer>" + Environment.NewLine;
+            lRTN = lRTN + "<primersize value=\"" + TargetCase.PrimerSize.ToString() + "\" type=\"string\">" + Environment.NewLine;
+            lRTN = lRTN + "</primersize>" + Environment.NewLine;
+            lRTN = lRTN + "</case>" + Environment.NewLine;
+
+            return lRTN;
         }
         private string GunDatXML(Gun TargetGun)
         {
@@ -1405,6 +924,117 @@ namespace LawlerBallisticsDesk.Classes
             lRTN = lRTN + "<VELAD value=\"" + TargetRound.VELAD.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
             lRTN = lRTN + "</VELAD>" + System.Environment.NewLine;
             lRTN = lRTN + "</round>" + System.Environment.NewLine;
+
+            return lRTN;
+        }
+        private string PrimerDatXML(Primer TargetPrimer)
+        {
+            string lRTN;
+
+            lRTN = "<primer>" + System.Environment.NewLine;
+            lRTN = lRTN + "<id value=\"" + TargetPrimer.ID.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</id>" + System.Environment.NewLine;
+            lRTN = lRTN + "<name value=\"" + TargetPrimer.Name.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</name>" + System.Environment.NewLine;
+            lRTN = lRTN + "<model value=\"" + TargetPrimer.Model.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</model>" + System.Environment.NewLine;
+            lRTN = lRTN + "<manufacturer value=\"" + TargetPrimer.Manufacturer.ToString() + "\" type='string'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</manufacturer>" + System.Environment.NewLine;
+            lRTN = lRTN + "<type value=\"" + TargetPrimer.Type.ToString() + "\" type='string'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</type>" + System.Environment.NewLine;
+            lRTN = lRTN + "</primer>" + System.Environment.NewLine;
+
+            return lRTN;
+        }
+        private string PowderDatXML(Powder TargetPowder)
+        {
+            string lRTN;
+
+            lRTN = "<powder>" + System.Environment.NewLine;
+            lRTN = lRTN + "<id value=\"" + TargetPowder.ID.ToString() + "\" type='string'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</id>" + System.Environment.NewLine;
+            lRTN = lRTN + "<name value=\"" + TargetPowder.Name.ToString() + "\" type='string'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</name>" + System.Environment.NewLine;
+            lRTN = lRTN + "<model value=\"" + TargetPowder.Model.ToString() + "\" type='string'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</model>" + System.Environment.NewLine;
+            lRTN = lRTN + "<manufacturer value=\"" + TargetPowder.Manufacturer.ToString() + "\" type='string'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</manufacturer>" + System.Environment.NewLine;
+            lRTN = lRTN + "<basetype value=\"" + TargetPowder.BaseType.ToString() + "\" type='string'>" + System.Environment.NewLine;
+            lRTN = lRTN + "</basetype>" + System.Environment.NewLine;
+            lRTN = lRTN + "</powder>" + System.Environment.NewLine;
+
+            return lRTN;
+        }
+        private string SolutionDatXML(Solution TargetSolution)
+        {
+            string lRTN;
+            
+            lRTN = "<Ballistic Solution File>" + Environment.NewLine;
+            lRTN = lRTN + ZeroDatXML(TargetSolution.MyScenario.MyShooter.MyLoadOut.zeroData);
+            lRTN = lRTN + "</Ballistic Solution File>";
+
+            return lRTN;
+        }
+        private string ZeroDatXML(ZeroData TargetZeroData)
+        {
+            string lRTN;
+
+            lRTN = "<Zero Data>" + Environment.NewLine;
+            lRTN = lRTN + "<MidRange value=\"" + TargetZeroData.MidRange.ToString() + "\" type=\"double\">" + System.Environment.NewLine;                       
+            lRTN = lRTN + "</MidRange>" + System.Environment.NewLine;
+            lRTN = lRTN + "<NearZeroRange value=\"" + TargetZeroData.NearZeroRange.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</NearZeroRange>" + System.Environment.NewLine;
+            lRTN = lRTN + "<PointBlankRange value=\"" + TargetZeroData.PointBlankRange.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</PointBlankRange>" + System.Environment.NewLine;
+            lRTN = lRTN + "<UseMaxRise value=\"" + TargetZeroData.UseMaxRise.ToString() + "\" type=\"bool\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</UseMaxRise>" + System.Environment.NewLine;
+            lRTN = lRTN + "<ZeroMaxRise value=\"" + TargetZeroData.ZeroMaxRise.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</ZeroMaxRise>" + System.Environment.NewLine;
+            lRTN = lRTN + "<ZeroRange value=\"" + TargetZeroData.ZeroRange.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</ZeroRange>" + System.Environment.NewLine;
+            lRTN = lRTN + "<Shooter Location Data>" + Environment.NewLine;
+            lRTN = lRTN + LocationDatXML(TargetZeroData.ShooterLoc);
+            lRTN = lRTN + "<Shooter Location Data>" + Environment.NewLine;
+            lRTN = lRTN + "<Target Location Data>" + Environment.NewLine;
+            lRTN = lRTN + LocationDatXML(TargetZeroData.TargetLoc);
+            lRTN = lRTN + "</Target Location Data>" + Environment.NewLine;
+            lRTN = lRTN + AtmosphericDatXML(TargetZeroData.atmospherics);
+            lRTN = lRTN + "</Zero Data>" + Environment.NewLine;
+
+            return lRTN;
+        }
+        private string LocationDatXML(LocationData TargetLocation)
+        {
+            string lRTN;
+
+            lRTN = "<Location Data>" + Environment.NewLine;
+            lRTN = lRTN + "<Altitude value=\"" + TargetLocation.Altitude + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<Latitude value=\"" + TargetLocation.Latitude + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<Longitude value=\"" + TargetLocation.Longitude + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</Location Data>" + Environment.NewLine;
+
+            return lRTN;
+        }
+        private string AtmosphericDatXML(Atmospherics TargetAtmospherics)
+        {
+            string lRTN;
+
+            lRTN = "<Atmospheric Data>" + Environment.NewLine;
+            lRTN = lRTN + "<DensityAlt value=\"" + TargetAtmospherics.DensityAlt + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<FeelsLike value=\"" + TargetAtmospherics.FeelsLike + "\" type=\"double\" unit=\"" + TargetAtmospherics.FeelsLikeUnits + "\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<HumidityRel value=\"" + TargetAtmospherics.HumidityRel + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<LastUpdated value=\"" + TargetAtmospherics.LastUpdated + "\" type=\"DateTime\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<Precipitation value=\"" + TargetAtmospherics.Precipitation + "\" type=\"string\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<Pressure value=\"" + TargetAtmospherics.Pressure + "\" type=\"double\" unit=\"" + TargetAtmospherics.PressureUnits + "\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<Station value=\"" + TargetAtmospherics.Station + "\" type=\"string\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<SunRise value=\"" + TargetAtmospherics.SunRise + "\" type=\"DateTime\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.SunSet + "\" type=\"DateTime\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.Temp + "\" type=\"double\" unit=\"" + TargetAtmospherics.TempUnits + "\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.Weather + "\" type=\"string\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.WindDirection + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.WindDirTxt + "\" type=\"string\">" + System.Environment.NewLine;
+            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.WindSpeed + "\" type=\"double\" unit=\"" + TargetAtmospherics.WindSpeedUnits + "\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</Atmospheric Data>" + Environment.NewLine;
 
             return lRTN;
         }
@@ -1888,7 +1518,206 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
+        private Case LoadCase(XmlNode CaseNode)
+        {
+            Case lRTN = new Case();
+            string lNR;
+
+            XmlNode lid = CaseNode.SelectSingleNode("id");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.ID = lNR;
+            XmlNode lmk = CaseNode.SelectSingleNode("cartridgeid");
+            lNR = lmk.Attributes["value"].Value;
+            lRTN.CartridgeID = lNR;
+            lRTN.CartridgeName = LawlerBallisticsFactory.GetCartridgeName(lRTN.CartridgeID);
+            XmlNode lmdl = CaseNode.SelectSingleNode("name");
+            lNR = lmdl.Attributes["value"].Value;
+            lRTN.Name = lNR;
+            XmlNode lbulletsbto = CaseNode.SelectSingleNode("model");
+            lNR = lbulletsbto.Attributes["value"].Value;
+            lRTN.Model = lNR;
+            XmlNode lbulletsoal = CaseNode.SelectSingleNode("manufacturer");
+            lNR = lbulletsoal.Attributes["value"].Value;
+            lRTN.Manufacturer = lNR;
+            lNR = "";
+            lbulletsoal = CaseNode.SelectSingleNode("primersize");
+            if (lbulletsoal != null) lNR = lbulletsoal.Attributes["value"].Value;
+            lRTN.PrimerSize = lNR;
+            return lRTN;
+        }
+        private Primer LoadPrimer(XmlNode PrimerNode)
+        {
+            Primer lRTN = new Primer();
+            string lNR;
+
+            XmlNode lid = PrimerNode.SelectSingleNode("id");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.ID = lNR;
+            XmlNode lname = PrimerNode.SelectSingleNode("name");
+            lNR = lname.Attributes["value"].Value;
+            lRTN.Name = lNR;
+            XmlNode lbulletsbto = PrimerNode.SelectSingleNode("model");
+            lNR = lbulletsbto.Attributes["value"].Value;
+            lRTN.Model = lNR;
+            XmlNode lbulletsoal = PrimerNode.SelectSingleNode("manufacturer");
+            lNR = lbulletsoal.Attributes["value"].Value;
+            lRTN.Manufacturer = lNR;
+            XmlNode ltype = PrimerNode.SelectSingleNode("type");
+            lNR = ltype.Attributes["value"].Value;
+            lRTN.Type = lNR;
+
+            return lRTN;
+        }
+        private Powder LoadPowder(XmlNode PowderNode)
+        {
+            Powder lRTN = new Powder();
+            string lNR;
+
+            XmlNode lid = PowderNode.SelectSingleNode("id");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.ID = lNR;
+            XmlNode lname = PowderNode.SelectSingleNode("name");
+            lNR = lname.Attributes["value"].Value;
+            lRTN.Name = lNR;
+            XmlNode lbulletsbto = PowderNode.SelectSingleNode("model");
+            lNR = lbulletsbto.Attributes["value"].Value;
+            lRTN.Model = lNR;
+            XmlNode lbulletsoal = PowderNode.SelectSingleNode("manufacturer");
+            lNR = lbulletsoal.Attributes["value"].Value;
+            lRTN.Manufacturer = lNR;
+            XmlNode ltype = PowderNode.SelectSingleNode("basetype");
+            lNR = ltype.Attributes["value"].Value;
+            lRTN.BaseType = lNR;
+
+            return lRTN;
+        }
+        private LocationData LoadLocationData(XmlNode LocationNode)
+        {
+            LocationData lRTN = new LocationData();
+
+            string lNR;
+            XmlNode lid;
+
+            lid = LocationNode.SelectSingleNode("Altitude");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.Altitude = Convert.ToDouble(lNR);
+            lid = LocationNode.SelectSingleNode("Latitude");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.Latitude = Convert.ToDouble(lNR);
+            lid = LocationNode.SelectSingleNode("Longitude");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.Longitude = Convert.ToDouble(lNR);
+
+            return lRTN;
+        }
+        private Atmospherics LoadAtmosphericData(XmlNode AtmosphericNode)
+        {
+            Atmospherics lRTN = new Atmospherics();
+
+            string lNR;
+            XmlNode lid;
+
+            lid = AtmosphericNode.SelectSingleNode("DensityAlt");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.DensityAlt = Convert.ToDouble(lNR);
+            lid = AtmosphericNode.SelectSingleNode("FeelsLike");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.FeelsLike = Convert.ToDouble(lNR);
+            lRTN.FeelsLikeUnits = lid.Attributes["unit"].Value;
+            lid = AtmosphericNode.SelectSingleNode("HumidityRel");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.HumidityRel = Convert.ToDouble(lNR);
+            lid = AtmosphericNode.SelectSingleNode("LastUpdated");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.LastUpdated = Convert.ToDateTime(lNR);
+            lid = AtmosphericNode.SelectSingleNode("Precipitation");
+            lRTN.Precipitation = lid.Attributes["value"].Value;
+            lid = AtmosphericNode.SelectSingleNode("Pressure");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.Pressure = Convert.ToDouble(lNR);
+            lRTN.PressureUnits = lid.Attributes["unit"].Value;
+            lid = AtmosphericNode.SelectSingleNode("Station");
+            lRTN.Station = lid.Attributes["value"].Value;
+            lid = AtmosphericNode.SelectSingleNode("SunRise");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.SunRise = Convert.ToDateTime(lNR);
+            lid = AtmosphericNode.SelectSingleNode("SunSet");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.SunSet = Convert.ToDateTime(lNR);
+            lid = AtmosphericNode.SelectSingleNode("Temp");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.Temp = Convert.ToDouble(lNR);
+            lRTN.TempUnits = lid.Attributes["unit"].Value;
+            lid = AtmosphericNode.SelectSingleNode("Weather");
+            lRTN.Weather = lid.Attributes["value"].Value;
+            lid = AtmosphericNode.SelectSingleNode("WindDirection");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.WindDirection = Convert.ToDouble(lNR);
+            lid = AtmosphericNode.SelectSingleNode("WindDirTxt");
+            lRTN.WindDirTxt = lid.Attributes["value"].Value;
+            lid = AtmosphericNode.SelectSingleNode("WindSpeed");
+            lNR = lid.Attributes["value"].Value;
+            lRTN.WindSpeed = Convert.ToDouble(lNR);
+            lRTN.WindSpeedUnits = lid.Attributes["unit"].Value;
+
+            return lRTN;
+        }
+        private ZeroData LoadZeroData(XmlNode ZeroDataNode)
+        {
+            ZeroData lRTN = new ZeroData();
+            XmlNode lGN;
+            string lNR;
+
+            lGN = ZeroDataNode.SelectSingleNode("MidRange");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.MidRange = Convert.ToDouble(lNR);
+            lGN = ZeroDataNode.SelectSingleNode("NearZeroRange");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.NearZeroRange = Convert.ToDouble(lNR);
+            lGN = ZeroDataNode.SelectSingleNode("PointBlankRange");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.PointBlankRange = Convert.ToDouble(lNR);
+            lGN = ZeroDataNode.SelectSingleNode("UseMaxRise");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.UseMaxRise = Convert.ToBoolean(lNR);
+            lGN = ZeroDataNode.SelectSingleNode("ZeroMaxRise");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.ZeroMaxRise = Convert.ToDouble(lNR);
+            lGN = ZeroDataNode.SelectSingleNode("ZeroRange");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.ZeroRange = Convert.ToDouble(lNR);
+            XmlNode lZDsl = ZeroDataNode.SelectSingleNode("Shooter Location Data");
+            XmlNode lLN = lZDsl.SelectSingleNode("Location Data");
+            lRTN.ShooterLoc = LoadLocationData(lLN);
+            XmlNode lZDtl = ZeroDataNode.SelectSingleNode("Shooter Location Data");
+            lLN = lZDtl.SelectSingleNode("Location Data");
+            lRTN.TargetLoc = LoadLocationData(lLN);
+            XmlNode lZDatm = ZeroDataNode.SelectSingleNode("Atmospheric Data");
+            lRTN.atmospherics = LoadAtmosphericData(lZDatm);            
+
+            return lRTN;
+        }
+        private Solution LoadSolution(XmlNode SolutionNode)
+        {
+            Solution lRTN = new Solution();
+            Scenario lMyScenario = new Scenario();
+            lMyScenario.MyShooter = new Shooter();
+            lMyScenario.MyShooter.MyLoadOut = new LoadOut();
+            
+            string lNR;
+            XmlNode lLN;
+
+            XmlNode lZD = SolutionNode.SelectSingleNode("Zero Data");
+            lMyScenario.MyShooter.MyLoadOut.zeroData = LoadZeroData(lZD);
+
+
+
+            Ballistics lMyBallistics = new Ballistics(lMyScenario);
+
+            return lRTN;
+        }
         #endregion
+
         #endregion
     }
 }
