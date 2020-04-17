@@ -104,6 +104,8 @@ namespace LawlerBallisticsDesk.Views.Maps
         { 
             SolutionViewModel mDC = (SolutionViewModel) this.DataContext;
             int lchk = 0;
+            //TODO: get elevation data
+            //https://docs.microsoft.com/en-us/bingmaps/rest-services/elevations/get-elevations
             switch (Mode)
             {
                 case "Zero":
@@ -111,12 +113,12 @@ namespace LawlerBallisticsDesk.Views.Maps
                     {
                         if (lpp.Name == "Shooter")
                         {
-                            mDC.SetShooterZeroLocation(lpp.Location.Latitude, lpp.Location.Longitude);
+                            mDC.SetShooterZeroLocation(lpp.Location.Altitude, lpp.Location.Latitude, lpp.Location.Longitude);
                             lchk += 1;
                         }
                         if (lpp.Name == "Target")
                         {
-                            mDC.SetTargetZeroLocation(lpp.Location.Latitude, lpp.Location.Longitude);
+                            mDC.SetTargetZeroLocation(lpp.Location.Altitude, lpp.Location.Latitude, lpp.Location.Longitude);
                             lchk += 1;
                         }
                     }
@@ -126,16 +128,15 @@ namespace LawlerBallisticsDesk.Views.Maps
                     {
                         if (lpp.Name == "Shooter")
                         {
-                            mDC.SetShooterLocation(lpp.Location.Latitude, lpp.Location.Longitude);
+                            mDC.SetShooterLocation(lpp.Location.Altitude, lpp.Location.Latitude, lpp.Location.Longitude);
                             lchk += 1;
                         }
                         if (lpp.Name == "Target")
                         {
-                            mDC.SetTargetLocation(lpp.Location.Latitude, lpp.Location.Longitude);
+                            mDC.SetTargetLocation(lpp.Location.Altitude, lpp.Location.Latitude, lpp.Location.Longitude);
                             lchk += 1;
                         }
                     }
-                    break;
                     break;
             
             }

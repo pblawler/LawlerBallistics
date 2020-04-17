@@ -11,6 +11,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         public static double GravFt = 32.17405;
         public static double GravIn = 386.0886;
         public static double G = 41.68211487;      //G = 3*(g(in/s^2)/2)^0.5 = 41.68
+        public static double YardsPerDegLatLon = 121740.6652;
+
 
         #region "Gyro Functions"
         /// <summary>
@@ -1012,7 +1014,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             LocationData ZeroTargetLoc, LocationData ZeroShooterLoc, LocationData TargetLoc, LocationData ShooterLoc,
             double ZeroRange, double Fo, double MuzzleVelocity)
         {
-            double lYrdPerDeg; double lLonDist; double lLatDist; double lVertMultiplier;
+            double lLonDist; double lLatDist; double lVertMultiplier;
             double lHorizMultiplier; double lFT; double lCorMag; double lSVM; double lSHM;
             double lCorVert; double lCorHorz; double lLonSign; double lLatSign; double lLonDistZ;
             double lLonSignZ; double lLatDistZ; double lLatSignZ; double lZeroVertMultiplier;
@@ -1030,7 +1032,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 return -1;
             }
 
-            lYrdPerDeg = 121740.6652;
             lFT = FlightTime(Range, Fo, MuzzleVelocity);
             lFTZ = FlightTime(ZeroRange, Fo, MuzzleVelocity);
             lCorMag = 0.00262 * lFT * Range;
@@ -1041,11 +1042,11 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             //  like the sight line in that it is linear with distance and zero at the zero ranges.
 
             //Longitudal distance to target
-            lLonDistZ = (ZeroTargetLoc.Longitude - ZeroShooterLoc.Longitude) * lYrdPerDeg;
+            lLonDistZ = (ZeroTargetLoc.Longitude - ZeroShooterLoc.Longitude) * YardsPerDegLatLon;
             lLonSignZ = Math.Sign(lLonDistZ);  // + = E, - = W
             if (lLonSignZ == 0) lLonSignZ = 1;
             //Latitudal distance to target
-            lLatDistZ = (ZeroTargetLoc.Latitude - ZeroShooterLoc.Latitude) * lYrdPerDeg;
+            lLatDistZ = (ZeroTargetLoc.Latitude - ZeroShooterLoc.Latitude) * YardsPerDegLatLon;
             lLatSignZ = Math.Sign(lLatDistZ);  // + = N, - = S
             if (lLatSignZ == 0) lLatSignZ = 1;
             //Correction factors for location on earth, the larger the lat the less vertical affect and more horizontal,
@@ -1075,11 +1076,11 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             //Negative = low, west
 
             //Longitudal distance to target
-            lLonDist = (TargetLoc.Longitude - ZeroShooterLoc.Longitude) * lYrdPerDeg;
+            lLonDist = (TargetLoc.Longitude - ZeroShooterLoc.Longitude) * YardsPerDegLatLon;
             lLonSign = Math.Sign(lLonDist);  // + = E, - = W
             if (lLonSign == 0) lLonSign = 1;
             //Latitudal distance to target
-            lLatDist = (TargetLoc.Latitude - ZeroShooterLoc.Latitude) * lYrdPerDeg;
+            lLatDist = (TargetLoc.Latitude - ZeroShooterLoc.Latitude) * YardsPerDegLatLon;
             lLatSign = Math.Sign(lLatDist);  // + = N, - = S
             if (lLatSign == 0) lLatSign = 1;
             //Correction factors for location on earth, convert degrees to radians

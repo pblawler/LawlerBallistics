@@ -161,13 +161,28 @@ namespace LawlerBallisticsDesk.ViewModel
 
         #region "Relay Commands"
         private RelayCommand _ZeroAtmosphericsCommand;
+        private RelayCommand _SaveFileCommand;
+        private RelayCommand _SaveFileAsCommand;
 
         public RelayCommand EstimateBCCommand { get; set; }
         public RelayCommand OpenBCestimatorCommand { get; set; }
         public RelayCommand RunPreShotCheckCommand { get; set; }
         public RelayCommand ShootCommand { get; set; }
-        public RelayCommand SaveFileCommand { get; set; }
-        public RelayCommand SaveFileAsCommand { get; set; }
+        public RelayCommand SaveFileCommand
+        {
+            get
+            {
+                return _SaveFileCommand ?? (_SaveFileCommand = new RelayCommand(() => SaveFile()));
+            }
+        }
+        public RelayCommand SaveFileAsCommand
+        {
+            get
+            {
+                return _SaveFileAsCommand ?? (_SaveFileAsCommand = new RelayCommand(() => SaveFileAs()));
+            }
+        }
+
         public RelayCommand OpenRangeFinderCommand { get; set; }
         public RelayCommand ZeroLocationCommand { get; set; }
         public RelayCommand ShotLocationCommand { get; set; }
@@ -182,8 +197,7 @@ namespace LawlerBallisticsDesk.ViewModel
 
         #region "Constructor"
         public SolutionViewModel()
-        {
-            _FileName = "";
+        {            
             MySolution = new Solution();
             _TrajectoryPlot = new PlotModel();
             _TrajectoryPlot.Title = "Trajectory";
@@ -200,36 +214,38 @@ namespace LawlerBallisticsDesk.ViewModel
             OpenBCestimatorCommand = new RelayCommand(OpenBCestimator, null);
             RunPreShotCheckCommand = new RelayCommand(RunPreShotCheck, null);
             ShootCommand = new RelayCommand(Shoot, null);
-            SaveFileCommand = new RelayCommand(SaveFile, null);
-            SaveFileAsCommand = new RelayCommand(SaveFileAs, null);
             OpenRangeFinderCommand = new RelayCommand(OpenRangeFinder, null);
             ZeroLocationCommand = new RelayCommand(ZeroLocation, null);
             ShotLocationCommand = new RelayCommand(ShotLocation, null);
             DataPersistence lDP = new DataPersistence();
-            Ballistics lBCls;
-            string lf = LawlerBallisticsFactory.AppDataFolder + "\\default.bdf";
-            //lBCls = lDP.ParseBallisticSolution(lf);
+            string lf = LawlerBallisticsFactory.DataFolder + "\\default.bdf";
+            _FileName = lf;
+            MySolution = lDP.ParseBallisticSolution(lf);
         }
         #endregion
 
         #region "Public Routines"      
-        public void SetShooterLocation(double Lat, double Lon)
+        public void SetShooterLocation(double Alt, double Lat, double Lon)
         {
+            MySolution.MyScenario.MyShooter.MyLocation.Altitude = Alt;
             MySolution.MyScenario.MyShooter.MyLocation.Latitude = Lat;
             MySolution.MyScenario.MyShooter.MyLocation.Longitude = Lon;
         }
-        public void SetTargetLocation(double Lat, double Lon)
+        public void SetTargetLocation(double Alt, double Lat, double Lon)
         {
+            MySolution.MyScenario.SelectedTarget.TargetLocation.Altitude = Alt;
             MySolution.MyScenario.SelectedTarget.TargetLocation.Latitude = Lat;
             MySolution.MyScenario.SelectedTarget.TargetLocation.Longitude = Lon;
         }
-        public void SetShooterZeroLocation(double Lat, double Lon)
+        public void SetShooterZeroLocation(double Alt, double Lat, double Lon)
         {
+            MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Altitude = Alt;
             MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Latitude = Lat;
             MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Longitude = Lon;
         }
-        public void SetTargetZeroLocation(double Lat, double Lon)
+        public void SetTargetZeroLocation(double Alt, double Lat, double Lon)
         {
+            MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.TargetLoc.Altitude = Alt;
             MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.TargetLoc.Latitude = Lat;
             MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.TargetLoc.Longitude = Lon;
         }
@@ -558,7 +574,7 @@ namespace LawlerBallisticsDesk.ViewModel
             DataPersistence lDP = new DataPersistence();
 
             lSFD.Filter = lDP.BallisticFileFilter;
-            lSFD.InitialDirectory = LawlerBallisticsFactory.AppDataFolder;
+            lSFD.InitialDirectory = LawlerBallisticsFactory.DataFolder;
             lSFD.RestoreDirectory = true;
             //lSFD.CheckFileExists = true;
             lSFD.OverwritePrompt = true;

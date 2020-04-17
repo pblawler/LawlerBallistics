@@ -47,6 +47,10 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         private double _PointBlankRange;
         private string _Message;
         private string[] _MsgQ = new string[12];
+        private double _ShotDirection;
+        private double _ShotAngle;
+        private double _ShotDistance;
+        private double _WindEffectiveDirection;
         //private DragSlopeData _dragSlopeData;
         #endregion
 
@@ -100,6 +104,19 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// </summary>
         public bool UseMaxRise { get { return _UseMaxRise; } set { _UseMaxRise = value; RaisePropertyChanged(nameof(UseMaxRise)); } }
         public double PointBlankRange { get { return _PointBlankRange; } set { _PointBlankRange = value; RaisePropertyChanged(nameof(PointBlankRange)); } }
+        /// <summary>
+        /// Degrees from true north.
+        /// </summary>
+        public double ShotDirection { get { return _ShotDirection; } set { _ShotDirection = value; RaisePropertyChanged(nameof(ShotDirection)); } }
+        /// <summary>
+        /// Degrees in elevation, i.e. shooting up or down.
+        /// </summary>
+        public double ShotAngle { get { return _ShotAngle; } set { _ShotAngle = value; RaisePropertyChanged(nameof(ShotAngle)); } }
+        /// <summary>
+        /// LOS range to the target calculated from map data.
+        /// </summary>
+        public double ShotDistance { get { return _ShotDistance; } set { _ShotDistance = value; RaisePropertyChanged(nameof(ShotDistance)); } }
+        public double WindEffectiveDirection { get { return _WindEffectiveDirection; } set { _WindEffectiveDirection = value; RaisePropertyChanged(nameof(WindEffectiveDirection)); } }
         public string Message { get { return _Message; } }
         #endregion
 
@@ -122,6 +139,41 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Private Routines"
+        private void SetWindDirection()
+        {
+            //TODO: break this function up to calculate the components independently
+
+            //Target latitude minus shooter latitude to get positive for east.
+            double lhoriz = (TargetLoc.Latitude - ShooterLoc.Latitude) * LocationData.YardsPerDegLatLon;
+            //Target longitude minus shooter longitude to get positive for north.
+            double lvert = (TargetLoc.Longitude - ShooterLoc.Longitude) * LocationData.YardsPerDegLatLon;
+            double lShtAngl = Math.Atan(Math.Abs(lhoriz / lvert))*(180/Math.PI);
+            double lhorzRange = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
+            double lElev = (TargetLoc.Altitude - ShooterLoc.Altitude)/3;
+            double lElevAng = Math.Atan(Math.Abs(lElev / lhorzRange)) * (180 / Math.PI);
+            ShotDistance = lElev / Math.Sin((lElevAng * (Math.PI / 180)));
+            ShotAngle = lElevAng;
+            if((lhoriz < 0) & (lvert > 0))
+            {
+                lShtAngl = 360 - lShtAngl;
+            }
+            else if ((lhoriz > 0) & (lvert < 0))
+            {
+                lShtAngl = 180 - lShtAngl;
+            }
+            else if ((lhoriz < 0) & (lvert < 0))
+            {
+                lShtAngl = 180 + lShtAngl;
+            }
+            ShotDirection = lShtAngl;
+            //TODO: fix effective wind direction.
+            double lWE = atmospherics.WindDirection - ShotDirection;
+            if(lWE<0)
+            {
+
+            }
+            WindEffectiveDirection = lWE;
+        }
         private void LoadMessage(string msg)
         {
             string lmsg = "";

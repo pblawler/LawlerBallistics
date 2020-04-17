@@ -161,14 +161,14 @@ namespace LawlerBallisticsDesk.Classes
         }
         public Solution ParseBallisticSolution(string FileName="")
         {
-            Solution lBSF = new Solution();
+            Solution lBSF;
             string lSF;
 
             lSF = File.ReadAllText(FileName);
             XmlDocument lXML = new XmlDocument();
 
             lXML.LoadXml(lSF);
-            XmlNode lSN = lXML.SelectSingleNode("Ballistic Solution File");
+            XmlNode lSN = lXML.SelectSingleNode("BallisticSolutionFile");
             lBSF = LoadSolution(lSN);
 
             return lBSF;
@@ -969,9 +969,9 @@ namespace LawlerBallisticsDesk.Classes
         {
             string lRTN;
             
-            lRTN = "<Ballistic Solution File>" + Environment.NewLine;
+            lRTN = "<BallisticSolutionFile>" + Environment.NewLine;
             lRTN = lRTN + ZeroDatXML(TargetSolution.MyScenario.MyShooter.MyLoadOut.zeroData);
-            lRTN = lRTN + "</Ballistic Solution File>";
+            lRTN = lRTN + "</BallisticSolutionFile>";
 
             return lRTN;
         }
@@ -979,7 +979,7 @@ namespace LawlerBallisticsDesk.Classes
         {
             string lRTN;
 
-            lRTN = "<Zero Data>" + Environment.NewLine;
+            lRTN = "<ZeroData>" + Environment.NewLine;
             lRTN = lRTN + "<MidRange value=\"" + TargetZeroData.MidRange.ToString() + "\" type=\"double\">" + System.Environment.NewLine;                       
             lRTN = lRTN + "</MidRange>" + System.Environment.NewLine;
             lRTN = lRTN + "<NearZeroRange value=\"" + TargetZeroData.NearZeroRange.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
@@ -992,14 +992,15 @@ namespace LawlerBallisticsDesk.Classes
             lRTN = lRTN + "</ZeroMaxRise>" + System.Environment.NewLine;
             lRTN = lRTN + "<ZeroRange value=\"" + TargetZeroData.ZeroRange.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
             lRTN = lRTN + "</ZeroRange>" + System.Environment.NewLine;
-            lRTN = lRTN + "<Shooter Location Data>" + Environment.NewLine;
+            //TODO: Add shotdirection + shotangle + shotrange + WindEffectiveDirection
+            lRTN = lRTN + "<ShooterLocationData>" + Environment.NewLine;
             lRTN = lRTN + LocationDatXML(TargetZeroData.ShooterLoc);
-            lRTN = lRTN + "<Shooter Location Data>" + Environment.NewLine;
-            lRTN = lRTN + "<Target Location Data>" + Environment.NewLine;
+            lRTN = lRTN + "</ShooterLocationData>" + Environment.NewLine;
+            lRTN = lRTN + "<TargetLocationData>" + Environment.NewLine;
             lRTN = lRTN + LocationDatXML(TargetZeroData.TargetLoc);
-            lRTN = lRTN + "</Target Location Data>" + Environment.NewLine;
+            lRTN = lRTN + "</TargetLocationData>" + Environment.NewLine;
             lRTN = lRTN + AtmosphericDatXML(TargetZeroData.atmospherics);
-            lRTN = lRTN + "</Zero Data>" + Environment.NewLine;
+            lRTN = lRTN + "</ZeroData>" + Environment.NewLine;
 
             return lRTN;
         }
@@ -1007,11 +1008,14 @@ namespace LawlerBallisticsDesk.Classes
         {
             string lRTN;
 
-            lRTN = "<Location Data>" + Environment.NewLine;
-            lRTN = lRTN + "<Altitude value=\"" + TargetLocation.Altitude + "\" type=\"double\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<Latitude value=\"" + TargetLocation.Latitude + "\" type=\"double\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<Longitude value=\"" + TargetLocation.Longitude + "\" type=\"double\">" + System.Environment.NewLine;
-            lRTN = lRTN + "</Location Data>" + Environment.NewLine;
+            lRTN = "<LocationData>" + Environment.NewLine;
+            lRTN = lRTN + "<Altitude value=\"" + TargetLocation.Altitude + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Altitude>" + Environment.NewLine;
+            lRTN = lRTN + "<Latitude value=\"" + TargetLocation.Latitude + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Latitude>" + Environment.NewLine;
+            lRTN = lRTN + "<Longitude value=\"" + TargetLocation.Longitude + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Longitude>" + Environment.NewLine;
+            lRTN = lRTN + "</LocationData>" + Environment.NewLine;
 
             return lRTN;
         }
@@ -1019,22 +1023,36 @@ namespace LawlerBallisticsDesk.Classes
         {
             string lRTN;
 
-            lRTN = "<Atmospheric Data>" + Environment.NewLine;
-            lRTN = lRTN + "<DensityAlt value=\"" + TargetAtmospherics.DensityAlt + "\" type=\"double\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<FeelsLike value=\"" + TargetAtmospherics.FeelsLike + "\" type=\"double\" unit=\"" + TargetAtmospherics.FeelsLikeUnits + "\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<HumidityRel value=\"" + TargetAtmospherics.HumidityRel + "\" type=\"double\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<LastUpdated value=\"" + TargetAtmospherics.LastUpdated + "\" type=\"DateTime\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<Precipitation value=\"" + TargetAtmospherics.Precipitation + "\" type=\"string\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<Pressure value=\"" + TargetAtmospherics.Pressure + "\" type=\"double\" unit=\"" + TargetAtmospherics.PressureUnits + "\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<Station value=\"" + TargetAtmospherics.Station + "\" type=\"string\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<SunRise value=\"" + TargetAtmospherics.SunRise + "\" type=\"DateTime\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.SunSet + "\" type=\"DateTime\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.Temp + "\" type=\"double\" unit=\"" + TargetAtmospherics.TempUnits + "\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.Weather + "\" type=\"string\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.WindDirection + "\" type=\"double\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.WindDirTxt + "\" type=\"string\">" + System.Environment.NewLine;
-            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.WindSpeed + "\" type=\"double\" unit=\"" + TargetAtmospherics.WindSpeedUnits + "\">" + System.Environment.NewLine;
-            lRTN = lRTN + "</Atmospheric Data>" + Environment.NewLine;
+            lRTN = "<AtmosphericData>" + Environment.NewLine;
+            lRTN = lRTN + "<DensityAlt value=\"" + TargetAtmospherics.DensityAlt + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</DensityAlt>" + Environment.NewLine;
+            lRTN = lRTN + "<FeelsLike value=\"" + TargetAtmospherics.FeelsLike + "\" type=\"double\" unit=\"" + TargetAtmospherics.FeelsLikeUnits + "\">" + Environment.NewLine;
+            lRTN = lRTN + "</FeelsLike>" + Environment.NewLine;
+            lRTN = lRTN + "<HumidityRel value=\"" + TargetAtmospherics.HumidityRel + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</HumidityRel>" + Environment.NewLine;
+            lRTN = lRTN + "<LastUpdated value=\"" + TargetAtmospherics.LastUpdated + "\" type=\"DateTime\">" + Environment.NewLine;
+            lRTN = lRTN + "</LastUpdated>" + Environment.NewLine;
+            lRTN = lRTN + "<Precipitation value=\"" + TargetAtmospherics.Precipitation + "\" type=\"string\">" + Environment.NewLine;
+            lRTN = lRTN + "</Precipitation>" + Environment.NewLine;
+            lRTN = lRTN + "<Pressure value=\"" + TargetAtmospherics.Pressure + "\" type=\"double\" unit=\"" + TargetAtmospherics.PressureUnits + "\">" + Environment.NewLine;
+            lRTN = lRTN + "</Pressure>" + Environment.NewLine;
+            lRTN = lRTN + "<Station value=\"" + TargetAtmospherics.Station + "\" type=\"string\">" + Environment.NewLine;
+            lRTN = lRTN + "</Station>" + Environment.NewLine;
+            lRTN = lRTN + "<SunRise value=\"" + TargetAtmospherics.SunRise + "\" type=\"DateTime\">" + Environment.NewLine;
+            lRTN = lRTN + "</SunRise>" + Environment.NewLine;
+            lRTN = lRTN + "<SunSet value=\"" + TargetAtmospherics.SunSet + "\" type=\"DateTime\">" + Environment.NewLine;
+            lRTN = lRTN + "</SunSet>" + Environment.NewLine;
+            lRTN = lRTN + "<Temp value=\"" + TargetAtmospherics.Temp + "\" type=\"double\" unit=\"" + TargetAtmospherics.TempUnits + "\">" + Environment.NewLine;
+            lRTN = lRTN + "</Temp>" + Environment.NewLine;
+            lRTN = lRTN + "<Weather value=\"" + TargetAtmospherics.Weather + "\" type=\"string\">" + Environment.NewLine;
+            lRTN = lRTN + "</Weather>" + Environment.NewLine;
+            lRTN = lRTN + "<WindDirection value=\"" + TargetAtmospherics.WindDirection + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</WindDirection>" + Environment.NewLine;
+            lRTN = lRTN + "<WindDirTxt value=\"" + TargetAtmospherics.WindDirTxt + "\" type=\"string\">" + Environment.NewLine;
+            lRTN = lRTN + "</WindDirTxt>" + Environment.NewLine;
+            lRTN = lRTN + "<WindSpeed value=\"" + TargetAtmospherics.WindSpeed + "\" type=\"double\" unit=\"" + TargetAtmospherics.WindSpeedUnits + "\">" + Environment.NewLine;
+            lRTN = lRTN + "</WindSpeed>" + Environment.NewLine;
+            lRTN = lRTN + "</AtmosphericData>" + Environment.NewLine;
 
             return lRTN;
         }
@@ -1686,13 +1704,13 @@ namespace LawlerBallisticsDesk.Classes
             lGN = ZeroDataNode.SelectSingleNode("ZeroRange");
             lNR = lGN.Attributes["value"].Value;
             lRTN.ZeroRange = Convert.ToDouble(lNR);
-            XmlNode lZDsl = ZeroDataNode.SelectSingleNode("Shooter Location Data");
-            XmlNode lLN = lZDsl.SelectSingleNode("Location Data");
+            XmlNode lZDsl = ZeroDataNode.SelectSingleNode("ShooterLocationData");
+            XmlNode lLN = lZDsl.SelectSingleNode("LocationData");
             lRTN.ShooterLoc = LoadLocationData(lLN);
-            XmlNode lZDtl = ZeroDataNode.SelectSingleNode("Shooter Location Data");
-            lLN = lZDtl.SelectSingleNode("Location Data");
+            XmlNode lZDtl = ZeroDataNode.SelectSingleNode("ShooterLocationData");
+            lLN = lZDtl.SelectSingleNode("LocationData");
             lRTN.TargetLoc = LoadLocationData(lLN);
-            XmlNode lZDatm = ZeroDataNode.SelectSingleNode("Atmospheric Data");
+            XmlNode lZDatm = ZeroDataNode.SelectSingleNode("AtmosphericData");
             lRTN.atmospherics = LoadAtmosphericData(lZDatm);            
 
             return lRTN;
@@ -1700,19 +1718,9 @@ namespace LawlerBallisticsDesk.Classes
         private Solution LoadSolution(XmlNode SolutionNode)
         {
             Solution lRTN = new Solution();
-            Scenario lMyScenario = new Scenario();
-            lMyScenario.MyShooter = new Shooter();
-            lMyScenario.MyShooter.MyLoadOut = new LoadOut();
             
-            string lNR;
-            XmlNode lLN;
-
-            XmlNode lZD = SolutionNode.SelectSingleNode("Zero Data");
-            lMyScenario.MyShooter.MyLoadOut.zeroData = LoadZeroData(lZD);
-
-
-
-            Ballistics lMyBallistics = new Ballistics(lMyScenario);
+            XmlNode lZD = SolutionNode.SelectSingleNode("ZeroData");
+            lRTN.MyScenario.MyShooter.MyLoadOut.zeroData = LoadZeroData(lZD);
 
             return lRTN;
         }

@@ -522,6 +522,19 @@ namespace LawlerBallisticsDesk.Classes
                     default:
                         break;
                 }
+                switch (FeelsLikeUnits.ToLower().Substring(0, 1))
+                {
+                    case "c":
+                        FeelsLike = DegCtoDegF(Temp);
+                        FeelsLikeUnits = "fahrenheit";
+                        break;
+                    case "k":
+                        FeelsLike = DegKtoDegF(Temp);
+                        FeelsLikeUnits = "fahrenheit";
+                        break;
+                    default:
+                        break;
+                }
                 switch (WindSpeedUnits.ToLower())
                 {
                     //TODO: convert wind speed to mph
@@ -534,6 +547,8 @@ namespace LawlerBallisticsDesk.Classes
                     default:
                         break;
                 }
+                //Refresh Calculated Values
+                PropertysChanged();
             }
             catch (Exception ex)
             {
