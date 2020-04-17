@@ -182,7 +182,6 @@ namespace LawlerBallisticsDesk.ViewModel
                 return _SaveFileAsCommand ?? (_SaveFileAsCommand = new RelayCommand(() => SaveFileAs()));
             }
         }
-
         public RelayCommand OpenRangeFinderCommand { get; set; }
         public RelayCommand ZeroLocationCommand { get; set; }
         public RelayCommand ShotLocationCommand { get; set; }

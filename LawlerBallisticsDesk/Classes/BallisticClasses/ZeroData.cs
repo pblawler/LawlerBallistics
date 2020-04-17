@@ -22,6 +22,33 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         private void atmospherics_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             RaisePropertyChanged(nameof(atmospherics));
+            SetWindDirection();
+            switch (e.PropertyName)
+            {
+                case "Message":
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        private void ShooterLoc_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaisePropertyChanged(nameof(ShooterLoc));
+            SetWindDirection();
+            switch (e.PropertyName)
+            {
+                case "Message":
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        private void TargetLoc_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaisePropertyChanged(nameof(TargetLoc));
+            SetWindDirection();
             switch (e.PropertyName)
             {
                 case "Message":
@@ -55,15 +82,54 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Properties"
-        public Atmospherics atmospherics { get { return _atmospherics; } set { _atmospherics = value; RaisePropertyChanged(nameof(atmospherics)); } }
+        public Atmospherics atmospherics
+        {
+            get 
+            {
+                return _atmospherics;
+            } 
+            set
+            {
+                _atmospherics = value;
+                SetWindDirection();
+                atmospherics.PropertyChanged += atmospherics_PropertyChanged;
+                RaisePropertyChanged(nameof(atmospherics));
+            }
+        }
         //public DragSlopeData dragSlopeData
         //{
         //    get { return _dragSlopeData; }
         //    set { _dragSlopeData = value; RaisePropertyChanged(nameof(dragSlopeData)); }
         //}
         //public LoadOut loadOutData { get { return _loadOutData; } set { _loadOutData = value; RaisePropertyChanged(nameof(loadOutData)); } }
-        public LocationData ShooterLoc { get { return _ShooterLoc; } set { _ShooterLoc = value; RaisePropertyChanged(nameof(ShooterLoc)); } }
-        public LocationData TargetLoc { get { return _TargetLoc; } set { _TargetLoc = value; RaisePropertyChanged(nameof(TargetLoc)); } }
+        public LocationData ShooterLoc
+        {
+            get 
+            {
+                return _ShooterLoc;
+            }
+            set
+            {
+                _ShooterLoc = value;
+                SetWindDirection();
+                ShooterLoc.PropertyChanged += ShooterLoc_PropertyChanged;
+                RaisePropertyChanged(nameof(ShooterLoc));
+            }
+        }
+        public LocationData TargetLoc
+        {
+            get
+            {
+                return _TargetLoc;
+            }
+            set
+            {
+                _TargetLoc = value;
+                SetWindDirection();
+                TargetLoc.PropertyChanged += TargetLoc_PropertyChanged;
+                RaisePropertyChanged(nameof(TargetLoc));
+            }
+        }
         /// <summary>
         /// The maximum bullet rise from the muzzle to the zero range.
         /// </summary>
@@ -107,7 +173,18 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// <summary>
         /// Degrees from true north.
         /// </summary>
-        public double ShotDirection { get { return _ShotDirection; } set { _ShotDirection = value; RaisePropertyChanged(nameof(ShotDirection)); } }
+        public double ShotDirection 
+        {
+            get
+            {
+                return _ShotDirection;
+            }
+            set
+            {
+                _ShotDirection = value; 
+                RaisePropertyChanged(nameof(ShotDirection));
+            } 
+        }
         /// <summary>
         /// Degrees in elevation, i.e. shooting up or down.
         /// </summary>
@@ -127,7 +204,19 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             atmospherics = new Atmospherics();
             atmospherics.PropertyChanged += atmospherics_PropertyChanged;
             ShooterLoc = new LocationData();
+            ShooterLoc.PropertyChanged += ShooterLoc_PropertyChanged;
             TargetLoc = new LocationData();
+            TargetLoc.PropertyChanged += TargetLoc_PropertyChanged;
+        }
+        #endregion
+
+        #region "Destructor"
+        ~ZeroData()
+        {
+            atmospherics.PropertyChanged -= atmospherics_PropertyChanged;
+            ShooterLoc.PropertyChanged -= ShooterLoc_PropertyChanged;
+            TargetLoc.PropertyChanged -= TargetLoc_PropertyChanged;
+
         }
         #endregion
 
@@ -142,11 +231,11 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         private void SetWindDirection()
         {
             //TODO: break this function up to calculate the components independently
-
+            if (TargetLoc == null) return;
             //Target latitude minus shooter latitude to get positive for east.
-            double lhoriz = (TargetLoc.Latitude - ShooterLoc.Latitude) * LocationData.YardsPerDegLatLon;
+            double lvert = (ShooterLoc.Latitude - TargetLoc.Latitude) * LocationData.YardsPerDegLatLon;
             //Target longitude minus shooter longitude to get positive for north.
-            double lvert = (TargetLoc.Longitude - ShooterLoc.Longitude) * LocationData.YardsPerDegLatLon;
+            double lhoriz = (TargetLoc.Longitude - ShooterLoc.Longitude) * LocationData.YardsPerDegLatLon;
             double lShtAngl = Math.Atan(Math.Abs(lhoriz / lvert))*(180/Math.PI);
             double lhorzRange = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
             double lElev = (TargetLoc.Altitude - ShooterLoc.Altitude)/3;
@@ -166,12 +255,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 lShtAngl = 180 + lShtAngl;
             }
             ShotDirection = lShtAngl;
-            //TODO: fix effective wind direction.
             double lWE = atmospherics.WindDirection - ShotDirection;
-            if(lWE<0)
-            {
-
-            }
+            if(lWE<0) lWE = 360 - lWE;
             WindEffectiveDirection = lWE;
         }
         private void LoadMessage(string msg)
@@ -193,12 +278,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         }
         #endregion
 
-        #region "Destructor"
-        ~ZeroData()
-        {
-            atmospherics.PropertyChanged -= atmospherics_PropertyChanged;
-        }
-        #endregion
 
     }
 }

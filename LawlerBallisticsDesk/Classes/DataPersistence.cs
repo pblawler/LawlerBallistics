@@ -1707,7 +1707,7 @@ namespace LawlerBallisticsDesk.Classes
             XmlNode lZDsl = ZeroDataNode.SelectSingleNode("ShooterLocationData");
             XmlNode lLN = lZDsl.SelectSingleNode("LocationData");
             lRTN.ShooterLoc = LoadLocationData(lLN);
-            XmlNode lZDtl = ZeroDataNode.SelectSingleNode("ShooterLocationData");
+            XmlNode lZDtl = ZeroDataNode.SelectSingleNode("TargetLocationData");
             lLN = lZDtl.SelectSingleNode("LocationData");
             lRTN.TargetLoc = LoadLocationData(lLN);
             XmlNode lZDatm = ZeroDataNode.SelectSingleNode("AtmosphericData");

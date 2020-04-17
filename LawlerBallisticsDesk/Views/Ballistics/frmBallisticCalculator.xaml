@@ -244,49 +244,50 @@
                             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="168" Margin="10,11,0,0" VerticalAlignment="Top" Width="362"/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="21,83,0,0" HorizontalContentAlignment="Center" 
                         TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ZeroMaxRise, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Max Rise (Hm)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                            <Label Content="Max Rise (in)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="21,53,0,0" VerticalAlignment="Top" Width="103" 
                         ToolTip="Centerline of scope to centerline of barrel." />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="129,83,0,0" HorizontalContentAlignment="Center" 
                         TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ZeroRange, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Zero Range" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                            <Label Content="Zero Range (Yrd)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="129,53,0,0" VerticalAlignment="Top" Width="114" 
                         ToolTip="Centerline of scope to centerline of barrel." />
                             <CheckBox Content="Use Max. Rise" HorizontalAlignment="Left" Height="25" Margin="21,21,0,0" 
                               VerticalAlignment="Top" Width="103" FontWeight="Bold" IsChecked="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.UseMaxRise}"/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="248,83,0,0" HorizontalContentAlignment="Center" 
                         TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.NearZeroRange, Mode=OneWay}"/>
-                            <Label Content="Near Zero Range" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                            <Label Content="Near Zero (Yrd)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="248,53,0,0" VerticalAlignment="Top" Width="114" 
                         ToolTip="Centerline of scope to centerline of barrel." />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="21,136,0,0" HorizontalContentAlignment="Center" 
                         TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MidRange, Mode=OneWay}"
                                      IsReadOnly="True" Background="#FFEAEAEA"/>
-                            <Label Content="Mid. Range" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                            <Label Content="Mid.Range (Yrd)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="21,106,0,0" VerticalAlignment="Top" Width="103" 
                         ToolTip="Centerline of scope to centerline of barrel." />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="129,136,0,0" HorizontalContentAlignment="Center" 
                         TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.PointBlankRange, Mode=OneWay}"
                                      IsReadOnly="True" Background="#FFEAEAEA"/>
-                            <Label Content="Point Blank Range" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                            <Label Content="PBR (Yrd)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="129,106,0,0" VerticalAlignment="Top" Width="114" 
                         ToolTip="Centerline of scope to centerline of barrel." />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="387,83,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.DensityAlt, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Density Altitude" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="387,53,0,0" VerticalAlignment="Top" Width="103" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="495,83,0,0" HorizontalContentAlignment="Center" 
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="115" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.DensityAlt, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Density Alt. (ft)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="387,53,0,0" VerticalAlignment="Top" Width="115" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="507,83,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.Temp, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Temperature F" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="495,53,0,0" VerticalAlignment="Top" Width="103" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="603,83,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.HumidityRel, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Temperature (F)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="507,53,0,0" VerticalAlignment="Top" Width="103" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="615,83,0,0" HorizontalContentAlignment="Center" 
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="103" ToolTip="Decimal Relative Humidity (i.e. 50% = 0.5)"
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.HumidityRel, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Rel. Humidity" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="603,53,0,0" VerticalAlignment="Top" Width="103" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="711,83,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Baro Pressure" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="711,53,0,0" VerticalAlignment="Top" Width="103" />
+                                FontWeight="Bold" Height="30" Margin="615,53,0,0" VerticalAlignment="Top" Width="103" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="723,83,0,0" HorizontalContentAlignment="Center" 
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Baro Pressure (inHg)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="723,53,0,0" VerticalAlignment="Top" Width="130" />
                             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="224" Margin="10,184,0,0" VerticalAlignment="Top" Width="362">
                                 <Label Content="Zero Location and Direction" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                     FontWeight="Bold" Height="30" Margin="-1,9,-1,0" VerticalAlignment="Top" Width="346" />
@@ -322,50 +323,60 @@
                             <TextBox HorizontalAlignment="Stretch" Grid.Row="1" IsReadOnly="True"
                                      TextWrapping="Wrap" VerticalAlignment="Stretch"
                                      Text="{Binding ZeroMessage, Mode=OneWay}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="522,136,0,0" HorizontalContentAlignment="Center" 
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="524,136,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="116" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.WindSpeed, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Wind Speed (mph)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="522,106,0,0" VerticalAlignment="Top" Width="116"/>
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="643,136,0,0" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="524,106,0,0" VerticalAlignment="Top" Width="116"/>
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="645,136,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.WindDirection, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Wind Direction (deg)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="643,106,0,0" VerticalAlignment="Top" Width="130" 
+                                FontWeight="Bold" Height="30" Margin="645,106,0,0" VerticalAlignment="Top" Width="130" 
                                    ToolTip="Degrees from true north."/>
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="657,246,0,0" HorizontalContentAlignment="Center" 
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="662,304,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.LastUpdated, UpdateSourceTrigger=PropertyChanged}"
                                      IsReadOnly="True" Background="#FFEAEAEA"/>
                             <Label Content="Last Updated" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="657,216,0,0" VerticalAlignment="Top" Width="130" 
+                                FontWeight="Bold" Height="30" Margin="662,274,0,0" VerticalAlignment="Top" Width="130" 
                                 ToolTip="Degrees from LOS to target with target at 0 degrees counting clockwise, ie direct cross wind blowing right to left is 90 degrees."/>
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="387,191,0,0" HorizontalContentAlignment="Center" 
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="389,136,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.FeelsLike, UpdateSourceTrigger=PropertyChanged}"
                                 IsReadOnly="True"/>
-                            <Label Content="Feels Like F" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="387,161,0,0" VerticalAlignment="Top" Width="130" 
+                            <Label Content="Feels Like (F)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="389,106,0,0" VerticalAlignment="Top" Width="130" 
                                 ToolTip="Degrees from LOS to target with target at 0 degrees counting clockwise, ie direct cross wind blowing right to left is 90 degrees."/>
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="522,191,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="292" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.Weather, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="389,246,0,0" HorizontalContentAlignment="Center" 
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="173" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.Weather, UpdateSourceTrigger=PropertyChanged}"
                                 IsReadOnly="True"/>
                             <Label Content="Weather" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="522,161,0,0" VerticalAlignment="Top" Width="292" 
+                                FontWeight="Bold" Height="30" Margin="389,216,0,0" VerticalAlignment="Top" Width="173" 
                                 ToolTip="Degrees from LOS to target with target at 0 degrees counting clockwise, ie direct cross wind blowing right to left is 90 degrees."/>
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="387,246,0,0" HorizontalContentAlignment="Center" 
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="392,304,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.SunRise, UpdateSourceTrigger=PropertyChanged}"
                                 IsReadOnly="True" Background="#FFEAEAEA"/>
                             <Label Content="Sun Rise" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="387,216,0,0" VerticalAlignment="Top" Width="130" 
+                                FontWeight="Bold" Height="30" Margin="392,274,0,0" VerticalAlignment="Top" Width="130" 
                                 ToolTip="Degrees from LOS to target with target at 0 degrees counting clockwise, ie direct cross wind blowing right to left is 90 degrees."/>
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="522,246,0,0" HorizontalContentAlignment="Center" 
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="527,304,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.SunSet, UpdateSourceTrigger=PropertyChanged}"
                                 IsReadOnly="True" Background="#FFEAEAEA"/>
                             <Label Content="Sun Set" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="522,216,0,0" VerticalAlignment="Top" Width="130" 
+                                FontWeight="Bold" Height="30" Margin="527,274,0,0" VerticalAlignment="Top" Width="130" 
                                 ToolTip="Degrees from LOS to target with target at 0 degrees counting clockwise, ie direct cross wind blowing right to left is 90 degrees."/>
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="387,136,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.WindSpeed, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="711,191,0,0" HorizontalContentAlignment="Center" 
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.SpeedOfSound, Mode=OneWay}"
                                      IsReadOnly="True" Background="#FFEAEAEA"/>
                             <Label Content="Speed of Sound (fps)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="387,106,0,0" VerticalAlignment="Top" Width="130"/>
+                                FontWeight="Bold" Height="30" Margin="711,161,0,0" VerticalAlignment="Top" Width="130"/>
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="387,191,0,0" HorizontalContentAlignment="Center" 
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShotDirection, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Shot Direction (deg)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="389,161,0,0" VerticalAlignment="Top" Width="130" 
+                                ToolTip="Degrees from true north."/>
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="524,191,0,0" HorizontalContentAlignment="Center" 
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="182" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.WindEffectiveDirection, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Wind Effective Direction (deg)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="524,161,0,0" VerticalAlignment="Top" Width="182" 
+                                ToolTip="Degrees from true north."/>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Zone Data">

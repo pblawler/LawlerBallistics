@@ -22,7 +22,9 @@ namespace LawlerBallisticsDesk.Classes
         }
         #endregion
 
+        #region "Constants"
         public static double YardsPerDegLatLon = 121740.6652;
+        #endregion
 
         #region "Private Variables"
         private double _Latitude;
