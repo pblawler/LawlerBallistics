@@ -461,8 +461,10 @@ namespace LawlerBallisticsDesk.Classes
                 lcNode = lNode.SelectSingleNode("sun");
                 lRtn = lcNode.Attributes["rise"].Value;
                 SunRise = ParseWeatherTime(lRtn);
+                SunRise = SunRise.AddHours(lTo);
                 lRtn = lcNode.Attributes["set"].Value;
                 SunSet = ParseWeatherTime(lRtn);
+                SunSet=SunSet.AddHours(lTo);
                 lNode = lCurr.SelectSingleNode("feels_like");
                 lRtn = lNode.Attributes["value"].Value;
                 FeelsLike = Convert.ToDouble(lRtn);
@@ -494,7 +496,8 @@ namespace LawlerBallisticsDesk.Classes
                 Weather = lNode.Attributes["value"].Value;
                 lNode = lCurr.SelectSingleNode("lastupdate");
                 lRtn = lNode.Attributes["value"].Value;
-                LastUpdated = ParseWeatherTime(lRtn);                
+                LastUpdated = ParseWeatherTime(lRtn);
+                LastUpdated = LastUpdated.AddHours(lTo);
                 lRtn = "";
                 switch(PressureUnits.ToLower())
                 {
