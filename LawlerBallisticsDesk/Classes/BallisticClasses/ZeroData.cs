@@ -21,7 +21,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         }
         private void atmospherics_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RaisePropertyChanged(nameof(atmospherics));
+            RaisePropertyChanged(e.PropertyName);
             SetWindDirection();
             switch (e.PropertyName)
             {
@@ -34,7 +34,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         }
         private void ShooterLoc_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RaisePropertyChanged(nameof(ShooterLoc));
+            //RaisePropertyChanged(nameof(ShooterLoc));
+            RaisePropertyChanged(e.PropertyName);
             SetWindDirection();
             switch (e.PropertyName)
             {
@@ -47,7 +48,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         }
         private void TargetLoc_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RaisePropertyChanged(nameof(TargetLoc));
+            //RaisePropertyChanged(nameof(TargetLoc));
+            RaisePropertyChanged(e.PropertyName);
             SetWindDirection();
             switch (e.PropertyName)
             {
@@ -58,7 +60,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                     break;
             }
         }
-
         #endregion
 
         #region "Private Variables"

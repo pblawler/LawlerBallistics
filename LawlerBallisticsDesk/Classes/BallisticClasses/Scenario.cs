@@ -27,13 +27,12 @@ namespace LawlerBallisticsDesk.Classes
         }
         private void MyShooter_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RaisePropertyChanged(nameof(MyShooter));
+            RaisePropertyChanged(e.PropertyName);
         }
         private void RefreshViewModel()
         {
             RaisePropertyChanged(nameof(MyAtmospherics));
         }
-
         #endregion
 
         #region "Private Variables"
@@ -57,7 +56,20 @@ namespace LawlerBallisticsDesk.Classes
                 RaisePropertyChanged(nameof(MyAtmospherics));
             }
         }
-        public Shooter MyShooter { get { return _MyShooter; } set { _MyShooter = value; RaisePropertyChanged(nameof(MyShooter)); } }
+        public Shooter MyShooter
+        {
+            get
+            {
+                return _MyShooter; 
+            }
+            set
+            {
+                MyShooter.PropertyChanged -= MyShooter_PropertyChanged;
+                _MyShooter = value;
+                MyShooter.PropertyChanged += MyShooter_PropertyChanged;
+                RaisePropertyChanged(nameof(MyShooter));
+            }
+        }
         public ObservableCollection<Target> Targets { get { return _Targets; } set { _Targets = value; RaisePropertyChanged(nameof(Targets)); } }
         public Target SelectedTarget { get { return _SelectedTarget; } set { _SelectedTarget = value; RaisePropertyChanged(nameof(SelectedTarget)); } }
         public BallisticData MyBallisticData { get { return _MyBallisticData; } set { _MyBallisticData = value; RaisePropertyChanged(nameof(MyBallisticData)); } }
@@ -67,7 +79,7 @@ namespace LawlerBallisticsDesk.Classes
         public Scenario()
         {
             MyAtmospherics = new Atmospherics();
-            MyShooter = new Shooter();
+            _MyShooter = new Shooter();
             MyAtmospherics.PropertyChanged += MyAtmospherics_PropertyChanged;
             MyShooter.PropertyChanged += MyShooter_PropertyChanged;
         }

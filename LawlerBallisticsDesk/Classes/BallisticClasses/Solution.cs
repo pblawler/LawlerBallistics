@@ -19,6 +19,18 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+        private void MyScenario_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaisePropertyChanged(e.PropertyName);
+            switch (e.PropertyName)
+            {
+                case "Message":
+                    break;
+
+                default:
+                    break;
+            }
+        }
         #endregion
 
         #region "Private Variables"
@@ -27,15 +39,36 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Properties"
-        public Scenario MyScenario { get { return _MyScenario; } set { _MyScenario = value; RaisePropertyChanged(nameof(MyScenario)); } }
+        public Scenario MyScenario
+        {
+            get
+            {
+                return _MyScenario;
+            }
+            set
+            {
+                MyScenario.PropertyChanged -= MyScenario_PropertyChanged;
+                _MyScenario = value;
+                MyScenario.PropertyChanged += MyScenario_PropertyChanged;
+                RaisePropertyChanged(nameof(MyScenario)); 
+            }
+        }
         public Ballistics MyBallistics { get { return _MyBallistics; } set { _MyBallistics = value; RaisePropertyChanged(nameof(MyBallistics)); } }
         #endregion
 
-        #region "Creator"
+        #region "Constructor"
         public Solution()
         {
-            MyScenario = new Scenario();
+            _MyScenario = new Scenario();
+            MyScenario.PropertyChanged += MyScenario_PropertyChanged;
             MyBallistics = new Ballistics(MyScenario);
+        }
+        #endregion
+
+        #region "Destructor"
+        ~Solution()
+        {
+            MyScenario.PropertyChanged -= MyScenario_PropertyChanged;
         }
         #endregion
     }

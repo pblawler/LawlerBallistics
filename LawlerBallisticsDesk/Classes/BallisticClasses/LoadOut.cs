@@ -22,12 +22,18 @@ namespace LawlerBallisticsDesk.Classes
         }        
         private void SelectedGun_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RaisePropertyChanged(nameof(SelectedGun));
+            //RaisePropertyChanged(nameof(SelectedGun));
         }
         private void SelectedLoadRecipe_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RaisePropertyChanged(nameof(SelectedCartridge));
+            //RaisePropertyChanged(nameof(SelectedCartridge));
         }
+        private void zeroData_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaisePropertyChanged(e.PropertyName);
+        }
+
+        //TODO: Add ZeroData property changed event subscription.  Need to pass the event up the chain to solution.
         #endregion
 
         #region "Private Variables"
@@ -63,7 +69,20 @@ namespace LawlerBallisticsDesk.Classes
         /// </summary>
         public double BSG { get { return _BSG; } set { _BSG = value; RaisePropertyChanged(nameof(BSG)); } }
         public double MaxRange { get { return _MaxRange; } set { _MaxRange = value; RaisePropertyChanged(nameof(MaxRange)); } }
-        public ZeroData zeroData { get { return _zeroData; } set { _zeroData = value; RaisePropertyChanged(nameof(zeroData)); } }
+        public ZeroData zeroData
+        {
+            get
+            {
+                return _zeroData;
+            }
+            set
+            {
+                zeroData.PropertyChanged -= zeroData_PropertyChanged;
+                _zeroData = value;
+                zeroData.PropertyChanged += zeroData_PropertyChanged;
+                RaisePropertyChanged(nameof(zeroData));
+            }
+        }
         #endregion
 
         #region "Constructor"
@@ -72,9 +91,10 @@ namespace LawlerBallisticsDesk.Classes
             _ID = Guid.NewGuid().ToString();
             SelectedGun = new Gun();
             SelectedCartridge = new Recipe();
-            zeroData = new ZeroData();
+            _zeroData = new ZeroData();
             SelectedGun.PropertyChanged += SelectedGun_PropertyChanged;
             SelectedCartridge.PropertyChanged += SelectedLoadRecipe_PropertyChanged;
+            zeroData.PropertyChanged += zeroData_PropertyChanged;
         }
         #endregion
 
@@ -83,6 +103,7 @@ namespace LawlerBallisticsDesk.Classes
         {
             SelectedGun.PropertyChanged -= SelectedGun_PropertyChanged;
             SelectedCartridge.PropertyChanged -= SelectedLoadRecipe_PropertyChanged;
+            zeroData.PropertyChanged -= zeroData_PropertyChanged;
 
         }
         #endregion

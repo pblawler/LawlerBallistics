@@ -25,7 +25,7 @@ namespace LawlerBallisticsDesk.Classes
         }
         private void MyLoadOut_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RaisePropertyChanged(nameof(MyLoadOut));
+            RaisePropertyChanged(e.PropertyName);
         }
         #endregion
 
@@ -36,14 +36,27 @@ namespace LawlerBallisticsDesk.Classes
 
         #region "Properties"
         public LocationData MyLocation { get { return _MyLocation; } set { _MyLocation = value; RaisePropertyChanged(nameof(MyLocation)); } }
-        public LoadOut MyLoadOut { get { return _MyLoadOut; } set { _MyLoadOut = value; RaisePropertyChanged(nameof(MyLoadOut)); } }
+        public LoadOut MyLoadOut
+        {
+            get
+            {
+                return _MyLoadOut;
+            }
+            set
+            {
+                MyLoadOut.PropertyChanged -= MyLoadOut_PropertyChanged;
+                _MyLoadOut = value;
+                MyLoadOut.PropertyChanged += MyLoadOut_PropertyChanged;
+                RaisePropertyChanged(nameof(MyLoadOut));
+            }
+        }
         #endregion
 
         #region "Constructor"
         public Shooter()
         {
             MyLocation = new LocationData();
-            MyLoadOut = new LoadOut();
+            _MyLoadOut = new LoadOut();
             MyLocation.PropertyChanged += MyLocation_PropertyChanged;
             MyLoadOut.PropertyChanged += MyLoadOut_PropertyChanged;            
         }

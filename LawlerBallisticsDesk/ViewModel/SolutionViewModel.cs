@@ -16,11 +16,31 @@ using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Views.Ballistics;
 using LawlerBallisticsDesk.Views.Maps;
 using LawlerBallisticsDesk.Classes.BallisticClasses;
+using System.ComponentModel;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
     public class SolutionViewModel : ViewModelBase, IDisposable
     {
+        //TODO: Subscribe to zerodata property changes and calculate values when properties change.
+
+        #region "Binding"
+        private void MySolution_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaisePropertyChanged(e.PropertyName);
+            
+            switch (e.PropertyName)
+            {
+                case "UseMaxRise":
+                    SolveZeroData();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        #endregion
+
         #region "Private Variables"
         private int _ZeroMsgVal = 0;
         private string[] _ZeroMsg = new string[12];
@@ -48,7 +68,20 @@ namespace LawlerBallisticsDesk.ViewModel
         #endregion
 
         #region "Properties"
-        public Solution MySolution { get { return _MySolution; } set { _MySolution = value; RaisePropertyChanged(nameof(MySolution)); } }
+        public Solution MySolution
+        {
+            get
+            {
+                return _MySolution;
+            }
+            set
+            {
+                MySolution.PropertyChanged -= MySolution_PropertyChanged;
+                _MySolution = value;
+                MySolution.PropertyChanged += MySolution_PropertyChanged;
+                RaisePropertyChanged(nameof(MySolution));
+            }
+        }
         public PlotModel TrajectoryPlot { get { return _TrajectoryPlot; } }
         public PlotModel WindagePlot { get { return _WindagePlot; } }
         public bool PlotWindDrift
@@ -182,7 +215,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 return _SaveFileAsCommand ?? (_SaveFileAsCommand = new RelayCommand(() => SaveFileAs()));
             }
         }
-        public RelayCommand OpenRangeFinderCommand { get; set; }
+        public RelayCommand OpenLocationFinderCommand { get; set; }
         public RelayCommand ZeroLocationCommand { get; set; }
         public RelayCommand ShotLocationCommand { get; set; }
         public RelayCommand ZeroAtmosphericsCommand
@@ -197,7 +230,8 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Constructor"
         public SolutionViewModel()
         {            
-            MySolution = new Solution();
+            _MySolution = new Solution();
+            MySolution.PropertyChanged += MySolution_PropertyChanged;
             _TrajectoryPlot = new PlotModel();
             _TrajectoryPlot.Title = "Trajectory";
             _WindagePlot = new PlotModel();
@@ -213,7 +247,7 @@ namespace LawlerBallisticsDesk.ViewModel
             OpenBCestimatorCommand = new RelayCommand(OpenBCestimator, null);
             RunPreShotCheckCommand = new RelayCommand(RunPreShotCheck, null);
             ShootCommand = new RelayCommand(Shoot, null);
-            OpenRangeFinderCommand = new RelayCommand(OpenRangeFinder, null);
+            OpenLocationFinderCommand = new RelayCommand(OpenLocationFinder, null);
             ZeroLocationCommand = new RelayCommand(ZeroLocation, null);
             ShotLocationCommand = new RelayCommand(ShotLocation, null);
             DataPersistence lDP = new DataPersistence();
@@ -222,6 +256,14 @@ namespace LawlerBallisticsDesk.ViewModel
             MySolution = lDP.ParseBallisticSolution(lf);
         }
         #endregion
+
+        #region "Destructor"
+        ~SolutionViewModel()
+        {
+            MySolution.PropertyChanged -= MySolution_PropertyChanged;
+        }
+        #endregion
+
 
         #region "Public Routines"      
         public void SetShooterLocation(double Alt, double Lat, double Lon)
@@ -457,11 +499,36 @@ namespace LawlerBallisticsDesk.ViewModel
         #endregion
 
         #region "Private Routines"
-        private void OpenRangeFinder()
+
+        #region "Location Routines"
+        private void OpenLocationFinder()
         {
             LocationFinder lLF = new LocationFinder();
             lLF.Show();
         }
+        private void ZeroLocation()
+        {
+            LocationFinder frmZlf = new LocationFinder();
+            frmZlf.Latitude = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Latitude;
+            frmZlf.Longitude = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Longitude;
+            frmZlf.NavigateTo();
+            frmZlf.Mode = "Zero";
+            frmZlf.DataContext = this;
+            frmZlf.Show();
+        }
+        private void ShotLocation()
+        {
+            LocationFinder frmZlf = new LocationFinder();
+            frmZlf.Latitude = MySolution.MyScenario.MyShooter.MyLocation.Latitude;
+            frmZlf.Longitude = MySolution.MyScenario.MyShooter.MyLocation.Longitude;
+            frmZlf.NavigateTo();
+            frmZlf.Mode = "Shot";
+            frmZlf.DataContext = this;
+            frmZlf.Show();
+        }
+        #endregion
+
+        #region "Bullet Routines"
         private void GetTestBulletBC()
         {
             double lBC = 0; BulletShapeEnum lShape;
@@ -473,16 +540,20 @@ namespace LawlerBallisticsDesk.ViewModel
             _TestBulletBC = Math.Round(lBC,4);
             RaisePropertyChanged(nameof(TestBulletBC));
         }
-        private void InstanceUnload()
-        {
-            Cleanup();
-        }
         private void OpenBCestimator()
         {
             _frmBCcalc = new frmBCcalculator();
             _frmBCcalc.DataContext = this;
             _frmBCcalc.Show();
         }
+        #endregion
+
+        private void InstanceUnload()
+        {
+            Cleanup();
+        }
+
+        #region "Ballistic Routines"
         private void RunPreShotCheck()
         {
             int lRtn;
@@ -567,6 +638,29 @@ namespace LawlerBallisticsDesk.ViewModel
             LoadCharts();
 
         }
+        private void SolveZeroData()
+        {
+            if(UseMaxRise)
+            {
+
+            }
+            else
+            {
+                if(ZeroRange == 0)
+                {
+
+                    // A zero range must be provided.
+                    LoadZeroMessage("A zero range must be provided.");
+                }
+                else
+                {
+
+                }
+            }
+        }
+        #endregion
+
+        #region "File Routines"
         private void SaveFileAs()
         {
             SaveFileDialog lSFD = new SaveFileDialog();
@@ -593,16 +687,9 @@ namespace LawlerBallisticsDesk.ViewModel
             DataPersistence lDP = new DataPersistence();
             lDP.SaveBallisticSolutionData(MySolution, _FileName);
         }
-        private void ZeroLocation()
-        {
-            LocationFinder frmZlf = new LocationFinder();
-            frmZlf.Latitude = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Latitude;
-            frmZlf.Longitude = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Longitude;
-            frmZlf.NavigateTo();
-            frmZlf.Mode = "Zero";
-            frmZlf.DataContext = this;
-            frmZlf.Show();
-        }
+        #endregion
+
+        #region "Atmospheric Routines"
         private void ZeroAtmospherics()
         {
             if ((MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc.Latitude == 0) ||
@@ -616,19 +703,12 @@ namespace LawlerBallisticsDesk.ViewModel
                 MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.LoadCurrentLocationWeather();
             }
         }
-        private void ShotLocation()
-        {
-            LocationFinder frmZlf = new LocationFinder();
-            frmZlf.Latitude = MySolution.MyScenario.MyShooter.MyLocation.Latitude;
-            frmZlf.Longitude = MySolution.MyScenario.MyShooter.MyLocation.Longitude;
-            frmZlf.NavigateTo();
-            frmZlf.Mode = "Shot";
-            frmZlf.DataContext = this;
-            frmZlf.Show();
-        }
+        #endregion
+
         #endregion
 
         #region "Solution Data Aliases"
+        public bool UseMaxRise { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.UseMaxRise; } }
         public double BarrelTwist { get { return MyBarrel.Twist; } }
         public string BarrelTwistDirection { get { return MyBarrel.RiflingTwistDirection; } }
         public double BaroPressure { get { return MyAtmospherics.Pressure; } }

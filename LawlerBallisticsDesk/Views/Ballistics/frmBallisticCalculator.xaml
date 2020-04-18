@@ -253,7 +253,8 @@
                         FontWeight="Bold" Height="30" Margin="129,53,0,0" VerticalAlignment="Top" Width="114" 
                         ToolTip="Centerline of scope to centerline of barrel." />
                             <CheckBox Content="Use Max. Rise" HorizontalAlignment="Left" Height="25" Margin="21,21,0,0" 
-                              VerticalAlignment="Top" Width="103" FontWeight="Bold" IsChecked="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.UseMaxRise}"/>
+                                VerticalAlignment="Top" Width="103" FontWeight="Bold"
+                                IsChecked="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.UseMaxRise}"/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="248,83,0,0" HorizontalContentAlignment="Center" 
                         TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.NearZeroRange, Mode=OneWay}"/>
                             <Label Content="Near Zero (Yrd)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
@@ -316,7 +317,7 @@
                                 FontWeight="Bold" Height="26" Margin="63,372,0,0" VerticalAlignment="Top" Width="248" Foreground="#FF1250F5">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName ="MouseUp">
-                                        <i:InvokeCommandAction Command="{Binding ZeroLocationCommand}"/>
+                                        <i:InvokeCommandAction Command="{Binding OpenLocationFinderCommand}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </Label>
