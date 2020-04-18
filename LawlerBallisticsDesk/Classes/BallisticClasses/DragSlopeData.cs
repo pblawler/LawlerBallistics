@@ -22,8 +22,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Private Variables"
-        private double _MuzzleVelocity;
-        private Atmospherics _Atmospherics = new Atmospherics();
         private double _Fo;
         private double _F2;
         private double _F3;
@@ -80,9 +78,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         public double F2
         {
             get
-            {
-                //F = BC(cV^0.5)
-                if (_F2 == 0) _F2 = BCz2 * (166 * Math.Pow(Zone2TransSpeed, 0.5));
+            {               
                 return _F2;
             }
             set
@@ -101,8 +97,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         {
             get
             {
-                //F = (cV^0.5)
-                if (_F3 == 0) _F3 = (166 * Math.Pow(Zone3TransSpeed, 0.5));
                 return _F3;
             }
             set
@@ -120,9 +114,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         public double F4
         {
             get
-            {
-                //F = (cV^0.5)
-                if (_F4 == 0) _F4 = (166 * Math.Pow(Zone3TransSpeed, 0.5));
+            {               
                 return _F4;
             }
             set
@@ -322,130 +314,132 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         }
         #endregion
 
-        #region "Sonic Speed Data"
-        /// <summary>
-        /// The speed where Supersonic enters first transonic zone approx 1.2 Mach or 1340 fps.
-        /// </summary>
-        public double Zone1TransSpeed
-        {
-            get
-            {
-                double lZ1;
-                double lDA;
-
-                lZ1 = _Atmospherics.SpeedOfSound;
-                lZ1 = lZ1 * Zone1MachFactor;
-                lDA = _Atmospherics.DensityAlt;
-                _Zone1TransSpeed = lZ1;
-                if (_Zone1TransSpeed == 0) _Zone1TransSpeed = 1340;
-                return _Zone1TransSpeed;
-            }
-        }
-        /// <summary>
-        /// The speed where the first transonic zone enters the second transonic zone, approx 1.0 Mach or 1125 fps.
-        /// </summary>
-        public double Zone2TransSpeed
-        {
-            get
-            {
-                double lZ2;
-                lZ2 = _Atmospherics.SpeedOfSound;
-                lZ2 = lZ2 * Zone2MachFactor;
-                _Zone2TransSpeed = lZ2;
-                if (_Zone2TransSpeed == 0) _Zone2TransSpeed = 1125;
-                return _Zone2TransSpeed;
-            }
-        }
-        /// <summary>
-        /// The speed where the second transonic zone enters the subsonic zone, approx 890 fps.
-        /// </summary>
-        public double Zone3TransSpeed
-        {
-            get
-            {
-                double lZ3;
-                lZ3 = _Atmospherics.SpeedOfSound;
-                lZ3 = lZ3 * Zone3MachFactor;
-                _Zone3TransSpeed = lZ3;
-                if (_Zone3TransSpeed == 0) _Zone3TransSpeed = 890;
-                return _Zone3TransSpeed;
-            }
-        }
-        #endregion
-
-        #region "Sonic Range Data"
-        /// <summary>
-        /// The range where the bullet passes our of Zone 1 into zone 2.
-        /// </summary>
-        public double Zone1Range
-        {
-            get
-            {
-                //R = (2/3)*Fo(1 - (V/Vo)^N)
-                _Zone1Range = (2.00 / 3.00) * Fo * (1 - Math.Pow((Zone1TransSpeed / _MuzzleVelocity), Zone1Slope));
-                if (_Zone1Range < 0) _Zone1Range = 0;
-                return _Zone1Range;
-            }
-        }
-        /// <summary>
-        /// The range where the bullet passes our of Zone 2 into zone 3.
-        /// </summary>
-        public double Zone2Range
-        {
-            get
-            {
-                //R = F/(3ln(Vo/V))
-                if (_MuzzleVelocity < Zone2TransSpeed)
-                {
-                    _Zone2Range = 0;
-                }
-                else
-                {
-                    _Zone2Range = (F2 / 3) * Math.Log(Zone1TransSpeed / Zone2TransSpeed);
-                    _Zone2Range = _Zone2Range + Zone1Range;
-                }
-                return _Zone2Range;
-            }
-        }
-        /// <summary>
-        /// The range where the bullet passes our of Zone 3 into zone 4.
-        /// </summary>
-        public double Zone3Range
-        {
-            get
-            {
-                //R = (F2-F3)/3N
-                if (_MuzzleVelocity < Zone3TransSpeed)
-                {
-                    _Zone3Range = 0;
-                }
-                else
-                {
-                    _Zone3Range = (F2 - F3) / (3 * Zone3Slope);
-                    _Zone3Range = _Zone3Range + Zone2Range;
-                }
-                return _Zone3Range;
-            }
-        }
-        #endregion
-
         #endregion
 
         #region "Constructor"
-        public DragSlopeData(double MuzzleVelocity)
+        public DragSlopeData()
         {
-            _MuzzleVelocity = MuzzleVelocity;
         }
         #endregion
 
         #region "Public Routines"
-        public void SetAtmospherics(Atmospherics atmosherics)
+
+        #region "Sonic Range Data"
+        /// <summary>
+        /// The range where the bullet passes our of Zone 3 into zone 4.
+        /// </summary>
+        public double Zone3Range(double MuzzleVelocity, double SpeedOfSound)
         {
-            _Atmospherics = atmosherics;
-            RaisePropertyChanged(nameof(Zone1TransSpeed));
-            RaisePropertyChanged(nameof(Zone2TransSpeed));
-            RaisePropertyChanged(nameof(Zone3TransSpeed));
+            //R = (F2-F3)/3N
+            if (MuzzleVelocity < Zone3TransSpeed(SpeedOfSound))
+            {
+                _Zone3Range = 0;
+            }
+            else
+            {
+                _Zone3Range = (F2 - F3) / (3 * Zone3Slope);
+                _Zone3Range = _Zone3Range + Zone2Range(MuzzleVelocity, SpeedOfSound);
+            }
+            return _Zone3Range;
         }
+        /// <summary>
+        /// The range where the bullet passes our of Zone 1 into zone 2.
+        /// </summary>
+        public double Zone1Range(double MuzzleVelocity, double SpeedOfSound)
+        {
+            //R = (2/3)*Fo(1 - (V/Vo)^N)
+            _Zone1Range = (2.00 / 3.00) * Fo * (1 - Math.Pow((Zone1TransSpeed(SpeedOfSound) / MuzzleVelocity), Zone1Slope));
+            if (_Zone1Range < 0) _Zone1Range = 0;
+            return _Zone1Range;
+        }
+        /// <summary>
+        /// The range where the bullet passes our of Zone 2 into zone 3.
+        /// </summary>
+        public double Zone2Range(double MuzzleVelocity, double SpeedOfSound)
+        {
+            //R = F/(3ln(Vo/V))
+            if (MuzzleVelocity < Zone2TransSpeed(SpeedOfSound))
+            {
+                _Zone2Range = 0;
+            }
+            else
+            {
+                _Zone2Range = (F2 / 3) * Math.Log(Zone1TransSpeed(SpeedOfSound) / Zone2TransSpeed(SpeedOfSound));
+                _Zone2Range = _Zone2Range + Zone1Range(MuzzleVelocity, SpeedOfSound);
+            }
+            return _Zone2Range;
+        }
+        #endregion
+
+        #region "Sonic Speed Data"
+        /// <summary>
+        /// The speed where Supersonic enters first transonic zone approx 1.2 Mach or 1340 fps.
+        /// </summary>
+        public double Zone1TransSpeed(double SpeedOfSound)
+        {
+            double lZ1;
+
+            lZ1 = SpeedOfSound;
+            lZ1 = lZ1 * Zone1MachFactor;
+            _Zone1TransSpeed = lZ1;
+            if (_Zone1TransSpeed == 0) _Zone1TransSpeed = 1340;
+            return _Zone1TransSpeed;
+        }
+        /// <summary>
+        /// The speed where the first transonic zone enters the second transonic zone, approx 1.0 Mach or 1125 fps.
+        /// </summary>
+        public double Zone2TransSpeed(double SpeedOfSound)
+        {
+            double lZ2;
+            lZ2 = SpeedOfSound;
+            lZ2 = lZ2 * Zone2MachFactor;
+            _Zone2TransSpeed = lZ2;
+            if (_Zone2TransSpeed == 0) _Zone2TransSpeed = 1125;
+            return _Zone2TransSpeed;
+        }
+        /// <summary>
+        /// The speed where the second transonic zone enters the subsonic zone, approx 890 fps.
+        /// </summary>
+        public double Zone3TransSpeed(double SpeedOfSound)
+        {
+            double lZ3;
+            lZ3 = SpeedOfSound;
+            lZ3 = lZ3 * Zone3MachFactor;
+            _Zone3TransSpeed = lZ3;
+            if (_Zone3TransSpeed == 0) _Zone3TransSpeed = 890;
+            return _Zone3TransSpeed;
+        }
+        #endregion
+
+        #region "Drag Coefficent Calculations"
+        //TODO: Calculate updated drag numbers from custom values updating for changes in the speed of sound.
+        public double CalculateF2(double SpeedOfSound)
+        {
+            double lF2;
+
+            //F = BC(cV^0.5)
+            lF2 = BCz2 * (166 * Math.Pow(Zone2TransSpeed(SpeedOfSound), 0.5));
+            return lF2;
+        }
+        public double CalculateF3(double SpeedOfSound)
+        {
+            double lF3;
+
+            //TODO: Add a BCz3 for custom drag solvable at different speeds of sound
+            //F = (cV^0.5)
+            lF3 = (166 * Math.Pow(Zone3TransSpeed(SpeedOfSound), 0.5));
+            return lF3;
+        }
+        public double CalculateF4(double SpeedOfSound)
+        {
+            double lF4;
+            //TODO: Add a BCz4 for custom drag solvable at different speeds of sound
+            //F = (cV^0.5)
+            lF4 = (166 * Math.Pow(Zone3TransSpeed(SpeedOfSound), 0.5));
+            return lF4;
+        }
+        #endregion
+
         #endregion
     }
 }

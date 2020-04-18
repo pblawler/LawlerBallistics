@@ -642,7 +642,17 @@ namespace LawlerBallisticsDesk.ViewModel
         {
             if(UseMaxRise)
             {
-
+                if(Fo==0)
+                {
+                    LoadZeroMessage("Invalid Fo value.");
+                    return;
+                }
+                else if (ZeroMaxRise == 0)
+                {
+                    LoadZeroMessage("Invalid maximum rise value.");
+                    return;
+                }
+                double lZd = BallisticFunctions.CalculateZeroRange(Fo, MidRange, ZeroMaxRise, ScopeHeight);
             }
             else
             {
@@ -717,30 +727,33 @@ namespace LawlerBallisticsDesk.ViewModel
         public double BulletWeight { get { return MyBullet.Weight; } }
         public double DensityAlt { get { return MySolution.MyScenario.MyAtmospherics.DensityAlt; } }
         public double DensityAltAtZero { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.DensityAlt; } }
-        public double Fo { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Fo; } }
-        public double F2 { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.F2; } }
-        public double F3 { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.F3; } }
-        public double F4 { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.F4; } }
+        public double Fo { get { return MySolution.MyScenario.MyDragSlopeData.Fo; } }
+        public double F2 { get { return MySolution.MyScenario.MyDragSlopeData.F2; } }
+        public double F3 { get { return MySolution.MyScenario.MyDragSlopeData.F3; } }
+        public double F4 { get { return MySolution.MyScenario.MyDragSlopeData.F4; } }
         public double MaxRange { get { return MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange; } }
+        public double MidRange { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MidRange; } }
         public double MuzzleVelocity { get { return MySolution.MyScenario.MyShooter.MyLoadOut.MuzzleVelocity; } }
         public Atmospherics MyAtmospherics { get { return MySolution.MyScenario.MyAtmospherics; } }
         public Barrel MyBarrel { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedBarrel; } }
         public Bullet MyBullet { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge.RecpBullet; } }
         public double ScopeHeight { get { return MySolution.MyScenario.MyShooter.MyLoadOut.ScopeHeight; } }
+        public double SpeedOfSound { get { return MySolution.MyScenario.MyAtmospherics.SpeedOfSound; } }
         public double TempF { get { return MySolution.MyScenario.MyAtmospherics.Temp; } }
         public double WindDirection { get { return MySolution.MyScenario.MyAtmospherics.WindDirection; } }
         public double WindSpeed { get { return MySolution.MyScenario.MyAtmospherics.WindSpeed; } }
-        public double Zone1Range { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone1Range; } }
-        public double Zone1AngleFactor { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone1AngleFactor; } }
-        public double Zone1Slope { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone1Slope; } }
-        public double Zone1SlopeMultiplier { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone1SlopeMultiplier; } }
-        public double Zone1TransSpeed { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone1TransSpeed; } }
-        public double Zone2Range { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone2Range; } }
-        public double Zone2TransSpeed { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone2TransSpeed; } }
-        public double Zone3Range { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone3Range; } }
-        public double Zone3Slope { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone3Slope; } }
-        public double Zone3SlopeMultiplier { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone3SlopeMultiplier; } }
-        public double Zone3TransSpeed { get { return MySolution.MyScenario.MyBallisticData.dragSlopeData.Zone3TransSpeed; } }
+        public double Zone1Range { get { return MySolution.MyScenario.MyDragSlopeData.Zone1Range(MuzzleVelocity,SpeedOfSound); } }
+        public double Zone1AngleFactor { get { return MySolution.MyScenario.MyDragSlopeData.Zone1AngleFactor; } }
+        public double Zone1Slope { get { return MySolution.MyScenario.MyDragSlopeData.Zone1Slope; } }
+        public double Zone1SlopeMultiplier { get { return MySolution.MyScenario.MyDragSlopeData.Zone1SlopeMultiplier; } }
+        public double Zone1TransSpeed { get { return MySolution.MyScenario.MyDragSlopeData.Zone1TransSpeed(MyAtmospherics.SpeedOfSound); } }
+        public double Zone2Range { get { return MySolution.MyScenario.MyDragSlopeData.Zone2Range(MuzzleVelocity, SpeedOfSound); } }
+        public double Zone2TransSpeed { get { return MySolution.MyScenario.MyDragSlopeData.Zone2TransSpeed(MyAtmospherics.SpeedOfSound); } }
+        public double Zone3Range { get { return MySolution.MyScenario.MyDragSlopeData.Zone3Range(MuzzleVelocity,SpeedOfSound); } }
+        public double Zone3Slope { get { return MySolution.MyScenario.MyDragSlopeData.Zone3Slope; } }
+        public double Zone3SlopeMultiplier { get { return MySolution.MyScenario.MyDragSlopeData.Zone3SlopeMultiplier; } }
+        public double Zone3TransSpeed { get { return MySolution.MyScenario.MyDragSlopeData.Zone3TransSpeed(MyAtmospherics.SpeedOfSound); } }
+        public double ZeroMaxRise { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ZeroMaxRise; } }
         public LocationData ZeroTargetLoc { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.TargetLoc; } }
         public LocationData ZeroShooterLoc { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShooterLoc; } }
         public LocationData TargetLoc { get { return MySolution.MyScenario.SelectedTarget.TargetLocation; } }
@@ -880,7 +893,7 @@ namespace LawlerBallisticsDesk.ViewModel
             {
                 _ZeroMsg[I] = _ZeroMsg[I - 1];
             }
-            _ZeroMsg[0] = msg;
+            _ZeroMsg[0] = "::> " + msg;
             for(int I=0; I < 12; I++)
             {
                 lmsg = lmsg + _ZeroMsg[I] + System.Environment.NewLine;

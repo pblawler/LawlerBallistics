@@ -257,7 +257,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             }
             ShotDirection = lShtAngl;
             double lWE = atmospherics.WindDirection - ShotDirection;
-            if(lWE<0) lWE = 360 - lWE;
+            if(lWE<0) lWE = 360 + lWE;
             WindEffectiveDirection = lWE;
         }
         private void LoadMessage(string msg)

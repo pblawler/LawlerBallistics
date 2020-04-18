@@ -40,7 +40,8 @@ namespace LawlerBallisticsDesk.Classes
         private Shooter _MyShooter;
         private ObservableCollection<Target> _Targets;
         private Target _SelectedTarget;
-        private BallisticData _MyBallisticData;
+        private DragSlopeData _MyDragSlopeData;
+
         #endregion
 
         #region "Properties"
@@ -72,16 +73,18 @@ namespace LawlerBallisticsDesk.Classes
         }
         public ObservableCollection<Target> Targets { get { return _Targets; } set { _Targets = value; RaisePropertyChanged(nameof(Targets)); } }
         public Target SelectedTarget { get { return _SelectedTarget; } set { _SelectedTarget = value; RaisePropertyChanged(nameof(SelectedTarget)); } }
-        public BallisticData MyBallisticData { get { return _MyBallisticData; } set { _MyBallisticData = value; RaisePropertyChanged(nameof(MyBallisticData)); } }
+        public DragSlopeData MyDragSlopeData { get { return _MyDragSlopeData; } set { _MyDragSlopeData = value; RaisePropertyChanged(nameof(MyDragSlopeData)); } }
         #endregion
 
         #region "Constructor"
         public Scenario()
         {
-            MyAtmospherics = new Atmospherics();
+            _MyAtmospherics = new Atmospherics();
             _MyShooter = new Shooter();
+            _MyDragSlopeData = new DragSlopeData();
             MyAtmospherics.PropertyChanged += MyAtmospherics_PropertyChanged;
             MyShooter.PropertyChanged += MyShooter_PropertyChanged;
+
         }
         #endregion
 

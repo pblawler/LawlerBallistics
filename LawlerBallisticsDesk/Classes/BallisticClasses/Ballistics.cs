@@ -122,7 +122,7 @@ namespace LawlerBallisticsDesk.Classes
             // Velocity Measurements Provided = 2
             // BC and Muzzle Provided = 4
             //Check to see of Fo is directly provided or must be calculated.
-            if ((_MyScenario.MyBallisticData.dragSlopeData.Fo > 0) & (_MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0))
+            if ((_MyScenario.MyDragSlopeData.Fo > 0) & (_MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0))
             {
                 //Fo is provided.  Set First bit value to 1
 
@@ -132,14 +132,14 @@ namespace LawlerBallisticsDesk.Classes
                 lRtn = 1;
             }
             //Check to see if velocity-range or BC-MV method is used to find Fo.
-            if ((_MyScenario.MyBallisticData.dragSlopeData.V1 > 0) & (_MyScenario.MyBallisticData.dragSlopeData.V2 > 0) &
-                (_MyScenario.MyBallisticData.dragSlopeData.D2 > 0))
+            if ((_MyScenario.MyDragSlopeData.V1 > 0) & (_MyScenario.MyDragSlopeData.V2 > 0) &
+                (_MyScenario.MyDragSlopeData.D2 > 0))
             {
                 //Actual velocities and distances provided.
                 lRtn += 2;
                 //_FoCalc = true;
             }
-            else if ((_MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0) & (_MyScenario.MyBallisticData.dragSlopeData.BCg1> 0))
+            else if ((_MyScenario.MyShooter.MyLoadOut.MuzzleVelocity > 0) & (_MyScenario.MyDragSlopeData.BCg1> 0))
             {
                 //BC and Muzzle velocity rather than Velocity-Range is used to calculate Fo
                 lRtn += 4;
@@ -165,7 +165,7 @@ namespace LawlerBallisticsDesk.Classes
             //    MyScenario.MyBallisticData.dragSlopeData.V1, MyScenario.MyBallisticData.dragSlopeData.D2, MyScenario.MyBallisticData.dragSlopeData.V2);
             //MyScenario.MyBallisticData.dragSlopeData.BCg1 = CalculateBC(MyScenario.MyBallisticData.dragSlopeData.V1, 
             //    MyScenario.MyBallisticData.dragSlopeData.V2, (MyScenario.MyBallisticData.dragSlopeData.D2 - MyScenario.MyBallisticData.dragSlopeData.D1));
-            if (_MyScenario.MyBallisticData.dragSlopeData.Fo <= 0)
+            if (_MyScenario.MyDragSlopeData.Fo <= 0)
             {
                 //Invalid Fo
                 lRtn = -3;

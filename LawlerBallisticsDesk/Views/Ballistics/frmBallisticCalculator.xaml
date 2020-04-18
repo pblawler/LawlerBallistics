@@ -86,60 +86,6 @@
                             </DataGrid.RowStyle>
                         </DataGrid>
                     </TabItem>
-                    <TabItem Header="Atmospheric/Location Data">
-                        <Grid Background="White">
-                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="185" Margin="476,213,0,0" VerticalAlignment="Top" Width="346"/>
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="528,260,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding MyBallisticsCalculator.ShooterLat, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Shooter Lat. (DD)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="528,230,0,0" VerticalAlignment="Top" Width="114" 
-                        ToolTip="Centerline of scope to centerline of barrel." />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="657,260,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="119" Text="{Binding MyBallisticsCalculator.ShooterLon, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Shooter Lon. (DD)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="657,230,0,0" VerticalAlignment="Top" Width="119" 
-                        ToolTip="Centerline of scope to centerline of barrel." />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="528,315,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding MyBallisticsCalculator.TargetLat, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Target Lat. (DD)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="528,285,0,0" VerticalAlignment="Top" Width="114" 
-                        ToolTip="Centerline of scope to centerline of barrel." />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="657,315,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="119" Text="{Binding MyBallisticsCalculator.TargetLon, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Target Lon. (DD)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="657,287,0,0" VerticalAlignment="Top" Width="119" 
-                        ToolTip="Centerline of scope to centerline of barrel." />
-                            <Label Content="Shot Location and Direction" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="476,183,0,0" VerticalAlignment="Top" Width="346" />
-                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="142" Margin="476,36,0,0" VerticalAlignment="Top" Width="346"/>
-                            <Label Content="Shot Atmospherics" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="476,6,0,0" VerticalAlignment="Top" Width="346" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="490,82,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MyBallisticsCalculator.DensityAlt, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Density Altitude" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="490,52,0,0" VerticalAlignment="Top" Width="103" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="598,82,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MyBallisticsCalculator.TempF, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Temperature F" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="598,52,0,0" VerticalAlignment="Top" Width="103" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="706,82,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MyBallisticsCalculator.RelHumidity, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Rel. Humidity %" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="706,52,0,0" VerticalAlignment="Top" Width="103" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="490,140,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MyBallisticsCalculator.BaroPressure, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Baro Pressure" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="490,110,0,0" VerticalAlignment="Top" Width="103" />
-                            <Label Content="Location" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="528,352,0,0" VerticalAlignment="Top" Width="248" Foreground="#FF1250F5">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName ="MouseUp">
-                                        <i:InvokeCommandAction Command="{Binding ShotLocationCommand}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </Label>
-                        </Grid>
-                    </TabItem>
                     <TabItem Header="Windage Graph">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -273,20 +219,23 @@
                         FontWeight="Bold" Height="30" Margin="129,106,0,0" VerticalAlignment="Top" Width="114" 
                         ToolTip="Centerline of scope to centerline of barrel." />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="387,83,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="115" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.DensityAlt, UpdateSourceTrigger=PropertyChanged}"/>
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="115" 
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.DensityAlt, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
                             <Label Content="Density Alt. (ft)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="387,53,0,0" VerticalAlignment="Top" Width="115" />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="507,83,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.Temp, UpdateSourceTrigger=PropertyChanged}"/>
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="103" 
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.Temp, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n1}}"/>
                             <Label Content="Temperature (F)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="507,53,0,0" VerticalAlignment="Top" Width="103" />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="615,83,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="103" ToolTip="Decimal Relative Humidity (i.e. 50% = 0.5)"
-                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.HumidityRel, UpdateSourceTrigger=PropertyChanged}"/>
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.HumidityRel, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n3}}"/>
                             <Label Content="Rel. Humidity" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="615,53,0,0" VerticalAlignment="Top" Width="103" />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="723,83,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" 
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.Pressure, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n3}}"/>
                             <Label Content="Baro Pressure (inHg)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="723,53,0,0" VerticalAlignment="Top" Width="130" />
                             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="224" Margin="10,184,0,0" VerticalAlignment="Top" Width="362">
@@ -317,7 +266,7 @@
                                 FontWeight="Bold" Height="26" Margin="63,372,0,0" VerticalAlignment="Top" Width="248" Foreground="#FF1250F5">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName ="MouseUp">
-                                        <i:InvokeCommandAction Command="{Binding OpenLocationFinderCommand}"/>
+                                        <i:InvokeCommandAction Command="{Binding ZeroLocationCommand}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </Label>
@@ -325,11 +274,13 @@
                                      TextWrapping="Wrap" VerticalAlignment="Stretch"
                                      Text="{Binding ZeroMessage, Mode=OneWay}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="524,136,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="116" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.WindSpeed, UpdateSourceTrigger=PropertyChanged}"/>
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="116" 
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.WindSpeed, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n2}}"/>
                             <Label Content="Wind Speed (mph)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="524,106,0,0" VerticalAlignment="Top" Width="116"/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="645,136,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.WindDirection, UpdateSourceTrigger=PropertyChanged}"/>
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" 
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.WindDirection, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n1}}"/>
                             <Label Content="Wind Direction (deg)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="645,106,0,0" VerticalAlignment="Top" Width="130" 
                                    ToolTip="Degrees from true north."/>
@@ -340,7 +291,8 @@
                                 FontWeight="Bold" Height="30" Margin="662,274,0,0" VerticalAlignment="Top" Width="130" 
                                 ToolTip="Degrees from LOS to target with target at 0 degrees counting clockwise, ie direct cross wind blowing right to left is 90 degrees."/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="389,136,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.FeelsLike, UpdateSourceTrigger=PropertyChanged}"
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" 
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.FeelsLike, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n1}}"
                                 IsReadOnly="True"/>
                             <Label Content="Feels Like (F)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="389,106,0,0" VerticalAlignment="Top" Width="130" 
@@ -364,17 +316,20 @@
                                 FontWeight="Bold" Height="30" Margin="527,274,0,0" VerticalAlignment="Top" Width="130" 
                                 ToolTip="Degrees from LOS to target with target at 0 degrees counting clockwise, ie direct cross wind blowing right to left is 90 degrees."/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="711,191,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.SpeedOfSound, Mode=OneWay}"
-                                     IsReadOnly="True" Background="#FFEAEAEA"/>
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" 
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.SpeedOfSound, Mode=OneWay, StringFormat={}{0:n1}}"
+                                IsReadOnly="True" Background="#FFEAEAEA"/>
                             <Label Content="Speed of Sound (fps)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="711,161,0,0" VerticalAlignment="Top" Width="130"/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="387,191,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShotDirection, UpdateSourceTrigger=PropertyChanged}"/>
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="130" 
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShotDirection, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n1}}"/>
                             <Label Content="Shot Direction (deg)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="389,161,0,0" VerticalAlignment="Top" Width="130" 
                                 ToolTip="Degrees from true north."/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="524,191,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="182" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.WindEffectiveDirection, UpdateSourceTrigger=PropertyChanged}"/>
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="182" 
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.WindEffectiveDirection, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n1}}"/>
                             <Label Content="Wind Effective Direction (deg)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="524,161,0,0" VerticalAlignment="Top" Width="182" 
                                 ToolTip="Degrees from true north."/>
