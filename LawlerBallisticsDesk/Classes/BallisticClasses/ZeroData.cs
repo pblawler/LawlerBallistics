@@ -193,7 +193,18 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// <summary>
         /// LOS range to the target calculated from map data.
         /// </summary>
-        public double ShotDistance { get { return _ShotDistance; } set { _ShotDistance = value; RaisePropertyChanged(nameof(ShotDistance)); } }
+        public double ShotDistance
+        {
+            get
+            {
+                return _ShotDistance;
+            }
+            set
+            {
+                _ShotDistance = value;
+                RaisePropertyChanged(nameof(ShotDistance)); 
+            }
+        }
         public double WindEffectiveDirection { get { return _WindEffectiveDirection; } set { _WindEffectiveDirection = value; RaisePropertyChanged(nameof(WindEffectiveDirection)); } }
         public string Message { get { return _Message; } }
         #endregion
@@ -241,7 +252,14 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             double lhorzRange = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
             double lElev = (TargetLoc.Altitude - ShooterLoc.Altitude)/3;
             double lElevAng = Math.Atan(Math.Abs(lElev / lhorzRange)) * (180 / Math.PI);
-            ShotDistance = lElev / Math.Sin((lElevAng * (Math.PI / 180)));
+            if (lElev == 0)
+            {
+                ShotDistance = lhorzRange;
+            }
+            else
+            {
+                ShotDistance = lElev / Math.Sin((lElevAng * (Math.PI / 180)));
+            }
             ShotAngle = lElevAng;
             if((lhoriz < 0) & (lvert > 0))
             {

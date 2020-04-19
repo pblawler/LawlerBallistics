@@ -73,7 +73,18 @@ namespace LawlerBallisticsDesk.Classes
         }
         public ObservableCollection<Target> Targets { get { return _Targets; } set { _Targets = value; RaisePropertyChanged(nameof(Targets)); } }
         public Target SelectedTarget { get { return _SelectedTarget; } set { _SelectedTarget = value; RaisePropertyChanged(nameof(SelectedTarget)); } }
-        public DragSlopeData MyDragSlopeData { get { return _MyDragSlopeData; } set { _MyDragSlopeData = value; RaisePropertyChanged(nameof(MyDragSlopeData)); } }
+        public DragSlopeData MyDragSlopeData
+        {
+            get
+            {
+                return _MyDragSlopeData;
+            }
+            set
+            {
+                _MyDragSlopeData = value; 
+                RaisePropertyChanged(nameof(MyDragSlopeData));
+            }
+        }
         #endregion
 
         #region "Constructor"

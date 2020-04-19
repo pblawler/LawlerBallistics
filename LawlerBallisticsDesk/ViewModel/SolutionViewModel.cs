@@ -24,6 +24,8 @@ namespace LawlerBallisticsDesk.ViewModel
     {
         //TODO: Subscribe to zerodata property changes and calculate values when properties change.
 
+        //TODO: Post load sanity check (i.e. calculate zero data etc....).
+
         #region "Binding"
         private void MySolution_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -263,7 +265,6 @@ namespace LawlerBallisticsDesk.ViewModel
             MySolution.PropertyChanged -= MySolution_PropertyChanged;
         }
         #endregion
-
 
         #region "Public Routines"      
         public void SetShooterLocation(double Alt, double Lat, double Lon)
@@ -656,15 +657,23 @@ namespace LawlerBallisticsDesk.ViewModel
             }
             else
             {
-                if(ZeroRange == 0)
+                if(ZeroRange <= 0)
                 {
 
                     // A zero range must be provided.
                     LoadZeroMessage("A zero range must be provided.");
                 }
+                else if(ScopeHeight <= 0)
+                {
+                    // A scope height > 0 must be provided.
+                    LoadZeroMessage("A scope height > 0 must be provided.");
+                }
                 else
                 {
-
+                    MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ZeroMaxRise = BallisticFunctions.CalculateHm(ZeroRange, ZeroRange, ScopeHeight, MuzzleVelocity,
+                        Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor,
+                        Zone2TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc,
+                       ZeroTargetLoc, ZeroShooterLoc);
                 }
             }
         }

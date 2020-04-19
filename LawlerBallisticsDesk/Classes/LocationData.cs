@@ -40,7 +40,6 @@ namespace LawlerBallisticsDesk.Classes
         {
             get
             {
-                if (_Latitude == 0) _Latitude = 34.681129;
                 return _Latitude;
             }
             set
