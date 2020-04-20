@@ -616,26 +616,33 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// <summary>
         /// Calculate Point Blank Range Distance
         /// </summary>
-        public static double PointBlankRange(double MaxRise, double MidRange, double ScopeHeight, double Fo)
+        public static double PointBlankRange(double MaxRise, double MuzzleVelocity, double ScopeHeight, double Fo)
         {
-            double lSQ; double lP;
+            double lSQ;
+            double lP;
+            double lMR;
+
+            lMR = BallisticFunctions.MidRange(MuzzleVelocity, MaxRise, ScopeHeight, Fo);
+
 
             //P = (1 + SQ)/(1/Fo + SQ/M)
             //SQ  = SH/2^0.5
             lSQ = SH(MaxRise,ScopeHeight) / (Math.Pow(2, 0.5));
-            lP = (1 + lSQ) / ((1 / Fo) + (lSQ / MidRange));
+            lP = (1 + lSQ) / ((1 / Fo) + (lSQ / lMR));
 
             return lP;
         }
         /// <summary>
         /// The near range where the bullet crosses the sight plane on the way to the far zero vertical deviation.
         /// </summary>
-        public static double ZeroNearRange(double MaxRise, double ScopeHeight, double MidRange, double Fo)
+        public static double ZeroNearRange(double MaxRise, double ScopeHeight, double MuzzleVelocity, double Fo)
         {
             double lNZ;
+            double lMR;
 
+            lMR = BallisticFunctions.MidRange(MuzzleVelocity, MaxRise, ScopeHeight, Fo);
             //Zn = (1 - SH) / (1 / Fo - SH / M)
-            lNZ = (1 - SH(MaxRise, ScopeHeight)) / ((1 / Fo) - (SH(MaxRise, ScopeHeight) / MidRange));
+            lNZ = (1 - SH(MaxRise, ScopeHeight)) / ((1 / Fo) - (SH(MaxRise, ScopeHeight) / lMR));
 
             return lNZ;
         }

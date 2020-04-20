@@ -22,6 +22,8 @@ namespace LawlerBallisticsDesk.ViewModel
 {
     public class SolutionViewModel : ViewModelBase, IDisposable
     {
+        //TODO: Add warnings before changing drag slope data when not 0
+        //TODO: reset all solution data when flight parameters change.
         //TODO: Subscribe to zerodata property changes and calculate values when properties change.
 
         //TODO: Post load sanity check (i.e. calculate zero data etc....).
@@ -703,6 +705,7 @@ namespace LawlerBallisticsDesk.ViewModel
                     LoadZeroMessage("Invalid scope height value.");
                 }
                 double lZd = BallisticFunctions.CalculateZeroRange(Fo, MuzzleVelocity, ZeroMaxRise, ScopeHeight);
+                MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ZeroRange = lZd;
             }
             else
             {
@@ -728,11 +731,21 @@ namespace LawlerBallisticsDesk.ViewModel
                         Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor,
                         Zone2TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc,
                        ZeroTargetLoc, ZeroShooterLoc);
+                    //Reset all target solution data as this affects vertical drop.
                 }
             }
+            MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.NearZeroRange =
+                BallisticFunctions.ZeroNearRange(ZeroMaxRise, ScopeHeight, MuzzleVelocity, Fo);
+            MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MidRange = BallisticFunctions.MidRange(MuzzleVelocity, ZeroMaxRise, ScopeHeight, Fo);
+            MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.PointBlankRange = BallisticFunctions.PointBlankRange(ZeroMaxRise, MuzzleVelocity, ScopeHeight, Fo);
+            RaisePropertyChanged(nameof(MidRange));
+            RaisePropertyChanged(nameof(PointBlankRange));
+
         }
         private void CalculateMuzzleVelocity()
         {
+            //Setting zero parameters of solution atmospherics are equal to zero atmospherics.  This should not be done when solving
+            // target ballistics.
             MyAtmospherics = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics;
             double lmv;
             if(V1 ==0)
@@ -826,6 +839,7 @@ namespace LawlerBallisticsDesk.ViewModel
         public Atmospherics MyAtmospherics { get { return MySolution.MyScenario.MyAtmospherics; } set { MySolution.MyScenario.MyAtmospherics = value; RaisePropertyChanged(nameof(MyAtmospherics)); } }
         public Barrel MyBarrel { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedBarrel; } }
         public Bullet MyBullet { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge.RecpBullet; } }
+        public double PointBlankRange { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.PointBlankRange; } }
         public double ScopeHeight { get { return MySolution.MyScenario.MyShooter.MyLoadOut.ScopeHeight; } }
         public double SpeedOfSound { get { return MySolution.MyScenario.MyAtmospherics.SpeedOfSound; } }
         public double TempF { get { return MySolution.MyScenario.MyAtmospherics.Temp; } }

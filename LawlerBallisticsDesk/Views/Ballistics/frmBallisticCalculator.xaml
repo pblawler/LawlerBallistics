@@ -201,18 +201,19 @@
                                 VerticalAlignment="Top" Width="103" FontWeight="Bold"
                                 IsChecked="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.UseMaxRise}"/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="248,83,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.NearZeroRange, Mode=OneWay, StringFormat={}{0:n0}}"/>
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="114" IsReadOnly="True" Background="#FFEAEAEA" 
+                                Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.NearZeroRange, Mode=OneWay, StringFormat={}{0:n0}}"/>
                             <Label Content="Near Zero (Yrd)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="248,53,0,0" VerticalAlignment="Top" Width="114" 
                         ToolTip="Centerline of scope to centerline of barrel." />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="21,136,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MidRange, Mode=OneWay, StringFormat={}{0:n0}}"
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MidRange, Mode=OneWay, StringFormat={}{0:n0}}"
                                      IsReadOnly="True" Background="#FFEAEAEA"/>
                             <Label Content="Mid.Range (Yrd)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="21,106,0,0" VerticalAlignment="Top" Width="103" 
                         ToolTip="Centerline of scope to centerline of barrel." />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="129,136,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.PointBlankRange, Mode=OneWay, StringFormat={}{0:n0}}"
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding PointBlankRange, Mode=OneWay, StringFormat={}{0:n0}}"
                                      IsReadOnly="True" Background="#FFEAEAEA"/>
                             <Label Content="PBR (Yrd)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="129,106,0,0" VerticalAlignment="Top" Width="114" 
