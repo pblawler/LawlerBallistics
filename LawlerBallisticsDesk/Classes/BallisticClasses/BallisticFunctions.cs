@@ -505,6 +505,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             //(1.5 * Range) = lF
             //Range = lF/1.5
             lMR = Fo / 1.5;
+            lMR = lMR * .9;
             return lMR;
         }
         public static double MuzzleVelocity(double Velocity_1, double Range_1, double Fo, double Zone1Slope, double Zone1TransSpeed,

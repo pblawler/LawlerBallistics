@@ -22,7 +22,7 @@ namespace LawlerBallisticsDesk.Classes
         }        
         private void SelectedGun_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            //RaisePropertyChanged(nameof(SelectedGun));
+            RaisePropertyChanged(e.PropertyName);
         }
         private void SelectedLoadRecipe_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -49,9 +49,25 @@ namespace LawlerBallisticsDesk.Classes
 
         #region "Properties"
         public string ID { get { return _ID; } }
-        public Gun SelectedGun { get { return _SelectedGun; } set { _SelectedGun = value;  } }
+        public Gun SelectedGun {
+            get
+            {
+                return _SelectedGun;
+            }
+            set
+            {
+                SelectedGun.PropertyChanged -= SelectedGun_PropertyChanged;
+                _SelectedGun = value;
+                SelectedGun.PropertyChanged += SelectedGun_PropertyChanged;
+                RaisePropertyChanged(nameof(SelectedGun));
+                _Barrel = _SelectedGun.SelectedBarrel;
+                _BarrelID = _Barrel.ID;
+                RaisePropertyChanged(nameof(SelectedBarrel));
+                RaisePropertyChanged(nameof(SelectedBarrelID));
+            }
+        }
         public string SelectedBarrelID { get { return _BarrelID; } set { _BarrelID = value; RaisePropertyChanged(nameof(SelectedBarrelID)); } }
-        public Barrel SelectedBarrel { get { return _Barrel; } }
+        public Barrel SelectedBarrel { get { return _Barrel; } set { _Barrel = value; RaisePropertyChanged(nameof(SelectedBarrel)); } }
         public Recipe SelectedCartridge { get { return _SelectedLoadRecipe; } set { _SelectedLoadRecipe = value; RaisePropertyChanged(nameof(SelectedCartridge)); } }
         public double ScopeHeight
         {
@@ -92,7 +108,7 @@ namespace LawlerBallisticsDesk.Classes
         public LoadOut()
         {
             _ID = Guid.NewGuid().ToString();
-            SelectedGun = new Gun();
+            _SelectedGun = new Gun();
             SelectedCartridge = new Recipe();
             _zeroData = new ZeroData();
             SelectedGun.PropertyChanged += SelectedGun_PropertyChanged;

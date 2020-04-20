@@ -29,6 +29,11 @@ namespace LawlerBallisticsDesk.Classes
         {
             RaisePropertyChanged(e.PropertyName);
         }
+        private void MyDragSlopeData_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaisePropertyChanged(e.PropertyName);
+        }
+
         private void RefreshViewModel()
         {
             RaisePropertyChanged(nameof(MyAtmospherics));
@@ -81,7 +86,9 @@ namespace LawlerBallisticsDesk.Classes
             }
             set
             {
-                _MyDragSlopeData = value; 
+                MyDragSlopeData.PropertyChanged -= MyDragSlopeData_PropertyChanged;
+                _MyDragSlopeData = value;
+                MyDragSlopeData.PropertyChanged += MyDragSlopeData_PropertyChanged;
                 RaisePropertyChanged(nameof(MyDragSlopeData));
             }
         }
@@ -95,6 +102,7 @@ namespace LawlerBallisticsDesk.Classes
             _MyDragSlopeData = new DragSlopeData();
             MyAtmospherics.PropertyChanged += MyAtmospherics_PropertyChanged;
             MyShooter.PropertyChanged += MyShooter_PropertyChanged;
+            MyDragSlopeData.PropertyChanged += MyDragSlopeData_PropertyChanged;
 
         }
         #endregion
@@ -104,6 +112,7 @@ namespace LawlerBallisticsDesk.Classes
         {
             MyAtmospherics.PropertyChanged -= MyAtmospherics_PropertyChanged;
             MyShooter.PropertyChanged -= MyShooter_PropertyChanged;
+            MyDragSlopeData.PropertyChanged -= MyDragSlopeData_PropertyChanged;
         }
         #endregion
 

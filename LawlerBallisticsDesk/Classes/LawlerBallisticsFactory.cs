@@ -375,7 +375,7 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Barrel"
-        public static ObservableCollection<Recipe> BarrelRecipes(string BarrelID)
+        public static ObservableCollection<Recipe> BarrelRecipes(string BarrelID, bool AndGeneric = false)
         {
             ObservableCollection<Recipe> lRTN = new ObservableCollection<Recipe>();
 
@@ -384,6 +384,18 @@ namespace LawlerBallisticsDesk.Classes
                 if (lR.BarrelID != null)
                 {
                     if (lR.BarrelID == BarrelID)
+                    {
+                        lRTN.Add(lR);
+                    }
+                }
+            }
+            if(AndGeneric)
+            {
+                Barrel lb = GetBarrel(BarrelID);
+
+                foreach (Recipe lR in MyRecipes)
+                {
+                    if((lR.CartridgeID == lb.CartridgeID) & (lR.BarrelID == ""))
                     {
                         lRTN.Add(lR);
                     }

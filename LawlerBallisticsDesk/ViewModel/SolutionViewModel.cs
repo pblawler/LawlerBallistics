@@ -36,9 +36,29 @@ namespace LawlerBallisticsDesk.ViewModel
             switch (e.PropertyName)
             {
                 case "UseMaxRise":
+                    //SolveZeroData(); causes endless loop
+                    break;
+                case "ZeroMaxRise":
+                    if (UseMaxRise) SolveZeroData();
+                    break;
+                case "ZeroRange":
+                    if (!UseMaxRise) SolveZeroData();
+                    break;
+                case "ScopeHeight":
                     SolveZeroData();
                     break;
-
+                case "MuzzleVelocity":
+                    SolveZeroData();
+                    break;
+                case "Fo":
+                    MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange = BallisticFunctions.MaxRange(Fo);
+                    break;
+                case "SelectedGun":
+                    RaisePropertyChanged(nameof(MyBarrels));
+                    break;
+                case "SelectedBarrel":
+                    RaisePropertyChanged(nameof(MyCartridges));
+                    break;
                 default:
                     break;
             }
@@ -203,13 +223,46 @@ namespace LawlerBallisticsDesk.ViewModel
         private RelayCommand _SaveFileCommand;
         private RelayCommand _SaveFileAsCommand;
         private RelayCommand _CalculateFoCommand;
+        private RelayCommand _CalculateF2Command;
+        private RelayCommand _CalculateF3Command;
+        private RelayCommand _CalculateF4Command;
         private RelayCommand _CalculateMuzzleVelocityCommand;
+        private RelayCommand _CalculateVelocityDistanceCommand;
 
         public RelayCommand CalculateFoCommand
         {
             get
             {
                 return _CalculateFoCommand ?? (_CalculateFoCommand = new RelayCommand(() => CalculateFo()));
+            }
+        }
+        public RelayCommand CalculateF2Command
+        {
+            get
+            {
+                return _CalculateF2Command ?? (_CalculateF2Command = new RelayCommand(() => CalculateF2()));
+            }
+        }
+        public RelayCommand CalculateF3Command
+        {
+            get
+            {
+                return _CalculateF3Command ?? (_CalculateF3Command = new RelayCommand(() => CalculateF3()));
+            }
+        }
+        public RelayCommand CalculateF4Command
+        {
+            get
+            {
+                return _CalculateF4Command ?? (_CalculateF4Command = new RelayCommand(() => CalculateF4()));
+            }
+        }
+
+        public RelayCommand CalculateVelocityDistanceCommand
+        {
+            get
+            {
+                return _CalculateVelocityDistanceCommand ?? (_CalculateVelocityDistanceCommand = new RelayCommand(() => CalculateVelocityDistance()));
             }
         }
         public RelayCommand CalculateMuzzleVelocityCommand
@@ -290,6 +343,11 @@ namespace LawlerBallisticsDesk.ViewModel
             string lf = LawlerBallisticsFactory.DataFolder + "\\default.bdf";
             _FileName = lf;
             MySolution = lDP.ParseBallisticSolution(lf);
+            SolveZeroData();
+            if((Fo>0) & (MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange==0))
+                MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange = BallisticFunctions.MaxRange(Fo);
+            RaisePropertyChanged(nameof(MyBarrels));
+            RaisePropertyChanged(nameof(MyCartridges));
         }
         public void SetShooterLocation(double Alt, double Lat, double Lon)
         {
@@ -582,21 +640,83 @@ namespace LawlerBallisticsDesk.ViewModel
         private void CalculateFo()
         {
             string lmsg;
+            Atmospherics ltmpAt;
 
-            if(SpeedOfSound == 0)
+            ltmpAt = MyAtmospherics;
+            MyAtmospherics = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics;
+
+            if (SpeedOfSound == 0)
             {
                 lmsg = "Speed-of-Sound must be provided before the drag factor can be calculated.";
                 LoadDragMessage(lmsg);
+                return;
             }
             else if((V1 == 0) || (D2 == 0))
             {
                 lmsg = "An initial and second velocity and distance pair must be provided before the drag factor can be calculated." +
                     Environment.NewLine + "    Muzzle velocity and 0ft can be provied for the initial velocity/distance pair.";
                 LoadDragMessage(lmsg);
+                return;
             }
             MySolution.MyScenario.MyDragSlopeData.Fo = MySolution.MyScenario.MyDragSlopeData.CalculateFo(Zone1TransSpeed, Zone2TransSpeed,
                 Zone3TransSpeed);
+            MyAtmospherics = ltmpAt;
         }
+        private void CalculateF2()
+        {
+            string lmsg;
+            Atmospherics ltmpAt;
+
+            ltmpAt = MyAtmospherics;
+            MyAtmospherics = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics;
+            if (SpeedOfSound == 0)
+            {
+                lmsg = "Speed-of-Sound must be provided before the drag factor can be calculated.";
+                LoadDragMessage(lmsg);
+                return;
+            }
+            else if(MySolution.MyScenario.MyDragSlopeData.BCz2 == 0)
+            {
+                lmsg = "Invalid Zone 2 Ballistic Coefficent.";
+                LoadDragMessage(lmsg);
+                return;
+            }
+            MySolution.MyScenario.MyDragSlopeData.F2 = MySolution.MyScenario.MyDragSlopeData.CalculateF2(SpeedOfSound);
+            MyAtmospherics = ltmpAt;
+        }
+        private void CalculateF3()
+        {
+            string lmsg;
+            Atmospherics ltmpAt;
+
+            ltmpAt = MyAtmospherics;
+            MyAtmospherics = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics;
+            if (SpeedOfSound == 0)
+            {
+                lmsg = "Speed-of-Sound must be provided before the drag factor can be calculated.";
+                LoadDragMessage(lmsg);
+                return;
+            }
+            MySolution.MyScenario.MyDragSlopeData.F3 = MySolution.MyScenario.MyDragSlopeData.CalculateF3(SpeedOfSound);
+            MyAtmospherics = ltmpAt;
+        }
+        private void CalculateF4()
+        {
+            string lmsg;
+            Atmospherics ltmpAt;
+
+            ltmpAt = MyAtmospherics;
+            MyAtmospherics = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics;
+            if (SpeedOfSound == 0)
+            {
+                lmsg = "Speed-of-Sound must be provided before the drag factor can be calculated.";
+                LoadDragMessage(lmsg);
+                return;
+            }
+            MySolution.MyScenario.MyDragSlopeData.F4 = MySolution.MyScenario.MyDragSlopeData.CalculateF4(SpeedOfSound);
+            MyAtmospherics = ltmpAt;
+        }
+
         private void RunPreShotCheck()
         {
             int lRtn;
@@ -632,12 +752,12 @@ namespace LawlerBallisticsDesk.ViewModel
             double lCR; //Current Range.
             TrajectoryData lTD;
 
-            lRtn = MySolution.MyBallistics.PreflightCheck();
-            if (lRtn < 0)
-            {
-                PostFlightCheck(lRtn);
-                return;
-            }
+           // lRtn = MySolution.MyBallistics.PreflightCheck();
+            //if (lRtn < 0)
+            //{
+            //    PostFlightCheck(lRtn);
+            //    return;
+            //}
             lDR = 1;
             lCR = lDR;
             _MyTrajectories = new ObservableCollection<TrajectoryData>();
@@ -645,15 +765,15 @@ namespace LawlerBallisticsDesk.ViewModel
             {
                 lTD = new TrajectoryData();
                 lTD.Range = lCR;
-                lTD.MuzzleDrop = MuzzleDrop(lCR);
-                lTD.SightDelta = SightDelta(lCR);
+                lTD.MuzzleDrop = MuzzleDrop(lCR,true);
+                lTD.SightDelta = SightDelta(lCR,true);
                 lTD.Velocity = Velocity(lCR);
                 lTD.Energy = Energy(lCR);
                 lTD.SpinRate = SpinRate(lCR);
                 lTD.GyroStability = GyroscopicStability(lCR);
-                lTD.HorizDev = TotalHorizontalDrift(lCR);
-                lTD.CoriolisH = GetCoriolisHoriz(lCR);
-                lTD.CoriolisV = GetCoriolisVert(lCR);
+                lTD.HorizDev = TotalHorizontalDrift(lCR, true);
+                lTD.CoriolisH = GetCoriolisHoriz(lCR, true);
+                lTD.CoriolisV = GetCoriolisVert(lCR, true);
                 lTD.SpinDrift = GetSpinDrift(lCR);
                 lTD.WindDeflect = WindDrift(lCR);
                 lTD.FlightTime = FlightTime(lCR);
@@ -662,15 +782,15 @@ namespace LawlerBallisticsDesk.ViewModel
                 {
                     lTD = new TrajectoryData();
                     lTD.Range = MaxRange;
-                    lTD.MuzzleDrop = MuzzleDrop(MaxRange);
-                    lTD.SightDelta = SightDelta(MaxRange);
+                    lTD.MuzzleDrop = MuzzleDrop(MaxRange, true);
+                    lTD.SightDelta = SightDelta(MaxRange, true);
                     lTD.Velocity = Velocity(MaxRange);
                     lTD.Energy = Energy(MaxRange);
                     lTD.SpinRate = SpinRate(MaxRange);
                     lTD.GyroStability = GyroscopicStability(MaxRange);
-                    lTD.HorizDev = TotalHorizontalDrift(MaxRange);
-                    lTD.CoriolisH = GetCoriolisHoriz(MaxRange);
-                    lTD.CoriolisV = GetCoriolisVert(MaxRange);
+                    lTD.HorizDev = TotalHorizontalDrift(MaxRange, true);
+                    lTD.CoriolisH = GetCoriolisHoriz(MaxRange, true);
+                    lTD.CoriolisV = GetCoriolisVert(MaxRange, true);
                     lTD.SpinDrift = GetSpinDrift(MaxRange);
                     lTD.WindDeflect = WindDrift(MaxRange);
                     lTD.FlightTime = FlightTime(MaxRange);
@@ -714,15 +834,18 @@ namespace LawlerBallisticsDesk.ViewModel
 
                     // A zero range must be provided.
                     LoadZeroMessage("A zero range must be provided.");
+                    return;
                 }
                 else if(ScopeHeight <= 0)
                 {
                     // A scope height > 0 must be provided.
                     LoadZeroMessage("A scope height > 0 must be provided.");
+                    return;
                 }
                 else if(MuzzleVelocity <= 0)
                 {
                     LoadZeroMessage("Invalid muzzle velocity.");
+                    return;
                 }
 
                 else
@@ -744,11 +867,12 @@ namespace LawlerBallisticsDesk.ViewModel
         }
         private void CalculateMuzzleVelocity()
         {
-            //Setting zero parameters of solution atmospherics are equal to zero atmospherics.  This should not be done when solving
-            // target ballistics.
-            MyAtmospherics = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics;
             double lmv;
-            if(V1 ==0)
+            Atmospherics ltmpAt;
+
+            ltmpAt = MyAtmospherics;
+            MyAtmospherics = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics;
+            if (V1 ==0)
             {
 
                 LoadDragMessage("Invalid V1 value.");
@@ -756,15 +880,37 @@ namespace LawlerBallisticsDesk.ViewModel
             else if(Fo == 0)
             {
                 LoadDragMessage("Invalid Fo value.");
+                return;
 
             }
-            else if(MyAtmospherics.SpeedOfSound <= 0)
+            else if(MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.SpeedOfSound <= 0)
             {
                 LoadDragMessage("Invalid atmospheric data.");
+                return;
             }
             lmv = BallisticFunctions.MuzzleVelocity(V1, D1, Fo, Zone1Slope, Zone1TransSpeed, Zone2TransSpeed, Zone3Slope, Zone3TransSpeed);
+            MyAtmospherics = ltmpAt;
             MySolution.MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = lmv;
             RaisePropertyChanged(nameof(MuzzleVelocity));
+        }
+        private void CalculateVelocityDistance()
+        {
+            double lV1;
+
+            if(MuzzleVelocity == 0)
+            {
+                LoadDragMessage("Invalid muzzle velocity value.");
+                return;
+            }
+            else if (BCg1 == 0)
+            {
+                LoadDragMessage("Invalid G1 ballistic coefficent value.");
+                return;
+            }
+            MySolution.MyScenario.MyDragSlopeData.V1 = MuzzleVelocity;
+            MySolution.MyScenario.MyDragSlopeData.D1 = 0;
+            MySolution.MyScenario.MyDragSlopeData.D2 = 300;
+            MySolution.MyScenario.MyDragSlopeData.V2 = BallisticFunctions.CalculateV2FromBC(MuzzleVelocity, BCg1, D2);
         }
         #endregion
 
@@ -816,10 +962,12 @@ namespace LawlerBallisticsDesk.ViewModel
         #endregion
 
         #region "Solution Data Aliases"
+        public ObservableCollection<Gun> MyGuns { get { return LawlerBallisticsFactory.MyGuns; } }
         public bool UseMaxRise { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.UseMaxRise; } }
         public double BarrelTwist { get { return MyBarrel.Twist; } }
         public string BarrelTwistDirection { get { return MyBarrel.RiflingTwistDirection; } }
         public double BaroPressure { get { return MyAtmospherics.Pressure; } }
+        public double BCg1 { get { return MySolution.MyScenario.MyDragSlopeData.BCg1; } }
         public double BSG { get { return MySolution.MyScenario.MyShooter.MyLoadOut.BSG; } }
         public double BulletDiameter { get { return MyBullet.Diameter; } }
         public double BulletWeight { get { return MyBullet.Weight; } }
@@ -838,6 +986,8 @@ namespace LawlerBallisticsDesk.ViewModel
         public double MuzzleVelocity { get { return MySolution.MyScenario.MyShooter.MyLoadOut.MuzzleVelocity; } }
         public Atmospherics MyAtmospherics { get { return MySolution.MyScenario.MyAtmospherics; } set { MySolution.MyScenario.MyAtmospherics = value; RaisePropertyChanged(nameof(MyAtmospherics)); } }
         public Barrel MyBarrel { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedBarrel; } }
+        public ObservableCollection<Barrel> MyBarrels { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedGun.Barrels; } }
+        public ObservableCollection<Recipe> MyCartridges { get { return LawlerBallisticsFactory.BarrelRecipes(MyBarrel.ID); } }
         public Bullet MyBullet { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge.RecpBullet; } }
         public double PointBlankRange { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.PointBlankRange; } }
         public double ScopeHeight { get { return MySolution.MyScenario.MyShooter.MyLoadOut.ScopeHeight; } }
@@ -881,32 +1031,54 @@ namespace LawlerBallisticsDesk.ViewModel
 
             return lRTN;
         }
-        public double SightDelta(double Range)
+        public double SightDelta(double Range, bool ZeroData = false)
         {
             double lRTN = 0;
-
-            lRTN = BallisticFunctions.SightDelta(Range, ZeroRange, ScopeHeight, MuzzleVelocity, Zone1Range, Zone2Range, Zone3Range,
-                Zone1Slope, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed,
-                Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc);
-
+            if (!ZeroData)
+            {
+                lRTN = BallisticFunctions.SightDelta(Range, ZeroRange, ScopeHeight, MuzzleVelocity, Zone1Range, Zone2Range, Zone3Range,
+                    Zone1Slope, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed,
+                    Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc);
+            }
+            else if(ZeroData)
+            {
+                lRTN = BallisticFunctions.SightDelta(Range, ZeroRange, ScopeHeight, MuzzleVelocity, Zone1Range, Zone2Range, Zone3Range,
+                    Zone1Slope, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed,
+                    Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc, ZeroTargetLoc, ZeroShooterLoc);
+            }
             return lRTN;
         }
-        public double GetCoriolisHoriz(double Range)
+        public double GetCoriolisHoriz(double Range, bool ZeroData = false)
         {
             double lRTN = 0;
 
-            lRTN = BallisticFunctions.GetCoriolisHoriz(Range, MuzzleVelocity, ZeroTargetLoc, ZeroShooterLoc,
+            if (!ZeroData)
+            {
+                lRTN = BallisticFunctions.GetCoriolisHoriz(Range, MuzzleVelocity, ZeroTargetLoc, ZeroShooterLoc,
                 TargetLoc, ShooterLoc, ZeroRange, Fo);
+            }
+            else
+            {
+                lRTN = BallisticFunctions.GetCoriolisHoriz(Range, MuzzleVelocity, ZeroTargetLoc, ZeroShooterLoc,
+                ZeroTargetLoc, ZeroShooterLoc, ZeroRange, Fo);
+            }
 
             return lRTN;
         }
-        public double GetCoriolisVert(double Range)
+        public double GetCoriolisVert(double Range, bool ZeroData = false)
         {
             double lRTN = 0;
 
-            lRTN = BallisticFunctions.GetCoriolisVert(Range, ZeroTargetLoc, ZeroShooterLoc,
-                TargetLoc, ShooterLoc, ZeroRange, Fo, MuzzleVelocity);
-
+            if (!ZeroData)
+            {
+                lRTN = BallisticFunctions.GetCoriolisVert(Range, ZeroTargetLoc, ZeroShooterLoc,
+                    TargetLoc, ShooterLoc, ZeroRange, Fo, MuzzleVelocity);
+            }
+            else
+            {
+                lRTN = BallisticFunctions.GetCoriolisVert(Range, ZeroTargetLoc, ZeroShooterLoc,
+                    ZeroTargetLoc, ZeroShooterLoc, ZeroRange, Fo, MuzzleVelocity);
+            }
             return lRTN;
         }
         public double GetSpinDrift(double Range)
@@ -925,13 +1097,20 @@ namespace LawlerBallisticsDesk.ViewModel
 
             return lRTN;
         }
-        public double TotalHorizontalDrift(double Range)
+        public double TotalHorizontalDrift(double Range, bool ZeroData = false)
         {
             double lRTN = 0;
 
-            lRTN = BallisticFunctions.TotalHorizontalDrift(Range, WindSpeed, WindDirection, MuzzleVelocity, Fo, ZeroTargetLoc,
-                ZeroShooterLoc, TargetLoc, ShooterLoc, ZeroRange, BarrelTwistDirection, BSG);
-
+            if (!ZeroData)
+            {
+                lRTN = BallisticFunctions.TotalHorizontalDrift(Range, WindSpeed, WindDirection, MuzzleVelocity, Fo, ZeroTargetLoc,
+                    ZeroShooterLoc, TargetLoc, ShooterLoc, ZeroRange, BarrelTwistDirection, BSG);
+            }
+            else
+            {
+                lRTN = BallisticFunctions.TotalHorizontalDrift(Range, WindSpeed, WindDirection, MuzzleVelocity, Fo, ZeroTargetLoc,
+                    ZeroShooterLoc, ZeroTargetLoc, ZeroShooterLoc, ZeroRange, BarrelTwistDirection, BSG);
+            }
             return lRTN;
         }
         public double Velocity(double Range)
@@ -951,14 +1130,22 @@ namespace LawlerBallisticsDesk.ViewModel
 
             return lRTN;
         }
-        public double MuzzleDrop(double Range)
+        public double MuzzleDrop(double Range, bool ZeroData = false)
         {
             double lRTN = 0;
 
-            lRTN = BallisticFunctions.MuzzleDrop(MuzzleVelocity, Range, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope,
-                Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo,
-                F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc, ZeroRange);
-
+            if (!ZeroData)
+            {
+                lRTN = BallisticFunctions.MuzzleDrop(MuzzleVelocity, Range, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope,
+                    Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo,
+                    F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc, TargetLoc, ShooterLoc, ZeroRange);
+            }
+            else if(ZeroData)
+            {
+                lRTN = BallisticFunctions.MuzzleDrop(MuzzleVelocity, Range, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope,
+                    Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, Zone1TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo,
+                    F2, F3, F4, DensityAlt, DensityAltAtZero, ZeroTargetLoc, ZeroShooterLoc, ZeroTargetLoc, ZeroShooterLoc, ZeroRange);
+            }
             return lRTN;
         }
         public double Energy(double Range)
