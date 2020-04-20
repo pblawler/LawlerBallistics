@@ -413,6 +413,13 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
         #region "Drag Coefficent Calculations"
         //TODO: Calculate updated drag numbers from custom values updating for changes in the speed of sound.
+        public double CalculateFo(double Zone1TransSpeed, double Zone2TransSpeed, double Zone3TransSpeed)
+        {
+            double lFo = BallisticFunctions.CalculateFo(D1, V1, D2, V2, Zone1TransSpeed, Zone1Slope, Zone1SlopeMultiplier,
+                Zone2TransSpeed, Zone3TransSpeed, Zone3Slope, Zone3SlopeMultiplier);
+
+            return lFo;
+        }
         public double CalculateF2(double SpeedOfSound)
         {
             double lF2;

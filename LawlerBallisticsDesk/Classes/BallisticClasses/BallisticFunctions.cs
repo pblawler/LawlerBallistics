@@ -935,13 +935,15 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// </summary>
         /// <param name="Hm">The maximum rise above the sight plan between the muzzle and zero range.</param>
         /// <returns>Zero Range (yrds)</returns>
-        public static double CalculateZeroRange(double Fo, double MidRange, double ZeroMaxRise, double ScopeHeight)
+        public static double CalculateZeroRange(double Fo, double MuzzleVelocity, double ZeroMaxRise, double ScopeHeight)
         {
             double lZ;
 
             if (SH(ZeroMaxRise, ScopeHeight) == 0) return 0;
             //Z = (1+SH)/(1/Fo + SH/M)
-            lZ = (1 + SH(ZeroMaxRise,ScopeHeight)) / ((1 / Fo) + (SH(ZeroMaxRise, ScopeHeight) / MidRange));
+            lZ = (1 + SH(ZeroMaxRise,ScopeHeight)) / ((1 / Fo) + (SH(ZeroMaxRise, ScopeHeight) / 
+                MidRange(MuzzleVelocity, ZeroMaxRise,ScopeHeight,Fo)));
+
             return lZ;
         }
         #endregion

@@ -47,7 +47,7 @@ namespace LawlerBallisticsDesk.Views.Guns
         private void imgGun_Loaded(object sender, RoutedEventArgs e)
         {
             GunsViewModel lDC = (GunsViewModel)this.DataContext;
-            imgGun.Source = LawlerBallisticsFactory.ConvertToBitmap(lDC.SelectedGun.GunPic);
+            if(lDC.SelectedGun.GunPic != null) imgGun.Source = LawlerBallisticsFactory.ConvertToBitmap(lDC.SelectedGun.GunPic);
         }
     }
 }

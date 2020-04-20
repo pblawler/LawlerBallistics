@@ -342,97 +342,122 @@
                     </TabItem>
                     <TabItem Header="Zone Data">
                         <Grid Background="White">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="393*"/>
+                                <RowDefinition Height="149*"/>
+                            </Grid.RowDefinitions>
                             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="87" Margin="9,171,0,0" VerticalAlignment="Top" Width="461"/>
-                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="87" Margin="9,49,0,0" VerticalAlignment="Top" Width="428"/>
+                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="87" Margin="9,49,0,0" VerticalAlignment="Top" Width="461"/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="171,92,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MyBallisticsCalculator.Zone1Slope, UpdateSourceTrigger=PropertyChanged}"/>
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MySolution.MyScenario.MyDragSlopeData.Zone1Slope, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Slope" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="171,62,0,0" VerticalAlignment="Top" Width="103" />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="279,92,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="133" Text="{Binding MyBallisticsCalculator.Zone1SlopeMultiplier, UpdateSourceTrigger=PropertyChanged}"/>
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="133" Text="{Binding MySolution.MyScenario.MyDragSlopeData.Zone1SlopeMultiplier, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Bullet Type Multiplier" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="279,62,0,0" VerticalAlignment="Top" Width="133" />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="22,92,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MyBallisticsCalculator.Zone1AngleFactor, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Zone 1 Angle Factor" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MySolution.MyScenario.MyDragSlopeData.Zone1AngleFactor, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Angle Factor" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                         FontWeight="Bold" Height="30" Margin="22,62,0,0" VerticalAlignment="Top" Width="144" />
                             <Label Content="Zone 1 (Super Sonic)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="10,19,0,0" VerticalAlignment="Top" Width="427" />
+                        FontWeight="Bold" Height="30" Margin="10,19,0,0" VerticalAlignment="Top" Width="460" />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="22,221,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MyBallisticsCalculator.F2, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Drag/Retard Factor (F2)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="22,191,0,0" VerticalAlignment="Top" Width="144" />
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="111" Text="{Binding MySolution.MyScenario.MyDragSlopeData.F2, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Drag Factor (F2)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                        FontWeight="Bold" Height="30" Margin="22,191,0,0" VerticalAlignment="Top" Width="111" />
                             <Label Content="Zone 2 (1st Transonic Zone)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="10,141,0,0" VerticalAlignment="Top" Width="427" />
-                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="87" Margin="8,293,0,0" VerticalAlignment="Top" Width="570"/>
+                        FontWeight="Bold" Height="30" Margin="10,141,0,0" VerticalAlignment="Top" Width="460" />
+                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="87" Margin="8,293,0,0" VerticalAlignment="Top" Width="462"/>
                             <Label Content="Zone 3 (2nd Transonic Zone)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="9,263,0,0" VerticalAlignment="Top" Width="569" />
+                        FontWeight="Bold" Height="30" Margin="9,263,0,0" VerticalAlignment="Top" Width="461" />
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="22,344,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MyBallisticsCalculator.F3, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Drag/Retard Factor (F3)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="22,314,0,0" VerticalAlignment="Top" Width="144" />
-                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="87" Margin="441,49,-83,0" VerticalAlignment="Top" Width="428"/>
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="111" Text="{Binding MySolution.MyScenario.MyDragSlopeData.F3, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Drag Factor (F3)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                        FontWeight="Bold" Height="30" Margin="22,314,0,0" VerticalAlignment="Top" Width="111" />
+                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="87" Margin="475,49,0,0" VerticalAlignment="Top" Width="394"/>
                             <Label Content="Zone 4 (Subsonic)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="442,19,-83,0" VerticalAlignment="Top" Width="427" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="456,92,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MyBallisticsCalculator.F4, UpdateSourceTrigger=PropertyChanged}"/>
+                        FontWeight="Bold" Height="30" Margin="475,19,0,0" VerticalAlignment="Top" Width="394" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="522,92,0,0" HorizontalContentAlignment="Center" 
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MySolution.MyScenario.MyDragSlopeData.F4, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Drag/Retard Factor (F4)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="456,62,0,0" VerticalAlignment="Top" Width="144" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="171,221,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MyBallisticsCalculator.Zone1MachFactor, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Starts Below Mach" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="171,191,0,0" VerticalAlignment="Top" Width="144" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="171,344,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MyBallisticsCalculator.Zone2MachFactor, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Starts Below Mach" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="171,314,0,0" VerticalAlignment="Top" Width="144" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="605,92,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MyBallisticsCalculator.Zone3MachFactor, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Starts Below Mach" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="605,62,0,0" VerticalAlignment="Top" Width="144" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="320,344,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Text="{Binding MyBallisticsCalculator.Zone3Slope, UpdateSourceTrigger=PropertyChanged}"/>
+                        FontWeight="Bold" Height="30" Margin="522,62,0,0" VerticalAlignment="Top" Width="144" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="138,221,0,0" HorizontalContentAlignment="Center" 
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MySolution.MyScenario.MyDragSlopeData.Zone1MachFactor, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Mach Ratio" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                        FontWeight="Bold" Height="30" Margin="138,191,0,0" VerticalAlignment="Top" Width="144" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="138,344,0,0" HorizontalContentAlignment="Center" 
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="115" Text="{Binding MySolution.MyScenario.MyDragSlopeData.Zone2MachFactor, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Mach Ratio" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                        FontWeight="Bold" Height="30" Margin="138,314,0,0" VerticalAlignment="Top" Width="115" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="671,92,0,0" HorizontalContentAlignment="Center" 
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MySolution.MyScenario.MyDragSlopeData.Zone3MachFactor, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Label Content="Mach Ratio" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                        FontWeight="Bold" Height="30" Margin="671,62,0,0" VerticalAlignment="Top" Width="144" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="258,344,0,0" HorizontalContentAlignment="Center" 
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="61" Text="{Binding MySolution.MyScenario.MyDragSlopeData.Zone3Slope, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Slope" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="320,314,0,0" VerticalAlignment="Top" Width="103" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="428,344,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="133" Text="{Binding MyBallisticsCalculator.Zone3SlopeMultiplier, UpdateSourceTrigger=PropertyChanged}"/>
+                        FontWeight="Bold" Height="30" Margin="258,314,0,0" VerticalAlignment="Top" Width="61" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="324,344,0,0" HorizontalContentAlignment="Center" 
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="133" Text="{Binding MySolution.MyScenario.MyDragSlopeData.Zone3SlopeMultiplier, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Bullet Type Multiplier" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="428,314,0,0" VerticalAlignment="Top" Width="133" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="320,221,0,0" HorizontalContentAlignment="Center" 
-                        TextWrapping="Wrap" VerticalAlignment="Top" Width="133" Text="{Binding MyBallisticsCalculator.BCz2, UpdateSourceTrigger=PropertyChanged}"/>
+                        FontWeight="Bold" Height="30" Margin="324,314,0,0" VerticalAlignment="Top" Width="133" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="287,221,0,0" HorizontalContentAlignment="Center" 
+                        TextWrapping="Wrap" VerticalAlignment="Top" Width="133" Text="{Binding MySolution.MyScenario.MyDragSlopeData.BCz2, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Bullet Type Multiplier" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                        FontWeight="Bold" Height="30" Margin="320,191,0,0" VerticalAlignment="Top" Width="133" />
-                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="218" Margin="645,152,0,0" VerticalAlignment="Top" Width="205"/>
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="675,202,0,0" HorizontalContentAlignment="Center" 
+                        FontWeight="Bold" Height="30" Margin="287,191,0,0" VerticalAlignment="Top" Width="133" />
+                            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="208" Margin="475,172,0,0" VerticalAlignment="Top" Width="394"/>
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="489,221,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="67" Text="{Binding MySolution.MyScenario.MyDragSlopeData.V1, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="V1 (FPS)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="675,172,0,0" VerticalAlignment="Top" Width="67" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="675,257,0,0" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="489,191,0,0" VerticalAlignment="Top" Width="67" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="637,221,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="67" Text="{Binding MySolution.MyScenario.MyDragSlopeData.V2, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="V2 (FPS)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="675,227,0,0" VerticalAlignment="Top" Width="67" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="748,202,0,0" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="637,191,0,0" VerticalAlignment="Top" Width="67" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="562,221,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="67" Text="{Binding MySolution.MyScenario.MyDragSlopeData.D1, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="D1 (FT)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="748,172,0,0" VerticalAlignment="Top" Width="67" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="748,257,0,0" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="562,191,0,0" VerticalAlignment="Top" Width="67" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="710,221,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="67" Text="{Binding MySolution.MyScenario.MyDragSlopeData.D2, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="D2 (FT)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="748,227,0,0" VerticalAlignment="Top" Width="67" />
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="675,326,0,0" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="710,191,0,0" VerticalAlignment="Top" Width="67" />
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="489,279,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Text="{Binding MySolution.MyScenario.MyDragSlopeData.Fo, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="Drag/Retard Factor (Fo)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
-                                FontWeight="Bold" Height="30" Margin="675,296,0,0" VerticalAlignment="Top" Width="144" />
+                            <Label Content="Drag Factor (Fo)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="489,249,0,0" VerticalAlignment="Top" Width="144" />
+                            <Label Content="Drag Calculation Parameters" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="30" Margin="475,142,0,0" VerticalAlignment="Top" Width="394" />
+                            <Label Content="Calculate Drag Factor" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="26" VerticalAlignment="Top" Width="143" Foreground="#FF1250F5" Margin="489,326,0,0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName ="MouseUp">
+                                        <i:InvokeCommandAction Command="{Binding CalculateFoCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Label>
+                            <TextBox HorizontalAlignment="Stretch" Grid.Row="1" IsReadOnly="True"
+                                TextWrapping="Wrap" VerticalAlignment="Stretch"
+                                Text="{Binding DragMessage, Mode=OneWay}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="0,20,0,0"/>
+                            <Label Content="Calculate Muzzle Velocity" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
+                                FontWeight="Bold" Height="26" VerticalAlignment="Top" Width="155" Foreground="#FF1250F5" Margin="632,326,0,0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName ="MouseUp">
+                                        <i:InvokeCommandAction Command="{Binding CalculateMuzzleVelocityCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Label>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Loadout Data">
                         <Grid Background="White">
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="10,40,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="{Binding MyBallisticsCalculator.MuzzleVelocity, UpdateSourceTrigger=PropertyChanged}"/>
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.MuzzleVelocity, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Muzzle Velocity (FPS)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="10,10,0,0" VerticalAlignment="Top" Width="140"/>
                             <TextBox HorizontalAlignment="Left" Height="20" Margin="302,126,0,0" HorizontalContentAlignment="Center" 
-                                TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding MyBallisticsCalculator.ScopeHeight, UpdateSourceTrigger=PropertyChanged}"/>
+                                TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.ScopeHeight, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Scope Height" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="302,96,0,0" VerticalAlignment="Top" Width="114" 
                                 ToolTip="Centerline of scope to centerline of barrel." />

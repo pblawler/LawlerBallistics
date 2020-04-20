@@ -286,23 +286,29 @@ namespace LawlerBallisticsDesk.Classes
             {
                 double lSOS = 0;
 
-                double lT = Temp;
-                if ((TempUnits.ToLower() == "f") || (TempUnits.ToLower() == "fahrenheit"))
+                try
                 {
-                    lT = DegFtoDegK(Temp);
+                    double lT = Temp;
+                    if ((TempUnits.ToLower() == "f") || (TempUnits.ToLower() == "fahrenheit"))
+                    {
+                        lT = DegFtoDegK(Temp);
+                    }
+                    else if ((TempUnits.ToLower() == "c") || (TempUnits.ToLower() == "celsius"))
+                    {
+                        lT = DegCtoDegK(Temp);
+                    }
+
+                    double lRH = HumidityRel;
+                    double lBP = MolecularWeightOfAir;
+
+                    //Speed of Sound = [(1.4* ( 8.3145 J/mol K)*(Temp C))/(M = the molecular weight of the gas in kg/mol)]^0.5
+                    lSOS = Math.Pow(((1.4 * 8.3145 * lT) / (lBP / 1000)), 0.5);
+                    lSOS = M_S_to_fps(lSOS);
                 }
-                else if ((TempUnits.ToLower() == "c") || (TempUnits.ToLower() == "celsius"))
+                catch
                 {
-                    lT = DegCtoDegK(Temp);
+                    lSOS = 1125;
                 }
-
-                double lRH = HumidityRel;
-                double lBP = MolecularWeightOfAir;
-
-                //Speed of Sound = [(1.4* ( 8.3145 J/mol K)*(Temp C))/(M = the molecular weight of the gas in kg/mol)]^0.5
-                lSOS = Math.Pow(((1.4 * 8.3145 * lT) / (lBP / 1000)), 0.5);
-                lSOS = M_S_to_fps(lSOS);
-
                 return lSOS;
             }
         }

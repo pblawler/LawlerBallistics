@@ -46,7 +46,9 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Private Variables"
         private int _ZeroMsgVal = 0;
         private string[] _ZeroMsg = new string[12];
+        private string[] _DragMsg = new string[12];
         private string _ZeroMessage;
+        private string _DragMessage;
         private Solution _MySolution;
         private List<string> _BulletTypes;
         private double _TestBulletWeight;
@@ -191,14 +193,30 @@ namespace LawlerBallisticsDesk.ViewModel
         public double TestBulletBC { get { return _TestBulletBC; } set { _TestBulletBC = value; RaisePropertyChanged(nameof(TestBulletBC)); } }
         public string TestBulletType { get { return _TestBulletType; } set { _TestBulletType = value; RaisePropertyChanged(nameof(TestBulletType)); } }
         public string ZeroMessage { get {return _ZeroMessage; } }
-        
+        public string DragMessage { get { return _DragMessage; } }
         #endregion
 
         #region "Relay Commands"
         private RelayCommand _ZeroAtmosphericsCommand;
         private RelayCommand _SaveFileCommand;
         private RelayCommand _SaveFileAsCommand;
+        private RelayCommand _CalculateFoCommand;
+        private RelayCommand _CalculateMuzzleVelocityCommand;
 
+        public RelayCommand CalculateFoCommand
+        {
+            get
+            {
+                return _CalculateFoCommand ?? (_CalculateFoCommand = new RelayCommand(() => CalculateFo()));
+            }
+        }
+        public RelayCommand CalculateMuzzleVelocityCommand
+        {
+            get
+            {
+                return _CalculateMuzzleVelocityCommand ?? (_CalculateMuzzleVelocityCommand = new RelayCommand(() => CalculateMuzzleVelocity()));
+            }
+        }
         public RelayCommand EstimateBCCommand { get; set; }
         public RelayCommand OpenBCestimatorCommand { get; set; }
         public RelayCommand RunPreShotCheckCommand { get; set; }
@@ -252,10 +270,6 @@ namespace LawlerBallisticsDesk.ViewModel
             OpenLocationFinderCommand = new RelayCommand(OpenLocationFinder, null);
             ZeroLocationCommand = new RelayCommand(ZeroLocation, null);
             ShotLocationCommand = new RelayCommand(ShotLocation, null);
-            DataPersistence lDP = new DataPersistence();
-            string lf = LawlerBallisticsFactory.DataFolder + "\\default.bdf";
-            _FileName = lf;
-            MySolution = lDP.ParseBallisticSolution(lf);
         }
         #endregion
 
@@ -266,7 +280,15 @@ namespace LawlerBallisticsDesk.ViewModel
         }
         #endregion
 
-        #region "Public Routines"      
+        #region "Public Routines"
+        public void LoadDefaultSolution()
+        {
+            DataPersistence lDP = new DataPersistence();
+
+            string lf = LawlerBallisticsFactory.DataFolder + "\\default.bdf";
+            _FileName = lf;
+            MySolution = lDP.ParseBallisticSolution(lf);
+        }
         public void SetShooterLocation(double Alt, double Lat, double Lon)
         {
             MySolution.MyScenario.MyShooter.MyLocation.Altitude = Alt;
@@ -555,6 +577,24 @@ namespace LawlerBallisticsDesk.ViewModel
         }
 
         #region "Ballistic Routines"
+        private void CalculateFo()
+        {
+            string lmsg;
+
+            if(SpeedOfSound == 0)
+            {
+                lmsg = "Speed-of-Sound must be provided before the drag factor can be calculated.";
+                LoadDragMessage(lmsg);
+            }
+            else if((V1 == 0) || (D2 == 0))
+            {
+                lmsg = "An initial and second velocity and distance pair must be provided before the drag factor can be calculated." +
+                    Environment.NewLine + "    Muzzle velocity and 0ft can be provied for the initial velocity/distance pair.";
+                LoadDragMessage(lmsg);
+            }
+            MySolution.MyScenario.MyDragSlopeData.Fo = MySolution.MyScenario.MyDragSlopeData.CalculateFo(Zone1TransSpeed, Zone2TransSpeed,
+                Zone3TransSpeed);
+        }
         private void RunPreShotCheck()
         {
             int lRtn;
@@ -653,7 +693,16 @@ namespace LawlerBallisticsDesk.ViewModel
                     LoadZeroMessage("Invalid maximum rise value.");
                     return;
                 }
-                double lZd = BallisticFunctions.CalculateZeroRange(Fo, MidRange, ZeroMaxRise, ScopeHeight);
+                else if (MuzzleVelocity == 0)
+                {
+                    LoadZeroMessage("Invalid muzzle velocity.");
+                    return;
+                }
+                else if(ScopeHeight == 0)
+                {
+                    LoadZeroMessage("Invalid scope height value.");
+                }
+                double lZd = BallisticFunctions.CalculateZeroRange(Fo, MuzzleVelocity, ZeroMaxRise, ScopeHeight);
             }
             else
             {
@@ -668,6 +717,11 @@ namespace LawlerBallisticsDesk.ViewModel
                     // A scope height > 0 must be provided.
                     LoadZeroMessage("A scope height > 0 must be provided.");
                 }
+                else if(MuzzleVelocity <= 0)
+                {
+                    LoadZeroMessage("Invalid muzzle velocity.");
+                }
+
                 else
                 {
                     MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ZeroMaxRise = BallisticFunctions.CalculateHm(ZeroRange, ZeroRange, ScopeHeight, MuzzleVelocity,
@@ -676,6 +730,28 @@ namespace LawlerBallisticsDesk.ViewModel
                        ZeroTargetLoc, ZeroShooterLoc);
                 }
             }
+        }
+        private void CalculateMuzzleVelocity()
+        {
+            MyAtmospherics = MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics;
+            double lmv;
+            if(V1 ==0)
+            {
+
+                LoadDragMessage("Invalid V1 value.");
+            }
+            else if(Fo == 0)
+            {
+                LoadDragMessage("Invalid Fo value.");
+
+            }
+            else if(MyAtmospherics.SpeedOfSound <= 0)
+            {
+                LoadDragMessage("Invalid atmospheric data.");
+            }
+            lmv = BallisticFunctions.MuzzleVelocity(V1, D1, Fo, Zone1Slope, Zone1TransSpeed, Zone2TransSpeed, Zone3Slope, Zone3TransSpeed);
+            MySolution.MyScenario.MyShooter.MyLoadOut.MuzzleVelocity = lmv;
+            RaisePropertyChanged(nameof(MuzzleVelocity));
         }
         #endregion
 
@@ -736,6 +812,10 @@ namespace LawlerBallisticsDesk.ViewModel
         public double BulletWeight { get { return MyBullet.Weight; } }
         public double DensityAlt { get { return MySolution.MyScenario.MyAtmospherics.DensityAlt; } }
         public double DensityAltAtZero { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.DensityAlt; } }
+        public double D1 { get { return MySolution.MyScenario.MyDragSlopeData.D1; } }
+        public double D2 { get { return MySolution.MyScenario.MyDragSlopeData.D2; } }
+        public double V1 { get { return MySolution.MyScenario.MyDragSlopeData.V1; } }
+        public double V2 { get { return MySolution.MyScenario.MyDragSlopeData.V2; } }
         public double Fo { get { return MySolution.MyScenario.MyDragSlopeData.Fo; } }
         public double F2 { get { return MySolution.MyScenario.MyDragSlopeData.F2; } }
         public double F3 { get { return MySolution.MyScenario.MyDragSlopeData.F3; } }
@@ -743,7 +823,7 @@ namespace LawlerBallisticsDesk.ViewModel
         public double MaxRange { get { return MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange; } }
         public double MidRange { get { return MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MidRange; } }
         public double MuzzleVelocity { get { return MySolution.MyScenario.MyShooter.MyLoadOut.MuzzleVelocity; } }
-        public Atmospherics MyAtmospherics { get { return MySolution.MyScenario.MyAtmospherics; } }
+        public Atmospherics MyAtmospherics { get { return MySolution.MyScenario.MyAtmospherics; } set { MySolution.MyScenario.MyAtmospherics = value; RaisePropertyChanged(nameof(MyAtmospherics)); } }
         public Barrel MyBarrel { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedBarrel; } }
         public Bullet MyBullet { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge.RecpBullet; } }
         public double ScopeHeight { get { return MySolution.MyScenario.MyShooter.MyLoadOut.ScopeHeight; } }
@@ -909,6 +989,22 @@ namespace LawlerBallisticsDesk.ViewModel
             }
             _ZeroMessage = lmsg;
             RaisePropertyChanged(nameof(ZeroMessage));
+        }
+        private void LoadDragMessage(string msg)
+        {
+            string lmsg = "";
+
+            for (int I = 11; I > 0; I--)
+            {
+                _DragMsg[I] = _DragMsg[I - 1];
+            }
+            _DragMsg[0] = "::> " + msg;
+            for (int I = 0; I < 12; I++)
+            {
+                lmsg = lmsg + _DragMsg[I] + System.Environment.NewLine;
+            }
+            _DragMessage = lmsg;
+            RaisePropertyChanged(nameof(DragMessage));
         }
         #endregion
     }

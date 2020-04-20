@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LawlerBallisticsDesk.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,9 @@ namespace LawlerBallisticsDesk.Views.Ballistics
         public frmBallisticCalculator()
         {
             InitializeComponent();
+
+            SolutionViewModel lDC = (SolutionViewModel) this.DataContext;
+            lDC.LoadDefaultSolution();
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -29,5 +33,6 @@ namespace LawlerBallisticsDesk.Views.Ballistics
             this.DataContext = null;
             GC.Collect();
         }
+
     }
 }

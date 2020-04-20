@@ -32,15 +32,13 @@ namespace LawlerBallisticsDesk.Classes
         {
             RaisePropertyChanged(e.PropertyName);
         }
-
-        //TODO: Add ZeroData property changed event subscription.  Need to pass the event up the chain to solution.
         #endregion
 
         #region "Private Variables"
-        private string _ID;
+        private string _ID="";
         private Gun _SelectedGun;
         private Recipe _SelectedLoadRecipe;
-        private string _BarrelID;
+        private string _BarrelID="";
         private Barrel _Barrel;
         private double _ScopeHeight;
         private double _MuzzleVelocity;
@@ -61,6 +59,11 @@ namespace LawlerBallisticsDesk.Classes
             {
                 //TODO: add the ability for the scope to be mounted on the barrel or reciever.
                 return SelectedGun.ScopeHeight;
+            }
+            set
+            {
+                SelectedGun.ScopeHeight = value;
+                RaisePropertyChanged(nameof(ScopeHeight));
             }
         }
         public double MuzzleVelocity { get { return _MuzzleVelocity; } set { _MuzzleVelocity = value; RaisePropertyChanged(nameof(MuzzleVelocity)); } }

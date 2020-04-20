@@ -130,8 +130,11 @@ namespace LawlerBallisticsDesk.Classes
             string lGF = File.ReadAllText(lCDF);
 
             lXML.LoadXml(lGF);
-            XmlNode lCartridges = lXML.SelectSingleNode("catridgedatabasefile");         
-            lRtn = LoadCartridges(lCartridges);
+            XmlNode lCartridges = lXML.SelectSingleNode("catridgedatabasefile");
+            foreach(XmlNode lc in lCartridges)
+            {
+                lRtn.Add(LoadCartridgeData(lc));
+            }
 
             return lRtn;
         }
@@ -168,8 +171,8 @@ namespace LawlerBallisticsDesk.Classes
             XmlDocument lXML = new XmlDocument();
 
             lXML.LoadXml(lSF);
-            XmlNode lSN = lXML.SelectSingleNode("BallisticSolutionFile");
-            lBSF = LoadSolution(lSN);
+            XmlNode lBF = lXML.SelectSingleNode("BallisticSolutionFile");
+            lBSF = LoadSolution(lBF);
 
             return lBSF;
         }
@@ -224,7 +227,7 @@ namespace LawlerBallisticsDesk.Classes
             XmlNode lGun = lXML.SelectSingleNode("gundatabasefile");
             foreach (XmlNode lgn in lGun)
             {
-                ltg = LoadGun(lgn);
+                ltg = LoadGunData(lgn);
                 lGDB.Add(ltg);
             }
             return lGDB;
@@ -283,7 +286,7 @@ namespace LawlerBallisticsDesk.Classes
                 XmlNode lRecipe = lXML.SelectSingleNode("recipedatabasefile");
                 foreach (XmlNode lgn in lRecipe)
                 {
-                    ltg = LoadRecipe(lgn);
+                    ltg = LoadRecipeData(lgn);
                     lLR.Add(ltg);
                 }
             //}
@@ -346,7 +349,7 @@ namespace LawlerBallisticsDesk.Classes
                 XmlNode lBullets = lXML.SelectSingleNode("bulletdatabasefile");
                 foreach (XmlNode lgn in lBullets)
                 {
-                    ltg = LoadBullet(lgn);
+                    ltg = LoadBulletData(lgn);
                     lLR.Add(ltg);
                 }
             }
@@ -409,7 +412,7 @@ namespace LawlerBallisticsDesk.Classes
                 XmlNode lBullets = lXML.SelectSingleNode("casedatabasefile");
                 foreach (XmlNode lgn in lBullets)
                 {
-                    ltg = LoadCase(lgn);
+                    ltg = LoadCaseData(lgn);
                     lLR.Add(ltg);
                 }
             //}
@@ -472,7 +475,7 @@ namespace LawlerBallisticsDesk.Classes
                 XmlNode lBullets = lXML.SelectSingleNode("primerdatabasefile");
                 foreach (XmlNode lgn in lBullets)
                 {
-                    ltg = LoadPrimer(lgn);
+                    ltg = LoadPrimerData(lgn);
                     lLR.Add(ltg);
                 }
             }
@@ -535,7 +538,7 @@ namespace LawlerBallisticsDesk.Classes
                 XmlNode lBullets = lXML.SelectSingleNode("powderdatabasefile");
                 foreach (XmlNode lgn in lBullets)
                 {
-                    ltg = LoadPowder(lgn);
+                    ltg = LoadPowderData(lgn);
                     lLR.Add(ltg);
                 }
             }
@@ -970,8 +973,57 @@ namespace LawlerBallisticsDesk.Classes
             string lRTN;
             
             lRTN = "<BallisticSolutionFile>" + Environment.NewLine;
-            lRTN = lRTN + ZeroDatXML(TargetSolution.MyScenario.MyShooter.MyLoadOut.zeroData);
-            lRTN = lRTN + "</BallisticSolutionFile>";
+            lRTN = lRTN + ScenarioDatXML(TargetSolution.MyScenario);
+            lRTN = lRTN + "</BallisticSolutionFile>" + Environment.NewLine;
+
+            return lRTN;
+        }
+        private string ScenarioDatXML(Scenario TargetScenario)
+        {
+            string lRTN;
+
+            lRTN = "<ScenarioData>" + Environment.NewLine;
+            lRTN = lRTN + AtmosphericDatXML(TargetScenario.MyAtmospherics);
+            lRTN = lRTN + ShooterDatXML(TargetScenario.MyShooter);
+            lRTN = lRTN + DragSlopeDatXML(TargetScenario.MyDragSlopeData);
+            lRTN = lRTN + "</ScenarioData>" + Environment.NewLine;
+
+            return lRTN;
+        }
+        private string ShooterDatXML(Shooter TargetShooter)
+        {
+            string lRTN;
+
+            lRTN = "<ShooterData>" + Environment.NewLine;
+            lRTN = lRTN + LoadoutDatXML(TargetShooter.MyLoadOut);
+            lRTN = lRTN + LocationDatXML(TargetShooter.MyLocation);
+            lRTN = lRTN + "</ShooterData>" + Environment.NewLine;
+
+            return lRTN;
+        }
+        private string LoadoutDatXML(LoadOut TargetLoadout)
+        {
+            string lRTN;
+
+            lRTN = "<LoadoutData>" + Environment.NewLine;
+            lRTN = lRTN + "<BSG value=\"" + TargetLoadout.BSG.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</BSG>" + System.Environment.NewLine;
+            lRTN = lRTN + "<ID value=\"" + TargetLoadout.ID.ToString() + "\" type=\"string\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</ID>" + System.Environment.NewLine;
+            lRTN = lRTN + "<MaxRange value=\"" + TargetLoadout.MaxRange.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</MaxRange>" + System.Environment.NewLine;
+            lRTN = lRTN + "<MuzzleVelocity value=\"" + TargetLoadout.MuzzleVelocity.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</MuzzleVelocity>" + System.Environment.NewLine;
+            lRTN = lRTN + "<ScopeHeight value=\"" + TargetLoadout.ScopeHeight.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</ScopeHeight>" + System.Environment.NewLine;
+            lRTN = lRTN + "<SelectedBarrelID value=\"" + TargetLoadout.SelectedBarrelID + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</SelectedBarrelID>" + System.Environment.NewLine;
+            lRTN = lRTN + "<SelectedCartridge>" + Environment.NewLine;
+            lRTN = lRTN + RecipeDatXML(TargetLoadout.SelectedCartridge);
+            lRTN = lRTN + "</SelectedCartridge>" + Environment.NewLine;
+            lRTN = lRTN + GunDatXML(TargetLoadout.SelectedGun);
+            lRTN = lRTN + ZeroDatXML(TargetLoadout.zeroData);
+            lRTN = lRTN + "</LoadoutData>" + Environment.NewLine;
 
             return lRTN;
         }
@@ -992,7 +1044,14 @@ namespace LawlerBallisticsDesk.Classes
             lRTN = lRTN + "</ZeroMaxRise>" + System.Environment.NewLine;
             lRTN = lRTN + "<ZeroRange value=\"" + TargetZeroData.ZeroRange.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
             lRTN = lRTN + "</ZeroRange>" + System.Environment.NewLine;
-            //TODO: Add shotdirection + shotangle + shotrange + WindEffectiveDirection
+            lRTN = lRTN + "<ShotDirection value=\"" + TargetZeroData.ShotDirection.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</ShotDirection>" + Environment.NewLine;
+            lRTN = lRTN + "<ShotAngle value=\"" + TargetZeroData.ShotAngle.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</ShotAngle>" + Environment.NewLine;
+            lRTN = lRTN + "<ShotDistance value=\"" + TargetZeroData.ShotDistance.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</ShotDistance>" + Environment.NewLine;
+            lRTN = lRTN + "<WindEffectiveDirection value=\"" + TargetZeroData.WindEffectiveDirection.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</WindEffectiveDirection>" + Environment.NewLine;
             lRTN = lRTN + "<ShooterLocationData>" + Environment.NewLine;
             lRTN = lRTN + LocationDatXML(TargetZeroData.ShooterLoc);
             lRTN = lRTN + "</ShooterLocationData>" + Environment.NewLine;
@@ -1056,6 +1115,52 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
+        private string DragSlopeDatXML(DragSlopeData TargetDragSlopeData)
+        {
+            string lRTN;
+
+            lRTN = "<DragSlopeData>" + Environment.NewLine;
+            lRTN = lRTN + "<BCg1 value=\"" + TargetDragSlopeData.BCg1.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</BCg1>" + Environment.NewLine;
+            lRTN = lRTN + "<BCz2 value=\"" + TargetDragSlopeData.BCz2.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</BCz2>" + Environment.NewLine;
+            lRTN = lRTN + "<D1 value=\"" + TargetDragSlopeData.D1.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</D1>" + Environment.NewLine;
+            lRTN = lRTN + "<D2 value=\"" + TargetDragSlopeData.D2.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</D2>" + Environment.NewLine;
+            lRTN = lRTN + "<F2 value=\"" + TargetDragSlopeData.F2.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</F2>" + Environment.NewLine;
+            lRTN = lRTN + "<F3 value=\"" + TargetDragSlopeData.F3.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</F3>" + Environment.NewLine;
+            lRTN = lRTN + "<F4 value=\"" + TargetDragSlopeData.F4.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</F4>" + Environment.NewLine;
+            lRTN = lRTN + "<Fo value=\"" + TargetDragSlopeData.Fo.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Fo>" + Environment.NewLine;
+            lRTN = lRTN + "<V1 value=\"" + TargetDragSlopeData.V1.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</V1>" + Environment.NewLine;
+            lRTN = lRTN + "<V2 value=\"" + TargetDragSlopeData.V2.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</V2>" + Environment.NewLine;
+            lRTN = lRTN + "<Zone1AngleFactor value=\"" + TargetDragSlopeData.Zone1AngleFactor.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Zone1AngleFactor>" + Environment.NewLine;
+            lRTN = lRTN + "<Zone1MachFactor value=\"" + TargetDragSlopeData.Zone1MachFactor.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Zone1MachFactor>" + Environment.NewLine;
+            lRTN = lRTN + "<Zone1Slope value=\"" + TargetDragSlopeData.Zone1Slope.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Zone1Slope>" + Environment.NewLine;
+            lRTN = lRTN + "<Zone1SlopeMultiplier value=\"" + TargetDragSlopeData.Zone1SlopeMultiplier.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Zone1SlopeMultiplier>" + Environment.NewLine;
+            lRTN = lRTN + "<Zone2MachFactor value=\"" + TargetDragSlopeData.Zone2MachFactor.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Zone2MachFactor>" + Environment.NewLine;
+            lRTN = lRTN + "<Zone3MachFactor value=\"" + TargetDragSlopeData.Zone3MachFactor.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Zone3MachFactor>" + Environment.NewLine;
+            lRTN = lRTN + "<Zone3Slope value=\"" + TargetDragSlopeData.Zone3Slope.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Zone3Slope>" + Environment.NewLine;
+            lRTN = lRTN + "<Zone3SlopeMultiplier value=\"" + TargetDragSlopeData.Zone3SlopeMultiplier.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Zone3SlopeMultiplier>" + Environment.NewLine;
+            lRTN = lRTN + "</DragSlopeData>" + Environment.NewLine;
+
+            return lRTN;
+        }
+
         #endregion
 
         //private bool IsBallisticSol(string[] FileLines)
@@ -1077,70 +1182,62 @@ namespace LawlerBallisticsDesk.Classes
         //}
 
         #region "XML to Class"
-        private ObservableCollection<Cartridge> LoadCartridges(XmlNode Cartridges)
+        private Cartridge LoadCartridgeData(XmlNode CartridgeNode)
         {
-            ObservableCollection<Cartridge> lRtn = new ObservableCollection<Cartridge>();
-            Cartridge lCartridge = null;
+            Cartridge lRTN = new Cartridge();
             string lValue;
             XmlNode lcnode;
 
-            //TODO: break the cartridge parse out to an individual cartridge parse and loop
-            // that function here.
-
-            foreach (XmlNode lCart in Cartridges)
-            {
-                lCartridge = new Cartridge();
-                lcnode = lCart.SelectSingleNode("id");
+                lcnode = CartridgeNode.SelectSingleNode("id");
                 lValue = lcnode.Attributes["value"].Value;
-                lCartridge.ID = lValue;
-                lcnode = lCart.SelectSingleNode("name");
+                lRTN.ID = lValue;
+                lcnode = CartridgeNode.SelectSingleNode("name");
                 lValue = lcnode.Attributes["value"].Value;
-                lCartridge.Name = lValue;
-                lcnode = lCart.SelectSingleNode("bulletdiameter");
+                lRTN.Name = lValue;
+                lcnode = CartridgeNode.SelectSingleNode("bulletdiameter");
                 lValue = lcnode.Attributes["value"].Value;
-                lCartridge.BulletDiameter = Convert.ToDouble(lValue);
-                lcnode = lCart.SelectSingleNode("trimlength");
+                lRTN.BulletDiameter = Convert.ToDouble(lValue);
+                lcnode = CartridgeNode.SelectSingleNode("trimlength");
                 lValue = lcnode.Attributes["value"].Value;
-                lCartridge.CaseTrimLngth = Convert.ToDouble(lValue);
-                lcnode = lCart.SelectSingleNode("maxcaselength");
+                lRTN.CaseTrimLngth = Convert.ToDouble(lValue);
+                lcnode = CartridgeNode.SelectSingleNode("maxcaselength");
                 lValue = lcnode.Attributes["value"].Value;
-                lCartridge.MaxCaseLngth = Convert.ToDouble(lValue);
-                lcnode = lCart.SelectSingleNode("maxcoal");
+                lRTN.MaxCaseLngth = Convert.ToDouble(lValue);
+                lcnode = CartridgeNode.SelectSingleNode("maxcoal");
                 lValue = lcnode.Attributes["value"].Value;
-                lCartridge.MaxCOAL = Convert.ToDouble(lValue);
-                lcnode = lCart.SelectSingleNode("headspacemax");
+                lRTN.MaxCOAL = Convert.ToDouble(lValue);
+                lcnode = CartridgeNode.SelectSingleNode("headspacemax");
                 lValue = lcnode.Attributes["value"].Value;
-                lCartridge.HeadSpaceMax = Convert.ToDouble(lValue);
-                lcnode = lCart.SelectSingleNode("headspacemin");
+                lRTN.HeadSpaceMax = Convert.ToDouble(lValue);
+                lcnode = CartridgeNode.SelectSingleNode("headspacemin");
                 lValue = lcnode.Attributes["value"].Value;
-                lCartridge.HeadSpaceMin = Convert.ToDouble(lValue);
+                lRTN.HeadSpaceMin = Convert.ToDouble(lValue);
                 try
                 {
-                    lcnode = lCart.SelectSingleNode("cartridgepic");
+                    lcnode = CartridgeNode.SelectSingleNode("cartridgepic");
                     lValue = lcnode.Attributes["value"].Value;
                     byte[] lba = LawlerBallisticsFactory.StringToByteArray(lValue);
                     Image lx = (Bitmap)((new ImageConverter()).ConvertFrom(lba));
-                    lCartridge.CartridgePic = lx;
+                    lRTN.CartridgePic = lx;
                 }
                 catch
                 {
                     // Image issue or no image
                 }
-                lcnode = lCart.SelectSingleNode("powders");
+                lcnode = CartridgeNode.SelectSingleNode("powders");
                 XmlNode lpwdrid;
-                lCartridge.PowderIDlist = new List<string>();
+                lRTN.PowderIDlist = new List<string>();
                 foreach (XmlNode ln in lcnode)
                 {
                     lValue = "";
                     lpwdrid = ln.SelectSingleNode("pwdrid");
                     lValue = lpwdrid.Attributes["value"].Value;
-                    lCartridge.PowderIDlist.Add(lValue);
-                }               
-                lRtn.Add(lCartridge);
-            }
-            return lRtn;
+                    lRTN.PowderIDlist.Add(lValue);
+                }
+
+            return lRTN;
         }
-        private Gun LoadGun(XmlNode GunNode)
+        private Gun LoadGunData(XmlNode GunNode)
         {
             string lsb = "";
             string lNR;
@@ -1190,7 +1287,7 @@ namespace LawlerBallisticsDesk.Classes
             XmlNode lbsn = GunNode.SelectSingleNode("barrels");
             foreach (XmlNode lbn in lbsn)
             {
-                lbarrel = LoadBarrel(lbn);
+                lbarrel = LoadBarrelData(lbn);
                 lRTN.Barrels.Add(lbarrel);
             }
             foreach (Barrel lb in lRTN.Barrels)
@@ -1204,7 +1301,7 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
-        private Barrel LoadBarrel(XmlNode BarrelNode)
+        private Barrel LoadBarrelData(XmlNode BarrelNode)
         {
             Barrel lRTN = new Barrel();
 
@@ -1243,7 +1340,7 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
-        private Bullet LoadBullet(XmlNode BulletNode)
+        private Bullet LoadBulletData(XmlNode BulletNode)
         {
             Bullet lRTN = new Bullet();
             string lNR;
@@ -1288,7 +1385,7 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
-        private Recipe LoadRecipe(XmlNode RecipeNode)
+        private Recipe LoadRecipeData(XmlNode RecipeNode)
         {
             string lNR;
             Recipe lRTN = new Recipe();
@@ -1373,14 +1470,14 @@ namespace LawlerBallisticsDesk.Classes
             {
                 foreach (XmlNode lLot in lLots)
                 {
-                    lRLC = LoadRecipeLot(lLot);
+                    lRLC = LoadRecipeLotData(lLot);
                     lRTN.Lots.Add(lRLC);
                 }
             }
 
             return lRTN;
         }
-        private RecipeLot LoadRecipeLot(XmlNode RecipeLotNode)
+        private RecipeLot LoadRecipeLotData(XmlNode RecipeLotNode)
         {
             string lLotPropVal;
             RecipeLot lRTN = new RecipeLot();
@@ -1430,13 +1527,13 @@ namespace LawlerBallisticsDesk.Classes
             {
                 foreach (XmlNode lrd in lRds)
                 {
-                    lRnd = LoadRound(lrd);
+                    lRnd = LoadRoundData(lrd);
                     lRTN.Rounds.Add(lRnd);
                 }
             }
             return lRTN;
         }
-        private Round LoadRound(XmlNode RoundNode)
+        private Round LoadRoundData(XmlNode RoundNode)
         {
             Round lRTN = new Round();
             XmlNode lRdprop;
@@ -1536,7 +1633,7 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
-        private Case LoadCase(XmlNode CaseNode)
+        private Case LoadCaseData(XmlNode CaseNode)
         {
             Case lRTN = new Case();
             string lNR;
@@ -1563,7 +1660,7 @@ namespace LawlerBallisticsDesk.Classes
             lRTN.PrimerSize = lNR;
             return lRTN;
         }
-        private Primer LoadPrimer(XmlNode PrimerNode)
+        private Primer LoadPrimerData(XmlNode PrimerNode)
         {
             Primer lRTN = new Primer();
             string lNR;
@@ -1586,7 +1683,7 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
-        private Powder LoadPowder(XmlNode PowderNode)
+        private Powder LoadPowderData(XmlNode PowderNode)
         {
             Powder lRTN = new Powder();
             string lNR;
@@ -1704,6 +1801,18 @@ namespace LawlerBallisticsDesk.Classes
             lGN = ZeroDataNode.SelectSingleNode("ZeroRange");
             lNR = lGN.Attributes["value"].Value;
             lRTN.ZeroRange = Convert.ToDouble(lNR);
+            lGN = ZeroDataNode.SelectSingleNode("ShotDirection");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.ShotDirection = Convert.ToDouble(lNR);
+            lGN = ZeroDataNode.SelectSingleNode("ShotAngle");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.ShotAngle = Convert.ToDouble(lNR);
+            lGN = ZeroDataNode.SelectSingleNode("ShotDistance");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.ShotDistance = Convert.ToDouble(lNR);
+            lGN = ZeroDataNode.SelectSingleNode("WindEffectiveDirection");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.WindEffectiveDirection = Convert.ToDouble(lNR);
             XmlNode lZDsl = ZeroDataNode.SelectSingleNode("ShooterLocationData");
             XmlNode lLN = lZDsl.SelectSingleNode("LocationData");
             lRTN.ShooterLoc = LoadLocationData(lLN);
@@ -1719,11 +1828,132 @@ namespace LawlerBallisticsDesk.Classes
         {
             Solution lRTN = new Solution();
             
-            XmlNode lZD = SolutionNode.SelectSingleNode("ZeroData");
-            lRTN.MyScenario.MyShooter.MyLoadOut.zeroData = LoadZeroData(lZD);
+            XmlNode lZD = SolutionNode.SelectSingleNode("ScenarioData");
+            lRTN.MyScenario = LoadScenarioData(lZD);
 
             return lRTN;
         }
+        private Scenario LoadScenarioData(XmlNode ScenarioNode)
+        {
+            Scenario lRTN = new Scenario();
+            XmlNode lGN;
+
+            lGN = ScenarioNode.SelectSingleNode("AtmosphericData");
+            lRTN.MyAtmospherics = LoadAtmosphericData(lGN);
+            lGN = ScenarioNode.SelectSingleNode("DragSlopeData");
+            lRTN.MyDragSlopeData = LoadDragSlopeData(lGN);
+            lGN = ScenarioNode.SelectSingleNode("ShooterData");
+            lRTN.MyShooter = LoadShooterData(lGN);
+
+            return lRTN;
+        }
+        private DragSlopeData LoadDragSlopeData(XmlNode DragSlopeNode)
+        {
+            DragSlopeData lRTN = new DragSlopeData();
+            XmlNode lGN;
+            string lNR;
+
+            lGN = DragSlopeNode.SelectSingleNode("BCg1");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.BCg1 = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("BCz2");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.BCz2 = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("D1");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.D1 = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("D2");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.D2 = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("F2");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.F2 = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("F3");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.F3 = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("F4");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.F4 = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("Fo");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.Fo = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("V1");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.V1 = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("V2");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.V2 = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("Zone1AngleFactor");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.Zone1AngleFactor = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("Zone1MachFactor");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.Zone1MachFactor = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("Zone1Slope");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.Zone1Slope = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("Zone1SlopeMultiplier");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.Zone1SlopeMultiplier = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("Zone2MachFactor");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.Zone2MachFactor = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("Zone3MachFactor");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.Zone3MachFactor = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("Zone3Slope");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.Zone3Slope = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("Zone3SlopeMultiplier");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.Zone3SlopeMultiplier = Convert.ToDouble(lNR);
+
+            return lRTN;
+        }
+        private Shooter LoadShooterData(XmlNode ShooterNode)
+        {
+            Shooter lRTN = new Shooter();
+            XmlNode lGN;
+
+            lGN = ShooterNode.SelectSingleNode("LocationData");
+            lRTN.MyLocation = LoadLocationData(lGN);
+            lGN = ShooterNode.SelectSingleNode("LoadoutData");
+            lRTN.MyLoadOut = LoadLoadoutData(lGN);
+
+            return lRTN;
+        }
+        private LoadOut LoadLoadoutData(XmlNode LoadoutNode)
+        {
+            LoadOut lRTN = new LoadOut();
+            XmlNode lGN;
+            string lNR;
+
+            lGN = LoadoutNode.SelectSingleNode("BSG");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.BSG = Convert.ToDouble(lNR);
+            lGN = LoadoutNode.SelectSingleNode("ID");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.SetID(lNR);
+            lGN = LoadoutNode.SelectSingleNode("MaxRange");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.MaxRange = Convert.ToDouble(lNR);
+            lGN = LoadoutNode.SelectSingleNode("MuzzleVelocity");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.MuzzleVelocity = Convert.ToDouble(lNR);
+            lGN = LoadoutNode.SelectSingleNode("SelectedBarrelID");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.SelectedBarrelID = lNR;
+            lGN = LoadoutNode.SelectSingleNode("SelectedCartridge");
+            XmlNode lSC = lGN.SelectSingleNode("recipe");
+            lRTN.SelectedCartridge = LoadRecipeData(lSC);
+            lGN = LoadoutNode.SelectSingleNode("gun");
+            lRTN.SelectedGun = LoadGunData(lGN);
+            lGN = LoadoutNode.SelectSingleNode("ZeroData");
+            lRTN.zeroData = LoadZeroData(lGN);
+
+            return lRTN;
+        }
+
         #endregion
 
         #endregion
