@@ -1092,11 +1092,11 @@ namespace LawlerBallisticsDesk.ViewModel
 
             if (!ZeroData)
             {
-                lRTN = BallisticFunctions.GetCoriolisHoriz(Range, MuzzleVelocity, TargetLoc, ShooterLoc, ZeroRange, Fo);
+                lRTN = BallisticFunctions.GetCoriolisHoriz(Range, MuzzleVelocity, TargetLoc, ShooterLoc, Fo);
             }
             else
             {
-                lRTN = BallisticFunctions.GetCoriolisHoriz(Range, ZeroMuzzleVelocity, ZeroTargetLoc, ZeroShooterLoc, ZeroRange, Fo);
+                lRTN = BallisticFunctions.GetCoriolisHoriz(Range, ZeroMuzzleVelocity, ZeroTargetLoc, ZeroShooterLoc, Fo);
             }
 
             return lRTN;
@@ -1132,7 +1132,7 @@ namespace LawlerBallisticsDesk.ViewModel
         {
             double lRTN = 0;
 
-            lRTN = BallisticFunctions.GetSpinDrift(Range, BarrelTwistDirection, BSG, Fo, MuzzleVelocity, ZeroRange);
+            lRTN = BallisticFunctions.GetSpinDrift(Range, BarrelTwistDirection, BSG, Fo, MuzzleVelocity);
 
             return lRTN;
         }
@@ -1150,14 +1150,16 @@ namespace LawlerBallisticsDesk.ViewModel
 
             if (!ZeroData)
             {
-                //TODO: needs to be wind effective direction.
-                lRTN = BallisticFunctions.TotalHorizontalDrift(Range, WindSpeed, effectivewinddirection, MuzzleVelocity, Fo, TargetLoc, ShooterLoc, ZeroRange, BarrelTwistDirection, BSG);
+                lRTN = BallisticFunctions.TotalHorizontalDrift(Range, WindSpeed, 
+                    LocationData.GetEffectiveWindDirection(TargetLoc, ShooterLoc, WindDirection), 
+                    MuzzleVelocity, Fo, TargetLoc, ShooterLoc, BarrelTwistDirection, BSG);
             }
             else
             {
-                lRTN = BallisticFunctions.TotalHorizontalDrift(Range, ZeroWindSpeed, ZeroEffectiveWindDirection, ZeroMuzzleVelocity, Fo, ZeroTargetLoc,
-                    ZeroShooterLoc, ZeroRange, BarrelTwistDirection, BSG);
+                lRTN = BallisticFunctions.TotalHorizontalDrift(Range, ZeroWindSpeed, ZeroEffectiveWindDirection,
+                    ZeroMuzzleVelocity, Fo, ZeroTargetLoc, ZeroShooterLoc, BarrelTwistDirection, BSG);
             }
+
             return lRTN;
         }
         public double Velocity(double Range)

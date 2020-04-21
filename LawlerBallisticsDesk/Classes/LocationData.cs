@@ -58,47 +58,132 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Public Routines"
-        public static double GetEffectiveWindDirection()
+        public static double GetEffectiveWindDirection(LocationData TargetLoc, LocationData ShooterLoc, double WindDirection)
         {
-            private void SetWindDirection()
-            {
-                //TODO: break this function up to calculate the components independently
-                if (TargetLoc == null) return;
-                //Target latitude minus shooter latitude to get positive for east.
-                double lvert = (ShooterLoc.Latitude - TargetLoc.Latitude) * LocationData.YardsPerDegLatLon;
-                //Target longitude minus shooter longitude to get positive for north.
-                double lhoriz = (TargetLoc.Longitude - ShooterLoc.Longitude) * LocationData.YardsPerDegLatLon;
-                double lShtAngl = Math.Atan(Math.Abs(lhoriz / lvert)) * (180 / Math.PI);
-                double lhorzRange = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
-                double lElev = (TargetLoc.Altitude - ShooterLoc.Altitude) / 3;
-                double lElevAng = Math.Atan(Math.Abs(lElev / lhorzRange)) * (180 / Math.PI);
-                if (lElev == 0)
-                {
-                    ShotDistance = lhorzRange;
-                }
-                else
-                {
-                    ShotDistance = lElev / Math.Sin((lElevAng * (Math.PI / 180)));
-                }
-                ShotAngle = lElevAng;
-                if ((lhoriz < 0) & (lvert > 0))
-                {
-                    lShtAngl = 360 - lShtAngl;
-                }
-                else if ((lhoriz > 0) & (lvert < 0))
-                {
-                    lShtAngl = 180 - lShtAngl;
-                }
-                else if ((lhoriz < 0) & (lvert < 0))
-                {
-                    lShtAngl = 180 + lShtAngl;
-                }
-                ShotDirection = lShtAngl;
-                double lWE = atmospherics.WindDirection - ShotDirection;
-                if (lWE < 0) lWE = 360 + lWE;
-                WindEffectiveDirection = lWE;
-            }
+            double lRTN = 0;
+            double lShotDistance = 0;
+            double lShotAngle = 0;
+            double lShotDirection = 0;
 
+            if (TargetLoc == null) return lRTN;
+            //Target latitude minus shooter latitude to get positive for east.
+            double lvert = (ShooterLoc.Latitude - TargetLoc.Latitude) * YardsPerDegLatLon;
+            //Target longitude minus shooter longitude to get positive for north.
+            double lhoriz = (TargetLoc.Longitude - ShooterLoc.Longitude) * YardsPerDegLatLon;
+            double lShtAngl = Math.Atan(Math.Abs(lhoriz / lvert)) * (180 / Math.PI);
+            double lhorzRange = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
+            double lElev = (TargetLoc.Altitude - ShooterLoc.Altitude) / 3;
+            double lElevAng = Math.Atan(Math.Abs(lElev / lhorzRange)) * (180 / Math.PI);
+            if (lElev == 0)
+            {
+                lShotDistance = lhorzRange;
+            }
+            else
+            {
+                lShotDistance = lElev / Math.Sin((lElevAng * (Math.PI / 180)));
+            }
+            lShotAngle = lElevAng;
+            if ((lhoriz < 0) & (lvert > 0))
+            {
+                lShtAngl = 360 - lShtAngl;
+            }
+            else if ((lhoriz > 0) & (lvert < 0))
+            {
+                lShtAngl = 180 - lShtAngl;
+            }
+            else if ((lhoriz < 0) & (lvert < 0))
+            {
+                lShtAngl = 180 + lShtAngl;
+            }
+            lShotDirection = lShtAngl;
+            double lWE = WindDirection - lShotDirection;
+            if (lWE < 0) lWE = 360 + lWE;
+            lRTN = lWE;
+
+            return lRTN;
+        }
+        public static double GetShotDistance(LocationData TargetLoc, LocationData ShooterLoc)
+        {
+            double lRTN = 0;
+
+            if (TargetLoc == null) return lRTN;
+            //Target latitude minus shooter latitude to get positive for east.
+            double lvert = (ShooterLoc.Latitude - TargetLoc.Latitude) * YardsPerDegLatLon;
+            //Target longitude minus shooter longitude to get positive for north.
+            double lhoriz = (TargetLoc.Longitude - ShooterLoc.Longitude) * YardsPerDegLatLon;
+            double lShtAngl = Math.Atan(Math.Abs(lhoriz / lvert)) * (180 / Math.PI);
+            double lhorzRange = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
+            double lElev = (TargetLoc.Altitude - ShooterLoc.Altitude) / 3;
+            double lElevAng = Math.Atan(Math.Abs(lElev / lhorzRange)) * (180 / Math.PI);
+            if (lElev == 0)
+            {
+                lRTN = lhorzRange;
+            }
+            else
+            {
+                lRTN = lElev / Math.Sin((lElevAng * (Math.PI / 180)));
+            }
+         
+            return lRTN;
+        }
+        public static double GetShotHorizontalDistance(LocationData TargetLoc, LocationData ShooterLoc)
+        {
+            double lRTN = 0;
+
+            if (TargetLoc == null) return lRTN;
+            //Target latitude minus shooter latitude to get positive for east.
+            double lvert = (ShooterLoc.Latitude - TargetLoc.Latitude) * LocationData.YardsPerDegLatLon;
+            //Target longitude minus shooter longitude to get positive for north.
+            double lhoriz = (TargetLoc.Longitude - ShooterLoc.Longitude) * LocationData.YardsPerDegLatLon;
+            double lShtAngl = Math.Atan(Math.Abs(lhoriz / lvert)) * (180 / Math.PI);
+            lRTN = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
+
+            return lRTN;
+        }
+        public static double GetShotAngle(LocationData TargetLoc, LocationData ShooterLoc)
+        {
+            double lRTN = 0;
+
+            if (TargetLoc == null) return lRTN;
+            //Target latitude minus shooter latitude to get positive for east.
+            double lvert = (ShooterLoc.Latitude - TargetLoc.Latitude) * YardsPerDegLatLon;
+            //Target longitude minus shooter longitude to get positive for north.
+            double lhoriz = (TargetLoc.Longitude - ShooterLoc.Longitude) * YardsPerDegLatLon;
+            double lShtAngl = Math.Atan(Math.Abs(lhoriz / lvert)) * (180 / Math.PI);
+            double lhorzRange = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
+            double lElev = (TargetLoc.Altitude - ShooterLoc.Altitude) / 3;
+            lRTN = Math.Atan(Math.Abs(lElev / lhorzRange)) * (180 / Math.PI);
+
+            return lRTN;
+        }
+        public static double GetShotDirection(LocationData TargetLoc, LocationData ShooterLoc)
+        {
+            double lRTN = 0;
+
+            if (TargetLoc == null) return lRTN;
+            //Target latitude minus shooter latitude to get positive for east.
+            double lvert = (ShooterLoc.Latitude - TargetLoc.Latitude) * YardsPerDegLatLon;
+            //Target longitude minus shooter longitude to get positive for north.
+            double lhoriz = (TargetLoc.Longitude - ShooterLoc.Longitude) * YardsPerDegLatLon;
+            double lShtAngl = Math.Atan(Math.Abs(lhoriz / lvert)) * (180 / Math.PI);
+            double lhorzRange = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
+            double lElev = (TargetLoc.Altitude - ShooterLoc.Altitude) / 3;
+            double lElevAng = Math.Atan(Math.Abs(lElev / lhorzRange)) * (180 / Math.PI);
+            if ((lhoriz < 0) & (lvert > 0))
+            {
+                lShtAngl = 360 - lShtAngl;
+            }
+            else if ((lhoriz > 0) & (lvert < 0))
+            {
+                lShtAngl = 180 - lShtAngl;
+            }
+            else if ((lhoriz < 0) & (lvert < 0))
+            {
+                lShtAngl = 180 + lShtAngl;
+            }
+            lRTN = lShtAngl;
+
+            return lRTN;
         }
         #endregion
 

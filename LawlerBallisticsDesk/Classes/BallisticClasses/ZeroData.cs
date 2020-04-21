@@ -22,7 +22,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         private void atmospherics_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             RaisePropertyChanged(e.PropertyName);
-            SetWindDirection();
+            RaiseDependentProperties();
             switch (e.PropertyName)
             {
                 case "Message":
@@ -36,7 +36,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         {
             //RaisePropertyChanged(nameof(ShooterLoc));
             RaisePropertyChanged(e.PropertyName);
-            SetWindDirection();
+            RaiseDependentProperties();
             switch (e.PropertyName)
             {
                 case "Message":
@@ -50,7 +50,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         {
             //RaisePropertyChanged(nameof(TargetLoc));
             RaisePropertyChanged(e.PropertyName);
-            SetWindDirection();
+            RaiseDependentProperties();
             switch (e.PropertyName)
             {
                 case "Message":
@@ -63,7 +63,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Private Variables"
-        //private LoadOut _loadOutData;
+        private string _Message;
         private Atmospherics _atmospherics;
         private LocationData _TargetLoc;
         private LocationData _ShooterLoc;
@@ -73,14 +73,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         private double _MidRange;
         private bool _UseMaxRise;
         private double _PointBlankRange;
-        private string _Message;
         private string[] _MsgQ = new string[12];
-        private double _ShotDirection;
-        private double _ShotAngle;
-        private double _ShotDistance;
-        private double _WindEffectiveDirection;
         private double _MuzzleVelocity;
-        //private DragSlopeData _dragSlopeData;
         #endregion
 
         #region "Properties"
@@ -93,7 +87,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             set
             {
                 _atmospherics = value;
-                SetWindDirection();
+                RaiseDependentProperties();
                 atmospherics.PropertyChanged += atmospherics_PropertyChanged;
                 RaisePropertyChanged(nameof(atmospherics));
             }
@@ -113,9 +107,9 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             set
             {
                 _ShooterLoc = value;
-                SetWindDirection();
                 ShooterLoc.PropertyChanged += ShooterLoc_PropertyChanged;
                 RaisePropertyChanged(nameof(ShooterLoc));
+                RaiseDependentProperties();
             }
         }
         public LocationData TargetLoc
@@ -126,10 +120,10 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             }
             set
             {
-                _TargetLoc = value;
-                SetWindDirection();
+                _TargetLoc = value;                
                 TargetLoc.PropertyChanged += TargetLoc_PropertyChanged;
                 RaisePropertyChanged(nameof(TargetLoc));
+                RaiseDependentProperties();
             }
         }
         /// <summary>
@@ -179,35 +173,19 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         {
             get
             {
-                return _ShotDirection;
+                return LocationData.GetShotDirection(TargetLoc, ShooterLoc);
             }
-            set
-            {
-                _ShotDirection = value; 
-                RaisePropertyChanged(nameof(ShotDirection));
-            } 
         }
         /// <summary>
         /// Degrees in elevation, i.e. shooting up or down.
         /// </summary>
-        public double ShotAngle { get { return _ShotAngle; } set { _ShotAngle = value; RaisePropertyChanged(nameof(ShotAngle)); } }
+        public double ShotAngle { get { return LocationData.GetShotAngle(TargetLoc, ShooterLoc); } }
         /// <summary>
         /// LOS range to the target calculated from map data.
         /// </summary>
-        public double ShotDistance
-        {
-            get
-            {
-                return _ShotDistance;
-            }
-            set
-            {
-                _ShotDistance = value;
-                RaisePropertyChanged(nameof(ShotDistance)); 
-            }
-        }
-        public double ShotHorizDistance { get { return GetShotHorizDistance(); } }
-        public double WindEffectiveDirection { get { return _WindEffectiveDirection; } set { _WindEffectiveDirection = value; RaisePropertyChanged(nameof(WindEffectiveDirection)); } }
+        public double ShotDistance{get{return LocationData.GetShotDistance(TargetLoc, ShooterLoc);}}
+        public double ShotHorizDistance { get { return LocationData.GetShotHorizontalDistance(TargetLoc, ShooterLoc); } }
+        public double WindEffectiveDirection { get { return LocationData.GetEffectiveWindDirection(TargetLoc, ShooterLoc, atmospherics.WindDirection); } }
         public double MuzzleVelocity { get { return _MuzzleVelocity; } set { _MuzzleVelocity = value; RaisePropertyChanged(nameof(MuzzleVelocity)); } }
         public string Message { get { return _Message; } }
         #endregion
@@ -243,58 +221,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Private Routines"
-        private double GetShotHorizDistance()
-        {
-            double lRTN = 0;
-
-            if (TargetLoc == null) return lRTN;
-            //Target latitude minus shooter latitude to get positive for east.
-            double lvert = (ShooterLoc.Latitude - TargetLoc.Latitude) * LocationData.YardsPerDegLatLon;
-            //Target longitude minus shooter longitude to get positive for north.
-            double lhoriz = (TargetLoc.Longitude - ShooterLoc.Longitude) * LocationData.YardsPerDegLatLon;
-            double lShtAngl = Math.Atan(Math.Abs(lhoriz / lvert)) * (180 / Math.PI);
-            lRTN = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
-
-            return lRTN;
-        }
-        private void SetWindDirection()
-        {
-            //TODO: break this function up to calculate the components independently
-            if (TargetLoc == null) return;
-            //Target latitude minus shooter latitude to get positive for east.
-            double lvert = (ShooterLoc.Latitude - TargetLoc.Latitude) * LocationData.YardsPerDegLatLon;
-            //Target longitude minus shooter longitude to get positive for north.
-            double lhoriz = (TargetLoc.Longitude - ShooterLoc.Longitude) * LocationData.YardsPerDegLatLon;
-            double lShtAngl = Math.Atan(Math.Abs(lhoriz / lvert))*(180/Math.PI);
-            double lhorzRange = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
-            double lElev = (TargetLoc.Altitude - ShooterLoc.Altitude)/3;
-            double lElevAng = Math.Atan(Math.Abs(lElev / lhorzRange)) * (180 / Math.PI);
-            if (lElev == 0)
-            {
-                ShotDistance = lhorzRange;
-            }
-            else
-            {
-                ShotDistance = lElev / Math.Sin((lElevAng * (Math.PI / 180)));
-            }
-            ShotAngle = lElevAng;
-            if((lhoriz < 0) & (lvert > 0))
-            {
-                lShtAngl = 360 - lShtAngl;
-            }
-            else if ((lhoriz > 0) & (lvert < 0))
-            {
-                lShtAngl = 180 - lShtAngl;
-            }
-            else if ((lhoriz < 0) & (lvert < 0))
-            {
-                lShtAngl = 180 + lShtAngl;
-            }
-            ShotDirection = lShtAngl;
-            double lWE = atmospherics.WindDirection - ShotDirection;
-            if(lWE<0) lWE = 360 + lWE;
-            WindEffectiveDirection = lWE;
-        }
         private void LoadMessage(string msg)
         {
             string lmsg = "";
@@ -311,6 +237,14 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             _Message = lmsg;
             RaisePropertyChanged(nameof(Message));
 
+        }
+        private void RaiseDependentProperties()
+        {
+            RaisePropertyChanged(nameof(WindEffectiveDirection));
+            RaisePropertyChanged(nameof(ShotAngle));
+            RaisePropertyChanged(nameof(ShotDirection));
+            RaisePropertyChanged(nameof(ShotDistance));
+            RaisePropertyChanged(nameof(ShotHorizDistance));
         }
         #endregion
 
