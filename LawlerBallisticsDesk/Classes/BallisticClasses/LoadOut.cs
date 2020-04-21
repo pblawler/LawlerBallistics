@@ -32,6 +32,10 @@ namespace LawlerBallisticsDesk.Classes
         {
             RaisePropertyChanged(e.PropertyName);
         }
+        private void MyDragSlopeData_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaisePropertyChanged(e.PropertyName);
+        }
         #endregion
 
         #region "Private Variables"
@@ -45,6 +49,7 @@ namespace LawlerBallisticsDesk.Classes
         private double _BSG;
         private double _MaxRange;
         private ZeroData _zeroData;
+        private DragSlopeData _MyDragSlopeData;
         #endregion
 
         #region "Properties"
@@ -102,6 +107,20 @@ namespace LawlerBallisticsDesk.Classes
                 RaisePropertyChanged(nameof(zeroData));
             }
         }
+        public DragSlopeData MyDragSlopeData
+        {
+            get
+            {
+                return _MyDragSlopeData;
+            }
+            set
+            {
+                MyDragSlopeData.PropertyChanged -= MyDragSlopeData_PropertyChanged;
+                _MyDragSlopeData = value;
+                MyDragSlopeData.PropertyChanged += MyDragSlopeData_PropertyChanged;
+                RaisePropertyChanged(nameof(MyDragSlopeData));
+            }
+        }
         #endregion
 
         #region "Constructor"
@@ -111,9 +130,11 @@ namespace LawlerBallisticsDesk.Classes
             _SelectedGun = new Gun();
             SelectedCartridge = new Recipe();
             _zeroData = new ZeroData();
+            _MyDragSlopeData = new DragSlopeData();
             SelectedGun.PropertyChanged += SelectedGun_PropertyChanged;
             SelectedCartridge.PropertyChanged += SelectedLoadRecipe_PropertyChanged;
             zeroData.PropertyChanged += zeroData_PropertyChanged;
+            MyDragSlopeData.PropertyChanged += MyDragSlopeData_PropertyChanged;
         }
         #endregion
 
@@ -123,7 +144,7 @@ namespace LawlerBallisticsDesk.Classes
             SelectedGun.PropertyChanged -= SelectedGun_PropertyChanged;
             SelectedCartridge.PropertyChanged -= SelectedLoadRecipe_PropertyChanged;
             zeroData.PropertyChanged -= zeroData_PropertyChanged;
-
+            MyDragSlopeData.PropertyChanged -= MyDragSlopeData_PropertyChanged;
         }
         #endregion
 

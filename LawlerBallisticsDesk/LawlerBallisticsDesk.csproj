@@ -245,7 +245,6 @@
     <Compile Include="Classes\BallisticClasses\DragSlopeData.cs" />
     <Compile Include="Classes\BallisticClasses\Solution.cs" />
     <Compile Include="Classes\BallisticClasses\ZeroData.cs" />
-    <Compile Include="Classes\BallisticClasses\Ballistics.cs" />
     <Compile Include="Classes\BallisticClasses\BallisticFunctions.cs" />
     <Compile Include="Classes\Barrel.cs" />
     <Compile Include="Classes\Bullet.cs" />

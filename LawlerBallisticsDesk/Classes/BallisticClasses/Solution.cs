@@ -35,7 +35,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
         #region "Private Variables"
         private Scenario _MyScenario;
-        private Ballistics _MyBallistics;
         #endregion
 
         #region "Properties"
@@ -53,7 +52,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 RaisePropertyChanged(nameof(MyScenario)); 
             }
         }
-        public Ballistics MyBallistics { get { return _MyBallistics; } set { _MyBallistics = value; RaisePropertyChanged(nameof(MyBallistics)); } }
         #endregion
 
         #region "Constructor"
@@ -61,7 +59,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         {
             _MyScenario = new Scenario();
             MyScenario.PropertyChanged += MyScenario_PropertyChanged;
-            MyBallistics = new Ballistics(MyScenario);
         }
         #endregion
 

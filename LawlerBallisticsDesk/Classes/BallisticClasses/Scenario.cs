@@ -29,10 +29,6 @@ namespace LawlerBallisticsDesk.Classes
         {
             RaisePropertyChanged(e.PropertyName);
         }
-        private void MyDragSlopeData_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            RaisePropertyChanged(e.PropertyName);
-        }
 
         private void RefreshViewModel()
         {
@@ -45,8 +41,6 @@ namespace LawlerBallisticsDesk.Classes
         private Shooter _MyShooter;
         private ObservableCollection<Target> _Targets;
         private Target _SelectedTarget;
-        private DragSlopeData _MyDragSlopeData;
-
         #endregion
 
         #region "Properties"
@@ -78,20 +72,6 @@ namespace LawlerBallisticsDesk.Classes
         }
         public ObservableCollection<Target> Targets { get { return _Targets; } set { _Targets = value; RaisePropertyChanged(nameof(Targets)); } }
         public Target SelectedTarget { get { return _SelectedTarget; } set { _SelectedTarget = value; RaisePropertyChanged(nameof(SelectedTarget)); } }
-        public DragSlopeData MyDragSlopeData
-        {
-            get
-            {
-                return _MyDragSlopeData;
-            }
-            set
-            {
-                MyDragSlopeData.PropertyChanged -= MyDragSlopeData_PropertyChanged;
-                _MyDragSlopeData = value;
-                MyDragSlopeData.PropertyChanged += MyDragSlopeData_PropertyChanged;
-                RaisePropertyChanged(nameof(MyDragSlopeData));
-            }
-        }
         #endregion
 
         #region "Constructor"
@@ -99,11 +79,8 @@ namespace LawlerBallisticsDesk.Classes
         {
             _MyAtmospherics = new Atmospherics();
             _MyShooter = new Shooter();
-            _MyDragSlopeData = new DragSlopeData();
             MyAtmospherics.PropertyChanged += MyAtmospherics_PropertyChanged;
             MyShooter.PropertyChanged += MyShooter_PropertyChanged;
-            MyDragSlopeData.PropertyChanged += MyDragSlopeData_PropertyChanged;
-
         }
         #endregion
 
@@ -112,7 +89,6 @@ namespace LawlerBallisticsDesk.Classes
         {
             MyAtmospherics.PropertyChanged -= MyAtmospherics_PropertyChanged;
             MyShooter.PropertyChanged -= MyShooter_PropertyChanged;
-            MyDragSlopeData.PropertyChanged -= MyDragSlopeData_PropertyChanged;
         }
         #endregion
 

@@ -79,6 +79,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         private double _ShotAngle;
         private double _ShotDistance;
         private double _WindEffectiveDirection;
+        private double _MuzzleVelocity;
         //private DragSlopeData _dragSlopeData;
         #endregion
 
@@ -205,7 +206,9 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 RaisePropertyChanged(nameof(ShotDistance)); 
             }
         }
+        public double ShotHorizDistance { get { return GetShotHorizDistance(); } }
         public double WindEffectiveDirection { get { return _WindEffectiveDirection; } set { _WindEffectiveDirection = value; RaisePropertyChanged(nameof(WindEffectiveDirection)); } }
+        public double MuzzleVelocity { get { return _MuzzleVelocity; } set { _MuzzleVelocity = value; RaisePropertyChanged(nameof(MuzzleVelocity)); } }
         public string Message { get { return _Message; } }
         #endregion
 
@@ -240,6 +243,20 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Private Routines"
+        private double GetShotHorizDistance()
+        {
+            double lRTN = 0;
+
+            if (TargetLoc == null) return lRTN;
+            //Target latitude minus shooter latitude to get positive for east.
+            double lvert = (ShooterLoc.Latitude - TargetLoc.Latitude) * LocationData.YardsPerDegLatLon;
+            //Target longitude minus shooter longitude to get positive for north.
+            double lhoriz = (TargetLoc.Longitude - ShooterLoc.Longitude) * LocationData.YardsPerDegLatLon;
+            double lShtAngl = Math.Atan(Math.Abs(lhoriz / lvert)) * (180 / Math.PI);
+            lRTN = lhoriz / Math.Sin((lShtAngl * (Math.PI / 180)));
+
+            return lRTN;
+        }
         private void SetWindDirection()
         {
             //TODO: break this function up to calculate the components independently

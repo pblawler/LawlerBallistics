@@ -985,7 +985,6 @@ namespace LawlerBallisticsDesk.Classes
             lRTN = "<ScenarioData>" + Environment.NewLine;
             lRTN = lRTN + AtmosphericDatXML(TargetScenario.MyAtmospherics);
             lRTN = lRTN + ShooterDatXML(TargetScenario.MyShooter);
-            lRTN = lRTN + DragSlopeDatXML(TargetScenario.MyDragSlopeData);
             lRTN = lRTN + "</ScenarioData>" + Environment.NewLine;
 
             return lRTN;
@@ -1023,6 +1022,7 @@ namespace LawlerBallisticsDesk.Classes
             lRTN = lRTN + "</SelectedCartridge>" + Environment.NewLine;
             lRTN = lRTN + GunDatXML(TargetLoadout.SelectedGun);
             lRTN = lRTN + ZeroDatXML(TargetLoadout.zeroData);
+            lRTN = lRTN + DragSlopeDatXML(TargetLoadout.MyDragSlopeData);
             lRTN = lRTN + "</LoadoutData>" + Environment.NewLine;
 
             return lRTN;
@@ -1052,6 +1052,8 @@ namespace LawlerBallisticsDesk.Classes
             lRTN = lRTN + "</ShotDistance>" + Environment.NewLine;
             lRTN = lRTN + "<WindEffectiveDirection value=\"" + TargetZeroData.WindEffectiveDirection.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
             lRTN = lRTN + "</WindEffectiveDirection>" + Environment.NewLine;
+            lRTN = lRTN + "<MuzzleVelocity value=\"" + TargetZeroData.MuzzleVelocity.ToString() + "\" type=\"double\">" + System.Environment.NewLine;
+            lRTN = lRTN + "</MuzzleVelocity>" + Environment.NewLine;
             lRTN = lRTN + "<ShooterLocationData>" + Environment.NewLine;
             lRTN = lRTN + LocationDatXML(TargetZeroData.ShooterLoc);
             lRTN = lRTN + "</ShooterLocationData>" + Environment.NewLine;
@@ -1813,6 +1815,9 @@ namespace LawlerBallisticsDesk.Classes
             lGN = ZeroDataNode.SelectSingleNode("WindEffectiveDirection");
             lNR = lGN.Attributes["value"].Value;
             lRTN.WindEffectiveDirection = Convert.ToDouble(lNR);
+            lGN = ZeroDataNode.SelectSingleNode("MuzzleVelocity");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.MuzzleVelocity = Convert.ToDouble(lNR);
             XmlNode lZDsl = ZeroDataNode.SelectSingleNode("ShooterLocationData");
             XmlNode lLN = lZDsl.SelectSingleNode("LocationData");
             lRTN.ShooterLoc = LoadLocationData(lLN);
@@ -1840,8 +1845,6 @@ namespace LawlerBallisticsDesk.Classes
 
             lGN = ScenarioNode.SelectSingleNode("AtmosphericData");
             lRTN.MyAtmospherics = LoadAtmosphericData(lGN);
-            lGN = ScenarioNode.SelectSingleNode("DragSlopeData");
-            lRTN.MyDragSlopeData = LoadDragSlopeData(lGN);
             lGN = ScenarioNode.SelectSingleNode("ShooterData");
             lRTN.MyShooter = LoadShooterData(lGN);
 
@@ -1950,6 +1953,8 @@ namespace LawlerBallisticsDesk.Classes
             lRTN.SelectedGun = LoadGunData(lGN);
             lGN = LoadoutNode.SelectSingleNode("ZeroData");
             lRTN.zeroData = LoadZeroData(lGN);
+            lGN = LoadoutNode.SelectSingleNode("DragSlopeData");
+            lRTN.MyDragSlopeData = LoadDragSlopeData(lGN);
 
             return lRTN;
         }
