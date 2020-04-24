@@ -212,11 +212,46 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 (Math.Pow(3600, 0.5))), 2);
             return lV2;
         }
+        /// <summary>
+        /// Calculates the effective drag/retard coefficent for the provided range.
+        /// </summary>
+        /// <param name="Range">Distance to calculate the F value at.</param>
+        /// <returns>F drag/retard coefficent</returns>
+        public static double Fa(double Range, double Fo, double F2, double F3, double F4, double Zone1Range, double Zone2Range, double Zone3Range,
+            double Zone1Slope, double Zone3Slope, double Zone1SlopeMultiplier, double Zone3SlopeMultiplier)
+        {
+            double lFa = 0;
+
+            if (Zone1Range >= Range)
+            {
+                //F at the provided range.  Applies to Zone 1
+                lFa = (Fo - Zone1SlopeMultiplier * Zone1Slope * Range);
+            }
+            else if ((Zone1Range < Range) &
+                (Zone2Range >= Range))
+            {
+                //F at the provided range.  Applies to Zone 2
+                lFa = F2;
+            }
+            else if ((Zone2Range < Range) &
+                (Zone3Range >= Range))
+            {
+                //F at the provided range.  Applies to Zone 3
+                lFa = (F3 - Zone3SlopeMultiplier *
+                    Zone3Slope * (Range - Zone3Range));
+            }
+            else if (Zone3Range < Range)
+            {
+                //F at the provided range.  Applies to Zone 4
+                lFa = F4;
+            }
+            return lFa;
+        }
         #endregion
 
         #region "Horizontal Trajectory"
         public static double TotalHorizontalDrift(double Range, double WindSpeed, double WindDirection, double MuzzleVelocity, double Fo,
-            LocationData TargetLoc, LocationData ShooterLoc, string TwistDirection, double BSG)
+            LocationData TargetLoc, LocationData ShooterLoc, string TwistDirection, double BSG, bool ZeroData = false)
         {
             double lTW;
 
@@ -254,37 +289,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
             return lDrift;
         }
-        /// <summary>
-        ///  The spin drift correction rate. When zeroing it is automatically accounted for and continues in a
-        /// straight line past the zero range. Since the bullet is slowing the rate will be over come past the
-        /// zero range but this must be accounted for or the reported drift will be too much.
-        /// </summary>
-        /// <param name="ZeroRange">The far distance where the sight elevation deviation is zero.</param>
-        /// <param name="TwistDirection">The direction of the barrel rifling twist i.e. Right or Left.</param>
-        /// <param name="BSG">Bullet stability factor</param>
-        /// <param name="Fo">Initual drag factor at muzzle.</param>
-        /// <param name="MuzzleVelocity">Bullet velocity at the barrel muzzle.</param>
-        /// <returns></returns>
-        public static double SpindDriftCorrection(double ZeroRange, string TwistDirection, double BSG, double Fo, double MuzzleVelocity)
-        {
-                double lZSD;
-                double lZDC;
-
-                //Amount of drift corrected at sight in
-                lZSD = GetRawSpinDrift(ZeroRange,TwistDirection,BSG,Fo,MuzzleVelocity);
-                //Correction factor (in/yards), the linear offset induced at sight in.
-                lZDC = lZSD / ZeroRange;
-                return lZDC;
-        }
-        /// <summary>
-        /// Returns the horizontal displacement caused by wind.
-        /// </summary>
-        /// <param name="WindSpeed">The speed of the wind in mph.</param>
-        /// <param name="WindDirection">The direction of the wind in degrees with the target at 0 degrees.</param>
-        /// <param name="Range">The distance to the target in yards.</param>
-        /// <param name="Fo">Initual drag factor at muzzle.</param>
-        /// <param name="MuzzleVelocity">Bullet velocity at the barrel muzzle.</param>
-        /// <returns>Horizontal displacement in inches</returns>
         public static double WindDrift(double WindSpeed, double WindDirection, double Range, double Fo, double MuzzleVelocity)
         {
             double lt;      //Flight time
@@ -973,41 +977,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             return lFp;
         }
         /// <summary>
-        /// Calculates the effective drag/retard coefficent for the provided range.
-        /// </summary>
-        /// <param name="Range">Distance to calculate the F value at.</param>
-        /// <returns>F drag/retard coefficent</returns>
-        private static double Fa(double Range,double Fo, double F2, double F3, double F4, double Zone1Range, double Zone2Range, double Zone3Range,
-            double Zone1Slope, double Zone3Slope, double Zone1SlopeMultiplier, double Zone3SlopeMultiplier)
-        {
-            double lFa = 0;
-
-            if (Zone1Range >= Range)
-            {
-                //F at the provided range.  Applies to Zone 1
-                lFa = (Fo - Zone1SlopeMultiplier * Zone1Slope * Range);
-            }
-            else if ((Zone1Range < Range) &
-                (Zone2Range >= Range))
-            {
-                //F at the provided range.  Applies to Zone 2
-                lFa = F2;
-            }
-            else if ((Zone2Range < Range) &
-                (Zone3Range >= Range))
-            {
-                //F at the provided range.  Applies to Zone 3
-                lFa = (F3 - Zone3SlopeMultiplier *
-                    Zone3Slope * (Range - Zone3Range));
-            }
-            else if (Zone3Range < Range)
-            {
-                //F at the provided range.  Applies to Zone 4
-                lFa = F4;
-            }
-            return lFa;
-        }
-        /// <summary>
         /// Calculates the horizontal and vertical devation of the flight path due to the Coriolis effect.
         /// </summary>
         /// <param name="VerticalComponent">Vertical drop or rise (in.) caused by the Coriolis effect.</param>
@@ -1142,6 +1111,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             {
                 lDrift = lDrift * (-1);
             }
+
             return lDrift;
         }
         /// <summary>

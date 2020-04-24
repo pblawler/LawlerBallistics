@@ -41,7 +41,19 @@ namespace LawlerBallisticsDesk.Classes
         #region "Properties"
         public string ID { get { return _ID; } }
         public string Name { get { return _Name; } set { _Name = value; RaisePropertyChanged(nameof(Name)); } }
-        public LocationData TargetLocation { get { return _TargetLocation; } set { _TargetLocation = value; } }
+        public LocationData TargetLocation
+        {
+            get
+            {
+                return _TargetLocation;
+            }
+            set
+            {
+                TargetLocation.PropertyChanged -= TargetLocation_PropertyChanged;
+                _TargetLocation = value;
+                TargetLocation.PropertyChanged += TargetLocation_PropertyChanged;
+            }
+        }
         public double WindSpeed { get { return _WindSpeed; } set { _WindSpeed = value; RaisePropertyChanged(nameof(WindSpeed)); } }
         public double WindDirection { get { return _WindDirection; } set { _WindDirection = value; RaisePropertyChanged(nameof(WindDirection)); } }
         #endregion
@@ -49,6 +61,7 @@ namespace LawlerBallisticsDesk.Classes
         #region "Constructor"
         public Target()
         {
+            _TargetLocation = new LocationData();
             TargetLocation.PropertyChanged += TargetLocation_PropertyChanged;
         }
         #endregion

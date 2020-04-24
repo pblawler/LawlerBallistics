@@ -79,6 +79,7 @@ namespace LawlerBallisticsDesk.Classes
         {
             _MyAtmospherics = new Atmospherics();
             _MyShooter = new Shooter();
+            _SelectedTarget = new Target();
             MyAtmospherics.PropertyChanged += MyAtmospherics_PropertyChanged;
             MyShooter.PropertyChanged += MyShooter_PropertyChanged;
         }

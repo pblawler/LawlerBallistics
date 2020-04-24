@@ -26,6 +26,7 @@ namespace LawlerBallisticsDesk.Views.Ballistics
 
             SolutionViewModel lDC = (SolutionViewModel) this.DataContext;
             lDC.LoadDefaultSolution();
+            chkMaxRise_Click(null, null);
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -34,5 +35,26 @@ namespace LawlerBallisticsDesk.Views.Ballistics
             GC.Collect();
         }
 
+        private void chkMaxRise_Click(object sender, RoutedEventArgs e)
+        {
+            var lconverter = new System.Windows.Media.BrushConverter();
+            Brush lbg = (Brush)lconverter.ConvertFromString("#FFEAEAEA");
+            Brush lbg1 = (Brush)lconverter.ConvertFromString("#FFFFFFFF");
+
+            if ((bool)chkMaxRise.IsChecked)
+            {
+                txtZeroR.Background = lbg;
+                txtZeroR.IsReadOnly = true;
+                txtMaxRise.Background = lbg1;
+                txtMaxRise.IsReadOnly = false;
+            }
+            else
+            {
+                txtZeroR.Background = lbg1;
+                txtZeroR.IsReadOnly = false;
+                txtMaxRise.Background = lbg;
+                txtMaxRise.IsReadOnly = true;
+            }
+        }
     }
 }

@@ -75,6 +75,10 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         private double _PointBlankRange;
         private string[] _MsgQ = new string[12];
         private double _MuzzleVelocity;
+        private double _ShotDirection;
+        private double _ShotAngle;
+        private double _ShotDistance;
+        private double _WindEffectiveDirection;
         #endregion
 
         #region "Properties"
@@ -173,19 +177,58 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         {
             get
             {
-                return LocationData.GetShotDirection(TargetLoc, ShooterLoc);
+                if(_ShotDirection == 0) _ShotDirection = LocationData.GetShotDirection(TargetLoc, ShooterLoc);
+
+                return _ShotDirection;
             }
+            set { _ShotDirection = value; RaisePropertyChanged(nameof(ShotDirection)); }
         }
         /// <summary>
         /// Degrees in elevation, i.e. shooting up or down.
         /// </summary>
-        public double ShotAngle { get { return LocationData.GetShotAngle(TargetLoc, ShooterLoc); } }
+        public double ShotAngle
+        {
+            get
+            {
+                if (_ShotAngle == 0) _ShotAngle = LocationData.GetShotAngle(TargetLoc, ShooterLoc);
+                return _ShotAngle;
+            }
+            set
+            {
+                _ShotAngle = value;
+                RaisePropertyChanged(nameof(ShotAngle));
+            }
+        }
         /// <summary>
         /// LOS range to the target calculated from map data.
         /// </summary>
-        public double ShotDistance{get{return LocationData.GetShotDistance(TargetLoc, ShooterLoc);}}
+        public double ShotDistance
+        {
+            get
+            {
+                if(_ShotDistance == 0) _ShotDistance = LocationData.GetShotDistance(TargetLoc, ShooterLoc);
+                return _ShotDistance;
+            }
+            set
+            {
+                _ShotDistance = value;
+                RaisePropertyChanged(nameof(ShotDistance));
+            }
+        }
         public double ShotHorizDistance { get { return LocationData.GetShotHorizontalDistance(TargetLoc, ShooterLoc); } }
-        public double WindEffectiveDirection { get { return LocationData.GetEffectiveWindDirection(TargetLoc, ShooterLoc, atmospherics.WindDirection); } }
+        public double WindEffectiveDirection
+        {
+            get
+            {
+                if(_WindEffectiveDirection == 0) _WindEffectiveDirection = LocationData.GetEffectiveWindDirection(TargetLoc, ShooterLoc, atmospherics.WindDirection);
+                return _WindEffectiveDirection;
+            }
+            set
+            {
+                _WindEffectiveDirection = value;
+                RaisePropertyChanged(nameof(WindEffectiveDirection));
+            }
+        }
         public double MuzzleVelocity { get { return _MuzzleVelocity; } set { _MuzzleVelocity = value; RaisePropertyChanged(nameof(MuzzleVelocity)); } }
         public string Message { get { return _Message; } }
         #endregion

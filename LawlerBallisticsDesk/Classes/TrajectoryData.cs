@@ -36,9 +36,13 @@ namespace LawlerBallisticsDesk.Classes
         private double _WindDeflect;
         private double _SpinDrift;
         private double _FlightTime;
+        private double _HorzComp;
+        private double _HorizErr;
+        private double _Fdragfactor;
         #endregion
 
         #region "Properties"
+        public double Fdragfactor { get{ return _Fdragfactor; } set { _Fdragfactor = value; RaisePropertyChanged(nameof(Fdragfactor)); } }
         public double MuzzleDrop { get { return _MuzzleDrop; } set { _MuzzleDrop = value; RaisePropertyChanged(nameof(MuzzleDrop)); } }
         public double Range { get { return _Range; } set { _Range = value; RaisePropertyChanged(nameof(Range)); } }
         public double SightDelta { get { return _SightDelta; } set { _SightDelta = value; RaisePropertyChanged(nameof(SightDelta)); } }
@@ -52,6 +56,8 @@ namespace LawlerBallisticsDesk.Classes
         public double WindDeflect { get { return _WindDeflect; } set { _WindDeflect = value; RaisePropertyChanged(nameof(WindDeflect)); } }
         public double SpinDrift { get { return _SpinDrift; } set { _SpinDrift = value; RaisePropertyChanged(nameof(SpinDrift)); } }
         public double FlightTime { get { return _FlightTime; } set { _FlightTime = value; RaisePropertyChanged(nameof(FlightTime)); } }
+        public double HorzComp { get { return _HorzComp; } set { _HorzComp = value; RaisePropertyChanged(nameof(HorzComp)); } }
+        public double HorizErr { get { return _HorizErr; } set { _HorizErr = value; RaisePropertyChanged(nameof(HorizErr)); } }
         #endregion
 
         public TrajectoryData()
