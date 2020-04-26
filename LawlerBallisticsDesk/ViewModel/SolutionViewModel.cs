@@ -665,6 +665,8 @@ namespace LawlerBallisticsDesk.ViewModel
                 lTD.SpinDrift = MySolution.GetSpinDrift(lCR, true);
                 lTD.WindDeflect = MySolution.WindDrift(lCR, true);
                 lTD.FlightTime = MySolution.FlightTime(lCR, true);
+                lTD.Fdragfactor = MySolution.Fdrag(lCR, true);
+                lTD.CDdragCoefficient = MySolution.CDdragCoefficient(lCR, true);
                 lCR += lDR;
                 if (lCR >= MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange)
                 {
@@ -684,6 +686,8 @@ namespace LawlerBallisticsDesk.ViewModel
                     lTD.SpinDrift = MySolution.GetSpinDrift(MySolution.MaxRange, true);
                     lTD.WindDeflect = MySolution.WindDrift(MySolution.MaxRange, true);
                     lTD.FlightTime = MySolution.FlightTime(MySolution.MaxRange, true);
+                    lTD.Fdragfactor = MySolution.Fdrag(MySolution.MaxRange, true);
+                    lTD.CDdragCoefficient = MySolution.CDdragCoefficient(MySolution.MaxRange, true);
                 }
                 _MyTrajectories.Add(lTD);
             }

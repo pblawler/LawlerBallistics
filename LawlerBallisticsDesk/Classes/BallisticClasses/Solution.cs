@@ -47,6 +47,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         private Scenario _MyScenario;
         private string _ZeroMessage;
         private string _DragMessage;
+        private const double _kgm3Tolbft3 = 0.062428;
         #endregion
 
         #region "Properties"
@@ -647,6 +648,41 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             else
             {
                 lRTN = BallisticFunctions.Energy(BulletWeight, Velocity(Range, ZeroData));
+            }
+
+            return lRTN;
+        }
+        public double Fdrag(double Range, bool ZeroData = false)
+        {
+            double lRTN = 0;
+
+            if (!ZeroData)
+            {
+                lRTN = BallisticFunctions.FdragCoefficient(Range, Fo, F2, F3, F4, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope,
+                    Zone1SlopeMultiplier, Zone3SlopeMultiplier);
+            }
+            else
+            {
+                lRTN = BallisticFunctions.FdragCoefficient(Range, Fo, F2, F3, F4, ZeroZone1Range, ZeroZone2Range, ZeroZone3Range,
+                    Zone1Slope, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
+            }
+
+            return lRTN;
+        }
+        public double CDdragCoefficient(double Range, bool ZeroData = false)
+        {
+            double lRTN = 0;
+
+            if (!ZeroData)
+            {
+                lRTN = BallisticFunctions.CDdragCoefficient(MuzzleVelocity, Range, Fo, F2, F3, F4, Zone1Range, Zone2Range, Zone3Range, Zone1Slope,
+                    Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1TransSpeed, BulletDiameter, MyAtmospherics.AirDensity * _kgm3Tolbft3);
+            }
+            else
+            {
+                lRTN = BallisticFunctions.CDdragCoefficient(ZeroMuzzleVelocity, Range, Fo, F2, F3, F4, ZeroZone1Range, ZeroZone2Range, 
+                    ZeroZone3Range, Zone1Slope, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, ZeroZone1TransSpeed, 
+                    BulletDiameter, MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.AirDensity * _kgm3Tolbft3);
             }
 
             return lRTN;

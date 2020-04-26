@@ -29,16 +29,17 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Private Variables"
-        private const double _E = 6356.766;        // radius of earth KM
-        private const double _GoMS = 9.80665;     //𝑔𝑜 is gravity 9.80665ms-2,
-        private const double _Rd = 287.053;   //𝑅𝑑 is the gas constant for dry air (287.053 Jkg−1𝐾−1)
-        private const double _R = 8.31432;     // gas constant, J/mol*deg K
-        private const double _SpecGasCwatervapor = 461.52;    // J/(kgK)
-        private const double _AirMolMass = 28.9647;   // grams/mole
-        private const double _WaterVaporMolMass = 18.01528;   // grams/mole
+        private const double _E = 6356.766;                 // radius of earth KM
+        private const double _GoMS = 9.80665;               //𝑔𝑜 is gravity 9.80665ms-2,
+        private const double _Rd = 287.053;                 //𝑅𝑑 is the gas constant for dry air (287.053 Jkg−1𝐾−1)
+        private const double _Rv = 461.495;                 // Specific gas constant water
+        private const double _R = 8.31432;                  // gas constant, J/mol*deg K
+        private const double _SpecGasCwatervapor = 461.52;  // J/(kgK)
+        private const double _AirMolMass = 28.9647;         // grams/mole
+        private const double _WaterVaporMolMass = 18.01528; // grams/mole
         private const double _StandardTempK = 288.15;
-        private const double _L = 6.50;    // is the standard tropospheric lapse rate of −6.5 K/km
-        private const double _StandPressKpa = 101.325; // Standard atmospheric pressure kPa
+        private const double _L = 6.50;                     // is the standard tropospheric lapse rate of −6.5 K/km
+        private const double _StandPressKpa = 101.325;      // Standard atmospheric pressure kPa
         double _DensityAlt;
         double _Temp;
         string _TempUnits;
@@ -278,6 +279,24 @@ namespace LawlerBallisticsDesk.Classes
             }
         }
         /// <summary>
+        /// Kg/M^3
+        /// </summary>
+        /// <returns></returns>
+        public double AirDensity
+        {
+            get
+            {
+                double lRTN = 0;
+                double lApp;
+
+                //  D = (PartialPressureDryAir/(SpecificGasConstantDryAir*Temp))*(PartialPressureWaterVapor/(SpecificGasConstantOfWaterVapor*Temp)
+                lApp = (Pressure_kPa() - WaterVaporPartialPressure) * 1000;
+                lRTN = (lApp / (_Rd * Temp_K())) * ((WaterVaporPartialPressure) / (_Rv * Temp_K()));
+
+                return lRTN;
+            }
+        }
+        /// <summary>
         /// Speed-Of-Sound in fps
         /// </summary>
         public double SpeedOfSound
@@ -298,7 +317,7 @@ namespace LawlerBallisticsDesk.Classes
                         lT = DegCtoDegK(Temp);
                     }
 
-                    double lRH = HumidityRel;
+                    //double lRH = HumidityRel;
                     double lBP = MolecularWeightOfAir;
 
                     //Speed of Sound = [(1.4* ( 8.3145 J/mol K)*(Temp C))/(M = the molecular weight of the gas in kg/mol)]^0.5
@@ -330,6 +349,22 @@ namespace LawlerBallisticsDesk.Classes
         #endregion
 
         #region "Private Routines"
+        private double Temp_K()
+        {
+            double lRTN = Temp;
+
+            switch(TempUnits.Substring(0,1).ToLower())
+            {
+                case "c":
+                    lRTN = DegCtoDegK(Temp);
+                    break;
+                case "f":
+                    lRTN = DegFtoDegK(Temp);
+                    break;
+            }
+
+            return lRTN;
+        }
         private double DegFtoDegC(double T)
         {
             double lT = 0;
@@ -368,7 +403,20 @@ namespace LawlerBallisticsDesk.Classes
 
             lT = DegFtoDegC(T) + 273.15;
             return lT;
-        }                             
+        }
+        private double Pressure_kPa()
+        {
+            double lRTN = Pressure;
+
+            switch (PressureUnits.ToLower())
+            {
+                case "inhg":
+                    lRTN = InHgTokPa(Pressure);
+                    break;
+            }
+
+            return lRTN;
+        }
         /// <summary>
         /// Convert pressure in InchesHg to kPa
         /// </summary>

@@ -39,9 +39,11 @@ namespace LawlerBallisticsDesk.Classes
         private double _HorzComp;
         private double _HorizErr;
         private double _Fdragfactor;
+        private double _CDdragCoefficient;
         #endregion
 
         #region "Properties"
+        public double CDdragCoefficient { get { return _CDdragCoefficient; } set { _CDdragCoefficient = value; RaisePropertyChanged(nameof(CDdragCoefficient)); } }
         public double Fdragfactor { get{ return _Fdragfactor; } set { _Fdragfactor = value; RaisePropertyChanged(nameof(Fdragfactor)); } }
         public double MuzzleDrop { get { return _MuzzleDrop; } set { _MuzzleDrop = value; RaisePropertyChanged(nameof(MuzzleDrop)); } }
         public double Range { get { return _Range; } set { _Range = value; RaisePropertyChanged(nameof(Range)); } }
