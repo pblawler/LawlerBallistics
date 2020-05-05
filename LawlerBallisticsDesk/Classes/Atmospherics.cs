@@ -290,8 +290,8 @@ namespace LawlerBallisticsDesk.Classes
                 double lApp;
 
                 //  D = (PartialPressureDryAir/(SpecificGasConstantDryAir*Temp))*(PartialPressureWaterVapor/(SpecificGasConstantOfWaterVapor*Temp)
-                lApp = (Pressure_kPa() - WaterVaporPartialPressure) * 1000;
-                lRTN = (lApp / (_Rd * Temp_K())) * ((WaterVaporPartialPressure) / (_Rv * Temp_K()));
+                lApp = (Pressure_kPa() - WaterVaporPartialPressure)*1000;
+                lRTN = (lApp / (_Rd * Temp_K())) + ((WaterVaporPartialPressure*1000) / (_Rv * Temp_K()));
 
                 return lRTN;
             }

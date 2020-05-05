@@ -92,6 +92,7 @@ namespace LawlerBallisticsDesk.ViewModel
         private string _FileName;
         private PlotModel _TrajectoryPlot;
         private PlotModel _WindagePlot;
+        private PlotModel _DragPlot;
         private ObservableCollection<TrajectoryData> _MyTrajectories;
         private bool _PlotVelocity = true;
         private bool _PlotEnergy = true;
@@ -630,6 +631,8 @@ namespace LawlerBallisticsDesk.ViewModel
         #endregion
 
         #region "Private Routines"
+
+        //TODO: Add drag chart function for 1/F and K to update with zone data.
 
         private void Shoot()
         {

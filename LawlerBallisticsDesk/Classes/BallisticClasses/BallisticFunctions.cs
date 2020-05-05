@@ -282,41 +282,41 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="MuzzleVelocity"></param>
-        /// <param name="Range"></param>
+        /// <param name="MuzzleVelocity">fps</param>
+        /// <param name="Range">yrds</param>
         /// <param name="Fo"></param>
         /// <param name="F2"></param>
         /// <param name="F3"></param>
         /// <param name="F4"></param>
-        /// <param name="Zone1Range"></param>
+        /// <param name="Zone1Range">yrds</param>
         /// <param name="Zone2Range"></param>
         /// <param name="Zone3Range"></param>
         /// <param name="Zone1Slope"></param>
         /// <param name="Zone3Slope"></param>
         /// <param name="Zone1SlopeMultiplier"></param>
         /// <param name="Zone3SlopeMultiplier"></param>
-        /// <param name="Zone1TransSpeed"></param>
-        /// <param name="BulletDiameter"></param>
-        /// <param name="AirDensity"></param>
+        /// <param name="Zone1TransSpeed">fps</param>
+        /// <param name="BulletDiameter">in</param>
+        /// <param name="AirDensity">lb/ft3</param>
         /// <returns></returns>
         public static double CDdragCoefficient(double MuzzleVelocity, double Range, double Fo, double F2, double F3, double F4,
             double Zone1Range, double Zone2Range, double Zone3Range, double Zone1Slope, double Zone3Slope, double Zone1SlopeMultiplier,
-            double Zone3SlopeMultiplier, double Zone1TransSpeed, double BulletDiameter, double AirDensity)
+            double Zone3SlopeMultiplier, double Zone1TransSpeed, double BulletDiameter, double BulletWeight, double AirDensity)
         {
             double lRTN = 0;
             double lFa;
             double lba;
             double lVelocity;
+            double lw = BulletWeight / 7000;
 
             lVelocity = Velocity(MuzzleVelocity, Range, Zone1Range, Zone1TransSpeed, Fo, Zone1Slope, Zone2Range, Zone2Range, F2, Zone3Range);
-            lba = Math.PI * Math.Pow((BulletDiameter / 2), 2);
-            lba = in2Toft2 * lba;
+            //lVelocity = lVelocity * 3;
+            lba = (Math.PI/4) * (Math.Pow(BulletDiameter/12, 2));
             lFa = Fa(Range, Fo, F2, F3, F4, Zone1Range, Zone2Range, Zone3Range, Zone1Slope, Zone3Slope, Zone1SlopeMultiplier,
                 Zone3SlopeMultiplier);
 
-            // CD = (Fa/(.5*AirDensity*Velocity^2*BulletArea))
-
-            lRTN = lFa / (.5 * AirDensity*(Math.Pow(lVelocity,2))*lba);
+            // K = (1/F)/(((pi/4)*d^2)*(p/w))
+            lRTN = (1/lFa)/(lba*(AirDensity/lw));
 
             return lRTN;
         }

@@ -676,13 +676,13 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             if (!ZeroData)
             {
                 lRTN = BallisticFunctions.CDdragCoefficient(MuzzleVelocity, Range, Fo, F2, F3, F4, Zone1Range, Zone2Range, Zone3Range, Zone1Slope,
-                    Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1TransSpeed, BulletDiameter, MyAtmospherics.AirDensity * _kgm3Tolbft3);
+                    Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1TransSpeed, BulletDiameter, BulletWeight, MyAtmospherics.AirDensity * _kgm3Tolbft3);
             }
             else
             {
                 lRTN = BallisticFunctions.CDdragCoefficient(ZeroMuzzleVelocity, Range, Fo, F2, F3, F4, ZeroZone1Range, ZeroZone2Range, 
                     ZeroZone3Range, Zone1Slope, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, ZeroZone1TransSpeed, 
-                    BulletDiameter, MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.AirDensity * _kgm3Tolbft3);
+                    BulletDiameter, BulletWeight, MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.AirDensity * _kgm3Tolbft3);
             }
 
             return lRTN;
