@@ -94,6 +94,7 @@ namespace LawlerBallisticsDesk.ViewModel
         private PlotModel _WindagePlot;
         private PlotModel _DragPlot;
         private ObservableCollection<TrajectoryData> _MyTrajectories;
+        private ObservableCollection<TrajectoryData> _MyDragData;
         private bool _PlotVelocity = true;
         private bool _PlotEnergy = true;
         private bool _PlotSpinRate = true;
@@ -122,6 +123,8 @@ namespace LawlerBallisticsDesk.ViewModel
         }
         public PlotModel TrajectoryPlot { get { return _TrajectoryPlot; } }
         public PlotModel WindagePlot { get { return _WindagePlot; } }
+        public PlotModel DragPlot { get { return _DragPlot; } }
+        public ObservableCollection<TrajectoryData> MyDragData { get { return _MyDragData; } }
         public bool PlotWindDrift
         {
             get
@@ -349,6 +352,8 @@ namespace LawlerBallisticsDesk.ViewModel
             _TrajectoryPlot.Title = "Trajectory";
             _WindagePlot = new PlotModel();
             _WindagePlot.Title = "Horizontal Deviation";
+            _DragPlot = new PlotModel();
+            _DragPlot.Title = "Drag Chart";
             RaisePropertyChanged(nameof(TrajectoryPlot));
             _BulletTypes = new List<string>();
             string[] values = Enum.GetNames(typeof(BulletShapeEnum));
@@ -416,10 +421,10 @@ namespace LawlerBallisticsDesk.ViewModel
         }
         public void LoadCharts()
         {
-            //_TrajectoryPlot = new PlotModel();
-            //Sight delta for series data.
+            #region "Vertical Plot"
             _TrajectoryPlot.Series.Clear();
             _TrajectoryPlot.Axes.Clear();
+
             AreaSeries lZ1 = new AreaSeries()
             {
                 StrokeThickness = 2,
@@ -565,8 +570,10 @@ namespace LawlerBallisticsDesk.ViewModel
                 _TrajectoryPlot.Series.Add(lBSG);
             }
             _TrajectoryPlot.InvalidatePlot(true);
+            #endregion
 
-            if(_WindagePlot.Series.Count>0) _WindagePlot.Series.Clear();
+            #region "Horizontal Plot"
+            if (_WindagePlot.Series.Count>0) _WindagePlot.Series.Clear();
             _WindagePlot.Axes.Clear();
             LineSeries lTHD = new LineSeries()
             {
@@ -623,7 +630,53 @@ namespace LawlerBallisticsDesk.ViewModel
             if(PlotComp) _WindagePlot.Series.Add(lZcomp);
             if(PlotHorizDrift) _WindagePlot.Series.Add(lTHD);
             _WindagePlot.InvalidatePlot(true);
-        }        
+            #endregion
+
+            #region "Drag Plot"
+            if (_DragPlot.Series.Count > 0) _DragPlot.Series.Clear();
+            _DragPlot.Axes.Clear();
+            LineSeries lf = new LineSeries()
+            {
+                StrokeThickness = 2,
+                LineStyle = OxyPlot.LineStyle.Solid,
+                Color = OxyColors.Blue,
+            };
+            LineSeries lk = new LineSeries()
+            {
+                StrokeThickness = 2,
+                LineStyle = OxyPlot.LineStyle.Solid,
+                Color = OxyColors.Red,
+            };
+            LinearAxis lfa = new LinearAxis();
+            LinearAxis lka = new LinearAxis();
+            lka.Position = AxisPosition.Right;
+            double lfMx;
+
+            lfMx = Math.Abs(_MyTrajectories.Max(hd => hd.Fdragfactor));
+            lfMx = lfMx + lfMx / 20;
+            lfa.Maximum = lfMx;
+            //lfa.Minimum = -lfMx;
+            //lfa.StartPosition = 1;
+            //lfa.EndPosition = 0;
+            lfa.Key = "Fdrag";
+            lka.Key = "CDdrag";
+            lf.Title = "Fdrag";
+            lf.YAxisKey = "Fdrag";
+            lk.Title = "CDcoef";
+            lk.YAxisKey = "CDdrag";
+            _DragPlot.Axes.Add(lfa);
+            _DragPlot.Axes.Add(lka);
+            foreach (TrajectoryData lTD in _MyTrajectories)
+            {
+                lf.Points.Add(new DataPoint(lTD.Velocity, lTD.Fdragfactor));
+                lk.Points.Add(new DataPoint(lTD.Velocity, lTD.CDdragCoefficient));
+            }
+            _DragPlot.Series.Add(lf);
+            _DragPlot.Series.Add(lk);
+            _DragPlot.InvalidatePlot(true);
+            RaisePropertyChanged(nameof(DragPlot));
+            #endregion
+        }
         public void Dispose()
         {
             InstanceUnload();
@@ -633,7 +686,6 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Private Routines"
 
         //TODO: Add drag chart function for 1/F and K to update with zone data.
-
         private void Shoot()
         {
             double lDR = 0;  //Trajectory Range increment.
@@ -698,7 +750,6 @@ namespace LawlerBallisticsDesk.ViewModel
             LoadCharts();
 
         }
-
         private void CalculateFo()
         {
             MySolution.CalculateFo();
