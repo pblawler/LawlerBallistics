@@ -32,8 +32,8 @@
     <ProductName>Lawler Ballistics</ProductName>
     <PublisherName>Patrick B Lawler III</PublisherName>
     <SuiteName>Lawler Solutions</SuiteName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>0.0.1.1</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>0.0.1.2</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -502,6 +502,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="Data\WeatherWeather.xml" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -530,6 +531,8 @@
     <Content Include="Data\default.bdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\GunDB.BAK" />
+    <Content Include="Data\RecipeDB.BAK" />
     <None Include="LBK.pfx" />
     <None Include="RefDocs\miller_stability_1.pdf" />
     <None Include="packages.config" />
@@ -602,6 +605,16 @@
       <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
+    <PublishFile Include="Data\GunDB.BAK">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
     <PublishFile Include="Data\GunDB.gdf">
       <Visible>False</Visible>
       <Group>
@@ -623,6 +636,16 @@
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Data\PrimerDB.pdf">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>DataFile</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="Data\RecipeDB.BAK">
       <Visible>False</Visible>
       <Group>
       </Group>

@@ -699,8 +699,8 @@ namespace LawlerBallisticsDesk.ViewModel
             _MyTrajectories = new ObservableCollection<TrajectoryData>();
             while (lCR < MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange)
             {
-                ldf = BallisticFunctions.Fa(lCR, MySolution.Fo, MySolution.F2, MySolution.F3, MySolution.F4, MySolution.Zone1Range,
-                    MySolution.Zone2Range, MySolution.Zone3Range, MySolution.Zone1Slope, MySolution.Zone3Slope, MySolution.Zone1SlopeMultiplier,
+                ldf = BallisticFunctions.Fa(lCR, MySolution.Fo, MySolution.F2, MySolution.F3, MySolution.F4, MySolution.ZeroZone1Range,
+                    MySolution.ZeroZone2Range, MySolution.ZeroZone3Range, MySolution.Zone1Slope, MySolution.Zone3Slope, MySolution.Zone1SlopeMultiplier,
                     MySolution.Zone3SlopeMultiplier);
                 ldf = 1 / ldf;
 

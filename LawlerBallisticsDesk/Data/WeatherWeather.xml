@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<current>
+  <city id="4066409" name="Harris Station">
+    <coord lon="-86.99" lat="34.68">
+    </coord>
+    <country>US</country>
+    <timezone>-18000</timezone>
+    <sun rise="2020-04-13T11:17:58" set="2020-04-14T00:18:16">
+    </sun>
+  </city>
+  <temperature value="50.49" min="48" max="53.6" unit="fahrenheit">
+  </temperature>
+  <feels_like value="43.38" unit="fahrenheit">
+  </feels_like>
+  <humidity value="71" unit="%">
+  </humidity>
+  <pressure value="1019" unit="hPa">
+  </pressure>
+  <wind>
+    <speed value="9.17" unit="mph" name="Gentle Breeze">
+    </speed>
+    <gusts>
+    </gusts>
+    <direction value="350" code="N" name="North">
+    </direction>
+  </wind>
+  <clouds value="90" name="overcast clouds">
+  </clouds>
+  <visibility>
+  </visibility>
+  <precipitation mode="no">
+  </precipitation>
+  <weather number="804" value="overcast clouds" icon="04d">
+  </weather>
+  <lastupdate value="2020-04-13T21:21:39">
+  </lastupdate>
+</current>
