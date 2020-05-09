@@ -29,6 +29,7 @@ namespace LawlerBallisticsDesk.ViewModel
         //TODO: Add zero windage compensation to wind drift.
         //TODO: Add property changed catch for bcg1 to fire property changed for bcz2 since they are linked need to update
         //TODO: when the cartridge is selected update BCg1 in drag slope
+        //TODO: verify all zero functions use zero data parameters.
 
 
         #region "Binding"
@@ -57,7 +58,7 @@ namespace LawlerBallisticsDesk.ViewModel
                     MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange = BallisticFunctions.MaxRange(MySolution.Fo);
                     break;
                 case "SelectedGun":
-                    RaisePropertyChanged(nameof(MySolution.MyBarrels));
+                    RaisePropertyChanged(nameof(MyBarrels));
                     break;
                 case "SelectedBarrel":
                     RaisePropertyChanged(nameof(MySolution.MyCartridges));
@@ -107,6 +108,8 @@ namespace LawlerBallisticsDesk.ViewModel
         #endregion
 
         #region "Properties"
+        public ObservableCollection<Gun> MyGuns { get { return LawlerBallisticsFactory.MyGuns; } }
+        public ObservableCollection<Barrel> MyBarrels { get { return MySolution.MyScenario.MyShooter.MyLoadOut.SelectedGun.Barrels; } }
         public Solution MySolution
         {
             get
@@ -388,7 +391,7 @@ namespace LawlerBallisticsDesk.ViewModel
             MySolution.SolveZeroData();
             if((MySolution.Fo >0) & (MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange==0))
                 MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange = BallisticFunctions.MaxRange(MySolution.Fo);
-            RaisePropertyChanged(nameof(MySolution.MyBarrels));
+            RaisePropertyChanged(nameof(MyBarrels));
             RaisePropertyChanged(nameof(MySolution.MyCartridges));
         }
         public void SetShooterLocation(double Alt, double Lat, double Lon)
@@ -659,11 +662,11 @@ namespace LawlerBallisticsDesk.ViewModel
             //lfa.StartPosition = 1;
             //lfa.EndPosition = 0;
             lfa.Key = "Fdrag";
-            lka.Key = "CDdrag";
+            lka.Key = "Kdrag";
             lf.Title = "Fdrag";
             lf.YAxisKey = "Fdrag";
-            lk.Title = "CDcoef";
-            lk.YAxisKey = "CDdrag";
+            lk.Title = "Kcoef";
+            lk.YAxisKey = "Kdrag";
             _DragPlot.Axes.Add(lfa);
             _DragPlot.Axes.Add(lka);
             foreach (TrajectoryData lTD in _MyTrajectories)

@@ -20,6 +20,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
     public class Solution : INotifyPropertyChanged
     {
+        //TODO: Verify all Zero calculation function calls are using zero data parameters.
+
         #region "Binding"
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -268,7 +270,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         #endregion
 
         #region "Solution Data Aliases"
-        public ObservableCollection<Gun> MyGuns { get { return LawlerBallisticsFactory.MyGuns; } }
         public bool UseMaxRise { get { return MyScenario.MyShooter.MyLoadOut.zeroData.UseMaxRise; } }
         public double BarrelTwist { get { return MyBarrel.Twist; } }
         public string BarrelTwistDirection { get { return MyBarrel.RiflingTwistDirection; } }
@@ -294,7 +295,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         public double ZeroMuzzleVelocity { get { return MyScenario.MyShooter.MyLoadOut.zeroData.MuzzleVelocity; } }
         public Atmospherics MyAtmospherics { get { return MyScenario.MyAtmospherics; } }  // set { MyScenario.MyAtmospherics = value; RaisePropertyChanged(nameof(MyAtmospherics)); } }
         public Barrel MyBarrel { get { return MyScenario.MyShooter.MyLoadOut.SelectedBarrel; } }
-        public ObservableCollection<Barrel> MyBarrels { get { return MyScenario.MyShooter.MyLoadOut.SelectedGun.Barrels; } }
         public ObservableCollection<Recipe> MyCartridges
         {
             get
@@ -402,11 +402,15 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
             if (!ZeroData)
             {
-                lRTN = BallisticFunctions.FlightTime(Range, Fo, MuzzleVelocity);
+                lRTN = BallisticFunctions.FlightTime(Range, Fo, F2, F3, F4, MuzzleVelocity, Zone1Range, Zone1TransSpeed,
+                    Zone1Slope, Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier,
+                    Zone3SlopeMultiplier);
             }
             else
             {
-                lRTN = BallisticFunctions.FlightTime(Range, Fo, ZeroMuzzleVelocity);
+                lRTN = BallisticFunctions.FlightTime(Range, Fo, F2, F3, F4, ZeroMuzzleVelocity, ZeroZone1Range, ZeroZone1TransSpeed,
+                    Zone1Slope, ZeroZone2Range, ZeroZone2TransSpeed, ZeroZone3Range, ZeroZone3TransSpeed, Zone3Slope,
+                    Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
             return lRTN;
         }
@@ -452,11 +456,15 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
             if (!ZeroData)
             {
-                lRTN = BallisticFunctions.GetCoriolisHoriz(Range, MuzzleVelocity, TargetLoc, ShooterLoc, Fo);
+                lRTN = BallisticFunctions.GetCoriolisHoriz(Range, MuzzleVelocity, TargetLoc, ShooterLoc, Fo, F2,F3,F4,Zone1Range,
+                    Zone1TransSpeed, Zone1Slope, Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed, Zone3Slope,
+                    Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
             else
             {
-                lRTN = BallisticFunctions.GetCoriolisHoriz(Range, ZeroMuzzleVelocity, ZeroTargetLoc, ZeroShooterLoc, Fo);
+                lRTN = BallisticFunctions.GetCoriolisHoriz(Range, ZeroMuzzleVelocity, ZeroTargetLoc, ZeroShooterLoc, Fo, F2,F3,
+                    F4,Zone1Range, Zone1TransSpeed, Zone1Slope, Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed, Zone3Slope,
+                    Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
 
             return lRTN;
@@ -470,18 +478,24 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
             if (!ZeroData)
             {
-                lRTN = BallisticFunctions.GetCoriolisVert(Range, TargetLoc, ShooterLoc, Fo, MuzzleVelocity);
+                lRTN = BallisticFunctions.GetCoriolisVert(Range, TargetLoc, ShooterLoc, Fo, MuzzleVelocity, F2, F3,F4,Zone1Range,
+                    Zone1TransSpeed, Zone1Slope, Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed, Zone3Slope,
+                    Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
             else
             {
-                lRTN = BallisticFunctions.GetCoriolisVert(Range, ZeroTargetLoc, ZeroShooterLoc, Fo, ZeroMuzzleVelocity);
+                lRTN = BallisticFunctions.GetCoriolisVert(Range, ZeroTargetLoc, ZeroShooterLoc, Fo, ZeroMuzzleVelocity, F2,
+                    F3,F4, Zone1Range, Zone1TransSpeed, Zone1Slope, Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed,
+                    Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
             if (SightDelta)
             {
                 //Get coriolis devation at zero range then get the compensation per yard.  Next multiply by the requested range
                 //  and subtract the compenstion from the raw at the requested range.  Raw can be different due to shot direction
                 //  and shot atmospherics.
-                lZD = BallisticFunctions.GetCoriolisVert(ZeroRange, ZeroTargetLoc, ZeroShooterLoc, Fo, ZeroMuzzleVelocity);
+                lZD = BallisticFunctions.GetCoriolisVert(ZeroRange, ZeroTargetLoc, ZeroShooterLoc, Fo, ZeroMuzzleVelocity,
+                    F2, F3,F4, Zone1Range, Zone1TransSpeed, Zone1Slope, Zone2Range, Zone2TransSpeed, Zone3Range,
+                    Zone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
                 lZD = lZD / ZeroRange;
                 lRTN = lRTN - (lZD * Range);
             }
@@ -494,11 +508,15 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
             if (!ZeroData)
             {
-                lRTN = BallisticFunctions.GetSpinDrift(Range, BarrelTwistDirection, BSG, Fo, MuzzleVelocity);
+                lRTN = BallisticFunctions.GetSpinDrift(Range, BarrelTwistDirection, BSG, Fo, MuzzleVelocity,
+                    F2, F3,F4,Zone1Range, Zone1TransSpeed, Zone1Slope, Zone2Range,Zone2TransSpeed, Zone3Range,
+                    Zone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
             else
             {
-                lRTN = BallisticFunctions.GetSpinDrift(Range, BarrelTwistDirection, BSG, Fo, ZeroMuzzleVelocity);
+                lRTN = BallisticFunctions.GetSpinDrift(Range, BarrelTwistDirection, BSG, Fo, ZeroMuzzleVelocity,
+                    F2,F3,F4,ZeroZone1Range, ZeroZone1TransSpeed, Zone1Slope, ZeroZone2Range, ZeroZone2TransSpeed,
+                    ZeroZone3Range, ZeroZone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
 
             return lRTN;
@@ -517,11 +535,15 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
             if (!ZeroData)
             {
-                lRTN = BallisticFunctions.SpinRate(Range, MuzzleVelocity, BarrelTwist, BulletDiameter, Fo);
+                lRTN = BallisticFunctions.SpinRate(Range, MuzzleVelocity, BarrelTwist, BulletDiameter, Fo, F2, F3,F4,
+                    Zone1Range, Zone1TransSpeed, Zone1Slope, Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed,
+                    Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
             else
             {
-                lRTN = BallisticFunctions.SpinRate(Range, ZeroMuzzleVelocity, BarrelTwist, BulletDiameter, Fo);
+                lRTN = BallisticFunctions.SpinRate(Range, ZeroMuzzleVelocity, BarrelTwist, BulletDiameter, Fo, F2,F3,F4,
+                    ZeroZone1Range, ZeroZone1TransSpeed, Zone1Slope, ZeroZone2Range, ZeroZone2TransSpeed, ZeroZone3Range,
+                    ZeroZone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
 
             return lRTN;
@@ -534,12 +556,16 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             {
                 lRTN = BallisticFunctions.TotalHorizontalDrift(Range, WindSpeed,
                     LocationData.GetEffectiveWindDirection(TargetLoc, ShooterLoc, WindDirection),
-                    MuzzleVelocity, Fo, TargetLoc, ShooterLoc, BarrelTwistDirection, BSG);
+                    MuzzleVelocity, Fo, TargetLoc, ShooterLoc, BarrelTwistDirection, BSG, F2,F3,F4,
+                    Zone1Range, Zone1TransSpeed, Zone1Slope, Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed,
+                    Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
             else
             {
                 lRTN = BallisticFunctions.TotalHorizontalDrift(Range, ZeroWindSpeed, ZeroEffectiveWindDirection,
-                    ZeroMuzzleVelocity, Fo, ZeroTargetLoc, ZeroShooterLoc, BarrelTwistDirection, BSG);
+                    ZeroMuzzleVelocity, Fo, ZeroTargetLoc, ZeroShooterLoc, BarrelTwistDirection, BSG, F2, F3, F4,
+                    ZeroZone1Range, ZeroZone1TransSpeed, Zone1Slope, ZeroZone2Range, ZeroZone2TransSpeed, ZeroZone3Range,
+                    ZeroZone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
 
             return lRTN;
@@ -560,13 +586,15 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
             if (!ZeroData)
             {
-                lRTN = BallisticFunctions.Velocity(MuzzleVelocity, Range, Zone1Range, Zone1TransSpeed, Fo, Zone1Slope, Zone2Range,
-                    Zone2TransSpeed, F2, Zone3Range);
+                lRTN = BallisticFunctions.Velocity(MuzzleVelocity, Range, Zone1Range, Zone1TransSpeed, Fo, Zone1Slope, 
+                    Zone1SlopeMultiplier, Zone2Range, Zone2TransSpeed, F2, Zone3Range, Zone3Slope, Zone3TransSpeed,
+                    Zone3SlopeMultiplier, F3, F4);
             }
             else
             {
-                lRTN = BallisticFunctions.Velocity(ZeroMuzzleVelocity, Range, ZeroZone1Range, ZeroZone1TransSpeed, Fo, Zone1Slope, ZeroZone2Range,
-                   ZeroZone2TransSpeed, F2, ZeroZone3Range);
+                lRTN = BallisticFunctions.Velocity(ZeroMuzzleVelocity, Range, ZeroZone1Range, ZeroZone1TransSpeed, Fo, 
+                    Zone1SlopeMultiplier, Zone1Slope, ZeroZone2Range, ZeroZone2TransSpeed, F2, ZeroZone3Range, 
+                    Zone3Slope, ZeroZone3TransSpeed, Zone3SlopeMultiplier, F3, F4);
             }
             return lRTN;
         }
@@ -576,11 +604,15 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
             if (!ZeroData)
             {
-                lRTN = BallisticFunctions.WindDrift(WindSpeed, EffectiveWindDirection, Range, Fo, MuzzleVelocity);
+                lRTN = BallisticFunctions.WindDrift(WindSpeed, EffectiveWindDirection, Range, Fo, MuzzleVelocity, F2,F3,F4,
+                    Zone1Range, Zone1TransSpeed, Zone1Slope, Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed, 
+                    Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
             else
             {
-                lRTN = BallisticFunctions.WindDrift(ZeroWindSpeed, ZeroEffectiveWindDirection, Range, Fo, ZeroMuzzleVelocity);
+                lRTN = BallisticFunctions.WindDrift(ZeroWindSpeed, ZeroEffectiveWindDirection, Range, Fo, ZeroMuzzleVelocity, F2,
+                    F3,F4, ZeroZone1Range, ZeroZone1TransSpeed, Zone1Slope, ZeroZone2Range, ZeroZone2TransSpeed, 
+                    ZeroZone3Range, ZeroZone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             }
 
             return lRTN;
@@ -590,7 +622,9 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             double lRTN = 0;
             double lZD = 0;
 
-            lZD = BallisticFunctions.WindDrift(ZeroWindSpeed, ZeroEffectiveWindDirection, ZeroRange, Fo, ZeroMuzzleVelocity);
+            lZD = BallisticFunctions.WindDrift(ZeroWindSpeed, ZeroEffectiveWindDirection, ZeroRange, Fo, ZeroMuzzleVelocity, F2,
+                F3,F4, ZeroZone1Range, ZeroZone1TransSpeed, Zone1Slope, ZeroZone2Range, ZeroZone2TransSpeed, ZeroZone3Range,
+                ZeroZone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             lZD = 0 - (lZD / ZeroRange);
             lRTN = lZD * Range;
 
@@ -601,7 +635,9 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             double lRTN = 0;
             double lZCHD = 0;
 
-            lZCHD = BallisticFunctions.GetCoriolisHoriz(ZeroRange, ZeroMuzzleVelocity, ZeroTargetLoc, ZeroShooterLoc, Fo);
+            lZCHD = BallisticFunctions.GetCoriolisHoriz(ZeroRange, ZeroMuzzleVelocity, ZeroTargetLoc, ZeroShooterLoc, Fo, F2,F3,F4,
+                Zone1Range, Zone1TransSpeed, Zone1Slope, Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed, Zone3Slope,
+                Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             lZCHD = lZCHD / ZeroRange;
             //Zero sight adjustment is opposite of coriolis effect.
             lRTN = 0 - lZCHD;
@@ -613,7 +649,9 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             double lRTN = 0;
             double lZD = 0;
 
-            lZD = BallisticFunctions.GetSpinDrift(ZeroRange, BarrelTwistDirection, BSG, Fo, ZeroMuzzleVelocity);
+            lZD = BallisticFunctions.GetSpinDrift(ZeroRange, BarrelTwistDirection, BSG, Fo, ZeroMuzzleVelocity, F2, F3, F4,
+                Zone1Range, Zone1TransSpeed, Zone1Slope, Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed,
+                Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier);
             lZD = 0 - (lZD / ZeroRange);
             lRTN = lZD * Range;
 
@@ -676,12 +714,12 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             if (!ZeroData)
             {
                 lRTN = BallisticFunctions.CDdragCoefficient(MuzzleVelocity, Range, Fo, F2, F3, F4, Zone1Range, Zone2Range, Zone3Range, Zone1Slope,
-                    Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1TransSpeed, BulletDiameter, BulletWeight, MyAtmospherics.AirDensity * _kgm3Tolbft3);
+                    Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1TransSpeed, Zone3TransSpeed, BulletDiameter, BulletWeight, MyAtmospherics.AirDensity * _kgm3Tolbft3);
             }
             else
             {
                 lRTN = BallisticFunctions.CDdragCoefficient(ZeroMuzzleVelocity, Range, Fo, F2, F3, F4, ZeroZone1Range, ZeroZone2Range, 
-                    ZeroZone3Range, Zone1Slope, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, ZeroZone1TransSpeed, 
+                    ZeroZone3Range, Zone1Slope, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, ZeroZone1TransSpeed, Zone3TransSpeed, 
                     BulletDiameter, BulletWeight, MyScenario.MyShooter.MyLoadOut.zeroData.atmospherics.AirDensity * _kgm3Tolbft3);
             }
 
