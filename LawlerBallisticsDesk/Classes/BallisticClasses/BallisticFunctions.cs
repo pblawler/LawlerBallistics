@@ -16,6 +16,9 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         public static double in3Toft3 = 0.000578704;
         public static double in2Toft2 = 0.00694444;
 
+        //TODO: Change all velocity calculations as zones to trans speeds rather than calculated velocity at zone range.
+
+
         #region "Gyro Functions"
         /// <summary>
         /// The gyroscopic stability measure of the bullet, a value of 1 is minimal stability.
@@ -562,38 +565,51 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             double lT;
             double lV;
             double lDeltT;
+            double lStartT;
+
             try
             {
 
-                ////T = 1/(1/3R - 1/2F)Vo sec
-                //lt = (1 / ((1 / (3 * Range)) - (1 / (2 * Fo)))) / MuzzleVelocity;
-                //if (lt < 0) lt = 0;
-
-                //TODO: Zone errors occur with the below code, needs investigation
                 if ((Zone2Range >= Range) & (Range > Zone1Range))
                 {
                     //Zone 2
 
+                    //Get precise velocity at transition.
                     lV = Velocity(MuzzleVelocity, Zone1Range, Zone1Range, Zone1TransSpeed, Fo, Zone1Slope, Zone1SlopeMultiplier,
                         Zone2Range, Zone2TransSpeed, F2, Zone3Range, Zone3Slope, Zone3TransSpeed, Zone3SlopeMultiplier, F3,
                         F4);
 
-                    lDeltT = FlightTime(Zone1Range, Fo, F2, F3, F4, MuzzleVelocity, Zone1Range, Zone1TransSpeed, Zone1Slope,
-                        Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier,
-                        Zone3SlopeMultiplier);
+                    //Get time of flight at transition
+                    lDeltT = FltTimeZ1(Zone1Range,MuzzleVelocity, Fo, Zone1Slope);
 
+                    //Get time of flight useing zone 2 calculation
+                    lStartT = FltTimeZ2((Zone1Range+1), Zone1TransSpeed, F2);
 
+                    //Remove delta from zone 2 calculation for zone 1.
+                    lDeltT = lStartT - lDeltT;
 
-                    //T = Fo / (Vo(exp(3R / Fo) - 1)
-                    lT = (F2 / lV) * (Math.Exp(((3 * Range) / F2)) - 1);
+                    //Get flight time for current range.
+                    lT = FltTimeZ2(Range, Zone1TransSpeed, F2);
+
+                    //Remove Zone 2 time calculation for first zone.
                     lT = lT - lDeltT;
                 }
                 else if ((Zone3Range >= Range) & (Range > Zone2Range))
                 {
                     //Zone 3
 
-                    //T = 3R / Vo / (1 - 3R / 2Fo + (1 - 2N)/ 130)
-                    lT = (3 * Range) / Zone2TransSpeed / (1 - (3 * Range) / (2 * F3) + (1 - 2 * Zone3Slope) / 130);
+
+                    lStartT = FlightTime(Zone2Range, Fo, F2, F3, F4, MuzzleVelocity, Zone1Range, Zone1TransSpeed, Zone1Slope,
+                        Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier,
+                        Zone3SlopeMultiplier);
+
+                    lDeltT = FltTimeZ3((Zone2Range+1), Zone2TransSpeed, F3, Zone3Slope);
+
+                    lDeltT = lDeltT - lStartT;
+
+                    lT = FltTimeZ3(Range, Zone2TransSpeed, F3, Zone3Slope);
+
+                    lT = lT - lDeltT;
                 }
                 else if (Zone1Range >= Range)
                 {
@@ -606,8 +622,19 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 {
                     //Zone 4
 
+                    lStartT = FlightTime(Zone3Range, Fo, F2, F3, F4, MuzzleVelocity, Zone1Range, Zone1TransSpeed, Zone1Slope,
+                        Zone2Range, Zone2TransSpeed, Zone3Range, Zone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier,
+                        Zone3SlopeMultiplier);
+
+                    lDeltT = FltTimeZ4((Zone3Range + 1), Zone3TransSpeed, F4);
+
+                    lDeltT = lDeltT - lStartT;
+
+
                     //T = Fo / (Vo(exp(3R / Fo) - 1)
-                    lT = F4 / (Zone3TransSpeed * (Math.Exp((3 * Range / F4)) - 1));
+                    lT = FltTimeZ4(Range, Zone3TransSpeed, F4);
+
+                    lT = lT - lDeltT;
                 }
 
                 return lT;
@@ -1266,6 +1293,52 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             //SH = (1 + S/Hm)^0.5
             lSH = Math.Pow((1 + (ScopeHeight / ZeroMaxRise)), 0.5);
             return lSH;
+        }
+
+        private static double FltTimeZ1(double Range, double MuzzleVelocity, double Fo, double Zone1Slope)
+        {
+            double lT;
+
+            //Zone 1
+
+            //T = 3R / Vo / (1 - (3R / 2Fo) + (1 - 2N)/ 130)
+            lT = (3 * Range) / MuzzleVelocity / (1 - ((3 * Range) / (2 * Fo)) + ((1 - 2 * Zone1Slope) / 130));
+
+            return lT;
+        }
+        private static double FltTimeZ2(double Range, double Zone1TransSpeed, double F2)
+        {
+            double lT;
+
+            //Zone 2
+
+            //T = (Fo / Vo)(exp(3R / Fo) - 1)
+            lT = (F2 / Zone1TransSpeed) * (Math.Exp(((3 * Range) / F2)) - 1);
+
+            return lT;
+        }
+        private static double FltTimeZ3(double Range, double Zone2TransSpeed, double F3, double Zone3Slope)
+        {
+            double lT;
+
+            //Zone 3
+
+            //T = 3R / Vo / (1 - (3R / 2Fo) + (1 - 2N)/ 130)
+
+            lT = (3 * Range) / Zone2TransSpeed / (1 - ((3 * Range) / (2 * F3)) + ((1 - 2 * Zone3Slope) / 130));
+
+            return lT;
+        }
+        private static double FltTimeZ4(double Range, double Zone3TransSpeed, double F4)
+        {
+            double lT;
+
+            //Zone 4
+
+            //T = (Fo / Vo)(exp(3R / Fo) - 1)
+            lT = (F4 / Zone3TransSpeed) * (Math.Exp((3 * Range / F4)) - 1);
+
+            return lT;
         }
         #endregion
 
