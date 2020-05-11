@@ -41,8 +41,10 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         private double _Zone1SlopeMultiplier;
         private double _Zone3SlopeMultiplier;
         private double _Zone1Slope;
-        private double _Zone1AngleFactor;
+        private double _Zone2Slope=0;
         private double _Zone3Slope;
+        private double _Zone4Slope=0;
+        private double _Zone1AngleFactor;
         private double _Zone1Range;
         private double _Zone2Range;
         private double _Zone3Range;
@@ -242,6 +244,24 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             set { _Zone1AngleFactor = value; RaisePropertyChanged(nameof(Zone1AngleFactor)); }
         }
         /// <summary>
+        /// Slope value for Zone 2 (Transonic) also represented as N for zone 2.
+        /// </summary>
+        public double Zone2Slope
+        {
+            get
+            {
+                return _Zone2Slope;
+            }
+            set
+            {
+                _Zone2Slope = value;
+                RaisePropertyChanged(nameof(Zone2Slope));
+                RaisePropertyChanged(nameof(Zone1Range));
+                RaisePropertyChanged(nameof(Zone2Range));
+                RaisePropertyChanged(nameof(Zone3Range));
+            }
+        }
+        /// <summary>
         /// Slope value for Zone 3 (Transonic) also represented as N for zone 3.
         /// </summary>
         public double Zone3Slope
@@ -259,6 +279,24 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 RaisePropertyChanged(nameof(Zone2Range));
                 RaisePropertyChanged(nameof(Zone3Range));
 
+            }
+        }
+        /// <summary>
+        /// Slope value for Zone 4 (subsonic) also represented as N for zone 4.
+        /// </summary>
+        public double Zone4Slope
+        {
+            get
+            {
+                return _Zone4Slope;
+            }
+            set
+            {
+                _Zone4Slope = value;
+                RaisePropertyChanged(nameof(Zone4Slope));
+                RaisePropertyChanged(nameof(Zone1Range));
+                RaisePropertyChanged(nameof(Zone2Range));
+                RaisePropertyChanged(nameof(Zone3Range));
             }
         }
         #endregion

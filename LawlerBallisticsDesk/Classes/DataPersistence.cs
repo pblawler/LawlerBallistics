@@ -1152,17 +1152,20 @@ namespace LawlerBallisticsDesk.Classes
             lRTN = lRTN + "</Zone1SlopeMultiplier>" + Environment.NewLine;
             lRTN = lRTN + "<Zone2MachFactor value=\"" + TargetDragSlopeData.Zone2MachFactor.ToString() + "\" type=\"double\">" + Environment.NewLine;
             lRTN = lRTN + "</Zone2MachFactor>" + Environment.NewLine;
+            lRTN = lRTN + "<Zone2Slope value=\"" + TargetDragSlopeData.Zone2Slope.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Zone2Slope>" + Environment.NewLine;
             lRTN = lRTN + "<Zone3MachFactor value=\"" + TargetDragSlopeData.Zone3MachFactor.ToString() + "\" type=\"double\">" + Environment.NewLine;
             lRTN = lRTN + "</Zone3MachFactor>" + Environment.NewLine;
             lRTN = lRTN + "<Zone3Slope value=\"" + TargetDragSlopeData.Zone3Slope.ToString() + "\" type=\"double\">" + Environment.NewLine;
             lRTN = lRTN + "</Zone3Slope>" + Environment.NewLine;
             lRTN = lRTN + "<Zone3SlopeMultiplier value=\"" + TargetDragSlopeData.Zone3SlopeMultiplier.ToString() + "\" type=\"double\">" + Environment.NewLine;
             lRTN = lRTN + "</Zone3SlopeMultiplier>" + Environment.NewLine;
+            lRTN = lRTN + "<Zone4Slope value=\"" + TargetDragSlopeData.Zone4Slope.ToString() + "\" type=\"double\">" + Environment.NewLine;
+            lRTN = lRTN + "</Zone4Slope>" + Environment.NewLine;
             lRTN = lRTN + "</DragSlopeData>" + Environment.NewLine;
 
             return lRTN;
         }
-
         #endregion
 
         //private bool IsBallisticSol(string[] FileLines)
@@ -1901,6 +1904,9 @@ namespace LawlerBallisticsDesk.Classes
             lGN = DragSlopeNode.SelectSingleNode("Zone2MachFactor");
             lNR = lGN.Attributes["value"].Value;
             lRTN.Zone2MachFactor = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("Zone2Slope");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.Zone2Slope = Convert.ToDouble(lNR);
             lGN = DragSlopeNode.SelectSingleNode("Zone3MachFactor");
             lNR = lGN.Attributes["value"].Value;
             lRTN.Zone3MachFactor = Convert.ToDouble(lNR);
@@ -1910,6 +1916,9 @@ namespace LawlerBallisticsDesk.Classes
             lGN = DragSlopeNode.SelectSingleNode("Zone3SlopeMultiplier");
             lNR = lGN.Attributes["value"].Value;
             lRTN.Zone3SlopeMultiplier = Convert.ToDouble(lNR);
+            lGN = DragSlopeNode.SelectSingleNode("Zone4Slope");
+            lNR = lGN.Attributes["value"].Value;
+            lRTN.Zone4Slope = Convert.ToDouble(lNR);
 
             return lRTN;
         }
@@ -1958,7 +1967,6 @@ namespace LawlerBallisticsDesk.Classes
 
             return lRTN;
         }
-
         #endregion
 
         #endregion
