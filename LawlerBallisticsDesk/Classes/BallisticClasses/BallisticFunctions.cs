@@ -18,6 +18,8 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
         //TODO: Change all velocity calculations as zones to trans speeds rather than calculated velocity at zone range.
         //TODO: Add zone 2 and 4 calculations for slope > 0 to time velocity and drop.  Add slope multiplier for zones 2 and 4.
+        //TODO: Add density alt correction for all calculations where applicable.
+
 
         #region "Gyro Functions"
         /// <summary>
@@ -247,7 +249,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 }
                 else
                 {
-                    lFa = (F2 - Zone2Slope * Range);
+                    lFa = (F2 - Zone2Slope * (Range-Zone1Range));
                 }
             }
             else if ((Zone2Range < Range) &
@@ -265,7 +267,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 }
                 else
                 {
-                    lFa = (F4 - Zone4Slope * Range);
+                    lFa = (F4 - Zone4Slope * (Range-Zone3Range));
                 }
             }
             return lFa;
@@ -975,7 +977,6 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             else if ((Range > Zone1Range) & (Range <= Zone2Range))
             {
                 //Zone 2
-
                 if (Zone1Range > 0)
                 {
                     //D = (G/Vo/(1/R - 1/Fa))^2
@@ -983,6 +984,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                         Zone3Slope, Zone4Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone1AngleFactor, 
                         Zone1TransSpeed, Zone2TransSpeed, Zone3TransSpeed, Fo, F2, F3, F4, DensityAlt, DensityAltAtZero, 
                         TargetLoc, ShooterLoc, true);
+
                     //D' = 3gFo(Rt - R)((1 - 3NR / Fo) ^ (1 - 2 / N))/ Vo ^ 2 / (2 - N)
                     //   Corrected to 3gFo(Rt-R)((1+3NR/Fo)^((2/N)-1))/Vo^2/(2-N)
                     //lD1p = lD1p * (Math.Pow(((1 + (3 * Zone1Slope * Zone1Range) / DensityAltCorrection(Fo))), ((2 / Zone1Slope) - 1)));
@@ -997,10 +999,18 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                     lD1p = lD1p / (2 - Zone1Slope);
                     lD1p = lD1p * Zone1AngleFactor;
                 }
-                //    'D = (G/Vo/(1/R - 1/Fa))^2
-                lD2 = Math.Pow(((BallisticFunctions.G / Zone1TransSpeed) /
-                    ((1 / (Range - Zone1Range)) -
-                    (1 / DensityAltCorrection(F2, DensityAlt, DensityAltAtZero)))), 2);
+                //    D = (G/Vo/(1/R - 1/Fa))^2
+
+                //Old equation with slope fixed at 0.
+                //lD2 = Math.Pow(((BallisticFunctions.G / Zone1TransSpeed) /
+                    //((1 / (Range - Zone1Range)) -
+                    //(1 / DensityAltCorrection(F2, DensityAlt, DensityAltAtZero)))), 2);
+
+                lD2 = Math.Pow(((BallisticFunctions.G / Zone1TransSpeed) / ((1 / (Range - Zone1Range)) - (1 /
+                   DensityAltCorrection(Fa(Range, Fo, F2, F3, F4, Zone1Range, Zone2Range, Zone3Range, Zone1Slope,
+                   Zone2Slope, Zone3Slope, Zone4Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier), DensityAlt, DensityAltAtZero)))), 2);
+
+
                 ld = lD1 + lD1p + lD2;
             }
             else if ((Range > Zone2Range) & (Range <= Zone3Range))
@@ -1046,9 +1056,17 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                         (Math.Pow((1 + 12 * (Zone3Range - Zone2Range) / lFa), (3 / 2)) - 1) / 6 / Math.Pow(Zone2TransSpeed, 2);
                 }
                 //D = (G/Vo/(1/R - 1/Fa))^2
-                lD4 = Math.Pow((BallisticFunctions.G / Zone3TransSpeed /
-                    ((1.00 / (Range - Zone3Range) -
-                    1 / DensityAltCorrection(F3, DensityAlt, DensityAltAtZero)))), 2);
+
+                //Old equation with slope fixed at 0.
+                //lD4 = Math.Pow((BallisticFunctions.G / Zone3TransSpeed /
+                //    ((1.00 / (Range - Zone3Range) -
+                //    1 / DensityAltCorrection(F3, DensityAlt, DensityAltAtZero)))), 2);
+
+                lD4 = Math.Pow(((BallisticFunctions.G / Zone3TransSpeed) / ((1 / (Range - Zone3Range)) - (1 /
+                   DensityAltCorrection(Fa(Range, Fo, F2, F3, F4, Zone1Range, Zone2Range, Zone3Range, Zone1Slope,
+                   Zone2Slope, Zone3Slope, Zone4Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier), DensityAlt, DensityAltAtZero)))), 2);
+
+
                 ld = lD3 + lD3p + lD4;
             }
 

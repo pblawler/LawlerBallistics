@@ -12,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.Maps.MapControl.WPF;
+
 
 namespace LawlerBallisticsDesk.Views.Ballistics
 {
@@ -56,5 +58,60 @@ namespace LawlerBallisticsDesk.Views.Ballistics
                 txtMaxRise.IsReadOnly = true;
             }
         }
+
+        #region "Scenario"
+        Pushpin TargetLoc;
+        Pushpin ShooterLoc;
+
+        private void MapWithPushpins_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // Disables the default mouse double-click action.
+            e.Handled = true;
+
+            // Determin the location to place the pushpin at on the map.
+
+            //Get the mouse click coordinates
+            Point mousePosition = e.GetPosition(ScenarioMap);
+
+            //Convert the mouse coordinates to a locatoin on the map
+            Location pinLocation = ScenarioMap.ViewportPointToLocation(mousePosition);
+
+            // The pushpin to add to the map.
+            bool shooter = false;
+            bool target = false;
+            foreach (Pushpin lpp in ScenarioMap.Children)
+            {
+                if (lpp.Name == "Shooter")
+                {
+                    shooter = true;
+                }
+                if (lpp.Name == "Target")
+                {
+                    target = true;
+                }
+            }
+            if (!shooter)
+            {
+                ShooterLoc = new Pushpin();
+                ShooterLoc.Location = pinLocation;
+                ShooterLoc.Name = "Shooter";
+                ShooterLoc.Content = "Shooter";
+                // Adds the pushpin to the map.
+                ScenarioMap.Children.Add(ShooterLoc);
+
+            }
+            else if (!target)
+            {
+                TargetLoc = new Pushpin();
+                TargetLoc.Location = pinLocation;
+                TargetLoc.Name = "Target";
+                TargetLoc.Content = "Target";
+                // Adds the pushpin to the map.
+                ScenarioMap.Children.Add(TargetLoc);
+            }
+
+        }
+
+        #endregion
     }
 }

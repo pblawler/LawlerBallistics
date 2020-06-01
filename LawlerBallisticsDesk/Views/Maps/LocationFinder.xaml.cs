@@ -60,7 +60,7 @@ namespace LawlerBallisticsDesk.Views.Maps
             // Determin the location to place the pushpin at on the map.
 
             //Get the mouse click coordinates
-            Point mousePosition = e.GetPosition(this);
+            Point mousePosition = e.GetPosition(RangeMap);
             //Convert the mouse coordinates to a locatoin on the map
             Location pinLocation = RangeMap.ViewportPointToLocation(mousePosition);
 
@@ -80,7 +80,7 @@ namespace LawlerBallisticsDesk.Views.Maps
             }
             if (!shooter)
             {
-                Pushpin ShooterLoc = new Pushpin();
+                ShooterLoc = new Pushpin();
                 ShooterLoc.Location = pinLocation;
                 ShooterLoc.Name = "Shooter";
                 ShooterLoc.Content = "Shooter";
@@ -90,7 +90,7 @@ namespace LawlerBallisticsDesk.Views.Maps
             }
             else if (!target)
             {
-                Pushpin TargetLoc = new Pushpin();
+                TargetLoc = new Pushpin();
                 TargetLoc.Location = pinLocation;
                 TargetLoc.Name = "Target";
                 TargetLoc.Content = "Target";
