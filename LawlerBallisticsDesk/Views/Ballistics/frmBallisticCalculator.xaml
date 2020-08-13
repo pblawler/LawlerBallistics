@@ -43,7 +43,7 @@
             </MenuItem>
         </Menu>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="White"
-                    Grid.Row="1">
+                    Grid.Row="1" >
             <TabItem Name="tabScenario" Header="Scenario">
                 <Grid Name="grdScn">
                     <Grid.RowDefinitions>
@@ -54,8 +54,61 @@
                         <ColumnDefinition Width="166*"/>
                         <ColumnDefinition Width="733*"/>
                     </Grid.ColumnDefinitions>
+                    <Label Name="lblAddTarget" Grid.Row="0" Grid.Column="1" Content="Add Target" FontWeight="Bold" 
+                           Foreground="#FF1250F5" Width="75" Margin="0,0,658,0" HorizontalAlignment="Left"
+                           VerticalAlignment="Center" MouseLeftButtonUp="lblAddTarget_MouseLeftButtonUp"/>
+                    <Label Grid.Row="0" Grid.Column="1" Content="Delete Target" FontWeight="Bold" 
+                           Foreground="#FF1250F5" Margin="75,2,0,2" HorizontalAlignment="Left"
+                           VerticalAlignment="Center"/>
+                    <Label Name="lblSetShooterLoc" Grid.Row="0" Grid.Column="1" Content="Set Shooter Location" FontWeight="Bold" 
+                           Foreground="#FF1250F5" Margin="160,2,0,2" HorizontalAlignment="Left"
+                           VerticalAlignment="Center" MouseLeftButtonUp="lblSetShooterLoc_MouseLeftButtonUp"/>
                     <m:Map x:Name="ScenarioMap" Mode="AerialWithLabels" MouseDoubleClick="MapWithPushpins_MouseDoubleClick"
                         CredentialsProvider="AnrO2VkGEY5x2TcoZxPkwaiVeYfUT2wmT81Fjcamvt1TbhaUYSoMEU8vudvst73k" Margin="0,0,0,0" Grid.Row="1" Grid.Column="1" />
+                    <ListBox Height="156" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"                             
+                             ItemsSource="{Binding MySolution.MyScenario.Targets}" DisplayMemberPath="Name"/>
+                    <Label Content="Target Name" Margin="0,156,5,384" Grid.Row="1" Grid.Column="0"
+                           HorizontalContentAlignment="Center" FontWeight="Bold" Height="28"
+                           VerticalAlignment="Top"/>
+                    <TextBox Height="23" Margin="0,184,5,0" Grid.Row="1"
+                             TextWrapping="Wrap" Text="{Binding MySolution.MyScenario.SelectedTarget.Name}" VerticalAlignment="Top"
+                             HorizontalContentAlignment="Center"/>
+                    <Label Content="Drop (inches)" Margin="0,258,5,0" Grid.Row="1" Grid.Column="0"
+                        HorizontalContentAlignment="Center" FontWeight="Bold" Height="28"
+                        VerticalAlignment="Top"/>
+                    <TextBox Height="23" Margin="0,235,5,0" Grid.Row="1"
+                        TextWrapping="Wrap" Text="{Binding MySolution.MyScenario.Range}" VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"/>
+                    <Label Content="Distance Yrds" Margin="0,207,5,0" Grid.Row="1" Grid.Column="0"
+                        HorizontalContentAlignment="Center" FontWeight="Bold" Height="28"
+                        VerticalAlignment="Top"/>
+                    <TextBox Height="23" Margin="0,286,5,0" Grid.Row="1"
+                        TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"/>
+                    <Label Content="Horizontal Drift (inches)" Margin="0,309,5,0" Grid.Row="1" Grid.Column="0"
+                        HorizontalContentAlignment="Center" FontWeight="Bold" Height="28"
+                        VerticalAlignment="Top"/>
+                    <TextBox Height="23" Margin="0,337,5,0" Grid.Row="1"
+                        TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"/>
+                    <Label Content="Angle Comp Range (Yrds)" Margin="0,365,5,0" Grid.Row="1" Grid.Column="0"
+                        HorizontalContentAlignment="Center" FontWeight="Bold" Height="28"
+                        VerticalAlignment="Top"/>
+                    <TextBox Height="23" Margin="0,393,5,0" Grid.Row="1"
+                        TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"/>
+                    <Label Content="MOA Elevation Correction" Margin="0,421,5,0" Grid.Row="1" Grid.Column="0"
+                        HorizontalContentAlignment="Center" FontWeight="Bold" Height="28"
+                        VerticalAlignment="Top"/>
+                    <TextBox Height="23" Margin="0,449,5,0" Grid.Row="1"
+                        TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"/>
+                    <Label Content="MOA Windage Correction" Margin="0,477,5,0" Grid.Row="1" Grid.Column="0"
+                        HorizontalContentAlignment="Center" FontWeight="Bold" Height="28"
+                        VerticalAlignment="Top"/>
+                    <TextBox Height="23" Margin="5,505,0,0" Grid.Row="1"
+                        TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"/>
 
                 </Grid>
             </TabItem>
@@ -544,7 +597,6 @@
                             <Label Content="Twist Rate" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="495,120,0,0" VerticalAlignment="Top" Width="140" 
                                 ToolTip="Centerline of scope to centerline of barrel." />
-
                         </Grid>
                     </TabItem>
                 </TabControl>

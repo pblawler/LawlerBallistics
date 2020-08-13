@@ -1,4 +1,5 @@
 ﻿using AvalonDock.Controls;
+using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -389,6 +390,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
                 Zone2Slope, Zone3Range, Zone3TransSpeed, Zone3Slope, Zone1SlopeMultiplier, Zone3SlopeMultiplier, Zone4Slope);
             return lCorHoriz;
         }
+
         /// <summary>
         /// Returns the horizontal displacement related to the gyroscopic forces of the bullet.
         /// </summary>
@@ -407,6 +409,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
             return lDrift;
         }
+
         public static double WindDrift(double WindSpeed, double WindDirection, double Range, double Fo, double MuzzleVelocity,
             double F2, double F3, double F4, double Zone1Range, double Zone1TransSpeed, double Zone1Slope, double Zone2Range,
             double Zone2TransSpeed, double Zone2Slope, double Zone3Range, double Zone3TransSpeed, double Zone3Slope,
@@ -480,6 +483,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
           
             return lHWD;
         }
+
         /// <summary>
         /// Returns the horizontal displacement caused by wind.
         /// </summary>
@@ -832,6 +836,30 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             lNZ = (1 - SH(MaxRise, ScopeHeight)) / ((1 / Fo) - (SH(MaxRise, ScopeHeight) / lMR));
 
             return lNZ;
+        }
+        /// <summary>
+        /// Calculates distance to target in yards given lat long of shooter and target.
+        /// </summary>
+        /// <param name="ShooterLoc"></param>
+        /// <param name="TargetLoc"></param>
+        /// <returns>Distance in yards</returns>
+        public static double CalculateRange(LocationData ShooterLoc, LocationData TargetLoc)
+        {
+            double rtnRange = 0;  //Yards
+
+            try
+            {
+                double LatDiff = Math.Abs(ShooterLoc.Latitude - TargetLoc.Latitude);
+                double LongDiff = Math.Abs(ShooterLoc.Longitude - TargetLoc.Longitude);
+                double AngMult = Math.Atan(LongDiff / LatDiff);
+                rtnRange = LongDiff / Math.Sin(AngMult);
+                rtnRange = rtnRange * YardsPerDegLatLon;
+            }
+            catch
+            {
+
+            }
+            return rtnRange;
         }
         #endregion
 

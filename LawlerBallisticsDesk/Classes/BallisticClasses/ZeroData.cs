@@ -34,7 +34,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         }
         private void ShooterLoc_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            //RaisePropertyChanged(nameof(ShooterLoc));
+            //RaisePropertyChanged(nameof(_ShooterLoc));
             RaisePropertyChanged(e.PropertyName);
             RaiseDependentProperties();
             switch (e.PropertyName)
@@ -48,7 +48,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
         }
         private void TargetLoc_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            //RaisePropertyChanged(nameof(TargetLoc));
+            //RaisePropertyChanged(nameof(_TargetLoc));
             RaisePropertyChanged(e.PropertyName);
             RaiseDependentProperties();
             switch (e.PropertyName)

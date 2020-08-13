@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Maps.MapControl.WPF;
-
+using LawlerBallisticsDesk.Classes;
 
 namespace LawlerBallisticsDesk.Views.Ballistics
 {
@@ -22,11 +22,13 @@ namespace LawlerBallisticsDesk.Views.Ballistics
     /// </summary>
     public partial class frmBallisticCalculator : Window
     {
+        private SolutionViewModel lDC;
+
         public frmBallisticCalculator()
         {
             InitializeComponent();
 
-            SolutionViewModel lDC = (SolutionViewModel) this.DataContext;
+            lDC = (SolutionViewModel) this.DataContext;
             lDC.LoadDefaultSolution();
             chkMaxRise_Click(null, null);
         }
@@ -60,8 +62,15 @@ namespace LawlerBallisticsDesk.Views.Ballistics
         }
 
         #region "Scenario"
-        Pushpin TargetLoc;
-        Pushpin ShooterLoc;
+        private Pushpin _TargetLoc;
+        private Pushpin _ShooterLoc;
+        private bool _AddTarget;
+        private bool _ShooterActive = true;
+        private bool _TargetActive = false;
+        private string _ActiveTargetName = "";
+
+        private bool _ShooterLocDefined { get { return !((lDC.MySolution.ShooterLoc.Latitude == 0) & 
+                    (lDC.MySolution.ShooterLoc.Longitude == 0)); } }        
 
         private void MapWithPushpins_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -75,43 +84,61 @@ namespace LawlerBallisticsDesk.Views.Ballistics
 
             //Convert the mouse coordinates to a locatoin on the map
             Location pinLocation = ScenarioMap.ViewportPointToLocation(mousePosition);
+            Target TargetLocDat = new Target();
 
-            // The pushpin to add to the map.
-            bool shooter = false;
-            bool target = false;
-            foreach (Pushpin lpp in ScenarioMap.Children)
+            if (_ShooterActive)
             {
-                if (lpp.Name == "Shooter")
+                //Add the shooter location if it does not exist.
+                foreach (Pushpin lpp in ScenarioMap.Children)
                 {
-                    shooter = true;
+                    if (lpp.Name == "Shooter")
+                    {
+                        ScenarioMap.Children.Remove(lpp);
+                        break;
+                    }
                 }
-                if (lpp.Name == "Target")
+                _ShooterLoc = new Pushpin();
+                _ShooterLoc.Location = pinLocation;
+                _ShooterLoc.Name = "Shooter";
+                _ShooterLoc.Content = _ShooterLoc.Name;
+                lDC.MySolution.ShooterLoc.Latitude = pinLocation.Latitude;
+                lDC.MySolution.ShooterLoc.Longitude = pinLocation.Longitude;
+                lDC.MySolution.MyScenario.MyShooter.MyLocation.Latitude = pinLocation.Latitude;
+                lDC.MySolution.MyScenario.MyShooter.MyLocation.Longitude = pinLocation.Longitude;
+                // Adds the pushpin to the map.
+                ScenarioMap.Children.Add(_ShooterLoc);
+            }
+            else if(_TargetActive)
+            {
+                if(_ActiveTargetName == "")
                 {
-                    target = true;
+                    _TargetLoc = new Pushpin();
+                    _TargetLoc.Location = pinLocation;
+                    _TargetLoc.Name = "Target_" + lDC.MySolution.MyScenario.Targets.Count.ToString();
+                    _TargetLoc.Content = _TargetLoc.Name;
+                    ScenarioMap.Children.Add(_TargetLoc);
+                    TargetLocDat.Name = _TargetLoc.Name;
+                    TargetLocDat.TargetLocation.Latitude = _TargetLoc.Location.Latitude;
+                    TargetLocDat.TargetLocation.Longitude = _TargetLoc.Location.Longitude;
+                    lDC.MySolution.MyScenario.Targets.Add(TargetLocDat);
+                    lDC.MySolution.MyScenario.SelectedTarget = TargetLocDat;
+                    _ActiveTargetName = _TargetLoc.Name;
                 }
             }
-            if (!shooter)
-            {
-                ShooterLoc = new Pushpin();
-                ShooterLoc.Location = pinLocation;
-                ShooterLoc.Name = "Shooter";
-                ShooterLoc.Content = "Shooter";
-                // Adds the pushpin to the map.
-                ScenarioMap.Children.Add(ShooterLoc);
-
-            }
-            else if (!target)
-            {
-                TargetLoc = new Pushpin();
-                TargetLoc.Location = pinLocation;
-                TargetLoc.Name = "Target";
-                TargetLoc.Content = "Target";
-                // Adds the pushpin to the map.
-                ScenarioMap.Children.Add(TargetLoc);
-            }
-
         }
 
         #endregion
+
+        private void lblSetShooterLoc_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _ShooterActive = true;
+        }
+
+        private void lblAddTarget_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _ShooterActive = false;
+            _TargetActive = true;
+            _ActiveTargetName = "";
+        }
     }
 }

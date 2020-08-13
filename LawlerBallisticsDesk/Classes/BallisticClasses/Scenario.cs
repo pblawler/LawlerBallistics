@@ -41,6 +41,7 @@ namespace LawlerBallisticsDesk.Classes
         private Shooter _MyShooter;
         private ObservableCollection<Target> _Targets;
         private Target _SelectedTarget;
+        private double _Range;  //Yards
         #endregion
 
         #region "Properties"
@@ -71,7 +72,36 @@ namespace LawlerBallisticsDesk.Classes
             }
         }
         public ObservableCollection<Target> Targets { get { return _Targets; } set { _Targets = value; RaisePropertyChanged(nameof(Targets)); } }
-        public Target SelectedTarget { get { return _SelectedTarget; } set { _SelectedTarget = value; RaisePropertyChanged(nameof(SelectedTarget)); } }
+        public Target SelectedTarget
+        { 
+            get { return _SelectedTarget; }
+            set 
+            {
+                _SelectedTarget = value;
+                RaisePropertyChanged(nameof(Range));
+                RaisePropertyChanged(nameof(SelectedTarget)); 
+            } 
+        }
+        public double Range
+        {
+            get
+            {
+                if (_Range == 0)
+                {
+                    return BallisticFunctions.CalculateRange(MyShooter.MyLocation, SelectedTarget.TargetLocation);
+                }
+                else
+                {
+                    return _Range;
+                }
+            }
+
+            set
+            {
+                _Range = value;
+                RaisePropertyChanged(nameof(Range));
+            }
+        }
         #endregion
 
         #region "Constructor"
@@ -80,6 +110,7 @@ namespace LawlerBallisticsDesk.Classes
             _MyAtmospherics = new Atmospherics();
             _MyShooter = new Shooter();
             _SelectedTarget = new Target();
+            _Targets = new ObservableCollection<Target>();
             MyAtmospherics.PropertyChanged += MyAtmospherics_PropertyChanged;
             MyShooter.PropertyChanged += MyShooter_PropertyChanged;
         }
