@@ -398,7 +398,7 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
 
             return lRTN;
         }
-        public double FlightTime(double Range, bool ZeroData)
+        public double FlightTime(double Range, bool ZeroData=false)
         {
             double lRTN = 0;
 

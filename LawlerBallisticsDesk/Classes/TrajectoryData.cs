@@ -47,7 +47,16 @@ namespace LawlerBallisticsDesk.Classes
         public double Fdragfactor { get{ return _Fdragfactor; } set { _Fdragfactor = value; RaisePropertyChanged(nameof(Fdragfactor)); } }
         public double MuzzleDrop { get { return _MuzzleDrop; } set { _MuzzleDrop = value; RaisePropertyChanged(nameof(MuzzleDrop)); } }
         public double Range { get { return _Range; } set { _Range = value; RaisePropertyChanged(nameof(Range)); } }
-        public double SightDelta { get { return _SightDelta; } set { _SightDelta = value; RaisePropertyChanged(nameof(SightDelta)); } }
+        public double SightDelta
+        {
+            get{return _SightDelta; } 
+            set
+            { 
+                _SightDelta = value;
+                RaisePropertyChanged(nameof(SightDelta));
+                RaisePropertyChanged(nameof(VertMOAcorrection));                
+            }
+        }
         public double Velocity { get { return _Velocity; } set { _Velocity = value; RaisePropertyChanged(nameof(Velocity)); } }
         public double Energy { get { return _Energy; } set { _Energy = value; RaisePropertyChanged(nameof(Energy)); } }
         public double SpinRate { get { return _SpinRate; } set { _SpinRate = value; RaisePropertyChanged(nameof(SpinRate)); } }
@@ -60,6 +69,25 @@ namespace LawlerBallisticsDesk.Classes
         public double FlightTime { get { return _FlightTime; } set { _FlightTime = value; RaisePropertyChanged(nameof(FlightTime)); } }
         public double HorzComp { get { return _HorzComp; } set { _HorzComp = value; RaisePropertyChanged(nameof(HorzComp)); } }
         public double HorizErr { get { return _HorizErr; } set { _HorizErr = value; RaisePropertyChanged(nameof(HorizErr)); } }
+        public double VertMOAcorrection
+        {
+            get
+            {
+                double rtn = 0;
+                rtn = (-1 * _SightDelta) / ((_Range / 100) * 1.047);
+                return rtn;
+            }
+        }
+        public double HorizMOAcorrection
+        {
+            get
+            {
+                double rtn = 0;
+                rtn = (-1 * HorizErr) / ((_Range / 100) * 1.047);
+                return rtn;
+            }
+        }
+
         #endregion
 
         public TrajectoryData()

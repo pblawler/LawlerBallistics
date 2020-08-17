@@ -41,7 +41,6 @@ namespace LawlerBallisticsDesk.Classes
         private Shooter _MyShooter;
         private ObservableCollection<Target> _Targets;
         private Target _SelectedTarget;
-        private double _Range;  //Yards
         #endregion
 
         #region "Properties"
@@ -86,19 +85,16 @@ namespace LawlerBallisticsDesk.Classes
         {
             get
             {
-                if (_Range == 0)
+                if (SelectedTarget.BallisticSolution.Range == 0)
                 {
-                    return BallisticFunctions.CalculateRange(MyShooter.MyLocation, SelectedTarget.TargetLocation);
+                    SelectedTarget.BallisticSolution.Range = BallisticFunctions.CalculateRange(MyShooter.MyLocation, SelectedTarget.TargetLocation);
                 }
-                else
-                {
-                    return _Range;
-                }
+                return SelectedTarget.BallisticSolution.Range;
             }
 
             set
             {
-                _Range = value;
+                SelectedTarget.BallisticSolution.Range = value;
                 RaisePropertyChanged(nameof(Range));
             }
         }

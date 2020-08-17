@@ -272,6 +272,7 @@ namespace LawlerBallisticsDesk.ViewModel
         private RelayCommand _CalculateF4Command;
         private RelayCommand _CalculateMuzzleVelocityCommand;
         private RelayCommand _CalculateVelocityDistanceCommand;
+        private RelayCommand _GetTargetSolutionCommand;
 
         public RelayCommand CalculateFoCommand
         {
@@ -301,7 +302,6 @@ namespace LawlerBallisticsDesk.ViewModel
                 return _CalculateF4Command ?? (_CalculateF4Command = new RelayCommand(() => CalculateF4()));
             }
         }
-
         public RelayCommand CalculateVelocityDistanceCommand
         {
             get
@@ -344,6 +344,14 @@ namespace LawlerBallisticsDesk.ViewModel
                 return _ZeroAtmosphericsCommand ?? (_ZeroAtmosphericsCommand = new RelayCommand(() => ZeroAtmospherics()));
             }
         }
+        public RelayCommand GetTargetSolutionCommand
+        {
+            get
+            {
+                return _GetTargetSolutionCommand ?? (_GetTargetSolutionCommand = new RelayCommand(() => GetTargetSolution()));
+            }
+        }
+
         #endregion
 
         #region "Constructor"
@@ -366,7 +374,7 @@ namespace LawlerBallisticsDesk.ViewModel
             }
             EstimateBCCommand = new RelayCommand(GetTestBulletBC, null);
             OpenBCestimatorCommand = new RelayCommand(OpenBCestimator, null);
-            ShootCommand = new RelayCommand(Shoot, null);
+            ShootCommand = new RelayCommand(ShootForBallisticTable, null);
             OpenLocationFinderCommand = new RelayCommand(OpenLocationFinder, null);
             ZeroLocationCommand = new RelayCommand(ZeroLocation, null);
             ShotLocationCommand = new RelayCommand(ShotLocation, null);
@@ -381,6 +389,19 @@ namespace LawlerBallisticsDesk.ViewModel
         #endregion
 
         #region "Public Routines"
+        public void LoadTargetBallistics()
+        {
+            GetTargetSolution();
+        }
+        public void ReloadAllTargetData()
+        {
+            foreach(Target t in MySolution.MyScenario.Targets)
+            {
+                t.BallisticSolution.Range = BallisticFunctions.CalculateRange(MySolution.ShooterLoc, t.TargetLocation);
+                t.BallisticSolution = GetTrajectoryData(t.BallisticSolution.Range);
+            }
+            RaisePropertyChanged(nameof(MySolution.MyScenario.SelectedTarget.BallisticSolution.Range));
+        }
         public void LoadDefaultSolution()
         {
             DataPersistence lDP = new DataPersistence();
@@ -689,7 +710,7 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Private Routines"
 
         //TODO: Add drag chart function for 1/F and K to update with zone data.
-        private void Shoot()
+        private void ShootForBallisticTable()
         {
             double lDR = 0;  //Trajectory Range increment.
             double lCR; //Current Range.
@@ -752,6 +773,37 @@ namespace LawlerBallisticsDesk.ViewModel
             RaisePropertyChanged(nameof(MyTrajectories));
             LoadCharts();
 
+        }
+        private void GetTargetSolution()
+        {
+            double TargetRange;
+            TrajectoryData  lTD = new TrajectoryData();
+            TargetRange = MySolution.MyScenario.Range;
+            lTD = GetTrajectoryData(TargetRange);
+            MySolution.MyScenario.SelectedTarget.BallisticSolution = lTD;
+        }
+        private TrajectoryData GetTrajectoryData(double TargetRange)
+        {
+            TrajectoryData lTD = new TrajectoryData();
+            lTD.Range = TargetRange;
+            lTD.MuzzleDrop = MySolution.MuzzleDrop(TargetRange);
+            lTD.SightDelta = MySolution.SightDelta(TargetRange);
+            lTD.Velocity = MySolution.Velocity(TargetRange);
+            lTD.Energy = MySolution.Energy(TargetRange);
+            lTD.SpinRate = MySolution.SpinRate(TargetRange);
+            lTD.GyroStability = MySolution.GyroscopicStability(TargetRange);
+            lTD.HorizDev = MySolution.TotalHorizontalDrift(TargetRange);
+            lTD.HorzComp = MySolution.ZeroTotalHorizontalComp(TargetRange);
+            lTD.HorizErr = MySolution.GetHorizErr(TargetRange);
+            lTD.CoriolisH = MySolution.GetCoriolisHoriz(TargetRange);
+            lTD.CoriolisV = MySolution.GetCoriolisVert(TargetRange);
+            lTD.SpinDrift = MySolution.GetSpinDrift(TargetRange);
+            lTD.WindDeflect = MySolution.WindDrift(TargetRange);
+            lTD.FlightTime = MySolution.FlightTime(TargetRange);
+            lTD.Fdragfactor = MySolution.Fdrag(TargetRange);
+            lTD.CDdragCoefficient = MySolution.CDdragCoefficient(TargetRange);
+
+            return lTD;
         }
         private void CalculateFo()
         {

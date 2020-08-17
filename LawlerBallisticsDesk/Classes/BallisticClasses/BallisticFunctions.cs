@@ -851,13 +851,24 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             {
                 double LatDiff = Math.Abs(ShooterLoc.Latitude - TargetLoc.Latitude);
                 double LongDiff = Math.Abs(ShooterLoc.Longitude - TargetLoc.Longitude);
-                double AngMult = Math.Atan(LongDiff / LatDiff);
-                rtnRange = LongDiff / Math.Sin(AngMult);
+                if (LatDiff == 0 & LongDiff != 0)
+                {
+                    rtnRange = LongDiff;
+                }
+                else if (LatDiff != 0 & LongDiff == 0)
+                {
+                    rtnRange = LatDiff;
+                }
+                else
+                {
+                    double AngMult = Math.Atan(LongDiff / LatDiff);
+                    rtnRange = LongDiff / Math.Sin(AngMult);
+                }
                 rtnRange = rtnRange * YardsPerDegLatLon;
             }
             catch
             {
-
+                rtnRange = 0;
             }
             return rtnRange;
         }

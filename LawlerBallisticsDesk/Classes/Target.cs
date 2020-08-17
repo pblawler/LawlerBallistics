@@ -36,6 +36,7 @@ namespace LawlerBallisticsDesk.Classes
         private double _WindDirection;
         private string _ID = Guid.NewGuid().ToString();
         private string _Name;
+        private TrajectoryData _BallisticSolution;
         #endregion
 
         #region "Properties"
@@ -56,12 +57,24 @@ namespace LawlerBallisticsDesk.Classes
         }
         public double WindSpeed { get { return _WindSpeed; } set { _WindSpeed = value; RaisePropertyChanged(nameof(WindSpeed)); } }
         public double WindDirection { get { return _WindDirection; } set { _WindDirection = value; RaisePropertyChanged(nameof(WindDirection)); } }
+        public TrajectoryData BallisticSolution 
+        {
+            get
+            {
+                return _BallisticSolution; 
+            }
+            set
+            {
+                _BallisticSolution = value; RaisePropertyChanged(nameof(BallisticSolution));
+            }
+        }
         #endregion
 
         #region "Constructor"
         public Target()
         {
             _TargetLocation = new LocationData();
+            _BallisticSolution = new TrajectoryData();
             TargetLocation.PropertyChanged += TargetLocation_PropertyChanged;
         }
         #endregion

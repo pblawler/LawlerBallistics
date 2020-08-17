@@ -107,6 +107,8 @@ namespace LawlerBallisticsDesk.Views.Ballistics
                 lDC.MySolution.MyScenario.MyShooter.MyLocation.Longitude = pinLocation.Longitude;
                 // Adds the pushpin to the map.
                 ScenarioMap.Children.Add(_ShooterLoc);
+                lDC.ReloadAllTargetData();
+
             }
             else if(_TargetActive)
             {
@@ -115,13 +117,14 @@ namespace LawlerBallisticsDesk.Views.Ballistics
                     _TargetLoc = new Pushpin();
                     _TargetLoc.Location = pinLocation;
                     _TargetLoc.Name = "Target_" + lDC.MySolution.MyScenario.Targets.Count.ToString();
-                    _TargetLoc.Content = _TargetLoc.Name;
+                    _TargetLoc.Content = lDC.MySolution.MyScenario.Targets.Count.ToString();
                     ScenarioMap.Children.Add(_TargetLoc);
                     TargetLocDat.Name = _TargetLoc.Name;
                     TargetLocDat.TargetLocation.Latitude = _TargetLoc.Location.Latitude;
                     TargetLocDat.TargetLocation.Longitude = _TargetLoc.Location.Longitude;
                     lDC.MySolution.MyScenario.Targets.Add(TargetLocDat);
                     lDC.MySolution.MyScenario.SelectedTarget = TargetLocDat;
+                    lDC.LoadTargetBallistics();
                     _ActiveTargetName = _TargetLoc.Name;
                 }
             }
