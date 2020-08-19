@@ -281,6 +281,9 @@
     <Compile Include="Views\Ballistics\frmBallisticCalculator.xaml.cs">
       <DependentUpon>frmBallisticCalculator.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Ballistics\uctrlBallisticCalculator.xaml.cs">
+      <DependentUpon>uctrlBallisticCalculator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Ballistics\frmBCcalculator.xaml.cs">
       <DependentUpon>frmBCcalculator.xaml</DependentUpon>
     </Compile>
@@ -376,6 +379,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\Ballistics\frmBallisticCalculator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Ballistics\uctrlBallisticCalculator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

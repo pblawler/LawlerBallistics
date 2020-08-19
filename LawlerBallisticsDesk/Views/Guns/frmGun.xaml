@@ -24,12 +24,7 @@
                     <cartridges:uctrlBarrelRecipes x:Name="uctrlBRp" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Ballistic Data">
-                <Grid>
-
-                </Grid>
-            </TabItem>
-            <TabItem Header="Senario">
+            <TabItem Header="Ballistics">
                 <Grid>
 
                 </Grid>

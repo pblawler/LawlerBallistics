@@ -100,6 +100,30 @@ namespace LawlerBallisticsDesk.Classes
         }
         #endregion
 
+        #region "Public Routines"
+        public int RemoveTarget(string ID)
+        {
+            int rtn = 0;
+
+            try
+            {
+                foreach (Target t in Targets)
+                {
+                    if (t.ID == ID)
+                    {
+                        Targets.Remove(t);
+                        break;
+                    }
+                }
+            }
+            catch
+            {
+                rtn = -1;
+            }
+            return rtn;
+        }
+        #endregion
+
         #region "Constructor"
         public Scenario()
         {

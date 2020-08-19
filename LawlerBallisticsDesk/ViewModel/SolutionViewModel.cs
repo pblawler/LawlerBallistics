@@ -30,6 +30,7 @@ namespace LawlerBallisticsDesk.ViewModel
         //TODO: Add property changed catch for bcg1 to fire property changed for bcz2 since they are linked need to update
         //TODO: when the cartridge is selected update BCg1 in drag slope
         //TODO: verify all zero functions use zero data parameters.
+        //TODO: add solution override for specific loadouts
 
 
         #region "Binding"
@@ -401,6 +402,11 @@ namespace LawlerBallisticsDesk.ViewModel
                 t.BallisticSolution = GetTrajectoryData(t.BallisticSolution.Range);
             }
             RaisePropertyChanged(nameof(MySolution.MyScenario.SelectedTarget.BallisticSolution.Range));
+        }
+        public void RemoveSelectedTarget()
+        {
+            MySolution.MyScenario.RemoveTarget(MySolution.MyScenario.SelectedTarget.ID);
+            if(MySolution.MyScenario.Targets.Count > 0) MySolution.MyScenario.SelectedTarget = MySolution.MyScenario.Targets[0];
         }
         public void LoadDefaultSolution()
         {
