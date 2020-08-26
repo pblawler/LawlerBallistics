@@ -37,7 +37,7 @@ namespace LawlerBallisticsDesk.ViewModel
         private void MySolution_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             RaisePropertyChanged(e.PropertyName);
-            
+
             switch (e.PropertyName)
             {
                 case "UseMaxRise":
@@ -251,15 +251,15 @@ namespace LawlerBallisticsDesk.ViewModel
         public List<string> BarrelDirList { get { return LawlerBallisticsFactory.BarrelRiflingDirection; } }
         public List<string> BulletTypes { get { return _BulletTypes; } }
         public double TestBulletWeight {
-            get { return _TestBulletWeight; } 
-            set { _TestBulletWeight = value; 
-                RaisePropertyChanged(nameof(TestBulletWeight)); } 
+            get { return _TestBulletWeight; }
+            set { _TestBulletWeight = value;
+                RaisePropertyChanged(nameof(TestBulletWeight)); }
         }
         public double TestBulletDiameter { get { return _TestBulletDiameter; } set { _TestBulletDiameter = value; RaisePropertyChanged(nameof(TestBulletDiameter)); } }
         public double TestBulletLength { get { return _TestBulletLength; } set { _TestBulletLength = value; RaisePropertyChanged(nameof(TestBulletLength)); } }
         public double TestBulletBC { get { return _TestBulletBC; } set { _TestBulletBC = value; RaisePropertyChanged(nameof(TestBulletBC)); } }
         public string TestBulletType { get { return _TestBulletType; } set { _TestBulletType = value; RaisePropertyChanged(nameof(TestBulletType)); } }
-        public string ZeroMessage { get {return _ZeroMessage; } }
+        public string ZeroMessage { get { return _ZeroMessage; } }
         public string DragMessage { get { return _DragMessage; } }
         #endregion
 
@@ -357,7 +357,7 @@ namespace LawlerBallisticsDesk.ViewModel
 
         #region "Constructor"
         public SolutionViewModel()
-        {            
+        {
             _MySolution = new Solution();
             MySolution.PropertyChanged += MySolution_PropertyChanged;
             _TrajectoryPlot = new PlotModel();
@@ -396,7 +396,7 @@ namespace LawlerBallisticsDesk.ViewModel
         }
         public void ReloadAllTargetData()
         {
-            foreach(Target t in MySolution.MyScenario.Targets)
+            foreach (Target t in MySolution.MyScenario.Targets)
             {
                 t.BallisticSolution.Range = BallisticFunctions.CalculateRange(MySolution.ShooterLoc, t.TargetLocation);
                 t.BallisticSolution = GetTrajectoryData(t.BallisticSolution.Range);
@@ -406,7 +406,7 @@ namespace LawlerBallisticsDesk.ViewModel
         public void RemoveSelectedTarget()
         {
             MySolution.MyScenario.RemoveTarget(MySolution.MyScenario.SelectedTarget.ID);
-            if(MySolution.MyScenario.Targets.Count > 0) MySolution.MyScenario.SelectedTarget = MySolution.MyScenario.Targets[0];
+            if (MySolution.MyScenario.Targets.Count > 0) MySolution.MyScenario.SelectedTarget = MySolution.MyScenario.Targets[0];
         }
         public void LoadDefaultSolution()
         {
@@ -416,7 +416,26 @@ namespace LawlerBallisticsDesk.ViewModel
             _FileName = lf;
             MySolution = lDP.ParseBallisticSolution(lf);
             MySolution.SolveZeroData();
-            if((MySolution.Fo >0) & (MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange==0))
+            if ((MySolution.Fo > 0) & (MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange == 0))
+                MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange = BallisticFunctions.MaxRange(MySolution.Fo);
+            RaisePropertyChanged(nameof(MyBarrels));
+            RaisePropertyChanged(nameof(MySolution.MyCartridges));
+        }
+        public void LoadSolution(string SolutionFile = "")
+        {
+            DataPersistence lDP = new DataPersistence();
+
+            if(SolutionFile != "") _FileName = SolutionFile;
+            if (_FileName != "")
+            {
+                MySolution = lDP.ParseBallisticSolution(_FileName);
+            }
+            else
+            {
+                MySolution = new Solution();
+            }
+            MySolution.SolveZeroData();
+            if ((MySolution.Fo > 0) & (MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange == 0))
                 MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange = BallisticFunctions.MaxRange(MySolution.Fo);
             RaisePropertyChanged(nameof(MyBarrels));
             RaisePropertyChanged(nameof(MySolution.MyCartridges));
@@ -491,7 +510,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 LineStyle = OxyPlot.LineStyle.Solid,
                 Color = OxyColors.Blue,
                 Color2 = OxyColors.Transparent,
-                Fill =  OxyColor.FromArgb(100, 56, 50, 168),
+                Fill = OxyColor.FromArgb(100, 56, 50, 168),
                 DataFieldX2 = "X",
                 ConstantY2 = _MyTrajectories.Min(sd => sd.SightDelta)
             };
@@ -502,11 +521,11 @@ namespace LawlerBallisticsDesk.ViewModel
             LineSeries lSR = new LineSeries();
             LineSeries lBSG = new LineSeries();
             LinearAxis lTLA = new LinearAxis();
-            lTLA.Key = "Traj";            
+            lTLA.Key = "Traj";
             lTLA.Position = AxisPosition.Left;
             lTLA.MajorGridlineColor = OxyColors.Black;
             lTLA.MajorGridlineStyle = LineStyle.Dot;
-            _TrajectoryPlot.Axes.Add(lTLA);           
+            _TrajectoryPlot.Axes.Add(lTLA);
             lZ1.Title = "Zone 1 Trajectory";
             lZ1.YAxisKey = "Traj";
             lZ2.Title = "Zone 2 Trajectory";
@@ -521,7 +540,7 @@ namespace LawlerBallisticsDesk.ViewModel
             lTPS.Color = OxyColors.Yellow;
             lENRGY.Title = "Energy (ft.lb.)";
             lSR.Title = "Bullet Spin Rate (rpm)";
-            lBSG.Title = "Gyroscopic Stability (SG)";           
+            lBSG.Title = "Gyroscopic Stability (SG)";
             foreach (TrajectoryData lTD in _MyTrajectories)
             {
                 if (lTD.Range <= MySolution.Zone1Range)
@@ -546,7 +565,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 lBSG.Points.Add(new DataPoint(lTD.Range, lTD.GyroStability));
                 lZsl.Points.Add(new DataPoint(lTD.Range, 0));
                 lFT.Points.Add(new DataPoint(lTD.Range, lTD.FlightTime));
-            }                      
+            }
             _TrajectoryPlot.Series.Add(lZ1);
             _TrajectoryPlot.Series.Add(lZ2);
             _TrajectoryPlot.Series.Add(lZ3);
@@ -557,7 +576,7 @@ namespace LawlerBallisticsDesk.ViewModel
             //lTa.MajorGridlineStyle = LineStyle.Dot;
             //lTa.Key = "Trajectory";
             //_TrajectoryPlot.Axes.Add(lTa);
-            if ((PlotEnergy)||(PlotVelocity))
+            if ((PlotEnergy) || (PlotVelocity))
             {
                 LinearAxis lVa = new LinearAxis();
                 lVa.Key = "VelEng";
@@ -565,7 +584,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 _TrajectoryPlot.Axes.Add(lVa);
             }
             if (PlotVelocity)
-            {                
+            {
                 lTPS.YAxisKey = "VelEng";
                 _TrajectoryPlot.Series.Add(lTPS);
             }
@@ -574,7 +593,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 lENRGY.YAxisKey = "VelEng";
                 _TrajectoryPlot.Series.Add(lENRGY);
             }
-            if((PlotSpinRate)||(PlotFlightTime))
+            if ((PlotSpinRate) || (PlotFlightTime))
             {
                 LinearAxis lBSGA = new LinearAxis();
                 lBSGA.Key = "BSG";
@@ -595,21 +614,21 @@ namespace LawlerBallisticsDesk.ViewModel
                 lSRA.Position = AxisPosition.Right;
                 lSR.YAxisKey = "SpinRate";
                 _TrajectoryPlot.Axes.Add(lSRA);
-                _TrajectoryPlot.Series.Add(lSR);                
-                lBSG.YAxisKey = "BSG";               
+                _TrajectoryPlot.Series.Add(lSR);
+                lBSG.YAxisKey = "BSG";
                 _TrajectoryPlot.Series.Add(lBSG);
             }
             _TrajectoryPlot.InvalidatePlot(true);
             #endregion
 
             #region "Horizontal Plot"
-            if (_WindagePlot.Series.Count>0) _WindagePlot.Series.Clear();
+            if (_WindagePlot.Series.Count > 0) _WindagePlot.Series.Clear();
             _WindagePlot.Axes.Clear();
             LineSeries lTHD = new LineSeries()
             {
                 StrokeThickness = 2,
                 LineStyle = OxyPlot.LineStyle.Solid,
-                Color = OxyColors.Blue,                
+                Color = OxyColors.Blue,
             };
             LineSeries lSD = new LineSeries();
             LineSeries lWD = new LineSeries();
@@ -652,13 +671,13 @@ namespace LawlerBallisticsDesk.ViewModel
                 lHerr.Points.Add(new DataPoint(lTD.Range, lTD.HorizErr));
                 lZcomp.Points.Add(new DataPoint(lTD.Range, lTD.HorzComp));
             }
-            _WindagePlot.Series.Add(lHSL);            
+            _WindagePlot.Series.Add(lHSL);
             _WindagePlot.Series.Add(lHerr);
             if (PlotSpinDrift) _WindagePlot.Series.Add(lSD);
-            if(PlotWindDrift) _WindagePlot.Series.Add(lWD);
-            if(PlotHcoriolis) _WindagePlot.Series.Add(lCHD);
-            if(PlotComp) _WindagePlot.Series.Add(lZcomp);
-            if(PlotHorizDrift) _WindagePlot.Series.Add(lTHD);
+            if (PlotWindDrift) _WindagePlot.Series.Add(lWD);
+            if (PlotHcoriolis) _WindagePlot.Series.Add(lCHD);
+            if (PlotComp) _WindagePlot.Series.Add(lZcomp);
+            if (PlotHorizDrift) _WindagePlot.Series.Add(lTHD);
             _WindagePlot.InvalidatePlot(true);
             #endregion
 
@@ -710,6 +729,10 @@ namespace LawlerBallisticsDesk.ViewModel
         public void Dispose()
         {
             InstanceUnload();
+        }
+        public void SetFileName(string FileName =  "")
+        {
+            _FileName = FileName;
         }
         #endregion
 

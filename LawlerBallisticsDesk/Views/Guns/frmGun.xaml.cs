@@ -4,6 +4,7 @@ using LawlerBallisticsDesk.Classes.Guns;
 using LawlerBallisticsDesk.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace LawlerBallisticsDesk.Views
     public partial class frmGun : Window
     {
         private GunsViewModel _DC;
+        private SolutionViewModel _SVM;
+        private string _SolutionFile;
 
         #region "Messaging"
         private void ReceiveGunMessage(GunBarrelMsg msg)
@@ -44,7 +47,10 @@ namespace LawlerBallisticsDesk.Views
             try
             {
                 if (_DC == null) return;
-                if (_DC.SelectedGun.SelectedBarrel.ID != "") uctrlBRp.DataContext = new BarrelRecipeViewModel(_DC.SelectedGun.SelectedBarrel.ID, _DC.SelectedGun.ID);
+                if (_DC.SelectedGun.SelectedBarrel.ID != "")
+                {
+                    uctrlBRp.DataContext = new BarrelRecipeViewModel(_DC.SelectedGun.SelectedBarrel.ID, _DC.SelectedGun.ID);
+                }
             }
             catch
             { }
@@ -57,8 +63,21 @@ namespace LawlerBallisticsDesk.Views
             _DC.CloseGunAction = new Action(this.Close);
             try
             {
-                if (_DC.SelectedGun.SelectedBarrel == null) return;
-                if (_DC.SelectedGun.SelectedBarrel.ID != "") uctrlBRp.DataContext = new BarrelRecipeViewModel(_DC.SelectedGun.SelectedBarrel.ID, _DC.SelectedGun.ID);
+                //TODO: When a gun is deleted, all the solution files for the gun should also be deleted.
+                _SolutionFile = LawlerBallisticsFactory.AppDataFolder + "\\" + _DC.GunID;               
+                _SolutionFile = _SolutionFile + ".gsf";               
+                uctrlBallisticData.DataContext = new SolutionViewModel();
+                _SVM = (SolutionViewModel)uctrlBallisticData.DataContext;
+                _SVM.SetFileName(_SolutionFile);
+                //Set the data context to the current gun.
+                if (File.Exists(_SolutionFile))
+                {
+                    _SVM.LoadSolution(_SolutionFile);
+                }
+                else
+                {
+                    
+                }
             }
             catch
             { }

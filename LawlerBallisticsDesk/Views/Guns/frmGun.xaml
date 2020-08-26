@@ -1,4 +1,4 @@
-﻿<Window x:Class="LawlerBallisticsDesk.Views.frmGun"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:LawlerBallisticsDesk.Views"
         xmlns:guns="clr-namespace:LawlerBallisticsDesk.Views.Guns"
         xmlns:cartridges="clr-namespace:LawlerBallisticsDesk.Views.Cartridges"
+        xmlns:Ballistics="clr-namespace:LawlerBallisticsDesk.Views.Ballistics" x:Class="LawlerBallisticsDesk.Views.frmGun"
         mc:Ignorable="d"
         Title="Gun" Height="450" Width="800">
     <Grid>
@@ -26,7 +27,7 @@
             </TabItem>
             <TabItem Header="Ballistics">
                 <Grid>
-
+                    <Ballistics:uctrlBallisticCalculator x:Name="uctrlBallisticData"/>
                 </Grid>
             </TabItem>
         </TabControl>
