@@ -62,6 +62,7 @@ namespace LawlerBallisticsDesk.ViewModel
                     RaisePropertyChanged(nameof(MyBarrels));
                     break;
                 case "SelectedBarrel":
+                    RaisePropertyChanged(nameof(MySolution.MyBarrel));
                     RaisePropertyChanged(nameof(MySolution.MyCartridges));
                     break;
                 case "ZeroMessage":
@@ -69,6 +70,10 @@ namespace LawlerBallisticsDesk.ViewModel
                     break;
                 case "DragMessage":
                     LoadDragMessage(MySolution.DragMessage);
+                    break;
+                case "SelectedCartridge":
+                    MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MuzzleVelocity = MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge.Velocity;
+                    RaisePropertyChanged(nameof(MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MuzzleVelocity));
                     break;
                 default:
                     break;
@@ -425,15 +430,7 @@ namespace LawlerBallisticsDesk.ViewModel
         {
             DataPersistence lDP = new DataPersistence();
 
-            if(SolutionFile != "") _FileName = SolutionFile;
-            if (_FileName != "")
-            {
-                MySolution = lDP.ParseBallisticSolution(_FileName);
-            }
-            else
-            {
-                MySolution = new Solution();
-            }
+            MySolution = lDP.ParseBallisticSolution(_FileName);
             MySolution.SolveZeroData();
             if ((MySolution.Fo > 0) & (MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange == 0))
                 MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange = BallisticFunctions.MaxRange(MySolution.Fo);
@@ -733,6 +730,18 @@ namespace LawlerBallisticsDesk.ViewModel
         public void SetFileName(string FileName =  "")
         {
             _FileName = FileName;
+        }
+        public void SelectGun(string GunID)
+        {
+            MySolution.MyScenario.MyShooter.MyLoadOut.SelectedGun = LawlerBallisticsFactory.GetGun(GunID);
+        }
+        public void SelectBarrel(string BarrelID)
+        {
+            MySolution.MyScenario.MyShooter.MyLoadOut.SelectedBarrel = LawlerBallisticsFactory.GetBarrel(BarrelID);
+        }
+        public void SelectRecipe(string RecipeID)
+        {
+            MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge = LawlerBallisticsFactory.GetRecipe(RecipeID);
         }
         #endregion
 

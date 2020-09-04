@@ -76,7 +76,15 @@ namespace LawlerBallisticsDesk.Views
                 }
                 else
                 {
-                    
+                    _SVM.SelectGun(_DC.SelectedGun.ID);
+                    if (_DC.SelectedGun.SelectedBarrel != null)
+                    {
+                        _SVM.SelectBarrel(_DC.SelectedGun.SelectedBarrel.ID);
+                        if (_DC.SelectedGun.SelectedBarrel.SelectedRecipe != null)
+                        {
+                            _SVM.SelectRecipe(_DC.SelectedGun.SelectedBarrel.SelectedRecipe.ID);
+                        }
+                    }
                 }
             }
             catch

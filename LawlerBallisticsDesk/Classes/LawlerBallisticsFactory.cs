@@ -391,13 +391,23 @@ namespace LawlerBallisticsDesk.Classes
             }
             if(AndGeneric)
             {
-                Barrel lb = GetBarrel(BarrelID);
-
-                foreach (Recipe lR in MyRecipes)
+                Barrel lb;
+                foreach (Gun tg in MyGuns)
                 {
-                    if((lR.CartridgeID == lb.CartridgeID) & (lR.BarrelID == ""))
+                    foreach(Barrel tb in tg.Barrels)
                     {
-                        lRTN.Add(lR);
+                        if(tb.ID == BarrelID)
+                        {
+                            lb = tb;
+                            foreach (Recipe lR in MyRecipes)
+                            {
+                                if ((lR.CartridgeID == lb.CartridgeID) & (lR.BarrelID == ""))
+                                {
+                                    lRTN.Add(lR);
+                                }
+                            }
+                            break;
+                        }
                     }
                 }
             }

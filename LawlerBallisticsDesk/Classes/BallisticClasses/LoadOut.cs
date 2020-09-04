@@ -66,9 +66,12 @@ namespace LawlerBallisticsDesk.Classes
                 SelectedGun.PropertyChanged += SelectedGun_PropertyChanged;
                 RaisePropertyChanged(nameof(SelectedGun));
                 _Barrel = _SelectedGun.SelectedBarrel;
-                _BarrelID = _Barrel.ID;
-                RaisePropertyChanged(nameof(SelectedBarrel));
-                RaisePropertyChanged(nameof(SelectedBarrelID));
+                if (_Barrel != null)
+                {
+                    _BarrelID = _Barrel.ID;
+                    RaisePropertyChanged(nameof(SelectedBarrel));
+                    RaisePropertyChanged(nameof(SelectedBarrelID));
+                }
             }
         }
         public string SelectedBarrelID { get { return _BarrelID; } set { _BarrelID = value; RaisePropertyChanged(nameof(SelectedBarrelID)); } }

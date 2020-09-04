@@ -38,7 +38,13 @@ namespace LawlerBallisticsDesk.Classes.BallisticClasses
             {
                 case "Message":
                     break;
-
+                case "SelectedBarrel":
+                    RaisePropertyChanged(nameof(MyBarrel));
+                    RaisePropertyChanged(nameof(MyCartridges));
+                    break;
+                case "SelectedCartridge":
+                    RaisePropertyChanged(nameof(MyCartridges));
+                    break;
                 default:
                     break;
             }

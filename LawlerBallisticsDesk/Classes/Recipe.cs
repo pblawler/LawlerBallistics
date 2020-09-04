@@ -56,6 +56,7 @@ namespace LawlerBallisticsDesk.Classes
         private string _Notes;
         private ObservableCollection<RecipeLot> _Lots;
         private RecipeLot _SelectedLot;
+        private double _Velocity;  //FPS
         #endregion
 
         #region "Properties"
@@ -111,6 +112,10 @@ namespace LawlerBallisticsDesk.Classes
                 RaisePropertyChanged(nameof(SelectedLot));
             }
         }
+        /// <summary>
+        /// Muzzle Velocity in FPS
+        /// </summary>
+        public double Velocity { get { return _Velocity; } set { _Velocity = value; RaisePropertyChanged(nameof(Velocity)); } }
         #endregion
 
         #region "Constructor"

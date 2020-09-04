@@ -549,7 +549,7 @@
                                 IsSynchronizedWithCurrentItem="True"/>
                             <ComboBox HorizontalAlignment="Left" Height="21" Margin="155,149,0,0" VerticalAlignment="Top" Width="190"
                                 ItemsSource="{Binding MySolution.MyCartridges}" DisplayMemberPath="Name" 
-                                SelectedItem="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge}"
                                 IsSynchronizedWithCurrentItem="True"/>
                             <Label Content="Barrel" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="155,64,0,0" VerticalAlignment="Top" Width="190" 
