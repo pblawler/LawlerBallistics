@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using MVVMtools;
 using CommunityToolkit.Mvvm.Input;
 using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Views.Cartridges;
