@@ -217,7 +217,4 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\MVVM\MVVMtools\MVVMtools.csproj" />
-  </ItemGroup>
 </Project>
