@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Views.Cartridges;
@@ -14,7 +14,7 @@ using MVVMtools;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
-    public class BulletsViewModel : ViewModelBase
+    public class BulletsViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
     {
         #region "Relay Commands"
         private RelayCommand _OpenBulletCommand;
@@ -76,10 +76,10 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 _SelectedBullet = value;
-                RaisePropertyChanged(nameof(SelectedBullet)); 
+                OnPropertyChanged(nameof(SelectedBullet)); 
             }
         }
-        public ObservableCollection<Bullet> MyBullets { get { return LawlerBallisticsFactory.MyBullets; } set { LawlerBallisticsFactory.MyBullets = value; RaisePropertyChanged(nameof(MyBullets)); } }
+        public ObservableCollection<Bullet> MyBullets { get { return LawlerBallisticsFactory.MyBullets; } set { LawlerBallisticsFactory.MyBullets = value; OnPropertyChanged(nameof(MyBullets)); } }
         public BulletShapeEnum BulletTypes { get; set; }
         public List<string> BulletTypeNames { get { return LawlerBallisticsFactory.BulletTypeNames; } }
         #endregion
@@ -123,8 +123,8 @@ namespace LawlerBallisticsDesk.ViewModel
             }
             if (!ls) MyBullets.Add(_SelectedBullet);
             _frmBullet.Close();
-            RaisePropertyChanged(nameof(MyBullets));
-            RaisePropertyChanged(nameof(SelectedBullet));
+            OnPropertyChanged(nameof(MyBullets));
+            OnPropertyChanged(nameof(SelectedBullet));;
         }
         private void SaveBullets()
         {

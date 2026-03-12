@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,7 +28,7 @@ namespace LawlerBallisticsDesk.Classes
         private void SendPropertyChangedMsg(string name)
         {
             var msg = new PropertyChangedMsg() { Sender = "RecipeLot", PropName = name, Msg = "" };
-            Messenger.Default.Send<PropertyChangedMsg>(msg);
+            WeakReferenceMessenger.Default.Send(msg);
         }
 
         private void ReceiveMessage(PropertyChangedMsg msg)
@@ -957,8 +957,7 @@ namespace LawlerBallisticsDesk.Classes
         #region "Constructor"
         public RecipeLot()
         {
-            //GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<PropertyChangedMsg>(this, (action ) => ReceiveMessage(action ));
-            Messenger.Default.Register<PropertyChangedMsg>(this, (Msg) => ReceiveMessage(Msg));
+            WeakReferenceMessenger.Default.Register<PropertyChangedMsg>(this, (r, m) => ReceiveMessage(m));
             _ID = Guid.NewGuid().ToString();
             _LotDate = "";
             _RecipeID="";

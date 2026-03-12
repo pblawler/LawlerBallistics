@@ -1,4 +1,4 @@
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Views;
@@ -10,7 +10,7 @@ using System;
 namespace LawlerBallisticsDesk.ViewModel
 {
 
-    public class MainViewModel : ViewModelBase, IDisposable
+    public class MainViewModel : ObservableObject, IDisposable
     {
         //TODO:  Make sure all classes with a name property have unique names before loading to collection.
         #region "Private Variables"

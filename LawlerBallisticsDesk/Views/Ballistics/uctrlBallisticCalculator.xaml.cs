@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Microsoft.Maps.MapControl.WPF;
+// Microsoft.Maps.MapControl.WPF is not compatible with .NET 8
 using LawlerBallisticsDesk.Classes;
 
 namespace LawlerBallisticsDesk.Views.Ballistics
@@ -63,72 +63,23 @@ namespace LawlerBallisticsDesk.Views.Ballistics
         }
 
         #region "Scenario"
-        private Pushpin _TargetLoc;
-        private Pushpin _ShooterLoc;
+        // Map-related types are not available in .NET 8
+        // private Pushpin _TargetLoc;
+        // private Pushpin _ShooterLoc;
         private bool _AddTarget;
         private bool _ShooterActive = true;
         private bool _TargetActive = false;
         private string _ActiveTargetName = "";
 
-        private bool _ShooterLocDefined { get { return !((lDC.MySolution.ShooterLoc.Latitude == 0) & 
-                    (lDC.MySolution.ShooterLoc.Longitude == 0)); } }        
+        private bool _ShooterLocDefined { get { return !((lDC.MySolution.ShooterLoc.Latitude == 0) &
+                    (lDC.MySolution.ShooterLoc.Longitude == 0)); } }
 
         private void MapWithPushpins_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // Disables the default mouse double-click action.
-            e.Handled = true;
-
-            // Determin the location to place the pushpin at on the map.
-
-            //Get the mouse click coordinates
-            Point mousePosition = e.GetPosition(ScenarioMap);
-
-            //Convert the mouse coordinates to a locatoin on the map
-            Location pinLocation = ScenarioMap.ViewportPointToLocation(mousePosition);
-            Target TargetLocDat = new Target();
-
-            if (_ShooterActive)
-            {
-                //Add the shooter location if it does not exist.
-                foreach (Pushpin lpp in ScenarioMap.Children.OfType<Pushpin>())
-                {
-                    if (lpp.Name == "Shooter")
-                    {
-                        ScenarioMap.Children.Remove(lpp);
-                        break;
-                    }
-                }
-                _ShooterLoc = new Pushpin();
-                _ShooterLoc.Location = pinLocation;
-                _ShooterLoc.Name = "Shooter";
-                _ShooterLoc.Content = _ShooterLoc.Name;
-                lDC.MySolution.ShooterLoc.Latitude = pinLocation.Latitude;
-                lDC.MySolution.ShooterLoc.Longitude = pinLocation.Longitude;
-                lDC.MySolution.MyScenario.MyShooter.MyLocation.Latitude = pinLocation.Latitude;
-                lDC.MySolution.MyScenario.MyShooter.MyLocation.Longitude = pinLocation.Longitude;
-                // Adds the pushpin to the map.
-                ScenarioMap.Children.Add(_ShooterLoc);
-                lDC.ReloadAllTargetData();
-
-            }
-            else if(_TargetActive)
-            {
-                if(_ActiveTargetName == "")
-                {
-                    _TargetLoc = new Pushpin();
-                    _TargetLoc.Location = pinLocation;
-                    _TargetLoc.Name = "Target_" + lDC.MySolution.MyScenario.Targets.Count.ToString();
-                    _TargetLoc.Content = lDC.MySolution.MyScenario.Targets.Count.ToString();
-                    ScenarioMap.Children.Add(_TargetLoc);
-                    TargetLocDat.Name = _TargetLoc.Name;
-                    TargetLocDat.TargetLocation.Latitude = _TargetLoc.Location.Latitude;
-                    TargetLocDat.TargetLocation.Longitude = _TargetLoc.Location.Longitude;
-                    lDC.MySolution.MyScenario.Targets.Add(TargetLocDat);
-                    lDC.MySolution.MyScenario.SelectedTarget = TargetLocDat;
-                    lDC.LoadTargetBallistics();
-                    _ActiveTargetName = _TargetLoc.Name;
-                }
-            }
+            // Map functionality disabled - Microsoft.Maps.MapControl.WPF is not compatible with .NET 8
+            // TODO: Consider using an alternative mapping solution like WebView2 with Bing Maps
+            MessageBox.Show("Map functionality is temporarily unavailable. The Bing Maps WPF control is not compatible with .NET 8.", 
+                "Feature Unavailable", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         #endregion
@@ -136,6 +87,8 @@ namespace LawlerBallisticsDesk.Views.Ballistics
         private void lblSetShooterLoc_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _ShooterActive = true;
+            MessageBox.Show("Map functionality is temporarily unavailable. The Bing Maps WPF control is not compatible with .NET 8.",
+                "Feature Unavailable", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void lblAddTarget_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -143,38 +96,15 @@ namespace LawlerBallisticsDesk.Views.Ballistics
             _ShooterActive = false;
             _TargetActive = true;
             _ActiveTargetName = "";
+            MessageBox.Show("Map functionality is temporarily unavailable. The Bing Maps WPF control is not compatible with .NET 8.",
+                "Feature Unavailable", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void lblDeleteTarget_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            foreach(Pushpin t in ScenarioMap.Children.OfType<Pushpin>())
-            {
-                if(t.Name == lDC.MySolution.MyScenario.SelectedTarget.Name)
-                {
-                    ScenarioMap.Children.Remove(t);
-                    break;
-                }
-            }
-            int i = 0;
-            foreach (Pushpin t in ScenarioMap.Children.OfType<Pushpin>())
-            {
-                if (t.Name != "Shooter")
-                {
-                    t.Content = i.ToString();
-                    t.Name = "Target_" + i.ToString();
-                    i++;
-                }
-            }
-            lDC.RemoveSelectedTarget();
-            string strName;
-            i = 0;
-            foreach(Target tt in lDC.MySolution.MyScenario.Targets)
-            {
-                strName = tt.Name;
-                strName = strName.Substring(0, (strName.IndexOf("_")));
-                tt.Name = strName + "_" + i;
-                i++;
-            }
+            // Map functionality disabled - Microsoft.Maps.MapControl.WPF is not compatible with .NET 8
+            MessageBox.Show("Map functionality is temporarily unavailable. The Bing Maps WPF control is not compatible with .NET 8.",
+                "Feature Unavailable", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

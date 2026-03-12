@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using LawlerBallisticsDesk.Classes.Guns;
 
 namespace LawlerBallisticsDesk.Classes
@@ -30,12 +30,12 @@ namespace LawlerBallisticsDesk.Classes
         private void SendPropertyChangedMsg(string name)
         {
             var msg = new PropertyChangedMsg() { Sender = "RecipeLot", PropName = name, Msg = "" };
-            Messenger.Default.Send<PropertyChangedMsg>(msg);
+            WeakReferenceMessenger.Default.Send(msg);
         }
         private void SendGunBarrelMsg(string SelectedBarrelID, string Message)
         {
             var msg = new GunBarrelMsg() { Sender = "Gun", GunID = ID, SelectedBarrelID = SelectedBarrelID, Msg = Message };
-            Messenger.Default.Send<GunBarrelMsg>(msg);
+            WeakReferenceMessenger.Default.Send(msg);
         }
         #endregion
 

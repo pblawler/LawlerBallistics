@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Views.Cartridges;
@@ -14,7 +14,7 @@ using MVVMtools;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
-    public class PrimersViewModel : ViewModelBase
+    public class PrimersViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
     {
         #region "Relay Command"
         private RelayCommand _AddPrimerCommand;
@@ -69,12 +69,12 @@ namespace LawlerBallisticsDesk.ViewModel
         public ObservableCollection<Primer> MyPrimers
         {
             get { return LawlerBallisticsFactory.MyPrimers; }
-            set { LawlerBallisticsFactory.MyPrimers = value; RaisePropertyChanged(nameof(MyPrimers)); }
+            set { LawlerBallisticsFactory.MyPrimers = value; OnPropertyChanged(nameof(MyPrimers)); }
         }
         public Primer SelectedPrimer
         {
             get { return _SelectedPrimer; }
-            set { _SelectedPrimer = value; RaisePropertyChanged(nameof(SelectedPrimer)); }
+            set { _SelectedPrimer = value; OnPropertyChanged(nameof(SelectedPrimer)); }
         }
         public List<String> PrimerType { get { return LawlerBallisticsFactory.PrimerTypeNames; } }
         #endregion
@@ -118,8 +118,8 @@ namespace LawlerBallisticsDesk.ViewModel
             }
             if (!ls) MyPrimers.Add(_SelectedPrimer);
             _frmPrimer.Close();
-            RaisePropertyChanged(nameof(MyPrimers));
-            RaisePropertyChanged(nameof(SelectedPrimer));
+            OnPropertyChanged(nameof(MyPrimers));
+            OnPropertyChanged(nameof(SelectedPrimer));
         }
         private void SavePrimers()
         {

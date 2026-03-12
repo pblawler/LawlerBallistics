@@ -1,6 +1,6 @@
-﻿using MVVMtools;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Views.Cartridges;
 using OxyPlot;
@@ -17,7 +17,7 @@ using System.Windows.Forms;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
-    public class BarrelRecipeViewModel : ViewModelBase
+    public class BarrelRecipeViewModel : ObservableObject
     {
         #region "Messaging"
         private void ReceiveMessage(PropertyChangedMsg msg)
@@ -141,9 +141,9 @@ namespace LawlerBallisticsDesk.ViewModel
         public string BarrelID
         {
             get { return _BarrelID; }
-            set { _BarrelID = value; RaisePropertyChanged(nameof(BarrelID)); }
+            set { _BarrelID = value; OnPropertyChanged(nameof(BarrelID)); }
         }
-        public Recipe SelectedRecipe { get { return _SelectedRecipe; } set { _SelectedRecipe = value; LoadCharts(); RaisePropertyChanged(nameof(SelectedRecipe)); } }
+        public Recipe SelectedRecipe { get { return _SelectedRecipe; } set { _SelectedRecipe = value; LoadCharts(); OnPropertyChanged(nameof(SelectedRecipe)); } }
         public ObservableCollection<Recipe> BarrelRecipes
         {
             get
@@ -151,7 +151,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 return _BarrelRecipes;
             } 
             set
-            { _BarrelRecipes = value; RaisePropertyChanged(nameof(BarrelRecipes)); }
+            { _BarrelRecipes = value; OnPropertyChanged(nameof(BarrelRecipes)); }
         }
         //public ObservableCollection<Case> Cases { get { return LawlerBallisticsFactory.MyCases; } }
         public PlotModel PerformancePlot { get { return _PerformancePlot; } }
@@ -160,8 +160,7 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Constructor"
         public BarrelRecipeViewModel(string BarrelIDval, string GunID = "")
         {
-            //GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<PropertyChangedMsg>(this, (action ) => ReceiveMessage(action ));
-            Messenger.Default.Register<PropertyChangedMsg>(this, (Msg) => ReceiveMessage(Msg));
+            WeakReferenceMessenger.Default.Register<PropertyChangedMsg>(this, (r, m) => ReceiveMessage(m));
             BarrelID = BarrelIDval;
             _PerformancePlot = new PlotModel();
             _PerformancePlot.Title = "Group Data";
@@ -229,13 +228,13 @@ namespace LawlerBallisticsDesk.ViewModel
             {
                 if(lR.ID == SelectedRecipe.ID)
                 {
-                    RaisePropertyChanged(nameof(BarrelRecipes));
+                    OnPropertyChanged(nameof(BarrelRecipes));
                     _frmLoadRecipe.Close();
                     return;
                 }
             }
             BarrelRecipes.Add(SelectedRecipe);
-            RaisePropertyChanged(nameof(BarrelRecipes));
+            OnPropertyChanged(nameof(BarrelRecipes));
             _frmLoadRecipe.Close();
         }
         private void SaveRecipe()
@@ -377,7 +376,7 @@ namespace LawlerBallisticsDesk.ViewModel
             SelectedRecipe.Lots.Add(lCartLt);
             lfrmCreatLot.Close();
             lfrmCreatLot = null;
-            RaisePropertyChanged(nameof(SelectedRecipe));
+            OnPropertyChanged(nameof(SelectedRecipe));
         }
         #endregion
 

@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Forms;
-using MVVMtools;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GalaSoft.MvvmLight.Ioc;
 using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Views.Cartridges;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
-    public class CartridgesViewModel : ViewModelBase, IDisposable
+    public class CartridgesViewModel : ObservableObject, IDisposable
     {
 
         #region "Binding"
@@ -21,8 +20,8 @@ namespace LawlerBallisticsDesk.ViewModel
         }
         private void RefreshViewModel()
         {
-            RaisePropertyChanged("SelectedCartridge");
-            RaisePropertyChanged("Cartridges");
+            OnPropertyChanged("SelectedCartridge");
+            OnPropertyChanged("Cartridges");
         }
         #endregion
 
@@ -59,7 +58,7 @@ namespace LawlerBallisticsDesk.ViewModel
         #endregion
 
         #region "Properties"
-        public ObservableCollection<Cartridge> Cartridges { get { return LawlerBallisticsFactory.MyCartridges; } set { LawlerBallisticsFactory.MyCartridges = value; RaisePropertyChanged(nameof(Cartridges)); } }
+        public ObservableCollection<Cartridge> Cartridges { get { return LawlerBallisticsFactory.MyCartridges; } set { LawlerBallisticsFactory.MyCartridges = value; OnPropertyChanged(nameof(Cartridges)); } }
         public Cartridge SelectedCartridge
         {
             get { return _SelectdedCartridge; }
@@ -74,11 +73,11 @@ namespace LawlerBallisticsDesk.ViewModel
                         _SelectedCartridgePowderList.Add(LawlerBallisticsFactory.GetPowderName(lpid));
                     }
                 }
-                RaisePropertyChanged(nameof(SelectedCartridge));
-                RaisePropertyChanged(nameof(SelectedCartridgePowderList));
+                OnPropertyChanged(nameof(SelectedCartridge));
+                OnPropertyChanged(nameof(SelectedCartridgePowderList));
             }
         }
-        public Cartridge TemporaryCartridge { get { return _TempCartridge; } set { _TempCartridge = value; RaisePropertyChanged(nameof(TemporaryCartridge)); } }
+        public Cartridge TemporaryCartridge { get { return _TempCartridge; } set { _TempCartridge = value; OnPropertyChanged(nameof(TemporaryCartridge)); } }
         public List<string> SelectedCartridgePowderList
         {
             get 
@@ -93,9 +92,9 @@ namespace LawlerBallisticsDesk.ViewModel
                 }
                 return _SelectedCartridgePowderList;
             }
-            set { _SelectedCartridgePowderList = value; RaisePropertyChanged(nameof(SelectedCartridgePowderList)); }
+            set { _SelectedCartridgePowderList = value; OnPropertyChanged(nameof(SelectedCartridgePowderList)); }
         }
-        public string SelectedCartridgePowderName { get { return _SelectedCartridgePowderName; } set { _SelectedCartridgePowderName = value; RaisePropertyChanged(nameof(SelectedCartridgePowderName)); } }
+        public string SelectedCartridgePowderName { get { return _SelectedCartridgePowderName; } set { _SelectedCartridgePowderName = value; OnPropertyChanged(nameof(SelectedCartridgePowderName)); } }
         #endregion
 
         #region "Constructor"
@@ -175,8 +174,8 @@ namespace LawlerBallisticsDesk.ViewModel
                             }
                         }
                         SelectedCartridge.Refresh();
-                        RaisePropertyChanged(nameof(SelectedCartridge));
-                        RaisePropertyChanged(nameof(SelectedCartridgePowderList));
+                    OnPropertyChanged(nameof(SelectedCartridge));
+                    OnPropertyChanged(nameof(SelectedCartridgePowderList));
                         break;
                     case System.Windows.Input.Key.OemPlus:
                         
@@ -221,15 +220,15 @@ namespace LawlerBallisticsDesk.ViewModel
                 if (lItr.ID == _SelectdedCartridge.ID)
                 {
                     _frmCartridge.Close();
-                    RaisePropertyChanged(nameof(Cartridges));
-                    RaisePropertyChanged(nameof(SelectedCartridge));
+                    OnPropertyChanged(nameof(Cartridges));
+                    OnPropertyChanged(nameof(SelectedCartridge));
                     return;
                 }
             }
             Cartridges.Add(_SelectdedCartridge);
             _frmCartridge.Close();
-            RaisePropertyChanged(nameof(Cartridges));
-            RaisePropertyChanged(nameof(SelectedCartridge));
+            OnPropertyChanged(nameof(Cartridges));
+            OnPropertyChanged(nameof(SelectedCartridge));
         }
         private void SaveCartridgeCollection()
         {
@@ -237,9 +236,7 @@ namespace LawlerBallisticsDesk.ViewModel
         }
         private void InstanceUnload()
         {
-            Cleanup();
-            SimpleIoc.Default.Unregister<CartridgesViewModel>();
-            SimpleIoc.Default.Register<CartridgesViewModel>();
+            // Cleanup logic if needed
         }
         #endregion
 
@@ -266,7 +263,7 @@ namespace LawlerBallisticsDesk.ViewModel
             }
             if(!lLoaded) SelectedCartridge.PowderIDlist.Add(lPwdrID);
             SelectedCartridge.Refresh();
-            RaisePropertyChanged(nameof(SelectedCartridgePowderList));
+            OnPropertyChanged(nameof(SelectedCartridgePowderList));
         }
         #endregion
 

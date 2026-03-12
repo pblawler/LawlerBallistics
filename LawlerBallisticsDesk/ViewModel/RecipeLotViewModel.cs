@@ -1,6 +1,6 @@
-﻿using MVVMtools;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Views.Cartridges;
 using OxyPlot;
@@ -17,7 +17,7 @@ using System.Windows.Forms;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
-    public class RecipeLotViewModel : ViewModelBase
+    public class RecipeLotViewModel : ObservableObject
     {
         #region "Messaging"
         private void ReceiveMessage(PropertyChangedMsg msg)
@@ -100,9 +100,9 @@ namespace LawlerBallisticsDesk.ViewModel
         #endregion
 
         #region "Properties"
-        public Recipe SelectedRecipe { get { return _SelectedRecipe; } set { _SelectedRecipe = value; LoadCharts(); RaisePropertyChanged(nameof(SelectedRecipe)); } }
+        public Recipe SelectedRecipe { get { return _SelectedRecipe; } set { _SelectedRecipe = value; LoadCharts(); OnPropertyChanged(nameof(SelectedRecipe)); } }
         public ObservableCollection<Recipe> MyRecipes { get {return LawlerBallisticsFactory.MyRecipes; } 
-            set { LawlerBallisticsFactory.MyRecipes = value; RaisePropertyChanged(nameof(MyRecipes)); } }
+            set { LawlerBallisticsFactory.MyRecipes = value; OnPropertyChanged(nameof(MyRecipes)); } }
         //public ObservableCollection<Case> Cases { get { return LawlerBallisticsFactory.MyCases; } }
         public PlotModel PerformancePlot { get { return _PerformancePlot; } }
         #endregion
@@ -111,8 +111,7 @@ namespace LawlerBallisticsDesk.ViewModel
         public RecipeLotViewModel(Recipe TargetRecipe)
         {
             _ThisRecipe = TargetRecipe;
-            //GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<PropertyChangedMsg>(this, (action ) => ReceiveMessage(action ));
-            Messenger.Default.Register<PropertyChangedMsg>(this, (Msg) => ReceiveMessage(Msg));
+            WeakReferenceMessenger.Default.Register<PropertyChangedMsg>(this, (r, m) => ReceiveMessage(m));
             _PerformancePlot = new PlotModel();
             _PerformancePlot.Title = "Group Data";
         }
@@ -229,7 +228,7 @@ namespace LawlerBallisticsDesk.ViewModel
             SelectedRecipe.Lots.Add(lCartLt);
             lfrmCreatLot.Close();
             lfrmCreatLot = null;
-            RaisePropertyChanged(nameof(SelectedRecipe));
+            OnPropertyChanged(nameof(SelectedRecipe));
         }
         public void LoadCharts()
         {

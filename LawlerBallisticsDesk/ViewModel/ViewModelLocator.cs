@@ -1,24 +1,21 @@
-/*
-  In App.xaml:
-  <Application.Resources>
-      <vm:ViewModelLocator xmlns:vm="clr-namespace:LawlerBallisticsDesk"
-                           x:Key="Locator" />
-  </Application.Resources>
-  
-  In the View:
-  DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
-
-  You can also use Blend to do all this with the tool's support.
-  See http://www.galasoft.ch/mvvm
-*/
-
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Ioc;
-using CommonServiceLocator;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
+    /// <summary>
+    /// Service provider for dependency injection
+    /// </summary>
+    public static class ServiceProviderHolder
+    {
+        public static IServiceProvider ServiceProvider { get; private set; }
+
+        public static void Initialize(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+        }
+    }
+
     /// <summary>
     /// This class contains static references to all the view models in the
     /// application and provides an entry point for the bindings.
@@ -30,91 +27,81 @@ namespace LawlerBallisticsDesk.ViewModel
         /// </summary>
         public ViewModelLocator()
         {
-            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+            var services = new ServiceCollection();
+            services.AddSingleton<MainViewModel>();
+            services.AddTransient<SolutionViewModel>();
+            services.AddSingleton<CartridgesViewModel>();
+            services.AddSingleton<GunsViewModel>();
+            services.AddSingleton<RecipeViewModel>();
+            services.AddSingleton<BulletsViewModel>();
+            services.AddSingleton<CasesViewModel>();
+            services.AddSingleton<PrimersViewModel>();
+            services.AddSingleton<PowdersViewModel>();
 
-            ////if (ViewModelBase.IsInDesignModeStatic)
-            ////{
-            ////    // Create design time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            ////}
-            ////else
-            ////{
-            ////    // Create run time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DataService>();
-            ////}
-
-            SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<SolutionViewModel>();
-            SimpleIoc.Default.Register<CartridgesViewModel>();
-            SimpleIoc.Default.Register<GunsViewModel>();
-            SimpleIoc.Default.Register<RecipeViewModel>();
-            SimpleIoc.Default.Register<BulletsViewModel>();
-            SimpleIoc.Default.Register<CasesViewModel>();
-            SimpleIoc.Default.Register<PrimersViewModel>();
-            SimpleIoc.Default.Register<PowdersViewModel>();
+            ServiceProviderHolder.Initialize(services.BuildServiceProvider());
         }
 
         public MainViewModel Main
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
+                return ServiceProviderHolder.ServiceProvider.GetRequiredService<MainViewModel>();
             }
         }
         public SolutionViewModel BC
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<SolutionViewModel> (Guid.NewGuid().ToString());
+                return ServiceProviderHolder.ServiceProvider.GetRequiredService<SolutionViewModel>();
             }
         }
         public CartridgesViewModel CVM
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<CartridgesViewModel>();
+                return ServiceProviderHolder.ServiceProvider.GetRequiredService<CartridgesViewModel>();
             }
         }
         public GunsViewModel GUNS
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<GunsViewModel>();
+                return ServiceProviderHolder.ServiceProvider.GetRequiredService<GunsViewModel>();
             }
         }
         public RecipeViewModel RECIPES
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<RecipeViewModel>();
+                return ServiceProviderHolder.ServiceProvider.GetRequiredService<RecipeViewModel>();
             }
         }
         public BulletsViewModel BVM
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<BulletsViewModel>();
+                return ServiceProviderHolder.ServiceProvider.GetRequiredService<BulletsViewModel>();
             }
         }
         public CasesViewModel CasesVM
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<CasesViewModel>();
+                return ServiceProviderHolder.ServiceProvider.GetRequiredService<CasesViewModel>();
             }
         }
         public PrimersViewModel PVM
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<PrimersViewModel>();
+                return ServiceProviderHolder.ServiceProvider.GetRequiredService<PrimersViewModel>();
             }
         }
         public PowdersViewModel PDRVM
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<PowdersViewModel>();
+                return ServiceProviderHolder.ServiceProvider.GetRequiredService<PowdersViewModel>();
             }
         }
 

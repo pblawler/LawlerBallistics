@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Views.Cartridges;
@@ -14,7 +14,7 @@ using MVVMtools;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
-    public class PowdersViewModel : ViewModelBase
+    public class PowdersViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
     {
         #region "Relay Command"
         private RelayCommand _AddPowderCommand;
@@ -69,12 +69,12 @@ namespace LawlerBallisticsDesk.ViewModel
         public ObservableCollection<Powder> MyPowders
         {
             get { return LawlerBallisticsFactory.MyPowders; }
-            set { LawlerBallisticsFactory.MyPowders = value; RaisePropertyChanged(nameof(MyPowders)); }
+            set { LawlerBallisticsFactory.MyPowders = value; OnPropertyChanged(nameof(MyPowders)); }
         }
         public Powder SelectedPowder
         {
             get { return _SelectedPowder; }
-            set { _SelectedPowder = value; RaisePropertyChanged(nameof(SelectedPowder)); }
+            set { _SelectedPowder = value; OnPropertyChanged(nameof(SelectedPowder)); }
         }
         public List<string> BaseTypeNames { get { return LawlerBallisticsFactory.PowderBaseTypeNames; } }
         #endregion
@@ -118,8 +118,8 @@ namespace LawlerBallisticsDesk.ViewModel
             }
             if (!ls) MyPowders.Add(_SelectedPowder);
             _frmPowder.Close();
-            RaisePropertyChanged(nameof(MyPowders));
-            RaisePropertyChanged(nameof(SelectedPowder));
+            OnPropertyChanged(nameof(MyPowders));
+            OnPropertyChanged(nameof(SelectedPowder));
         }
         private void SavePowders()
         {

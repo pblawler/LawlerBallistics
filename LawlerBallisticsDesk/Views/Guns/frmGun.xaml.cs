@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using LawlerBallisticsDesk.Classes;
 using LawlerBallisticsDesk.Classes.Guns;
 using LawlerBallisticsDesk.ViewModel;
@@ -43,7 +43,7 @@ namespace LawlerBallisticsDesk.Views
         public frmGun()
         {
             InitializeComponent();            
-            Messenger.Default.Register<GunBarrelMsg>(this, (Msg) => ReceiveGunMessage(Msg));
+            WeakReferenceMessenger.Default.Register<GunBarrelMsg>(this, (r, m) => ReceiveGunMessage(m));
             try
             {
                 if (_DC == null) return;

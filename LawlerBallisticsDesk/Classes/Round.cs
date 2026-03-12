@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,7 +27,7 @@ namespace LawlerBallisticsDesk.Classes
         private void SendPropertyChangedMsg(string name)
         {
             var msg = new PropertyChangedMsg() { Sender = "Round", PropName = name, Msg="" };
-            Messenger.Default.Send<PropertyChangedMsg>(msg);
+            WeakReferenceMessenger.Default.Send(msg);
         }
         #endregion
 
