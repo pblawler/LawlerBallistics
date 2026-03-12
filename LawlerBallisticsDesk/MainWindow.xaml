@@ -61,7 +61,7 @@
         </Menu>
         <TabControl  Grid.ColumnSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,0,0" Grid.Row="1"
                     Grid.RowSpan="5" VerticalAlignment="Stretch">
-            <TabItem Header="Guns">
+            <TabItem Header="Guns" Background="BlanchedAlmond">
                 <guns:uctrlGuns HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></guns:uctrlGuns></TabItem>
             <TabItem Header="Loads">
             <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
