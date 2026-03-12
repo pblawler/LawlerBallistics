@@ -25,7 +25,7 @@ namespace LawlerBallisticsDesk.Views.Cartridges
     {
         public uctrlCartridges()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void GoToHyperlink(object Sender, RequestNavigateEventArgs e)
