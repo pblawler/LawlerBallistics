@@ -100,10 +100,10 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Constructor"
         public CartridgesViewModel()
         {
-            AddCartridgeCommand = new RelayCommand(AddCartridge, null);
-            LoadCartridgeCommand = new RelayCommand(LoadCartridge, null);
-            SaveCartridgeCommand = new RelayCommand(SaveCartridge, null);
-            SaveCartridgeDataCommand = new RelayCommand(SaveCartridgeCollection, null);
+            AddCartridgeCommand = new RelayCommand(AddCartridge);
+            LoadCartridgeCommand = new RelayCommand(LoadCartridge);
+            SaveCartridgeCommand = new RelayCommand(SaveCartridge);
+            SaveCartridgeDataCommand = new RelayCommand(SaveCartridgeCollection);
             _SelectdedCartridge = new Cartridge();
             SelectedCartridge.PropertyChanged += SelectedCartridge_PropertyChanged;
         }

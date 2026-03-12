@@ -36,7 +36,7 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Binding"
         private void MySolution_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RaisePropertyChanged(e.PropertyName);
+            OnPropertyChanged(e.PropertyName);
 
             switch (e.PropertyName)
             {
@@ -59,11 +59,11 @@ namespace LawlerBallisticsDesk.ViewModel
                     MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange = BallisticFunctions.MaxRange(MySolution.Fo);
                     break;
                 case "SelectedGun":
-                    RaisePropertyChanged(nameof(MyBarrels));
+                    OnPropertyChanged(nameof(MyBarrels));
                     break;
                 case "SelectedBarrel":
-                    RaisePropertyChanged(nameof(MySolution.MyBarrel));
-                    RaisePropertyChanged(nameof(MySolution.MyCartridges));
+                    OnPropertyChanged(nameof(MySolution.MyBarrel));
+                    OnPropertyChanged(nameof(MySolution.MyCartridges));
                     break;
                 case "ZeroMessage":
                     LoadZeroMessage(MySolution.ZeroMessage);
@@ -74,7 +74,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 case "SelectedCartridge":
                     if(MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge != null) 
                     MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MuzzleVelocity = MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge.Velocity;
-                    RaisePropertyChanged(nameof(MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MuzzleVelocity));
+                    OnPropertyChanged(nameof(MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MuzzleVelocity));
                     break;
                 default:
                     break;
@@ -128,7 +128,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 MySolution.PropertyChanged -= MySolution_PropertyChanged;
                 _MySolution = value;
                 MySolution.PropertyChanged += MySolution_PropertyChanged;
-                RaisePropertyChanged(nameof(MySolution));
+                OnPropertyChanged(nameof(MySolution));
             }
         }
         public PlotModel TrajectoryPlot { get { return _TrajectoryPlot; } }
@@ -144,7 +144,7 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 _PlotWindDrift = value;
-                RaisePropertyChanged(nameof(PlotWindDrift));
+                OnPropertyChanged(nameof(PlotWindDrift));
                 LoadCharts();
             }
         }
@@ -157,7 +157,7 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 _PlotSpinDrift = value;
-                RaisePropertyChanged(nameof(PlotSpinDrift));
+                OnPropertyChanged(nameof(PlotSpinDrift));
                 LoadCharts();
             }
         }
@@ -170,7 +170,7 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 _PlotHcoriolis = value;
-                RaisePropertyChanged(nameof(PlotHcoriolis));
+                OnPropertyChanged(nameof(PlotHcoriolis));
                 LoadCharts();
             }
         }
@@ -183,7 +183,7 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 _HorizDrift = value;
-                RaisePropertyChanged(nameof(PlotHorizDrift));
+                OnPropertyChanged(nameof(PlotHorizDrift));
                 LoadCharts();
             }
         }
@@ -196,7 +196,7 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 _PlotVelocity = value;
-                RaisePropertyChanged(nameof(PlotVelocity));
+                OnPropertyChanged(nameof(PlotVelocity));
                 LoadCharts();
             }
         }
@@ -209,7 +209,7 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 _PlotEnergy = value;
-                RaisePropertyChanged(nameof(PlotEnergy));
+                OnPropertyChanged(nameof(PlotEnergy));
                 LoadCharts();
             }
         }
@@ -222,7 +222,7 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 _PlotSpinRate = value;
-                RaisePropertyChanged(nameof(PlotSpinRate));
+                OnPropertyChanged(nameof(PlotSpinRate));
                 LoadCharts();
             }
         }
@@ -235,7 +235,7 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 _PlotFlightTime = value;
-                RaisePropertyChanged(nameof(PlotFlightTime));
+                OnPropertyChanged(nameof(PlotFlightTime));
                 LoadCharts();
             }
         }
@@ -248,23 +248,23 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 _PlotComp = value;
-                RaisePropertyChanged(nameof(PlotComp));
+                OnPropertyChanged(nameof(PlotComp));
                 LoadCharts();
             }
         }
-        public ObservableCollection<TrajectoryData> MyTrajectories { get { return _MyTrajectories; } set { _MyTrajectories = value; RaisePropertyChanged(nameof(MyTrajectories)); } }
-        public string ShotMsg { get { return _ShotMsg; } set { _ShotMsg = value; RaisePropertyChanged(nameof(ShotMsg)); } }
+        public ObservableCollection<TrajectoryData> MyTrajectories { get { return _MyTrajectories; } set { _MyTrajectories = value; OnPropertyChanged(nameof(MyTrajectories)); } }
+        public string ShotMsg { get { return _ShotMsg; } set { _ShotMsg = value; OnPropertyChanged(nameof(ShotMsg)); } }
         public List<string> BarrelDirList { get { return LawlerBallisticsFactory.BarrelRiflingDirection; } }
         public List<string> BulletTypes { get { return _BulletTypes; } }
         public double TestBulletWeight {
             get { return _TestBulletWeight; }
             set { _TestBulletWeight = value;
-                RaisePropertyChanged(nameof(TestBulletWeight)); }
+                OnPropertyChanged(nameof(TestBulletWeight)); }
         }
-        public double TestBulletDiameter { get { return _TestBulletDiameter; } set { _TestBulletDiameter = value; RaisePropertyChanged(nameof(TestBulletDiameter)); } }
-        public double TestBulletLength { get { return _TestBulletLength; } set { _TestBulletLength = value; RaisePropertyChanged(nameof(TestBulletLength)); } }
-        public double TestBulletBC { get { return _TestBulletBC; } set { _TestBulletBC = value; RaisePropertyChanged(nameof(TestBulletBC)); } }
-        public string TestBulletType { get { return _TestBulletType; } set { _TestBulletType = value; RaisePropertyChanged(nameof(TestBulletType)); } }
+        public double TestBulletDiameter { get { return _TestBulletDiameter; } set { _TestBulletDiameter = value; OnPropertyChanged(nameof(TestBulletDiameter)); } }
+        public double TestBulletLength { get { return _TestBulletLength; } set { _TestBulletLength = value; OnPropertyChanged(nameof(TestBulletLength)); } }
+        public double TestBulletBC { get { return _TestBulletBC; } set { _TestBulletBC = value; OnPropertyChanged(nameof(TestBulletBC)); } }
+        public string TestBulletType { get { return _TestBulletType; } set { _TestBulletType = value; OnPropertyChanged(nameof(TestBulletType)); } }
         public string ZeroMessage { get { return _ZeroMessage; } }
         public string DragMessage { get { return _DragMessage; } }
         #endregion
@@ -372,19 +372,19 @@ namespace LawlerBallisticsDesk.ViewModel
             _WindagePlot.Title = "Horizontal Deviation";
             _DragPlot = new PlotModel();
             _DragPlot.Title = "Drag Chart";
-            RaisePropertyChanged(nameof(TrajectoryPlot));
+            OnPropertyChanged(nameof(TrajectoryPlot));
             _BulletTypes = new List<string>();
             string[] values = Enum.GetNames(typeof(BulletShapeEnum));
             foreach (string B in values)
             {
                 _BulletTypes.Add(B.ToString());
             }
-            EstimateBCCommand = new RelayCommand(GetTestBulletBC, null);
-            OpenBCestimatorCommand = new RelayCommand(OpenBCestimator, null);
-            ShootCommand = new RelayCommand(ShootForBallisticTable, null);
-            OpenLocationFinderCommand = new RelayCommand(OpenLocationFinder, null);
-            ZeroLocationCommand = new RelayCommand(ZeroLocation, null);
-            ShotLocationCommand = new RelayCommand(ShotLocation, null);
+            EstimateBCCommand = new RelayCommand(GetTestBulletBC);
+            OpenBCestimatorCommand = new RelayCommand(OpenBCestimator);
+            ShootCommand = new RelayCommand(ShootForBallisticTable);
+            OpenLocationFinderCommand = new RelayCommand(OpenLocationFinder);
+            ZeroLocationCommand = new RelayCommand(ZeroLocation);
+            ShotLocationCommand = new RelayCommand(ShotLocation);
         }
         #endregion
 
@@ -407,7 +407,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 t.BallisticSolution.Range = BallisticFunctions.CalculateRange(MySolution.ShooterLoc, t.TargetLocation);
                 t.BallisticSolution = GetTrajectoryData(t.BallisticSolution.Range);
             }
-            RaisePropertyChanged(nameof(MySolution.MyScenario.SelectedTarget.BallisticSolution.Range));
+            OnPropertyChanged(nameof(MySolution.MyScenario.SelectedTarget.BallisticSolution.Range));
         }
         public void RemoveSelectedTarget()
         {
@@ -424,8 +424,8 @@ namespace LawlerBallisticsDesk.ViewModel
             MySolution.SolveZeroData();
             if ((MySolution.Fo > 0) & (MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange == 0))
                 MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange = BallisticFunctions.MaxRange(MySolution.Fo);
-            RaisePropertyChanged(nameof(MyBarrels));
-            RaisePropertyChanged(nameof(MySolution.MyCartridges));
+            OnPropertyChanged(nameof(MyBarrels));
+            OnPropertyChanged(nameof(MySolution.MyCartridges));
         }
         public void LoadSolution(string SolutionFile = "")
         {
@@ -435,8 +435,8 @@ namespace LawlerBallisticsDesk.ViewModel
             MySolution.SolveZeroData();
             if ((MySolution.Fo > 0) & (MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange == 0))
                 MySolution.MyScenario.MyShooter.MyLoadOut.MaxRange = BallisticFunctions.MaxRange(MySolution.Fo);
-            RaisePropertyChanged(nameof(MyBarrels));
-            RaisePropertyChanged(nameof(MySolution.MyCartridges));
+            OnPropertyChanged(nameof(MyBarrels));
+            OnPropertyChanged(nameof(MySolution.MyCartridges));
         }
         public void SetShooterLocation(double Alt, double Lat, double Lon)
         {
@@ -721,7 +721,7 @@ namespace LawlerBallisticsDesk.ViewModel
             _DragPlot.Series.Add(lf);
             _DragPlot.Series.Add(lk);
             _DragPlot.InvalidatePlot(true);
-            RaisePropertyChanged(nameof(DragPlot));
+            OnPropertyChanged(nameof(DragPlot));
             #endregion
         }
         public void Dispose()
@@ -809,7 +809,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 }
                 _MyTrajectories.Add(lTD);
             }
-            RaisePropertyChanged(nameof(MyTrajectories));
+            OnPropertyChanged(nameof(MyTrajectories));
             LoadCharts();
 
         }
@@ -907,7 +907,7 @@ namespace LawlerBallisticsDesk.ViewModel
             lShape = (BulletShapeEnum) Enum.Parse(typeof(BulletShapeEnum), _TestBulletType);
             lBC = BallisticFunctions.EstimateBC(_TestBulletWeight, _TestBulletDiameter, lShape);
             _TestBulletBC = Math.Round(lBC,4);
-            RaisePropertyChanged(nameof(TestBulletBC));
+            OnPropertyChanged(nameof(TestBulletBC));
         }
         private void OpenBCestimator()
         {
@@ -919,7 +919,7 @@ namespace LawlerBallisticsDesk.ViewModel
 
         private void InstanceUnload()
         {
-            Cleanup();
+           // Cleanup();
         }
 
         #region "File Routines"
@@ -984,7 +984,7 @@ namespace LawlerBallisticsDesk.ViewModel
                     lmsg = "";
                     break;
             }
-            RaisePropertyChanged(nameof(ZeroMessage));
+            OnPropertyChanged(nameof(ZeroMessage));
         }
         private void LoadZeroMessage(string msg)
         {
@@ -1001,7 +1001,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 lmsg = lmsg + _ZeroMsg[I] + System.Environment.NewLine;
             }
             _ZeroMessage = lmsg;
-            RaisePropertyChanged(nameof(ZeroMessage));
+            OnPropertyChanged(nameof(ZeroMessage));
         }
         private void LoadDragMessage(string msg)
         {
@@ -1018,7 +1018,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 lmsg = lmsg + _DragMsg[I] + System.Environment.NewLine;
             }
             _DragMessage = lmsg;
-            RaisePropertyChanged(nameof(DragMessage));
+            OnPropertyChanged(nameof(DragMessage));
         }
         #endregion
     }

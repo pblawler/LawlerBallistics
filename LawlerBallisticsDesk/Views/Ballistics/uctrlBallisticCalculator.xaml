@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:LawlerBallisticsDesk.Views.Ballistics"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:mapsui="clr-namespace:Mapsui.UI.Wpf;assembly=Mapsui.UI.Wpf"
         DataContext="{Binding BC, Source={StaticResource Locator}}"        
         mc:Ignorable="d">
     <Grid>
@@ -60,8 +61,14 @@
                     <Label Name="lblSetShooterLoc" Grid.Row="0" Grid.Column="1" Content="Set Shooter Location" FontWeight="Bold" 
                            Foreground="#FF1250F5" Margin="160,2,0,2" HorizontalAlignment="Left"
                            VerticalAlignment="Center" MouseLeftButtonUp="lblSetShooterLoc_MouseLeftButtonUp"/>
+                    <ComboBox x:Name="cboMapType" Grid.Row="0" Grid.Column="1" Width="100" Height="22"
+                           Margin="310,2,0,2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           SelectionChanged="cboMapType_SelectionChanged">
+                        <ComboBoxItem Content="Topo" IsSelected="True"/>
+                        <ComboBoxItem Content="Satellite"/>
+                    </ComboBox>
                     <!-- Map control removed - Microsoft.Maps.MapControl.WPF is not compatible with .NET 8 -->
-                    <TextBlock x:Name="ScenarioMapPlaceholder" Grid.Row="1" 
+                    <mapsui:MapControl x:Name="ScenarioMap" Grid.Row="1" 
                            Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     <ListBox Height="156" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"                             
                              ItemsSource="{Binding MySolution.MyScenario.Targets}" DisplayMemberPath="Name"
@@ -318,7 +325,7 @@
                                 IsReadOnly="True" Background="#FFEAEAEA"/>
                             <Label Content="Speed of Sound (fps)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 
                                 FontWeight="Bold" Height="30" Margin="711,161,0,0" VerticalAlignment="Top" Width="130"/>
-                            <TextBox HorizontalAlignment="Left" Height="20" Margin="387,191,0,0" HorizontalContentAlignment="Center" 
+                            <TextBox HorizontalAlignment="Left" Height="20" Margin="389,191,0,0" HorizontalContentAlignment="Center" 
                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="130" 
                                 Text="{Binding MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.ShotDirection, UpdateSourceTrigger=Default, StringFormat={}{0:n1}}"/>
                             <Label Content="Shot Direction (deg)" HorizontalAlignment="Left" HorizontalContentAlignment="Center" 

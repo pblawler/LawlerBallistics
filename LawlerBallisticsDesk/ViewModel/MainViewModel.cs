@@ -58,9 +58,9 @@ namespace LawlerBallisticsDesk.ViewModel
         public MainViewModel()
         {
             LawlerBallisticsFactory.InitializeFactory();
-            OpenBCestimateCommand = new RelayCommand(OpenBCestimate, null);
-            OpenBcalculatorCommand = new RelayCommand(OpenBcalculator, null);
-            ExitCommand = new RelayCommand(ExitFunc, null);
+            OpenBCestimateCommand = new RelayCommand(OpenBCestimate);
+            OpenBcalculatorCommand = new RelayCommand(OpenBcalculator);
+            ExitCommand = new RelayCommand(ExitFunc);
         }
         #endregion
 

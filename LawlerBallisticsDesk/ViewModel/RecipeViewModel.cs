@@ -134,9 +134,9 @@ namespace LawlerBallisticsDesk.ViewModel
             WeakReferenceMessenger.Default.Register<PropertyChangedMsg>(this, (r, m) => ReceiveMessage(m));
             _PerformancePlot = new PlotModel();
             _PerformancePlot.Title = "Group Data";
-            LoadRecipeCommand = new RelayCommand(LoadThisRecipe, null);
-            SaveRecipeDataCommand = new RelayCommand(SaveRecipeCollection, null);
-            SaveRecipeCommand = new RelayCommand(SaveRecipe, null);
+            LoadRecipeCommand = new RelayCommand(LoadThisRecipe);
+            SaveRecipeDataCommand = new RelayCommand(SaveRecipeCollection);
+            SaveRecipeCommand = new RelayCommand(SaveRecipe);
         }
         #endregion
 

@@ -30,8 +30,8 @@ namespace LawlerBallisticsDesk.ViewModel
         }
         private void RefreshViewModel()
         {
-            RaisePropertyChanged("SelectedGun");
-            RaisePropertyChanged("MyGuns");
+            OnPropertyChanged(nameof(SelectedGun));
+            OnPropertyChanged("MyGuns");
         }
         #endregion
 
@@ -57,7 +57,7 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 _SelectedGun = value;
-                RaisePropertyChanged(nameof(SelectedGun));
+                    OnPropertyChanged(nameof(SelectedGun));
             }
         }
         public ObservableCollection<Gun> MyGuns
@@ -69,7 +69,7 @@ namespace LawlerBallisticsDesk.ViewModel
             set
             {
                 LawlerBallisticsFactory.MyGuns = value;
-                RaisePropertyChanged(nameof(MyGuns));
+                OnPropertyChanged(nameof(MyGuns));
             }
         }
         public string GunID
@@ -119,15 +119,15 @@ namespace LawlerBallisticsDesk.ViewModel
         public GunsViewModel()
         {
             GunID = Guid.NewGuid().ToString();
-            CloseWindowCommand = new RelayCommand(CloseWindow, null);
-            CloseBarrelWindowCommand = new RelayCommand(CloseBarrelWindow, null);
-            CloseGunWindowCommand = new RelayCommand(CloseGunWindow, null);
-            OpenGunCommand = new RelayCommand(OpenGun, null);
-            AddGunCommand = new RelayCommand(AddGun, null);
-            LoadGunCommand = new RelayCommand(LoadGun, null);
-            SaveGunDBCommand = new RelayCommand(SaveGunDB, null);
-            AddBarrelCommand = new RelayCommand(AddBarrel, null);
-            LoadBarrelCommand = new RelayCommand(LoadBarrel, null);
+            CloseWindowCommand = new RelayCommand(CloseWindow);
+            CloseBarrelWindowCommand = new RelayCommand(CloseBarrelWindow);
+            CloseGunWindowCommand = new RelayCommand(CloseGunWindow);
+            OpenGunCommand = new RelayCommand(OpenGun);
+            AddGunCommand = new RelayCommand(AddGun);
+            LoadGunCommand = new RelayCommand(LoadGun);
+            SaveGunDBCommand = new RelayCommand(SaveGunDB);
+            AddBarrelCommand = new RelayCommand(AddBarrel);
+            LoadBarrelCommand = new RelayCommand(LoadBarrel);
         }
         #endregion
 
@@ -156,7 +156,7 @@ namespace LawlerBallisticsDesk.ViewModel
             }
             SelectedGun.TargetBarrel.CartridgeID = SelectedGun.TargetBarrel.ParentCartridge.ID;
             if (!lF) SelectedGun.Barrels.Add(SelectedGun.TargetBarrel);
-            RaisePropertyChanged(nameof(SelectedGun));
+            OnPropertyChanged(nameof(SelectedGun));
             CloseBarrelWindow();
         }
         private void CloseWindow()
@@ -206,7 +206,7 @@ namespace LawlerBallisticsDesk.ViewModel
                 }
             }
             if(!lF) MyGuns.Add(SelectedGun);
-            RaisePropertyChanged(nameof(MyGuns));
+            OnPropertyChanged(nameof(MyGuns));
             CloseGunWindow();
         }
         private void SaveGunDB()
@@ -253,8 +253,8 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Public Routines"
         public void RefreshContent()
         {
-            RaisePropertyChanged(nameof(MyGuns));
-            RaisePropertyChanged(nameof(SelectedGun));
+            OnPropertyChanged(nameof(MyGuns));
+            OnPropertyChanged(nameof(SelectedGun));
         }
         #endregion
     }

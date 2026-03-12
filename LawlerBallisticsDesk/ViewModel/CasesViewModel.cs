@@ -12,6 +12,11 @@ using System.Windows.Forms;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
+    public abstract class ViewModelBase : ObservableObject
+    {
+        // You can add common ViewModel functionality here if needed.
+    }
+
     public class CasesViewModel : ViewModelBase
     {
         #region "Relay Command"
@@ -66,12 +71,13 @@ namespace LawlerBallisticsDesk.ViewModel
         #region "Properties"
         public ObservableCollection<Case> MyCases
         {
-            get{ return LawlerBallisticsFactory.MyCases; }
-            set { LawlerBallisticsFactory.MyCases = value; RaisePropertyChanged(nameof(MyCases)); } }
+            get { return LawlerBallisticsFactory.MyCases; }
+            set { LawlerBallisticsFactory.MyCases = value; OnPropertyChanged(nameof(MyCases)); }
+        }
         public Case SelectedCase
         {
             get { return _SelectedCase; }
-            set { _SelectedCase = value; RaisePropertyChanged(nameof(SelectedCase)); } 
+            set { _SelectedCase = value; OnPropertyChanged(nameof(SelectedCase)); }
         }
         public List<String> Cartridges { get { return LawlerBallisticsFactory.CartridgeNames; } }
         public List<string> PrimerTypes { get { return LawlerBallisticsFactory.PrimerTypeNames; } }
@@ -120,8 +126,8 @@ namespace LawlerBallisticsDesk.ViewModel
                 }
             }
             if (!ls) MyCases.Add(_SelectedCase);
-            RaisePropertyChanged(nameof(MyCases));
-            RaisePropertyChanged(nameof(SelectedCase));
+            OnPropertyChanged(nameof(MyCases));
+            OnPropertyChanged(nameof(SelectedCase));
         }
         private void KeyUp(System.Windows.Input.KeyEventArgs e)
         {
