@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using GalaSoft.MvvmLight;
+using MVVMtools;
 using CommunityToolkit.Mvvm.Input;
 using OxyPlot;
 using OxyPlot.Series;
