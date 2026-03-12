@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Forms;
-using GalaSoft.MvvmLight;
+using MVVMtools;
 using CommunityToolkit.Mvvm.Input;
 using GalaSoft.MvvmLight.Ioc;
 using LawlerBallisticsDesk.Classes;
