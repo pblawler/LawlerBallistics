@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using MVVMtools;
 
 namespace LawlerBallisticsDesk.ViewModel
 {
