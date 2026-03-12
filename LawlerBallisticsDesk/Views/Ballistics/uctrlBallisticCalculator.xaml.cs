@@ -90,7 +90,7 @@ namespace LawlerBallisticsDesk.Views.Ballistics
             if (_ShooterActive)
             {
                 //Add the shooter location if it does not exist.
-                foreach (Pushpin lpp in ScenarioMap.Children)
+                foreach (Pushpin lpp in ScenarioMap.Children.OfType<Pushpin>())
                 {
                     if (lpp.Name == "Shooter")
                     {
@@ -147,7 +147,7 @@ namespace LawlerBallisticsDesk.Views.Ballistics
 
         private void lblDeleteTarget_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            foreach(Pushpin t in ScenarioMap.Children)
+            foreach(Pushpin t in ScenarioMap.Children.OfType<Pushpin>())
             {
                 if(t.Name == lDC.MySolution.MyScenario.SelectedTarget.Name)
                 {
@@ -156,7 +156,7 @@ namespace LawlerBallisticsDesk.Views.Ballistics
                 }
             }
             int i = 0;
-            foreach (Pushpin t in ScenarioMap.Children)
+            foreach (Pushpin t in ScenarioMap.Children.OfType<Pushpin>())
             {
                 if (t.Name != "Shooter")
                 {

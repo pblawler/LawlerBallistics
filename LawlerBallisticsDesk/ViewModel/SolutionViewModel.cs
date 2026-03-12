@@ -72,6 +72,7 @@ namespace LawlerBallisticsDesk.ViewModel
                     LoadDragMessage(MySolution.DragMessage);
                     break;
                 case "SelectedCartridge":
+                    if(MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge != null) 
                     MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MuzzleVelocity = MySolution.MyScenario.MyShooter.MyLoadOut.SelectedCartridge.Velocity;
                     RaisePropertyChanged(nameof(MySolution.MyScenario.MyShooter.MyLoadOut.zeroData.MuzzleVelocity));
                     break;

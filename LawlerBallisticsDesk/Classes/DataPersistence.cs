@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,6 +76,10 @@ namespace LawlerBallisticsDesk.Classes
                 string lSource = LawlerBallisticsFactory.DefaultDataFolder + "\\" + lF;
                 if (!File.Exists(lDatFile))
                 {
+                    string exePath = Assembly.GetExecutingAssembly().Location;
+                    string appPath = Path.GetDirectoryName(exePath);                   
+                    appPath += "\\Data" + "\\" + lF;
+                    if (!File.Exists(lSource)) lSource = appPath;
                     File.Copy(lSource, lDatFile);
                 }
             }
@@ -1905,7 +1910,7 @@ namespace LawlerBallisticsDesk.Classes
             lNR = lGN.Attributes["value"].Value;
             lRTN.Zone2MachFactor = Convert.ToDouble(lNR);
             lGN = DragSlopeNode.SelectSingleNode("Zone2Slope");
-            lNR = lGN.Attributes["value"].Value;
+            if(lGN != null) lNR = lGN.Attributes["value"].Value;
             lRTN.Zone2Slope = Convert.ToDouble(lNR);
             lGN = DragSlopeNode.SelectSingleNode("Zone3MachFactor");
             lNR = lGN.Attributes["value"].Value;
@@ -1917,7 +1922,7 @@ namespace LawlerBallisticsDesk.Classes
             lNR = lGN.Attributes["value"].Value;
             lRTN.Zone3SlopeMultiplier = Convert.ToDouble(lNR);
             lGN = DragSlopeNode.SelectSingleNode("Zone4Slope");
-            lNR = lGN.Attributes["value"].Value;
+            if (lGN != null) lNR = lGN.Attributes["value"].Value;
             lRTN.Zone4Slope = Convert.ToDouble(lNR);
 
             return lRTN;
